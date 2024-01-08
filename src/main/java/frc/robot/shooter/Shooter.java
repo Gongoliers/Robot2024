@@ -1,5 +1,6 @@
 package frc.robot.shooter;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,6 +11,7 @@ import frc.robot.shooter.BeamBreakSensorIO.BeamBreakSensorIOValues;
 import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
 import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
+import frc.robot.shooter.ShooterConstants.SensorConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
 /** Subsystem class for the shooter subsystem. */
@@ -23,6 +25,8 @@ public class Shooter extends Subsystem {
 
   /** Beam break sensor values. */
   private final BeamBreakSensorIOValues beamBreakSensorValues = new BeamBreakSensorIOValues();
+
+  private final Debouncer beamBreakDebouncer = new Debouncer(SensorConstants.BEAM_BREAK_DEBOUNCE_PERIOD, SensorConstants.BEAM_BREAK_DEBOUNCE_TYPE);
 
   /** Serializer motor. */
   private final SerializerMotorIO serializerMotor;
@@ -59,6 +63,9 @@ public class Shooter extends Subsystem {
   @Override
   public void periodic() {
     beamBreakSensor.update(beamBreakSensorValues);
+
+    beamBreakDebouncer.calculate(beamBreakSensorValues.isBroken);
+
     serializerMotor.update(serializerMotorValues);
     flywheelMotor.update(flywheelMotorValues);
   }
@@ -69,7 +76,7 @@ public class Shooter extends Subsystem {
    * @return true if the shooter is holding a note.
    */
   private boolean isHoldingNote() {
-    return beamBreakSensorValues.isBroken; // TODO debounce / filter?
+    return beamBreakDebouncer.calculate(beamBreakSensorValues.isBroken);
   }
 
   /**
@@ -94,6 +101,7 @@ public class Shooter extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout sensors = Telemetry.addColumn(tab, "Sensors");
 
+    sensors.addBoolean("Is Beam Break Broken?", () -> beamBreakSensorValues.isBroken);
     sensors.addBoolean("Is Holding Note?", this::isHoldingNote);
 
     ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");

@@ -1,5 +1,6 @@
 package frc.robot.shooter;
 
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 
@@ -10,6 +11,11 @@ public class ShooterConstants {
   public static class SensorConstants {
     /** Beam break sensor's DIO port number. */
     public static final int BEAM_BREAK_PORT = 0; // TODO
+
+    /** Beam break sensor's debounce filter's period in seconds. */
+    public static final double BEAM_BREAK_DEBOUNCE_PERIOD = 0.1; // TODO
+    /** Beam break sensor's debounce filter's type. */
+    public static final DebounceType BEAM_BREAK_DEBOUNCE_TYPE = DebounceType.kBoth;
   }
 
   /** Constants for the serializer motor used in the shooter subsystem. */
