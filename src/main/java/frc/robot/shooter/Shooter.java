@@ -118,7 +118,7 @@ public class Shooter extends Subsystem {
   }
 
   public Command serialize() {
-    return Commands.startEnd(() -> serializerMotor.setVoltage(4.0), serializerMotor::stop);
+    return Commands.startEnd(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE), serializerMotor::stop);
   }
 
   public Command smartSerialize() {
@@ -126,15 +126,15 @@ public class Shooter extends Subsystem {
   }
 
   public Command spin() {
-    return Commands.startEnd(() -> flywheelMotor.setVoltage(8.0), flywheelMotor::stop);
+    return Commands.startEnd(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE), flywheelMotor::stop);
   }
 
   public Command shoot() {
-    return Commands.deadline(Commands.waitSeconds(1.0).andThen(serialize()), spin());
+    return Commands.deadline(Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(serialize()), spin());
   }
 
   public Command smartShoot() {
     return Commands.deadline(
-        Commands.waitSeconds(1.0).andThen(smartSerialize()), spin().onlyIf(this::isHoldingNote));
+        Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(smartSerialize()), spin().onlyIf(this::isHoldingNote));
   }
 }
