@@ -118,7 +118,7 @@ public class Shooter extends Subsystem {
   }
 
   public Command serialize() {
-    return Commands.startEnd(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE), serializerMotor::stop);
+    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE)).finallyDo(serializerMotor::stop);
   }
 
   public Command smartSerialize() {
@@ -126,7 +126,7 @@ public class Shooter extends Subsystem {
   }
 
   public Command spin() {
-    return Commands.startEnd(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE), flywheelMotor::stop);
+    return Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE)).finallyDo(flywheelMotor::stop);
   }
 
   public Command shoot() {
