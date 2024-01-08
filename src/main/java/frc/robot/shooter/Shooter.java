@@ -73,15 +73,6 @@ public class Shooter extends Subsystem {
   }
 
   /**
-   * Returns true if the shooter is not holding a note.
-   *
-   * @return true if the shooter is not holding a note.
-   */
-  private boolean isNotHoldingNote() {
-    return !isHoldingNote();
-  }
-
-  /**
    * Calculates the tangential speed of the serializer in meters per second.
    *
    * @return the tangential speed of the serializer in meters per second.
@@ -120,17 +111,25 @@ public class Shooter extends Subsystem {
   }
 
   public Command serialize() {
-    return Commands.run(() -> serializerMotor.setVoltage(4));
+    return Commands.run(() -> serializerMotor.setVoltage(4), this);
   }
 
   public Command stopSerializing() {
-    return Commands.runOnce(() -> serializerMotor.setVoltage(0));
+    return Commands.runOnce(() -> serializerMotor.setVoltage(0), this);
   }
 
   public Command smartSerialize() {
     return serialize()
-        .until(this::isNotHoldingNote)
-        .unless(this::isNotHoldingNote)
+        .onlyWhile(this::isHoldingNote)
+        .onlyIf(this::isHoldingNote)
         .andThen(stopSerializing());
+  }
+
+  public Command spin() {
+    return Commands.run(() -> flywheelMotor.setVoltage(8), this);
+  }
+
+  public Command stopSpinning() {
+    return Commands.runOnce(() -> flywheelMotor.setVoltage(0), this);
   }
 }
