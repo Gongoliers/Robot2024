@@ -1,11 +1,11 @@
 package frc.robot.shooter;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
+import frc.lib.Telemetry;
 import frc.robot.shooter.BeamBreakSensorIO.BeamBreakSensorIOValues;
 import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
 import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
@@ -92,19 +92,16 @@ public class Shooter extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout sensors =
-        tab.getLayout("Sensors", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
+    ShuffleboardLayout sensors = Telemetry.addColumn(tab, "Sensors");
 
     sensors.addBoolean("Is Holding Note?", this::isHoldingNote);
 
-    ShuffleboardLayout serializer =
-        tab.getLayout("Serializer", BuiltInLayouts.kList).withPosition(2, 0).withSize(2, 4);
+    ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
 
     serializer.addDouble("Serializer Speed (mps)", this::getSerializerTangentialSpeed);
     serializer.addDouble("Serializer Current (A)", () -> serializerMotorValues.currentAmps);
 
-    ShuffleboardLayout flywheel =
-        tab.getLayout("Flywheel", BuiltInLayouts.kList).withPosition(4, 0).withSize(2, 4);
+    ShuffleboardLayout flywheel = Telemetry.addColumn(tab, "Flywheel");
 
     flywheel.addDouble("Flywheel Speed (mps)", this::getFlywheelTangentialSpeed);
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
