@@ -2,6 +2,7 @@ package frc.robot.shooter;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.RobotConstants;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 
 /** Simulated flywheel motor. */
@@ -16,7 +17,8 @@ public class FlywheelMotorIOSim implements FlywheelMotorIO {
 
   @Override
   public void update(FlywheelMotorIOValues values) {
-    flywheelSim.update(0.02);
+    flywheelSim.update(RobotConstants.TICK_PERIOD);
+
     values.angularVelocityRotationsPerSecond = flywheelSim.getAngularVelocityRPM() / 60.0;
     values.currentAmps = flywheelSim.getCurrentDrawAmps();
   }
