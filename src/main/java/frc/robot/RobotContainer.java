@@ -28,6 +28,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     // TODO
+    operator.rightBumper().whileTrue(shooter.serialize()).onFalse(shooter.stopSerializing());
+    operator.rightTrigger().whileTrue(shooter.smartSerialize()).onFalse(shooter.stopSerializing());
   }
 
   public Command getAutonomousCommand() {

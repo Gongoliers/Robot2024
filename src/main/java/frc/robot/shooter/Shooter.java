@@ -3,6 +3,8 @@ package frc.robot.shooter;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.robot.shooter.BeamBreakSensorIO.BeamBreakSensorIOValues;
 import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
@@ -62,6 +64,24 @@ public class Shooter extends Subsystem {
   }
 
   /**
+   * Returns true if the shooter is holding a note.
+   *
+   * @return true if the shooter is holding a note.
+   */
+  private boolean isHoldingNote() {
+    return beamBreakSensorValues.isBroken; // TODO debounce / filter?
+  }
+
+  /**
+   * Returns true if the shooter is not holding a note.
+   *
+   * @return true if the shooter is not holding a note.
+   */
+  private boolean isNotHoldingNote() {
+    return !isHoldingNote();
+  }
+
+  /**
    * Calculates the tangential speed of the serializer in meters per second.
    *
    * @return the tangential speed of the serializer in meters per second.
@@ -84,7 +104,7 @@ public class Shooter extends Subsystem {
     ShuffleboardLayout sensors =
         tab.getLayout("Sensors", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
 
-    sensors.addBoolean("Beam Break Sensor Is Broken?", () -> beamBreakSensorValues.isBroken);
+    sensors.addBoolean("Is Holding Note?", this::isHoldingNote);
 
     ShuffleboardLayout serializer =
         tab.getLayout("Serializer", BuiltInLayouts.kList).withPosition(2, 0).withSize(2, 4);
@@ -97,5 +117,20 @@ public class Shooter extends Subsystem {
 
     flywheel.addDouble("Flywheel Speed (mps)", this::getFlywheelTangentialSpeed);
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
+  }
+
+  public Command serialize() {
+    return Commands.run(() -> serializerMotor.setVoltage(4));
+  }
+
+  public Command stopSerializing() {
+    return Commands.runOnce(() -> serializerMotor.setVoltage(0));
+  }
+
+  public Command smartSerialize() {
+    return serialize()
+        .until(this::isNotHoldingNote)
+        .unless(this::isNotHoldingNote)
+        .andThen(stopSerializing());
   }
 }
