@@ -26,7 +26,9 @@ public class Shooter extends Subsystem {
   /** Beam break sensor values. */
   private final BeamBreakSensorIOValues beamBreakSensorValues = new BeamBreakSensorIOValues();
 
-  private final Debouncer beamBreakDebouncer = new Debouncer(SensorConstants.BEAM_BREAK_DEBOUNCE_PERIOD, SensorConstants.BEAM_BREAK_DEBOUNCE_TYPE);
+  private final Debouncer beamBreakDebouncer =
+      new Debouncer(
+          SensorConstants.BEAM_BREAK_DEBOUNCE_PERIOD, SensorConstants.BEAM_BREAK_DEBOUNCE_TYPE);
 
   /** Serializer motor. */
   private final SerializerMotorIO serializerMotor;
@@ -116,25 +118,23 @@ public class Shooter extends Subsystem {
   }
 
   public Command serialize() {
-    return Commands.run(() -> serializerMotor.setVoltage(4), this);
-  }
-
-  public Command stopSerializing() {
-    return Commands.runOnce(() -> serializerMotor.setVoltage(0), this);
+    return Commands.startEnd(() -> serializerMotor.setVoltage(4.0), serializerMotor::stop);
   }
 
   public Command smartSerialize() {
-    return serialize()
-        .onlyWhile(this::isHoldingNote)
-        .onlyIf(this::isHoldingNote)
-        .andThen(stopSerializing());
+    return serialize().onlyWhile(this::isHoldingNote).onlyIf(this::isHoldingNote);
   }
 
   public Command spin() {
-    return Commands.run(() -> flywheelMotor.setVoltage(8), this);
+    return Commands.startEnd(() -> flywheelMotor.setVoltage(8.0), flywheelMotor::stop);
   }
 
-  public Command stopSpinning() {
-    return Commands.runOnce(() -> flywheelMotor.setVoltage(0), this);
+  public Command shoot() {
+    return Commands.deadline(Commands.waitSeconds(1.0).andThen(serialize()), spin());
+  }
+
+  public Command smartShoot() {
+    return Commands.deadline(
+        Commands.waitSeconds(1.0).andThen(smartSerialize()), spin().onlyIf(this::isHoldingNote));
   }
 }

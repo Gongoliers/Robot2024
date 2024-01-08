@@ -14,6 +14,7 @@ public class ShooterConstants {
 
     /** Beam break sensor's debounce filter's period in seconds. */
     public static final double BEAM_BREAK_DEBOUNCE_PERIOD = 0.1; // TODO
+
     /** Beam break sensor's debounce filter's type. */
     public static final DebounceType BEAM_BREAK_DEBOUNCE_TYPE = DebounceType.kBoth;
   }

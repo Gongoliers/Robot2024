@@ -27,8 +27,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    operator.rightBumper().whileTrue(shooter.spin()).onFalse(shooter.stopSpinning());
-    operator.rightTrigger().whileTrue(shooter.smartSerialize()).onFalse(shooter.stopSerializing());
+    operator.rightBumper().whileTrue(shooter.shoot());
+    operator.rightTrigger().whileTrue(shooter.smartShoot());
   }
 
   public Command getAutonomousCommand() {

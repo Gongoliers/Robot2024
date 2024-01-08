@@ -25,4 +25,7 @@ public interface FlywheelMotorIO {
    * @param volts volts to apply to the flywheel motor.
    */
   public void setVoltage(double volts);
+
+  /** Stop the flywheel motor. */
+  public void stop();
 }

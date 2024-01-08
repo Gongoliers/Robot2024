@@ -25,4 +25,7 @@ public interface SerializerMotorIO {
    * @param volts volts to apply to the serializer motor.
    */
   public void setVoltage(double volts);
+
+  /** Stop the serializer motor. */
+  public void stop();
 }

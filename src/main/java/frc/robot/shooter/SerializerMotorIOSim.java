@@ -25,4 +25,9 @@ public class SerializerMotorIOSim implements SerializerMotorIO {
   public void setVoltage(double volts) {
     serializerSim.setInputVoltage(volts);
   }
+
+  @Override
+  public void stop() {
+    serializerSim.setInputVoltage(0);
+  }
 }
