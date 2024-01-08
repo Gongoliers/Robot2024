@@ -36,11 +36,14 @@ public class ShooterConstants {
     /** Radius of the serializer wheel in meters. */
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
+    /** Voltage to apply while intaking in volts. */
+    public static final double INTAKE_VOLTAGE = -2.0; // TODO
+
     /** Voltage to apply while serializing in volts. */
-    public static final double SERIALIZE_VOLTAGE = 4.0;
+    public static final double SERIALIZE_VOLTAGE = 4.0; // TODO
 
     /** Delay between starting flywheel and serializing while shooting in seconds. */
-    public static final double SHOOT_DELAY = 1.0;
+    public static final double SHOOT_DELAY = 1.0; // TODO
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
@@ -60,7 +63,10 @@ public class ShooterConstants {
     /** Radius of the flywheel wheel in meters. */
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
+    /** Voltage to apply while intaking in volts. */
+    public static final double INTAKE_VOLTAGE = -2.0; // TODO
+
     /** Voltage to apply while shooting in volts. */
-    public static final double SHOOT_VOLTAGE = 8.0;
+    public static final double SHOOT_VOLTAGE = 8.0; // TODO
   }
 }

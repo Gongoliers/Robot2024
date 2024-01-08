@@ -117,8 +117,21 @@ public class Shooter extends Subsystem {
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
   }
 
+  public Command intake() {
+    return Commands.parallel(
+        Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.INTAKE_VOLTAGE))
+            .finallyDo(serializerMotor::stop),
+        Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.INTAKE_VOLTAGE))
+            .finallyDo(flywheelMotor::stop));
+  }
+
+  public Command smartIntake() {
+    return intake().until(this::isHoldingNote).unless(this::isHoldingNote);
+  }
+
   public Command serialize() {
-    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE)).finallyDo(serializerMotor::stop);
+    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE))
+        .finallyDo(serializerMotor::stop);
   }
 
   public Command smartSerialize() {
@@ -126,15 +139,18 @@ public class Shooter extends Subsystem {
   }
 
   public Command spin() {
-    return Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE)).finallyDo(flywheelMotor::stop);
+    return Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE))
+        .finallyDo(flywheelMotor::stop);
   }
 
   public Command shoot() {
-    return Commands.deadline(Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(serialize()), spin());
+    return Commands.deadline(
+        Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(serialize()), spin());
   }
 
   public Command smartShoot() {
     return Commands.deadline(
-        Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(smartSerialize()), spin().onlyIf(this::isHoldingNote));
+        Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(smartSerialize()),
+        spin().onlyIf(this::isHoldingNote));
   }
 }

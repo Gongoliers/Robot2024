@@ -27,6 +27,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    operator.leftBumper().whileTrue(shooter.intake());
+    operator.leftTrigger().whileTrue(shooter.smartIntake());
+
     operator.rightBumper().whileTrue(shooter.shoot());
     operator.rightTrigger().whileTrue(shooter.smartShoot());
   }
