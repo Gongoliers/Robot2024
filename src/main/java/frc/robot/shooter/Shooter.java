@@ -77,7 +77,7 @@ public class Shooter extends Subsystem {
    *
    * @return true if the shooter is holding a note.
    */
-  private boolean isHoldingNote() {
+  private boolean holdingNote() {
     return beamBreakDebouncer.calculate(beamBreakSensorValues.isBroken);
   }
 
@@ -104,7 +104,7 @@ public class Shooter extends Subsystem {
     ShuffleboardLayout sensors = Telemetry.addColumn(tab, "Sensors");
 
     sensors.addBoolean("Is Beam Break Broken?", () -> beamBreakSensorValues.isBroken);
-    sensors.addBoolean("Is Holding Note?", this::isHoldingNote);
+    sensors.addBoolean("Holding Note?", this::holdingNote);
 
     ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
 
@@ -117,6 +117,11 @@ public class Shooter extends Subsystem {
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
   }
 
+  /**
+   * Intakes a note.
+   * 
+   * @return a command that intakes a note.
+   */
   public Command intake() {
     return Commands.parallel(
         Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.INTAKE_VOLTAGE))
@@ -125,32 +130,62 @@ public class Shooter extends Subsystem {
             .finallyDo(flywheelMotor::stop));
   }
 
+  /**
+   * Intakes a note until it is held.
+   * 
+   * @return a command that intakes a note until it is held.
+   */
   public Command smartIntake() {
-    return intake().until(this::isHoldingNote).unless(this::isHoldingNote);
+    return intake().until(this::holdingNote).unless(this::holdingNote);
   }
 
+  /**
+   * Serializes a note.
+   * 
+   * @return a command that serializes a note.
+   */
   public Command serialize() {
     return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE))
         .finallyDo(serializerMotor::stop);
   }
 
+  /**
+   * Serializes a note until it is not held.
+   * 
+   * @return a command that serializes a note until it is not held.
+   */
   public Command smartSerialize() {
-    return serialize().onlyWhile(this::isHoldingNote).onlyIf(this::isHoldingNote);
+    return serialize().onlyWhile(this::holdingNote).onlyIf(this::holdingNote);
   }
 
+  /**
+   * Spins the flywheel.
+   * 
+   * @return a command that spins the flywheel.
+   */
   public Command spin() {
     return Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE))
         .finallyDo(flywheelMotor::stop);
   }
 
+  /**
+   * Shoots a note by spinning the flywheel then serializing a note.
+   * 
+   * @return a command that shoots a note.
+   */
   public Command shoot() {
     return Commands.deadline(
         Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(serialize()), spin());
   }
 
+  /**
+   * Shoots a note by spinning the flywheel then serializing a note until it is not held.
+   * 
+   * @return a command that shoots a note until it is not held.
+   */
   public Command smartShoot() {
     return Commands.deadline(
         Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(smartSerialize()),
-        spin().onlyIf(this::isHoldingNote));
+        spin().onlyIf(this::holdingNote));
   }
 }
