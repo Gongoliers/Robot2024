@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +13,9 @@ import frc.robot.vision.Vision;
 
 public class RobotContainer {
 
+  /** Instance variable for the robot container singleton. */
+  public static RobotContainer instance = null;
+
   private final Arm arm = Arm.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
@@ -27,15 +26,31 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
-  public RobotContainer() {
-    initializeShuffleboards();
+  /** Creates a new instance of the robot container. */
+  private RobotContainer() {
+    initializeTelemetry();
     configureBindings();
   }
 
-  private void initializeShuffleboards() {
+  /**
+   * Gets the instance of the robot container.
+   *
+   * @return the instance of the robot container.
+   */
+  public static RobotContainer getInstance() {
+    if (instance == null) {
+      instance = new RobotContainer();
+    }
+
+    return instance;
+  }
+
+  /** Initializes subsystem telemetry. */
+  private void initializeTelemetry() {
     Telemetry.initializeShuffleboards(arm, climber, intake, shooter, swerve, vision);
   }
 
+  /** Configures operator controller bindings. */
   private void configureBindings() {
     operator.leftBumper().whileTrue(shooter.intake());
     operator.leftTrigger().whileTrue(shooter.smartIntake());
@@ -44,6 +59,11 @@ public class RobotContainer {
     operator.rightTrigger().whileTrue(shooter.smartShoot());
   }
 
+  /**
+   * Gets the command to run during the autonomous period.
+   *
+   * @return the command to run during the autonomous period.
+   */
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
