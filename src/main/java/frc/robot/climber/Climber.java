@@ -30,5 +30,4 @@ public class Climber extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {}
-
 }

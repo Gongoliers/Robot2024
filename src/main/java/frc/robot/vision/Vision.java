@@ -30,5 +30,4 @@ public class Vision extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {}
-
 }

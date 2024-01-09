@@ -30,5 +30,4 @@ public class Arm extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {}
-
 }
