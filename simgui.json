@@ -6,6 +6,15 @@
   },
   "NetworkTables": {
     "transitory": {
+      "Shuffleboard": {
+        "Swerve": {
+          "North East Module": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      },
       "shooter": {
         "beamBreakSensorSim": {
           "open": true

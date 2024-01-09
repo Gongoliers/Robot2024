@@ -52,6 +52,9 @@ public class RobotContainer {
 
   /** Configures operator controller bindings. */
   private void configureBindings() {
+    driver.a().whileTrue(swerve.forwards());
+    driver.b().whileTrue(swerve.sideways());
+
     operator.leftBumper().whileTrue(shooter.intake());
     operator.leftTrigger().whileTrue(shooter.smartIntake());
 

@@ -2,7 +2,7 @@ package frc.lib;
 
 import java.util.Objects;
 
-/** Record class representing a CAN identifier for a device. */
+/** A CAN identifier for a device. */
 public record CAN(int id, String bus) {
 
   /**
