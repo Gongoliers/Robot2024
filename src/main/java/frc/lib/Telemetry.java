@@ -25,6 +25,17 @@ public class Telemetry {
   }
 
   /**
+   * Initializes each subsystem's Shuffleboard tab.
+   *
+   * @param subsystems the subsystems to initialize.
+   */
+  public static void initializeShuffleboards(Subsystem... subsystems) {
+    for (Subsystem subsystem : subsystems) {
+      Telemetry.initializeShuffleboard(subsystem);
+    }
+  }
+
+  /**
    * Adds a column to a Shuffleboard tab.
    *
    * @param tab the Shuffleboard tab to add the column to.
