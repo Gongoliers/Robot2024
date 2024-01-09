@@ -41,9 +41,6 @@ public class ShooterConstants {
 
     /** Voltage to apply while serializing in volts. */
     public static final double SERIALIZE_VOLTAGE = 4.0; // TODO
-
-    /** Delay between starting flywheel and serializing while shooting in seconds. */
-    public static final double SHOOT_DELAY = 1.0; // TODO
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
@@ -68,5 +65,14 @@ public class ShooterConstants {
 
     /** Voltage to apply while shooting in volts. */
     public static final double SHOOT_VOLTAGE = 8.0; // TODO
+  }
+
+  /** Constants for commands used in the shooter subsystem. */
+  public static class ShooterCommandConstants {
+    /** Delay between starting flywheel and starting serialization while shooting in seconds. */
+    public static final double PRE_SHOOT_DELAY = 1.0; // TODO
+
+    /** Delay between stopping serialization and stopping flywheel while shooting in seconds. */
+    public static final double POST_SHOOT_DELAY = 1.0; // TODO
   }
 }

@@ -13,6 +13,7 @@ import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 import frc.robot.shooter.ShooterConstants.SensorConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
+import frc.robot.shooter.ShooterConstants.ShooterCommandConstants;
 
 /** Subsystem class for the shooter subsystem. */
 public class Shooter extends Subsystem {
@@ -119,7 +120,7 @@ public class Shooter extends Subsystem {
 
   /**
    * Intakes a note.
-   * 
+   *
    * @return a command that intakes a note.
    */
   public Command intake() {
@@ -132,7 +133,7 @@ public class Shooter extends Subsystem {
 
   /**
    * Intakes a note until it is held.
-   * 
+   *
    * @return a command that intakes a note until it is held.
    */
   public Command smartIntake() {
@@ -141,7 +142,7 @@ public class Shooter extends Subsystem {
 
   /**
    * Serializes a note.
-   * 
+   *
    * @return a command that serializes a note.
    */
   public Command serialize() {
@@ -151,7 +152,7 @@ public class Shooter extends Subsystem {
 
   /**
    * Serializes a note until it is not held.
-   * 
+   *
    * @return a command that serializes a note until it is not held.
    */
   public Command smartSerialize() {
@@ -160,7 +161,7 @@ public class Shooter extends Subsystem {
 
   /**
    * Spins the flywheel.
-   * 
+   *
    * @return a command that spins the flywheel.
    */
   public Command spin() {
@@ -170,22 +171,24 @@ public class Shooter extends Subsystem {
 
   /**
    * Shoots a note by spinning the flywheel then serializing a note.
-   * 
+   *
    * @return a command that shoots a note.
    */
   public Command shoot() {
     return Commands.deadline(
-        Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(serialize()), spin());
+        Commands.waitSeconds(ShooterCommandConstants.PRE_SHOOT_DELAY).andThen(serialize()), spin());
   }
 
   /**
    * Shoots a note by spinning the flywheel then serializing a note until it is not held.
-   * 
+   *
    * @return a command that shoots a note until it is not held.
    */
   public Command smartShoot() {
     return Commands.deadline(
-        Commands.waitSeconds(SerializerConstants.SHOOT_DELAY).andThen(smartSerialize()),
+        Commands.waitSeconds(ShooterCommandConstants.PRE_SHOOT_DELAY)
+            .andThen(smartSerialize())
+            .andThen(Commands.waitSeconds(ShooterCommandConstants.POST_SHOOT_DELAY)),
         spin().onlyIf(this::holdingNote));
   }
 }
