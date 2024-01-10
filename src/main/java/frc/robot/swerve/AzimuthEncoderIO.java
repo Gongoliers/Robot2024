@@ -9,6 +9,9 @@ public interface AzimuthEncoderIO {
     public double angleRotations = 0.0;
   }
 
+  /** Configures the azimuth encoder. */
+  public void configure();
+
   /**
    * Updates the azimuth encoder's values.
    *

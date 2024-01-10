@@ -9,6 +9,9 @@ public interface BeamBreakSensorIO {
     public boolean isBroken = false;
   }
 
+  /** Configures the beam break sensor. */
+  public void configure();
+
   /**
    * Updates the beam break sensor's values.
    *

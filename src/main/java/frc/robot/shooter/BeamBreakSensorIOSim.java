@@ -21,6 +21,9 @@ public class BeamBreakSensorIOSim implements BeamBreakSensorIO {
   }
 
   @Override
+  public void configure() {}
+
+  @Override
   public void update(BeamBreakSensorIOValues values) {
     values.isBroken = isBrokenSupplier.getAsBoolean();
   }

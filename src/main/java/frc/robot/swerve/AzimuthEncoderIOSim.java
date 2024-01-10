@@ -4,6 +4,9 @@ package frc.robot.swerve;
 public class AzimuthEncoderIOSim implements AzimuthEncoderIO {
 
   @Override
+  public void configure() {}
+
+  @Override
   public void update(AzimuthEncoderIOValues values) {
     values.angleRotations = 0.0;
   }

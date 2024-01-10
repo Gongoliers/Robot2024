@@ -14,6 +14,15 @@ public class SwerveConstants {
 
     /** Moment of inertia of the wheel when steering in joules kilograms meters squared. */
     public static final double STEER_MOI = 0.004; // TODO
+
+    /** Gearing between the drive motor and the wheel. */
+    public static final double DRIVE_GEARING = 6.12;
+
+    /** Diameter of the MK4i's wheels in meters. */
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
+
+    /** Conversion between wheel rotations and distances in meters. */
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   }
 
   /** Module configuration for the north west swerve module. */

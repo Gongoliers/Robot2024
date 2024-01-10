@@ -16,6 +16,9 @@ public class FlywheelMotorIOSim implements FlywheelMotorIO {
       new FlywheelSim(motorSim, FlywheelConstants.GEARING, FlywheelConstants.MOI);
 
   @Override
+  public void configure() {}
+
+  @Override
   public void update(FlywheelMotorIOValues values) {
     flywheelSim.update(RobotConstants.TICK_PERIOD);
 

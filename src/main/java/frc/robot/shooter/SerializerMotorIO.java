@@ -12,6 +12,9 @@ public interface SerializerMotorIO {
     public double currentAmps = 0.0;
   }
 
+  /** Configures the serializer motor. */
+  public void configure();
+
   /**
    * Updates the serializer motor's values.
    *

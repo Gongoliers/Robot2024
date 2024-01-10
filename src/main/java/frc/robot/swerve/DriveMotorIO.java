@@ -12,6 +12,9 @@ public interface DriveMotorIO {
     public double velocityMetersPerSecond = 0.0;
   }
 
+  /** Configures the drive motor. */
+  public void configure();
+
   /**
    * Updates the drive motor's values.
    *

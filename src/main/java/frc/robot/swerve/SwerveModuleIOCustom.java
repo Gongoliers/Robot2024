@@ -7,6 +7,7 @@ import frc.robot.swerve.AzimuthEncoderIO.AzimuthEncoderIOValues;
 import frc.robot.swerve.DriveMotorIO.DriveMotorIOValues;
 import frc.robot.swerve.SteerMotorIO.SteerMotorIOValues;
 
+/** Custom swerve module. */
 public class SwerveModuleIOCustom implements SwerveModuleIO {
 
   /** Azimuth encoder. */
@@ -27,10 +28,15 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   /** Driver motor values. */
   private final DriveMotorIOValues driveMotorValues = new DriveMotorIOValues();
 
-  public SwerveModuleIOCustom() {
-    azimuthEncoder = SwerveFactory.createAzimuthEncoder();
+  /**
+   * Creates a custom swerve module.
+   *
+   * @param config the swerve module's configuration.
+   */
+  public SwerveModuleIOCustom(SwerveModuleConfig config) {
+    azimuthEncoder = SwerveFactory.createAzimuthEncoder(config);
     steerMotor = SwerveFactory.createSteerMotor();
-    driveMotor = SwerveFactory.createDriveMotor();
+    driveMotor = SwerveFactory.createDriveMotor(config);
 
     azimuthEncoder.update(azimuthEncoderValues);
     steerMotor.setPosition(azimuthEncoderValues.angleRotations);
@@ -64,7 +70,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
 
     return new SwerveModuleState(
         driveMotorValues.velocityMetersPerSecond,
-        Rotation2d.fromRotations(steerMotorValues.angleRotations));
+        Rotation2d.fromRotations(steerMotorValues.positionRotations));
   }
 
   @Override
@@ -74,6 +80,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     driveMotor.update(driveMotorValues);
 
     return new SwerveModulePosition(
-        driveMotorValues.positionMeters, Rotation2d.fromRotations(steerMotorValues.angleRotations));
+        driveMotorValues.positionMeters,
+        Rotation2d.fromRotations(steerMotorValues.positionRotations));
   }
 }

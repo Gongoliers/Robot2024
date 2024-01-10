@@ -12,6 +12,9 @@ public interface FlywheelMotorIO {
     public double currentAmps = 0.0;
   }
 
+  /** Configures the flywheel motor. */
+  public void configure();
+
   /**
    * Updates the flywheel motor's values.
    *

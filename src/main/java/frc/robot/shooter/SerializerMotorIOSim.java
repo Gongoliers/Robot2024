@@ -16,6 +16,9 @@ public class SerializerMotorIOSim implements SerializerMotorIO {
       new FlywheelSim(motorSim, SerializerConstants.GEARING, SerializerConstants.MOI);
 
   @Override
+  public void configure() {}
+
+  @Override
   public void update(SerializerMotorIOValues values) {
     serializerSim.update(RobotConstants.TICK_PERIOD);
 
