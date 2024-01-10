@@ -56,29 +56,15 @@ public class Swerve extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout northWestModule = Telemetry.addColumn(tab, "North West Module");
+    for (int i = 0; i < 4; i++) {
+      SwerveModuleIO swerveModule = swerveModules[i];
 
-    northWestModule.addDouble(
-        "Angle (deg)", () -> swerveModules[0].getPosition().angle.getDegrees());
-    northWestModule.addDouble("Distance (m)", () -> swerveModules[0].getPosition().distanceMeters);
+      ShuffleboardLayout swerveModuleColumn = Telemetry.addColumn(tab, "Module " + i);
 
-    ShuffleboardLayout northEastModule = Telemetry.addColumn(tab, "North East Module");
-
-    northEastModule.addDouble(
-        "Angle (deg)", () -> swerveModules[1].getPosition().angle.getDegrees());
-    northEastModule.addDouble("Distance (m)", () -> swerveModules[1].getPosition().distanceMeters);
-
-    ShuffleboardLayout southEastModule = Telemetry.addColumn(tab, "South East Module");
-
-    southEastModule.addDouble(
-        "Angle (deg)", () -> swerveModules[2].getPosition().angle.getDegrees());
-    southEastModule.addDouble("Distance (m)", () -> swerveModules[2].getPosition().distanceMeters);
-
-    ShuffleboardLayout southWestModule = Telemetry.addColumn(tab, "South West Module");
-
-    southWestModule.addDouble(
-        "Angle (deg)", () -> swerveModules[3].getPosition().angle.getDegrees());
-    southWestModule.addDouble("Distance (m)", () -> swerveModules[3].getPosition().distanceMeters);
+      swerveModuleColumn.addDouble("Angle (deg)", () -> swerveModule.getState().angle.getDegrees());
+      swerveModuleColumn.addDouble(
+          "Velocity (mps)", () -> swerveModule.getState().speedMetersPerSecond);
+    }
   }
 
   /**
