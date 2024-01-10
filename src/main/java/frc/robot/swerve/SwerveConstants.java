@@ -25,25 +25,42 @@ public class SwerveConstants {
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   }
 
+  /** Module X offset in meters. */
+  public static final double X_OFFSET = Units.inchesToMeters(22.75);
+
+  /** Module Y offset in meters. */
+  public static final double Y_OFFSET = Units.inchesToMeters(22.75);
+
+  /** Swerve's CAN bus. */
+  public static final String SWERVE_BUS = "swerve";
+
   /** Module configuration for the north west swerve module. */
   public static final SwerveModuleConfig NORTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(0, 0, 0, ""), new Translation2d(), new Rotation2d()); // TODO
+          new SwerveModuleCAN(1, 2, 3, SWERVE_BUS),
+          new Translation2d(X_OFFSET, Y_OFFSET),
+          Rotation2d.fromRotations(-0.179688));
 
   /** Module configuration for the north east swerve module. */
   public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(0, 0, 0, ""), new Translation2d(), new Rotation2d()); // TODO
+          new SwerveModuleCAN(4, 5, 6, SWERVE_BUS),
+          new Translation2d(X_OFFSET, -Y_OFFSET),
+          Rotation2d.fromRotations(-0.951904));
 
   /** Module configuration for the south east swerve module. */
   public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(0, 0, 0, ""), new Translation2d(), new Rotation2d()); // TODO
+          new SwerveModuleCAN(8, 9, 10, SWERVE_BUS),
+          new Translation2d(-X_OFFSET, -Y_OFFSET),
+          Rotation2d.fromRotations(-0.774568));
 
   /** Module configuration for the south west swerve module. */
   public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(0, 0, 0, ""), new Translation2d(), new Rotation2d()); // TODO
+          new SwerveModuleCAN(11, 12, 13, SWERVE_BUS),
+          new Translation2d(-X_OFFSET, Y_OFFSET),
+          Rotation2d.fromRotations(-0.954346));
 
   /** Maximum attainable speed in meters per second. */
   public static final double MAXIMUM_SPEED = Units.feetToMeters(4.0);
