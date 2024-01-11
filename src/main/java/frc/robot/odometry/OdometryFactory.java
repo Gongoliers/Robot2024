@@ -10,9 +10,9 @@ public class OdometryFactory {
    *
    * @return a gyroscope.
    */
-  public static GyroscopeIO createGyroscope() {
-    if (Robot.isReal()) return new GyroscopeIOSim();
+  public static GyroscopeIO createGyroscope(Odometry odometry) {
+    if (Robot.isReal()) return new GyroscopeIOSim(odometry);
 
-    return new GyroscopeIOSim();
+    return new GyroscopeIOSim(odometry);
   }
 }

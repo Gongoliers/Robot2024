@@ -38,7 +38,7 @@ public class Odometry extends Subsystem {
 
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
-    gyroscope = OdometryFactory.createGyroscope();
+    gyroscope = OdometryFactory.createGyroscope(this);
     gyroscope.configure();
 
     swerveModulePositionsSupplier = () -> Swerve.getInstance().getModulePositions();
@@ -125,6 +125,9 @@ public class Odometry extends Subsystem {
    * @return the velocity of the robot on the field.
    */
   public Transform2d getVelocity() {
+    // TODO Guards against simulated odometry hardware calling before the swerve pose estimator is intialized
+    if (swervePoseEstimator == null) return new Transform2d();
+
     ChassisSpeeds chassisSpeeds = swerveChassisSpeedsSupplier.get();
 
     Rotation2d rotation = getPosition().getRotation();

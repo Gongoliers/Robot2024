@@ -7,6 +7,7 @@ import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
+import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
 import frc.robot.swerve.Swerve;
 import frc.robot.vision.Vision;
@@ -20,6 +21,7 @@ public class RobotContainer {
   private final Auto auto = Auto.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
+  private final Odometry odometry = Odometry.getInstance();
   private final Shooter shooter = Shooter.getInstance();
   private final Swerve swerve = Swerve.getInstance();
   private final Vision vision = Vision.getInstance();
@@ -48,7 +50,7 @@ public class RobotContainer {
 
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
-    Telemetry.initializeShuffleboards(arm, auto, climber, intake, shooter, swerve, vision);
+    Telemetry.initializeShuffleboards(arm, auto, climber, intake, odometry, shooter, swerve, vision);
   }
 
   /** Configures operator controller bindings. */

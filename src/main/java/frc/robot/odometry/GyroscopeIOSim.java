@@ -12,11 +12,11 @@ public class GyroscopeIOSim implements GyroscopeIO {
   private final DoubleSupplier yawVelocityRotationsPerSecondSupplier;
 
   /** Creates a new simulated gyroscope. */
-  public GyroscopeIOSim() {
+  public GyroscopeIOSim(Odometry odometry) {
     yawRotations = 0.0;
 
     yawVelocityRotationsPerSecondSupplier =
-        () -> Odometry.getInstance().getVelocity().getRotation().getRotations();
+        () -> odometry.getVelocity().getRotation().getRotations();
   }
 
   @Override
