@@ -35,8 +35,13 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    */
   public SwerveModuleIOCustom(SwerveModuleConfig config) {
     azimuthEncoder = SwerveFactory.createAzimuthEncoder(config);
+    azimuthEncoder.configure();
+
     steerMotor = SwerveFactory.createSteerMotor();
+    steerMotor.configure();
+
     driveMotor = SwerveFactory.createDriveMotor(config);
+    driveMotor.configure();
 
     azimuthEncoder.update(azimuthEncoderValues);
     steerMotor.setPosition(azimuthEncoderValues.angleRotations);
