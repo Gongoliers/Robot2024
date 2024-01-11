@@ -37,6 +37,13 @@ public class Swerve extends Subsystem {
             SwerveConstants.NORTH_EAST_MODULE_CONFIG.position(),
             SwerveConstants.SOUTH_EAST_MODULE_CONFIG.position(),
             SwerveConstants.SOUTH_WEST_MODULE_CONFIG.position());
+
+    // TODO this command is so the swerve fails safely
+    this.setDefaultCommand(Commands.run(() -> {
+      for (int i = 0; i < 4; i++) {
+        swerveModules[i].setSetpoint(swerveModules[i].getState(), false);
+      }
+    }, this));
   }
 
   /**

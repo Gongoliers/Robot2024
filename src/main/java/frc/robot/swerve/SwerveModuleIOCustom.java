@@ -37,7 +37,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     azimuthEncoder = SwerveFactory.createAzimuthEncoder(config);
     azimuthEncoder.configure();
 
-    steerMotor = SwerveFactory.createSteerMotor();
+    steerMotor = SwerveFactory.createSteerMotor(config);
     steerMotor.configure();
 
     driveMotor = SwerveFactory.createDriveMotor(config);
@@ -64,7 +64,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    * @return the optimized setpoint.
    */
   private SwerveModuleState optimize(SwerveModuleState setpoint) {
-    return setpoint; // TODO
+    return setpoint;
   }
 
   @Override

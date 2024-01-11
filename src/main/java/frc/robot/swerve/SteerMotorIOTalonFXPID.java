@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.ConfigApplier;
+import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** TalonFX steer motor controlled by an external PID controller. */
 public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
@@ -36,31 +37,34 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
   public void configure() {
     TalonFXConfiguration config = SwerveFactory.createSteerMotorConfig();
 
+    config.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
+
     ConfigApplier.applyTalonFXConfig(talonFX.getConfigurator(), config);
   }
 
   @Override
   public void setSetpoint(double positionRotations) {
+    positionFeedback.setSetpoint(positionRotations);
+
     if (positionFeedback.atSetpoint()) {
       talonFX.setControl(new CoastOut());
     } else {
-      talonFX.setControl(calculatePositionVoltage(positionRotations));
+      talonFX.setControl(calculatePositionVoltage());
     }
   }
 
   /**
    * Calculates the TalonFX's applied voltage for a position setpoint.
    *
-   * @param positionRotations the position setpoint.
    * @return the voltage to apply.
    */
-  private VoltageOut calculatePositionVoltage(double positionRotations) {
+  private VoltageOut calculatePositionVoltage() {
     double measuredPositionRotations =
         BaseStatusSignal.getLatencyCompensatedValue(
             this.positionRotations, this.velocityRotationsPerSecond);
 
     double positionFeedbackVolts =
-        positionFeedback.calculate(measuredPositionRotations, positionRotations);
+        positionFeedback.calculate(measuredPositionRotations);
 
     double positionFeedforwardVolts =
         Math.signum(positionFeedbackVolts) * this.positionFeedforwardVolts;
