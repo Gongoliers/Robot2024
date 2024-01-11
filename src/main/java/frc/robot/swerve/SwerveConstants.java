@@ -26,10 +26,10 @@ public class SwerveConstants {
   }
 
   /** Module X offset in meters. */
-  public static final double X_OFFSET = Units.inchesToMeters(22.75);
+  public static final double X_OFFSET = Units.inchesToMeters(11.375);
 
   /** Module Y offset in meters. */
-  public static final double Y_OFFSET = Units.inchesToMeters(22.75);
+  public static final double Y_OFFSET = Units.inchesToMeters(11.375);
 
   /** Swerve's CAN bus. */
   public static final String SWERVE_BUS = "swerve";

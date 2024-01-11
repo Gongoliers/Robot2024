@@ -12,7 +12,7 @@ public record SwerveModuleConfig(
    * Creates the configuration of a swerve module.
    *
    * @param moduleCAN the swerve module's CAN identifiers.
-   * @param position the swerve module's position.
+   * @param position the swerve module's position relative to the center of the robot.
    * @param offset the swerve module steer motor's offset.
    */
   public SwerveModuleConfig {
