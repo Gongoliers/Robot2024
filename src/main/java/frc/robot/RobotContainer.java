@@ -1,10 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
+import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
 import frc.robot.shooter.Shooter;
@@ -17,6 +17,7 @@ public class RobotContainer {
   public static RobotContainer instance = null;
 
   private final Arm arm = Arm.getInstance();
+  private final Auto auto = Auto.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
   private final Shooter shooter = Shooter.getInstance();
@@ -47,7 +48,7 @@ public class RobotContainer {
 
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
-    Telemetry.initializeShuffleboards(arm, climber, intake, shooter, swerve, vision);
+    Telemetry.initializeShuffleboards(arm, auto, climber, intake, shooter, swerve, vision);
   }
 
   /** Configures operator controller bindings. */
@@ -68,6 +69,6 @@ public class RobotContainer {
    * @return the command to run during the autonomous period.
    */
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return auto.getAutonomousCommand();
   }
 }

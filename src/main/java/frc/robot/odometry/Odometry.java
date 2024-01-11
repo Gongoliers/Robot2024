@@ -108,6 +108,18 @@ public class Odometry extends Subsystem {
   }
 
   /**
+   * Sets the position of the robot on the field.
+   *
+   * @param position the position of the robot on the field.
+   */
+  public void setPosition(Pose2d position) {
+    swervePoseEstimator.resetPosition(
+        Rotation2d.fromRotations(gyroscopeValues.yawRotations),
+        swerveModulePositionsSupplier.get(),
+        position);
+  }
+
+  /**
    * Gets the velocity of the robot on the field.
    *
    * @return the velocity of the robot on the field.

@@ -1,5 +1,6 @@
 package frc.lib;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -55,5 +56,16 @@ public class Telemetry {
     return tab.getLayout(columnTitle, BuiltInLayouts.kList)
         .withSize(kColumnWidth, kColumnHeight)
         .withPosition(currentColumnCount * kColumnWidth, 0);
+  }
+
+  /**
+   * Adds a fullscreen sendable to a Shuffleboard tab.
+   *
+   * @param tab the Shuffleboard tab to add the Sendable to.
+   * @param title the title of the sendable.
+   * @param sendable the sendable to add.
+   */
+  public static void addFullscreen(ShuffleboardTab tab, String title, Sendable sendable) {
+    tab.add(title, sendable).withPosition(0, 0).withSize(10, 4);
   }
 }
