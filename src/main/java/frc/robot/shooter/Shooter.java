@@ -73,6 +73,24 @@ public class Shooter extends Subsystem {
     flywheelMotor.update(flywheelMotorValues);
   }
 
+  @Override
+  public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout sensors = Telemetry.addColumn(tab, "Sensors");
+
+    sensors.addBoolean("Is Beam Break Broken?", () -> beamBreakSensorValues.isBroken);
+    sensors.addBoolean("Holding Note?", this::holdingNote);
+
+    ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
+
+    serializer.addDouble("Serializer Speed (mps)", this::getSerializerTangentialSpeed);
+    serializer.addDouble("Serializer Current (A)", () -> serializerMotorValues.currentAmps);
+
+    ShuffleboardLayout flywheel = Telemetry.addColumn(tab, "Flywheel");
+
+    flywheel.addDouble("Flywheel Speed (mps)", this::getFlywheelTangentialSpeed);
+    flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
+  }
+
   /**
    * Returns true if the shooter is holding a note.
    *
@@ -98,24 +116,6 @@ public class Shooter extends Subsystem {
    */
   private double getFlywheelTangentialSpeed() {
     return flywheelMotorValues.angularVelocityRotationsPerSecond * FlywheelConstants.RADIUS;
-  }
-
-  @Override
-  public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout sensors = Telemetry.addColumn(tab, "Sensors");
-
-    sensors.addBoolean("Is Beam Break Broken?", () -> beamBreakSensorValues.isBroken);
-    sensors.addBoolean("Holding Note?", this::holdingNote);
-
-    ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
-
-    serializer.addDouble("Serializer Speed (mps)", this::getSerializerTangentialSpeed);
-    serializer.addDouble("Serializer Current (A)", () -> serializerMotorValues.currentAmps);
-
-    ShuffleboardLayout flywheel = Telemetry.addColumn(tab, "Flywheel");
-
-    flywheel.addDouble("Flywheel Speed (mps)", this::getFlywheelTangentialSpeed);
-    flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
   }
 
   /**

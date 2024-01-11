@@ -3,6 +3,7 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -65,6 +66,54 @@ public class Swerve extends Subsystem {
       swerveModuleColumn.addDouble(
           "Velocity (mps)", () -> swerveModule.getState().speedMetersPerSecond);
     }
+  }
+
+  /**
+   * Gets the swerve's kinematics.
+   *
+   * @return the swerve's kinematics.
+   */
+  public SwerveDriveKinematics getKinematics() {
+    return swerveKinematics;
+  }
+
+  /**
+   * Gets the state of each of the swerve's modules.
+   *
+   * @return the state of each of the swerve's modules.
+   */
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+
+    for (int i = 0; i < 4; i++) {
+      moduleStates[i] = swerveModules[i].getState();
+    }
+
+    return moduleStates;
+  }
+
+  /**
+   * Gets the position of each of the swerve's modules.
+   *
+   * @return the position of each of the swerve's modules.
+   */
+  public SwerveModulePosition[] getModulePositions() {
+    SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+
+    for (int i = 0; i < 4; i++) {
+      modulePositions[i] = swerveModules[i].getPosition();
+    }
+
+    return modulePositions;
+  }
+
+  /**
+   * Gets the swerve's speeds.
+   *
+   * @return the swerve's speeds.
+   */
+  public ChassisSpeeds getChassisSpeeds() {
+    return swerveKinematics.toChassisSpeeds(getModuleStates());
   }
 
   /**
