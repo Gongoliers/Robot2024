@@ -38,7 +38,7 @@ public class Odometry extends Subsystem {
 
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
-    gyroscope = OdometryFactory.createGyroscope(this);
+    gyroscope = OdometryFactory.createGyroscope(OdometryConstants.GYROSCOPE_CAN, this);
     gyroscope.configure();
 
     swerveModulePositionsSupplier = () -> Swerve.getInstance().getModulePositions();

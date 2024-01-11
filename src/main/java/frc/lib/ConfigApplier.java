@@ -3,6 +3,8 @@ package frc.lib;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 
@@ -35,6 +37,21 @@ public class ConfigApplier {
    */
   public static void applyTalonFXConfig(
       TalonFXConfigurator configurator, TalonFXConfiguration config) {
+    for (int i = 0; i < PHOENIX_RETRY_COUNT; i++) {
+      if (configurator.apply(config) == StatusCode.OK) {
+        break;
+      }
+    }
+  }
+
+  /**
+   * Configures a Pigeon 2.
+   *
+   * @param configurator the Pigeon 2's configurator.
+   * @param config the config to apply.
+   */
+  public static void applyPigeon2Config(
+      Pigeon2Configurator configurator, Pigeon2Configuration config) {
     for (int i = 0; i < PHOENIX_RETRY_COUNT; i++) {
       if (configurator.apply(config) == StatusCode.OK) {
         break;
