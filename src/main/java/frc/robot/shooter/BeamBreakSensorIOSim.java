@@ -1,23 +1,21 @@
 package frc.robot.shooter;
 
-import edu.wpi.first.networktables.BooleanTopic;
+import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import java.util.function.BooleanSupplier;
 
 /** Simulated beam break sensor. */
 public class BeamBreakSensorIOSim implements BeamBreakSensorIO {
 
-  /** Supplies values for if the beam break sensor is broken. */
-  private final BooleanSupplier isBrokenSupplier;
+  /** NetworkTables entry for if the beam break sensor is broken. */
+  private final BooleanEntry isBrokenEntry;
 
   /** Creates a simulated beam break sensor. */
   public BeamBreakSensorIOSim() {
     NetworkTable table = NetworkTableInstance.getDefault().getTable("shooter/beamBreakSensorSim");
 
-    BooleanTopic isBrokenTopic = table.getBooleanTopic("isBroken");
-    isBrokenTopic.publish().set(false);
-    isBrokenSupplier = isBrokenTopic.subscribe(false);
+    isBrokenEntry = table.getBooleanTopic("isBroken").getEntry(false);
+    isBrokenEntry.set(false);
   }
 
   @Override
@@ -25,6 +23,6 @@ public class BeamBreakSensorIOSim implements BeamBreakSensorIO {
 
   @Override
   public void update(BeamBreakSensorIOValues values) {
-    values.isBroken = isBrokenSupplier.getAsBoolean();
+    values.isBroken = isBrokenEntry.get();
   }
 }
