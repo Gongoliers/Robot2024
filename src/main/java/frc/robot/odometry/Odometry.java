@@ -125,7 +125,8 @@ public class Odometry extends Subsystem {
    * @return the velocity of the robot on the field.
    */
   public Transform2d getVelocity() {
-    // TODO Guards against simulated odometry hardware calling before the swerve pose estimator is intialized
+    // TODO Guards against simulated odometry hardware calling before the swerve pose estimator is
+    // intialized
     if (swervePoseEstimator == null) return new Transform2d();
 
     ChassisSpeeds chassisSpeeds = swerveChassisSpeedsSupplier.get();

@@ -50,7 +50,8 @@ public class RobotContainer {
 
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
-    Telemetry.initializeShuffleboards(arm, auto, climber, intake, odometry, shooter, swerve, vision);
+    Telemetry.initializeShuffleboards(
+        arm, auto, climber, intake, odometry, shooter, swerve, vision);
   }
 
   /** Configures operator controller bindings. */
