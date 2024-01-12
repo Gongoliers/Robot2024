@@ -79,8 +79,7 @@ public class SwerveFactory {
    * @return a drive motor.
    */
   public static DriveMotorIO createDriveMotor(SwerveModuleConfig config) {
-    //if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
-    if (Robot.isReal()) return new DriveMotorIOSim();
+    if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
 
     return new DriveMotorIOSim();
   }

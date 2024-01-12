@@ -39,7 +39,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
     if (velocityMetersPerSecond == 0.0) {
       talonFX.setControl(new CoastOut());
     } else {
-      talonFX.setControl(calculateVelocityVoltage(velocityMetersPerSecond));
+      talonFX.setControl(new VoltageOut(velocityMetersPerSecond / SwerveConstants.MAXIMUM_SPEED * 12));
     }
   }
 
