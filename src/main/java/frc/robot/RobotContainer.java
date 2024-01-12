@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.CustomXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
@@ -9,6 +10,7 @@ import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
+import frc.robot.swerve.Drive;
 import frc.robot.swerve.Swerve;
 import frc.robot.vision.Vision;
 
@@ -26,7 +28,7 @@ public class RobotContainer {
   private final Swerve swerve = Swerve.getInstance();
   private final Vision vision = Vision.getInstance();
 
-  private final CommandXboxController driver = new CommandXboxController(0);
+  private final CustomXboxController driver = new CustomXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
 
   /** Creates a new instance of the robot container. */
@@ -56,6 +58,8 @@ public class RobotContainer {
 
   /** Configures operator controller bindings. */
   private void configureBindings() {
+    swerve.setDefaultCommand(new Drive(driver));
+
     driver.a().whileTrue(swerve.forwards());
     driver.b().whileTrue(swerve.sideways());
 

@@ -3,6 +3,7 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import frc.robot.swerve.AzimuthEncoderIO.AzimuthEncoderIOValues;
 import frc.robot.swerve.DriveMotorIO.DriveMotorIOValues;
 import frc.robot.swerve.SteerMotorIO.SteerMotorIOValues;
@@ -64,6 +65,19 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    * @return the optimized setpoint.
    */
   private SwerveModuleState optimize(SwerveModuleState setpoint) {
+    setpoint =
+        SwerveModuleState.optimize(
+            setpoint, Rotation2d.fromRotations(steerMotorValues.positionRotations));
+
+    final double kDejitterThreshold = Units.inchesToMeters(4);
+
+    if (Math.abs(setpoint.speedMetersPerSecond) < kDejitterThreshold) {
+      setpoint.angle = getState().angle;
+    }
+
+    // https://github.com/Mechanical-Advantage/RobotCode2023/blob/bf960378bca7fe3f32c46d3d529925d960d1ff37/src/main/java/org/littletonrobotics/frc2023/subsystems/drive/Module.java#L117
+    setpoint.speedMetersPerSecond *= setpoint.angle.minus(getState().angle).getCos();
+
     return setpoint;
   }
 

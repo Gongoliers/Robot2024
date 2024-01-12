@@ -63,8 +63,7 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
         BaseStatusSignal.getLatencyCompensatedValue(
             this.positionRotations, this.velocityRotationsPerSecond);
 
-    double positionFeedbackVolts =
-        positionFeedback.calculate(measuredPositionRotations);
+    double positionFeedbackVolts = positionFeedback.calculate(measuredPositionRotations);
 
     double positionFeedforwardVolts =
         Math.signum(positionFeedbackVolts) * this.positionFeedforwardVolts;

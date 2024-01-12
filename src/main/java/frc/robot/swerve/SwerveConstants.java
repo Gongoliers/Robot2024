@@ -64,4 +64,7 @@ public class SwerveConstants {
 
   /** Maximum attainable speed in meters per second. */
   public static final double MAXIMUM_SPEED = Units.feetToMeters(4.0);
+
+  /** Maximum attainable rotational speed in rotations per second. */
+  public static final Rotation2d MAXIMUM_ANGULAR_SPEED = Rotation2d.fromRotations(0.5);
 }

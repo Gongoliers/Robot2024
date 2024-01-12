@@ -38,6 +38,10 @@ public class GyroscopeIOPigeon2 implements GyroscopeIO {
 
   @Override
   public void update(GyroscopeIOValues values) {
+    roll.refresh();
+    pitch.refresh();
+    yaw.refresh();
+
     values.rollRotations = roll.getValue();
     values.pitchRotations = pitch.getValue();
     values.yawRotations = yaw.getValue();
