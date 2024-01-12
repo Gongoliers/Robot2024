@@ -25,7 +25,7 @@ public class GyroscopeIOSim implements GyroscopeIO {
   @Override
   public void update(GyroscopeIOValues values) {
     yawRotations +=
-        yawVelocityRotationsPerSecondSupplier.getAsDouble() * RobotConstants.TICK_PERIOD;
+        yawVelocityRotationsPerSecondSupplier.getAsDouble() * RobotConstants.PERIODIC_DURATION;
 
     values.rollRotations = 0.0;
     values.pitchRotations = 0.0;

@@ -20,7 +20,7 @@ public class SerializerMotorIOSim implements SerializerMotorIO {
 
   @Override
   public void update(SerializerMotorIOValues values) {
-    serializerSim.update(RobotConstants.TICK_PERIOD);
+    serializerSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.angularVelocityRotationsPerSecond = serializerSim.getAngularVelocityRPM() / 60.0;
     values.currentAmps = serializerSim.getCurrentDrawAmps();

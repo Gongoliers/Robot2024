@@ -16,7 +16,7 @@ public class DriveMotorIOSim implements DriveMotorIO {
 
   @Override
   public void update(DriveMotorIOValues values) {
-    this.positionMeters += velocityMetersPerSecond * RobotConstants.TICK_PERIOD;
+    this.positionMeters += velocityMetersPerSecond * RobotConstants.PERIODIC_DURATION;
 
     values.positionMeters = positionMeters;
     values.velocityMetersPerSecond = velocityMetersPerSecond;

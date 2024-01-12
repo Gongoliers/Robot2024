@@ -36,7 +36,7 @@ public class SteerMotorIOSim implements SteerMotorIO {
     double voltage = positionFeedback.calculate(positionRotations);
 
     wheelSim.setInputVoltage(voltage);
-    wheelSim.update(RobotConstants.TICK_PERIOD);
+    wheelSim.update(RobotConstants.PERIODIC_DURATION);
 
     double velocityRotationsPerSecond = wheelSim.getAngularVelocityRPM() / 60.0;
     positionRotations += velocityRotationsPerSecond;

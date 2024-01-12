@@ -9,37 +9,38 @@ import frc.lib.RotationPIDController;
 import frc.robot.odometry.Odometry;
 import frc.robot.swerve.DriveRequest.TranslationMode;
 
-/** Commands the swerve to drive using driver input. */
+/** Drives the swerve using driver input. */
 public class Drive extends Command {
-  /* Reference to the swerve subsystem. */
+  /* Swerve subsystem. */
   private final Swerve swerve;
-  /* Reference to the odometry subsystem. */
+  /* Odometry subsystem. */
   private final Odometry odometry;
 
-  /* Reference to the Xbox controller used to get driver input. */
+  /* Xbox controller used to get driver input. */
   private final CustomXboxController controller;
 
-  /* Stores the current and previous requests from the driver controller. */
+  /* Current and previous requests from the driver controller. */
   private DriveRequest request, previousRequest;
 
-  /* Rotation feedback controller. Outputs angular velocities to correct positional error caused by unintentional drift. */
+  /* Drift feedback controller. */
   private final RotationPIDController driftFeedback = new RotationPIDController(0, 0, 0);
-  /* Rotation feedback controller. Outputs angular velocities to approach requested headings. */
-  private final RotationPIDController thetaFeedback = new RotationPIDController(0, 0, 0);
+  /* Heading feedback controller. */
+  private final RotationPIDController headingFeedback = new RotationPIDController(0, 0, 0);
 
+  /** Heading setpoint. */
   private Rotation2d heading = new Rotation2d();
 
   public Drive(CustomXboxController controller) {
-    this.swerve = Swerve.getInstance();
-    this.odometry = Odometry.getInstance();
+    swerve = Swerve.getInstance();
+    odometry = Odometry.getInstance();
 
-    addRequirements(this.swerve);
+    addRequirements(swerve);
 
     this.controller = controller;
-    this.previousRequest = DriveRequest.fromController(controller);
+    previousRequest = DriveRequest.fromController(controller);
 
     driftFeedback.setSaturation(SwerveConstants.MAXIMUM_ANGULAR_SPEED.times(0.5));
-    thetaFeedback.setSaturation(SwerveConstants.MAXIMUM_ANGULAR_SPEED);
+    headingFeedback.setSaturation(SwerveConstants.MAXIMUM_ANGULAR_SPEED);
   }
 
   @Override
@@ -65,7 +66,7 @@ public class Drive extends Command {
         break;
       case SNAPPING:
         heading = request.getRequestedSnapAngle();
-        omegaRadiansPerSecond = thetaFeedback.calculate(rotation, heading);
+        omegaRadiansPerSecond = headingFeedback.calculate(rotation, heading);
         break;
       case DRIFTING:
         omegaRadiansPerSecond = driftFeedback.calculate(rotation, heading);

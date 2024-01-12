@@ -20,7 +20,7 @@ public class FlywheelMotorIOSim implements FlywheelMotorIO {
 
   @Override
   public void update(FlywheelMotorIOValues values) {
-    flywheelSim.update(RobotConstants.TICK_PERIOD);
+    flywheelSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.angularVelocityRotationsPerSecond = flywheelSim.getAngularVelocityRPM() / 60.0;
     values.currentAmps = flywheelSim.getCurrentDrawAmps();

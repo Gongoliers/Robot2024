@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+/** XboxController with triggers for if an axis is non-zero. */
 public class CustomXboxController extends CommandXboxController {
 
   private final double kAxisDeadband = 0.1;
