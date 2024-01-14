@@ -5,19 +5,21 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.CAN;
 import frc.lib.ConfigApplier;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
+import frc.robot.swerve.SwerveConstants.SteerMotorConstants;
 
 /** TalonFX steer motor controlled by an external PID controller. */
 public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
 
   /** Feedback controller for TalonFX position. */
-  private final PIDController positionFeedback = new PIDController(32, 0, 0.25);
+  private final PIDController positionFeedback =
+      new PIDController(SteerMotorConstants.FEEDBACK_KP, 0, SteerMotorConstants.FEEDBACK_KD);
 
-  /** Static feedforward for TalonFX position in volts. */
-  private final double positionFeedforwardVolts = 0.14;
+  private final SimpleMotorFeedforward positionFeedforward =
+      new SimpleMotorFeedforward(SteerMotorConstants.FEEDFORWARD_KS, 0);
 
   /**
    * Creates a new TalonFX steer motor controlled by an external PID controller.
@@ -30,7 +32,7 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
     super(steerMotorCAN, azimuthEncoderCAN);
 
     positionFeedback.enableContinuousInput(0, 1);
-    positionFeedback.setTolerance(Units.degreesToRotations(1));
+    positionFeedback.setTolerance(SteerMotorConstants.TOLERANCE.getRotations());
   }
 
   @Override
@@ -65,8 +67,8 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
 
     double positionFeedbackVolts = positionFeedback.calculate(measuredPositionRotations);
 
-    double positionFeedforwardVolts =
-        Math.signum(positionFeedbackVolts) * this.positionFeedforwardVolts;
+    // TOOD Uses feedback voltage as a stand-in for "velocity"
+    double positionFeedforwardVolts = positionFeedforward.calculate(positionFeedbackVolts);
 
     return new VoltageOut(positionFeedbackVolts + positionFeedforwardVolts);
   }

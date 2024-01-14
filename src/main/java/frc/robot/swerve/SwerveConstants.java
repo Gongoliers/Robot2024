@@ -67,4 +67,19 @@ public class SwerveConstants {
 
   /** Maximum attainable rotational speed in rotations per second. */
   public static final Rotation2d MAXIMUM_ANGULAR_SPEED = Rotation2d.fromRotations(0.5);
+
+  /** Constants for steer feedback controllers. */
+  public static class SteerMotorConstants {
+    /** Feedback tolerance. */
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(1.0);
+
+    /** Feedback proportional gain in volts per rotation. */
+    public static final double FEEDBACK_KP = 32.0;
+
+    /** Feedback derivative gain in volts per rotation per second. */
+    public static final double FEEDBACK_KD = 0.25;
+
+    /** Feedforward static gain in volts. */
+    public static final double FEEDFORWARD_KS = 0.14;
+  }
 }

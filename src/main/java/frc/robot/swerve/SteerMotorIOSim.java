@@ -2,9 +2,11 @@ package frc.robot.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.RobotConstants;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
+import frc.robot.swerve.SwerveConstants.SteerMotorConstants;
 
 /** Simulated steer motor. */
 public class SteerMotorIOSim implements SteerMotorIO {
@@ -23,12 +25,15 @@ public class SteerMotorIOSim implements SteerMotorIO {
   private double velocityRotationsPerSecond;
 
   /** Feedback controller for the position. */
-  private final PIDController positionFeedback = new PIDController(1.0, 0, 0);
+  private final PIDController positionFeedback =
+      new PIDController(SteerMotorConstants.FEEDBACK_KP, 0, SteerMotorConstants.FEEDBACK_KD);
 
   public SteerMotorIOSim() {
     positionRotations = 0.0;
+    velocityRotationsPerSecond = 0.0;
 
     positionFeedback.enableContinuousInput(0, 1);
+    positionFeedback.setTolerance(SteerMotorConstants.TOLERANCE.getRotations());
   }
 
   @Override
@@ -42,7 +47,7 @@ public class SteerMotorIOSim implements SteerMotorIO {
 
   @Override
   public void setPosition(double positionRotations) {
-    this.positionRotations = 0.0;
+    this.positionRotations = positionRotations;
   }
 
   @Override
@@ -52,7 +57,9 @@ public class SteerMotorIOSim implements SteerMotorIO {
     wheelSim.setInputVoltage(voltage);
     wheelSim.update(RobotConstants.PERIODIC_DURATION);
 
-    this.velocityRotationsPerSecond = wheelSim.getAngularVelocityRPM() / 60.0;
+    this.velocityRotationsPerSecond =
+        Units.radiansToRotations(wheelSim.getAngularVelocityRadPerSec())
+            / MK4iConstants.STEER_GEARING;
     this.positionRotations += this.velocityRotationsPerSecond;
   }
 }
