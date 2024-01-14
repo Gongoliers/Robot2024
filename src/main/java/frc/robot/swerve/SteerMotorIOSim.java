@@ -19,6 +19,9 @@ public class SteerMotorIOSim implements SteerMotorIO {
   /** Represents the position of the steer motor. */
   private double positionRotations;
 
+  /** Represents the velocity of the steer motor. */
+  private double velocityRotationsPerSecond;
+
   /** Feedback controller for the position. */
   private final PIDController positionFeedback = new PIDController(1.0, 0, 0);
 
@@ -33,14 +36,6 @@ public class SteerMotorIOSim implements SteerMotorIO {
 
   @Override
   public void update(SteerMotorIOValues values) {
-    double voltage = positionFeedback.calculate(positionRotations);
-
-    wheelSim.setInputVoltage(voltage);
-    wheelSim.update(RobotConstants.PERIODIC_DURATION);
-
-    double velocityRotationsPerSecond = wheelSim.getAngularVelocityRPM() / 60.0;
-    positionRotations += velocityRotationsPerSecond;
-
     values.positionRotations = positionRotations;
     values.velocityRotationsPerSecond = velocityRotationsPerSecond;
   }
@@ -52,6 +47,12 @@ public class SteerMotorIOSim implements SteerMotorIO {
 
   @Override
   public void setSetpoint(double positionRotations) {
-    positionFeedback.setSetpoint(positionRotations);
+    double voltage = positionFeedback.calculate(this.positionRotations, positionRotations);
+
+    wheelSim.setInputVoltage(voltage);
+    wheelSim.update(RobotConstants.PERIODIC_DURATION);
+
+    this.velocityRotationsPerSecond = wheelSim.getAngularVelocityRPM() / 60.0;
+    this.positionRotations += this.velocityRotationsPerSecond;
   }
 }

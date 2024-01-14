@@ -57,6 +57,9 @@ public class Swerve extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
+    Telemetry.addSwerveModuleStates(tab, "Swerve Module States", this::getModuleStates);
+    Telemetry.addSwerveModuleStates(tab, "Swerve Module Setpoints", this::getModuleSetpoints);
+
     for (int i = 0; i < 4; i++) {
       SwerveModuleIO swerveModule = swerveModules[i];
 
@@ -90,6 +93,21 @@ public class Swerve extends Subsystem {
     }
 
     return moduleStates;
+  }
+
+  /**
+   * Gets the setpoint of each of the swerve's modules.
+   *
+   * @return the setpoint of each of the swerve's modules.
+   */
+  public SwerveModuleState[] getModuleSetpoints() {
+    SwerveModuleState[] moduleSetpoints = new SwerveModuleState[4];
+
+    for (int i = 0; i < 4; i++) {
+      moduleSetpoints[i] = swerveModules[i].getSetpoint();
+    }
+
+    return moduleSetpoints;
   }
 
   /**

@@ -29,6 +29,9 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   /** Driver motor values. */
   private final DriveMotorIOValues driveMotorValues = new DriveMotorIOValues();
 
+  /** Module setpoint */
+  private SwerveModuleState setpoint;
+
   /**
    * Creates a custom swerve module.
    *
@@ -44,6 +47,8 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     driveMotor = SwerveFactory.createDriveMotor(config);
     driveMotor.configure();
 
+    setpoint = new SwerveModuleState();
+
     azimuthEncoder.update(azimuthEncoderValues);
     steerMotor.setPosition(azimuthEncoderValues.angleRotations);
   }
@@ -56,6 +61,8 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
 
     steerMotor.setSetpoint(setpoint.angle.getRotations());
     driveMotor.setSetpoint(setpoint.speedMetersPerSecond);
+
+    this.setpoint = setpoint;
   }
 
   /**
@@ -90,6 +97,11 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     return new SwerveModuleState(
         driveMotorValues.velocityMetersPerSecond,
         Rotation2d.fromRotations(steerMotorValues.positionRotations));
+  }
+
+  @Override
+  public SwerveModuleState getSetpoint() {
+    return setpoint;
   }
 
   @Override

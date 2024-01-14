@@ -22,6 +22,13 @@ public interface SwerveModuleIO {
   public SwerveModuleState getState();
 
   /**
+   * Gets the setpoint of the swerve module.
+   *
+   * @return the setpoint of the swerve module.
+   */
+  public SwerveModuleState getSetpoint();
+
+  /**
    * Gets the position of the swerve module.
    *
    * @return the position of the swerve module.
