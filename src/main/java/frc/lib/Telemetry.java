@@ -73,23 +73,26 @@ public class Telemetry {
 
   /**
    * Adds swerve module states to a Shuffleboard tab.
-   * 
+   *
    * @param tab the Shuffleboard tab to add the swerve module states to.
    * @param title the title of the swerve module states.
    * @param swerveModuleStatesSupplier a supplier for swerve module states.
    */
-  public static void addSwerveModuleStates(ShuffleboardTab tab, String title, Supplier<SwerveModuleState[]> swerveModuleStatesSupplier) {
-    tab.addDoubleArray(title, () -> {
-      SwerveModuleState[] states = swerveModuleStatesSupplier.get();
-      double[] doubles = new double[8];
+  public static void addSwerveModuleStates(
+      ShuffleboardTab tab, String title, Supplier<SwerveModuleState[]> swerveModuleStatesSupplier) {
+    tab.addDoubleArray(
+        title,
+        () -> {
+          SwerveModuleState[] states = swerveModuleStatesSupplier.get();
+          double[] doubles = new double[8];
 
-      for (int i = 0; i < 4; i++) {
-        SwerveModuleState state = states[i];
-        doubles[2 * i] = state.angle.getDegrees();
-        doubles[2 * i + 1] = state.speedMetersPerSecond;
-      }
+          for (int i = 0; i < 4; i++) {
+            SwerveModuleState state = states[i];
+            doubles[2 * i] = state.angle.getDegrees();
+            doubles[2 * i + 1] = state.speedMetersPerSecond;
+          }
 
-      return doubles;
-    });
+          return doubles;
+        });
   }
 }
