@@ -20,49 +20,22 @@ public class DriveRequest {
   public final TranslationMode translationMode;
   public final RotationMode rotationMode;
 
-  public final Translation2d velocity;
-  public final Translation2d heading;
+  public final Translation2d translationVector;
+  public final Translation2d rotationVector;
 
   private DriveRequest(
-      TranslationMode translation,
-      RotationMode rotation,
-      Translation2d velocity,
-      Translation2d heading) {
-    this.translationMode = translation;
-    this.rotationMode = rotation;
+      TranslationMode translationMode,
+      RotationMode rotationMode,
+      Translation2d translationVector,
+      Translation2d rotationVector) {
+    this.translationMode = translationMode;
+    this.rotationMode = rotationMode;
 
-    this.velocity = velocity;
-    this.heading = heading;
+    this.translationVector = translationVector;
+    this.rotationVector = rotationVector;
   }
 
-  static DriveRequest fromController(CustomXboxController controller) {
-    final boolean snipingRequested = controller.leftTrigger().getAsBoolean();
-    final boolean aligningRequested = controller.rightTrigger().getAsBoolean();
-
-    final Translation2d translation =
-        new Translation2d(-controller.getLeftY(), -controller.getLeftX());
-    final Translation2d heading =
-        new Translation2d(-controller.getRightY(), -controller.getRightX());
-
-    final TranslationMode translationMode =
-        snipingRequested ? TranslationMode.ROBOT_CENTRIC : TranslationMode.FIELD_CENTRIC;
-
-    final boolean isDrifting = determineIfDrifting(heading, aligningRequested);
-
-    final RotationMode rotationMode;
-
-    if (isDrifting) {
-      rotationMode = RotationMode.DRIFTING;
-    } else if (aligningRequested) {
-      rotationMode = RotationMode.SNAPPING;
-    } else {
-      rotationMode = RotationMode.SPINNING;
-    }
-
-    return new DriveRequest(translationMode, rotationMode, translation, heading);
-  }
-
-  private static boolean determineIfDrifting(Translation2d heading, boolean aligning) {
+  private static boolean isDrifting(Translation2d heading, boolean aligning) {
     if (aligning) {
       final double kMinHeadingDisplacement = 0.7;
 
@@ -74,23 +47,48 @@ public class DriveRequest {
     return Math.abs(heading.getY()) < kOmegaDeadband;
   }
 
+  static DriveRequest fromController(CustomXboxController controller) {
+    boolean snipingRequested = controller.leftTrigger().getAsBoolean();
+    boolean aligningRequested = controller.rightTrigger().getAsBoolean();
+
+    Translation2d translationVector =
+        new Translation2d(-controller.getLeftY(), -controller.getLeftX());
+    Translation2d rotationVector =
+        new Translation2d(-controller.getRightY(), -controller.getRightX());
+
+    TranslationMode translationMode =
+        snipingRequested ? TranslationMode.ROBOT_CENTRIC : TranslationMode.FIELD_CENTRIC;
+
+    RotationMode rotationMode;
+
+    if (isDrifting(rotationVector, aligningRequested)) {
+      rotationMode = RotationMode.DRIFTING;
+    } else if (aligningRequested) {
+      rotationMode = RotationMode.SNAPPING;
+    } else {
+      rotationMode = RotationMode.SPINNING;
+    }
+
+    return new DriveRequest(translationMode, rotationMode, translationVector, rotationVector);
+  }
+
   public static boolean startedDrifting(DriveRequest past, DriveRequest present) {
     return past.rotationMode == RotationMode.SPINNING
         && present.rotationMode == RotationMode.DRIFTING;
   }
 
-  public Translation2d getRequestedVelocity() {
+  public Translation2d getTranslationVelocity() {
     double scalar = SwerveConstants.MAXIMUM_SPEED;
 
     if (translationMode == TranslationMode.ROBOT_CENTRIC) {
       scalar *= 0.25;
     }
 
-    return velocity.times(scalar);
+    return translationVector.times(scalar);
   }
 
-  public Rotation2d getRequestedSpinRate() {
-    return Rotation2d.fromRotations(0.5).times(this.heading.getY());
+  public Rotation2d getSpinRate() {
+    return Rotation2d.fromRotations(0.5).times(this.rotationVector.getY());
   }
 
   private Rotation2d snapToNearest(Rotation2d angle, Rotation2d multiple) {
@@ -106,6 +104,6 @@ public class DriveRequest {
   public Rotation2d getRequestedSnapAngle() {
     double kSnapMultipleDegrees = 90;
 
-    return snapToNearest(heading.getAngle(), Rotation2d.fromDegrees(kSnapMultipleDegrees));
+    return snapToNearest(rotationVector.getAngle(), Rotation2d.fromDegrees(kSnapMultipleDegrees));
   }
 }

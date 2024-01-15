@@ -50,7 +50,7 @@ public class Drive extends Command {
   public void execute() {
     request = DriveRequest.fromController(controller);
 
-    Translation2d velocity = request.getRequestedVelocity();
+    Translation2d velocity = request.getTranslationVelocity();
 
     final Rotation2d rotation = odometry.getPosition().getRotation();
 
@@ -62,7 +62,7 @@ public class Drive extends Command {
 
     switch (request.rotationMode) {
       case SPINNING:
-        omegaRadiansPerSecond = request.getRequestedSpinRate().getRadians();
+        omegaRadiansPerSecond = request.getSpinRate().getRadians();
         break;
       case SNAPPING:
         heading = request.getRequestedSnapAngle();
