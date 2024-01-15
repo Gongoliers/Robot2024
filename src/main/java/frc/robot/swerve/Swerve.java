@@ -65,6 +65,7 @@ public class Swerve extends Subsystem {
 
       ShuffleboardLayout swerveModuleColumn = Telemetry.addColumn(tab, "Module " + i);
 
+      swerveModuleColumn.addDouble("Azimuth (deg)", () -> swerveModule.getAzimuth().getDegrees());
       swerveModuleColumn.addDouble("Angle (deg)", () -> swerveModule.getState().angle.getDegrees());
       swerveModuleColumn.addDouble(
           "Velocity (mps)", () -> swerveModule.getState().speedMetersPerSecond);

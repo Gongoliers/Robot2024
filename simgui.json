@@ -16,17 +16,29 @@
     "transitory": {
       "Shuffleboard": {
         "Swerve": {
+          "Module 0": {
+            "open": true
+          },
+          "Module 1": {
+            "open": true
+          },
+          "Module 2": {
+            "open": true
+          },
+          "Module 3": {
+            "open": true
+          },
           "North East Module": {
             "open": true
           },
           "open": true
-        }
+        },
+        "open": true
       },
       "shooter": {
         "beamBreakSensorSim": {
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },

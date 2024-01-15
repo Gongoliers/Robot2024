@@ -6,7 +6,7 @@ public interface AzimuthEncoderIO {
   /** Values for the azimuth encoder hardware interface. */
   public static class AzimuthEncoderIOValues {
     /** Position of the azimuth encoder in rotations. */
-    public double angleRotations = 0.0;
+    public double positionRotations = 0.0;
   }
 
   /** Configures the azimuth encoder. */

@@ -49,7 +49,29 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     setpoint = new SwerveModuleState();
 
     azimuthEncoder.update(azimuthEncoderValues);
-    steerMotor.setPosition(azimuthEncoderValues.angleRotations);
+    steerMotor.setPosition(azimuthEncoderValues.positionRotations);
+  }
+
+  @Override
+  public SwerveModuleState getState() {
+    steerMotor.update(steerMotorValues);
+    driveMotor.update(driveMotorValues);
+
+    return new SwerveModuleState(
+        driveMotorValues.velocityMetersPerSecond,
+        Rotation2d.fromRotations(steerMotorValues.positionRotations));
+  }
+
+  @Override
+  public Rotation2d getAzimuth() {
+    azimuthEncoder.update(azimuthEncoderValues);
+
+    return Rotation2d.fromRotations(azimuthEncoderValues.positionRotations);
+  }
+
+  @Override
+  public SwerveModuleState getSetpoint() {
+    return setpoint;
   }
 
   @Override
@@ -73,22 +95,6 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    */
   private SwerveModuleState optimize(SwerveModuleState setpoint, SwerveModuleState state) {
     return SwerveModuleState.optimize(setpoint, state.angle);
-  }
-
-  @Override
-  public SwerveModuleState getState() {
-    azimuthEncoder.update(azimuthEncoderValues);
-    steerMotor.update(steerMotorValues);
-    driveMotor.update(driveMotorValues);
-
-    return new SwerveModuleState(
-        driveMotorValues.velocityMetersPerSecond,
-        Rotation2d.fromRotations(steerMotorValues.positionRotations));
-  }
-
-  @Override
-  public SwerveModuleState getSetpoint() {
-    return setpoint;
   }
 
   @Override

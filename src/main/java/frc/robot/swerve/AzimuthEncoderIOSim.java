@@ -8,6 +8,6 @@ public class AzimuthEncoderIOSim implements AzimuthEncoderIO {
 
   @Override
   public void update(AzimuthEncoderIOValues values) {
-    values.angleRotations = 0.0;
+    values.positionRotations = 0.0;
   }
 }

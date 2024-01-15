@@ -44,6 +44,6 @@ public class AzimuthEncoderIOCANcoder implements AzimuthEncoderIO {
   public void update(AzimuthEncoderIOValues values) {
     absolutePositionRotations.refresh();
 
-    values.angleRotations = absolutePositionRotations.getValue();
+    values.positionRotations = absolutePositionRotations.getValue();
   }
 }
