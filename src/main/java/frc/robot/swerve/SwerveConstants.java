@@ -66,7 +66,7 @@ public class SwerveConstants {
   public static final double MAXIMUM_SPEED = Units.feetToMeters(4.0);
 
   /** Maximum attainable rotational speed in rotations per second. */
-  public static final Rotation2d MAXIMUM_ANGULAR_SPEED = Rotation2d.fromRotations(0.5);
+  public static final Rotation2d MAXIMUM_ROTATION_SPEED = Rotation2d.fromRotations(0.5);
 
   /** Constants for steer feedback controllers. */
   public static class SteerMotorConstants {

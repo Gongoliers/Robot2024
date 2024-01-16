@@ -28,8 +28,8 @@ public class RobotContainer {
   private final Swerve swerve = Swerve.getInstance();
   private final Vision vision = Vision.getInstance();
 
-  private final CustomXboxController driver = new CustomXboxController(0);
-  private final CommandXboxController operator = new CommandXboxController(1);
+  private final CustomXboxController driverController = new CustomXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
@@ -58,16 +58,16 @@ public class RobotContainer {
 
   /** Configures operator controller bindings. */
   private void configureBindings() {
-    swerve.setDefaultCommand(new Drive(driver));
+    swerve.setDefaultCommand(new Drive(driverController));
 
-    driver.a().whileTrue(swerve.forwards());
-    driver.b().whileTrue(swerve.sideways());
+    driverController.a().whileTrue(swerve.forwards());
+    driverController.b().whileTrue(swerve.sideways());
 
-    operator.leftBumper().whileTrue(shooter.intake());
-    operator.leftTrigger().whileTrue(shooter.smartIntake());
+    operatorController.leftBumper().whileTrue(shooter.intake());
+    operatorController.leftTrigger().whileTrue(shooter.smartIntake());
 
-    operator.rightBumper().whileTrue(shooter.shoot());
-    operator.rightTrigger().whileTrue(shooter.smartShoot());
+    operatorController.rightBumper().whileTrue(shooter.shoot());
+    operatorController.rightTrigger().whileTrue(shooter.smartShoot());
   }
 
   /**

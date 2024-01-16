@@ -17,30 +17,30 @@ public class Drive extends Command {
   private final Odometry odometry;
 
   /* Xbox controller used to get driver input. */
-  private final CustomXboxController controller;
+  private final CustomXboxController driverController;
 
   /* Current and previous requests from the driver controller. */
   private DriveRequest request, previousRequest;
 
   /* Drift feedback controller. */
-  private final RotationPIDController driftFeedback = new RotationPIDController(0, 0, 0);
+  private final RotationPIDController driftFeedback =
+      new RotationPIDController(0, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
   /* Heading feedback controller. */
-  private final RotationPIDController headingFeedback = new RotationPIDController(0, 0, 0);
+  private final RotationPIDController headingFeedback =
+      new RotationPIDController(0, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
 
   /** Heading setpoint. */
-  private Rotation2d heading = new Rotation2d();
+  private Rotation2d headingSetpoint = new Rotation2d();
 
-  public Drive(CustomXboxController controller) {
+  public Drive(CustomXboxController driverController) {
     swerve = Swerve.getInstance();
     odometry = Odometry.getInstance();
 
     addRequirements(swerve);
 
-    this.controller = controller;
-    previousRequest = DriveRequest.fromController(controller);
+    this.driverController = driverController;
 
-    driftFeedback.setSaturation(SwerveConstants.MAXIMUM_ANGULAR_SPEED.times(0.5));
-    headingFeedback.setSaturation(SwerveConstants.MAXIMUM_ANGULAR_SPEED);
+    previousRequest = DriveRequest.fromController(driverController);
   }
 
   @Override
@@ -48,39 +48,46 @@ public class Drive extends Command {
 
   @Override
   public void execute() {
-    request = DriveRequest.fromController(controller);
+    request = DriveRequest.fromController(driverController);
 
-    Translation2d velocity = request.getTranslationVelocity();
+    Translation2d translationVelocityMetersPerSecond = request.getTranslationVelocity();
 
-    final Rotation2d rotation = odometry.getPosition().getRotation();
+    final Rotation2d positionHeading = odometry.getPosition().getRotation();
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
-      heading = rotation;
+      headingSetpoint = positionHeading;
     }
 
-    double omegaRadiansPerSecond = 0.0;
+    Rotation2d rotationVelocity = new Rotation2d();
 
     switch (request.rotationMode) {
       case SPINNING:
-        omegaRadiansPerSecond = request.getSpinRate().getRadians();
+        rotationVelocity = request.getRotationVelocity();
         break;
       case SNAPPING:
-        heading = request.getRequestedSnapAngle();
-        omegaRadiansPerSecond = headingFeedback.calculate(rotation, heading);
+        headingSetpoint = request.getHeading();
+        rotationVelocity = headingFeedback.calculate(positionHeading, headingSetpoint);
         break;
       case DRIFTING:
-        omegaRadiansPerSecond = driftFeedback.calculate(rotation, heading);
+        rotationVelocity = driftFeedback.calculate(positionHeading, headingSetpoint);
         break;
     }
 
     ChassisSpeeds chassisSpeeds;
 
     if (request.translationMode == TranslationMode.ROBOT_CENTRIC) {
-      chassisSpeeds = new ChassisSpeeds(velocity.getX(), velocity.getY(), omegaRadiansPerSecond);
+      chassisSpeeds =
+          new ChassisSpeeds(
+              translationVelocityMetersPerSecond.getX(),
+              translationVelocityMetersPerSecond.getY(),
+              rotationVelocity.getRadians());
     } else {
       chassisSpeeds =
           ChassisSpeeds.fromFieldRelativeSpeeds(
-              velocity.getX(), velocity.getY(), omegaRadiansPerSecond, rotation);
+              translationVelocityMetersPerSecond.getX(),
+              translationVelocityMetersPerSecond.getY(),
+              rotationVelocity.getRadians(),
+              positionHeading);
     }
 
     swerve.setChassisSpeeds(chassisSpeeds);

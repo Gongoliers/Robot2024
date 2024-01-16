@@ -10,15 +10,17 @@ public class RotationPIDController extends SaturatedPIDController {
     this.enableContinuousInput(-Math.PI, Math.PI);
   }
 
-  public void setSaturation(Rotation2d omega) {
-    this.setSaturation(omega.getRadians());
+  public RotationPIDController withSaturation(Rotation2d saturation) {
+    this.setSaturation(saturation.getRadians());
+
+    return this;
   }
 
-  public double calculate(Rotation2d rotation) {
-    return calculate(rotation.getRadians());
+  public Rotation2d calculate(Rotation2d rotation) {
+    return Rotation2d.fromRadians(calculate(rotation.getRadians()));
   }
 
-  public double calculate(Rotation2d rotation, Rotation2d setpoint) {
-    return calculate(rotation.getRadians(), setpoint.getRadians());
+  public Rotation2d calculate(Rotation2d rotation, Rotation2d setpoint) {
+    return Rotation2d.fromRadians(calculate(rotation.getRadians(), setpoint.getRadians()));
   }
 }
