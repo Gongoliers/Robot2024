@@ -17,25 +17,27 @@ public class AzimuthEncoderIOCANcoder implements AzimuthEncoderIO {
   private final StatusSignal<Double> absolutePositionRotations;
 
   /** CANcoder's magnet offset. */
-  private final Rotation2d offset;
+  private final Rotation2d magnetOffset;
 
   /**
    * Creates a new CANcoder azimuth encoder.
    *
    * @param azimuthEncoderCAN the CANcoder's CAN identifier.
-   * @param offset the CANcoder's magnet offset.
+   * @param magnetOffset the CANcoder's magnet offset.
    */
-  public AzimuthEncoderIOCANcoder(CAN azimuthEncoderCAN, Rotation2d offset) {
+  public AzimuthEncoderIOCANcoder(CAN azimuthEncoderCAN, Rotation2d magnetOffset) {
     cancoder = new CANcoder(azimuthEncoderCAN.id(), azimuthEncoderCAN.bus());
 
     absolutePositionRotations = cancoder.getAbsolutePosition();
 
-    this.offset = offset;
+    this.magnetOffset = magnetOffset;
   }
 
   @Override
   public void configure() {
-    CANcoderConfiguration config = SwerveFactory.createAzimuthEncoderConfig(offset);
+    CANcoderConfiguration config = SwerveFactory.createAzimuthEncoderConfig();
+
+    config.MagnetSensor.MagnetOffset = magnetOffset.getRotations();
 
     ConfigApplier.applyCANcoderConfig(cancoder.getConfigurator(), config);
   }

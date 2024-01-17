@@ -3,7 +3,6 @@ package frc.robot.swerve;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Robot;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
@@ -38,10 +37,8 @@ public class SwerveFactory {
    *
    * @return an azimuth encoder configuration.
    */
-  public static CANcoderConfiguration createAzimuthEncoderConfig(Rotation2d offset) {
+  public static CANcoderConfiguration createAzimuthEncoderConfig() {
     CANcoderConfiguration azimuthEncoderConfig = new CANcoderConfiguration();
-
-    azimuthEncoderConfig.MagnetSensor.MagnetOffset = offset.getRotations();
 
     return azimuthEncoderConfig;
   }
