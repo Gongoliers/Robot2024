@@ -95,8 +95,8 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    */
   private SwerveModuleState optimize(SwerveModuleState setpoint, SwerveModuleState state) {
     setpoint = SwerveModuleState.optimize(setpoint, state.angle);
-    
-    final double kDejitterThreshold = 0.01; 
+
+    final double kDejitterThreshold = 0.01;
 
     if (Math.abs(setpoint.speedMetersPerSecond) < kDejitterThreshold) {
       setpoint.speedMetersPerSecond = 0.0;

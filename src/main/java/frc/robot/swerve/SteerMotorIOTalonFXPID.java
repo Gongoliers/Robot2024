@@ -17,10 +17,17 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
 
   /** Feedback controller for TalonFX position. */
   private final ProfiledPIDController positionFeedback =
-      new ProfiledPIDController(SteerMotorConstants.FEEDBACK_KP, 0, SteerMotorConstants.FEEDBACK_KD, new Constraints(SteerMotorConstants.MAXIMUM_SPEED.getRotations(), SteerMotorConstants.MAXIMUM_ACCELERATION.getRotations()));
+      new ProfiledPIDController(
+          SteerMotorConstants.FEEDBACK_KP,
+          0,
+          SteerMotorConstants.FEEDBACK_KD,
+          new Constraints(
+              SteerMotorConstants.MAXIMUM_SPEED.getRotations(),
+              SteerMotorConstants.MAXIMUM_ACCELERATION.getRotations()));
 
   private final SimpleMotorFeedforward positionFeedforward =
-      new SimpleMotorFeedforward(SteerMotorConstants.FEEDFORWARD_KS, SteerMotorConstants.FEEDFORWARD_KV);
+      new SimpleMotorFeedforward(
+          SteerMotorConstants.FEEDFORWARD_KS, SteerMotorConstants.FEEDFORWARD_KV);
 
   /**
    * Creates a new TalonFX steer motor controlled by an external PID controller.
@@ -67,9 +74,11 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
         BaseStatusSignal.getLatencyCompensatedValue(
             this.positionRotations, this.velocityRotationsPerSecond);
 
-    double positionFeedbackVolts = positionFeedback.calculate(measuredPositionRotations, positionRotations);
+    double positionFeedbackVolts =
+        positionFeedback.calculate(measuredPositionRotations, positionRotations);
 
-    double positionFeedforwardVolts = positionFeedforward.calculate(positionFeedback.getSetpoint().velocity);
+    double positionFeedforwardVolts =
+        positionFeedforward.calculate(positionFeedback.getSetpoint().velocity);
 
     return new VoltageOut(positionFeedbackVolts + positionFeedforwardVolts);
   }
