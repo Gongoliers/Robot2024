@@ -94,7 +94,20 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    * @return the optimized setpoint.
    */
   private SwerveModuleState optimize(SwerveModuleState setpoint, SwerveModuleState state) {
-    return SwerveModuleState.optimize(setpoint, state.angle);
+    setpoint = SwerveModuleState.optimize(setpoint, state.angle);
+    
+    final double kDejitterThreshold = 0.01; 
+
+    if (Math.abs(setpoint.speedMetersPerSecond) < kDejitterThreshold) {
+      setpoint.speedMetersPerSecond = 0.0;
+      setpoint.angle = state.angle;
+    }
+
+    Rotation2d angleError = setpoint.angle.minus(state.angle);
+
+    setpoint.speedMetersPerSecond *= angleError.getCos();
+
+    return setpoint;
   }
 
   @Override

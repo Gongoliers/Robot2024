@@ -69,6 +69,9 @@ public class Swerve extends Subsystem {
       swerveModuleColumn.addDouble("Angle (deg)", () -> swerveModule.getState().angle.getDegrees());
       swerveModuleColumn.addDouble(
           "Velocity (mps)", () -> swerveModule.getState().speedMetersPerSecond);
+      swerveModuleColumn.addDouble("Setpoint Angle (deg)", () -> swerveModule.getSetpoint().angle.getDegrees());
+      swerveModuleColumn.addDouble(
+          "Setpoint Velocity (mps)", () -> swerveModule.getSetpoint().speedMetersPerSecond);
     }
   }
 

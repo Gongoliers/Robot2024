@@ -71,7 +71,8 @@ public class SwerveConstants {
   /** Constants for steer feedback controllers. */
   public static class SteerMotorConstants {
     /** Feedback tolerance. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(1.0);
+    // TODO See if it is possible to tighten tolerance further, less than 1 degree?
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(3.0);
 
     /** Feedback proportional gain in volts per rotation. */
     public static final double FEEDBACK_KP = 32.0;

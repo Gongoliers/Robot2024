@@ -24,10 +24,10 @@ public class Drive extends Command {
 
   /* Drift feedback controller. */
   private final RotationPIDController driftFeedback =
-      new RotationPIDController(0, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
+      new RotationPIDController(1, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
   /* Heading feedback controller. */
   private final RotationPIDController headingFeedback =
-      new RotationPIDController(0, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
+      new RotationPIDController(1.25, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
 
   /** Heading setpoint. */
   private Rotation2d headingSetpoint = new Rotation2d();
