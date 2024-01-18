@@ -24,10 +24,10 @@ public class Drive extends Command {
 
   /* Drift feedback controller. */
   private final RotationPIDController driftFeedback =
-      new RotationPIDController(1, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
+      new RotationPIDController(1, 0, 0);
   /* Heading feedback controller. */
   private final RotationPIDController headingFeedback =
-      new RotationPIDController(1.25, 0, 0).withSaturation(SwerveConstants.MAXIMUM_ROTATION_SPEED);
+      new RotationPIDController(1.25, 0, 0);
 
   /** Heading setpoint. */
   private Rotation2d headingSetpoint = new Rotation2d();
@@ -88,6 +88,12 @@ public class Drive extends Command {
               translationVelocityMetersPerSecond.getY(),
               rotationVelocity.getRadians(),
               positionHeading);
+    }
+
+    double maxOmegaRadiansPerSecond = SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians();
+
+    if (Math.abs(chassisSpeeds.omegaRadiansPerSecond) > maxOmegaRadiansPerSecond) {
+      chassisSpeeds.omegaRadiansPerSecond = maxOmegaRadiansPerSecond;
     }
 
     swerve.setChassisSpeeds(chassisSpeeds);

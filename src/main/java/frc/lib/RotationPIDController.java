@@ -1,19 +1,14 @@
 package frc.lib;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public class RotationPIDController extends SaturatedPIDController {
+public class RotationPIDController extends PIDController {
 
   public RotationPIDController(double kp, double ki, double kd) {
     super(kp, ki, kd);
 
     this.enableContinuousInput(-Math.PI, Math.PI);
-  }
-
-  public RotationPIDController withSaturation(Rotation2d saturation) {
-    this.setSaturation(saturation.getRadians());
-
-    return this;
   }
 
   public Rotation2d calculate(Rotation2d rotation) {
