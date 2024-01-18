@@ -33,7 +33,7 @@ public class SteerMotorIOSim implements SteerMotorIO {
     velocityRotationsPerSecond = 0.0;
 
     positionFeedback.enableContinuousInput(0, 1);
-    positionFeedback.setTolerance(SteerMotorConstants.TOLERANCE.getRotations());
+    positionFeedback.setTolerance(SteerMotorConstants.FEEDBACK_TOLERANCE.getRotations());
   }
 
   @Override

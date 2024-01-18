@@ -4,8 +4,9 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.VoltageOut;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.lib.CAN;
 import frc.lib.ConfigApplier;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
@@ -15,11 +16,11 @@ import frc.robot.swerve.SwerveConstants.SteerMotorConstants;
 public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
 
   /** Feedback controller for TalonFX position. */
-  private final PIDController positionFeedback =
-      new PIDController(SteerMotorConstants.FEEDBACK_KP, 0, SteerMotorConstants.FEEDBACK_KD);
+  private final ProfiledPIDController positionFeedback =
+      new ProfiledPIDController(SteerMotorConstants.FEEDBACK_KP, 0, SteerMotorConstants.FEEDBACK_KD, new Constraints(SteerMotorConstants.MAXIMUM_SPEED.getRotations(), SteerMotorConstants.MAXIMUM_ACCELERATION.getRotations()));
 
   private final SimpleMotorFeedforward positionFeedforward =
-      new SimpleMotorFeedforward(SteerMotorConstants.FEEDFORWARD_KS, 0);
+      new SimpleMotorFeedforward(SteerMotorConstants.FEEDFORWARD_KS, SteerMotorConstants.FEEDFORWARD_KV);
 
   /**
    * Creates a new TalonFX steer motor controlled by an external PID controller.
@@ -32,7 +33,7 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
     super(steerMotorCAN, azimuthEncoderCAN);
 
     positionFeedback.enableContinuousInput(-0.5, 0.5);
-    positionFeedback.setTolerance(SteerMotorConstants.TOLERANCE.getRotations());
+    positionFeedback.setTolerance(SteerMotorConstants.FEEDBACK_TOLERANCE.getRotations());
   }
 
   @Override
@@ -46,29 +47,29 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
 
   @Override
   public void setSetpoint(double positionRotations) {
-    positionFeedback.setSetpoint(positionRotations);
+    positionFeedback.setGoal(positionRotations);
 
     if (positionFeedback.atSetpoint()) {
       talonFX.setControl(new CoastOut());
     } else {
-      talonFX.setControl(calculatePositionVoltage());
+      talonFX.setControl(calculatePositionVoltage(positionRotations));
     }
   }
 
   /**
    * Calculates the TalonFX's applied voltage for a position setpoint.
    *
+   * @param positionRotations the steer motor's setpoint.
    * @return the voltage to apply.
    */
-  private VoltageOut calculatePositionVoltage() {
+  private VoltageOut calculatePositionVoltage(double positionRotations) {
     double measuredPositionRotations =
         BaseStatusSignal.getLatencyCompensatedValue(
             this.positionRotations, this.velocityRotationsPerSecond);
 
-    double positionFeedbackVolts = positionFeedback.calculate(measuredPositionRotations);
+    double positionFeedbackVolts = positionFeedback.calculate(measuredPositionRotations, positionRotations);
 
-    // TOOD Uses feedback voltage as a stand-in for "velocity"
-    double positionFeedforwardVolts = positionFeedforward.calculate(positionFeedbackVolts);
+    double positionFeedforwardVolts = positionFeedforward.calculate(positionFeedback.getSetpoint().velocity);
 
     return new VoltageOut(positionFeedbackVolts + positionFeedforwardVolts);
   }
