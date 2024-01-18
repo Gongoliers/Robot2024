@@ -83,4 +83,15 @@ public class SwerveConstants {
     /** Feedforward static gain in volts. */
     public static final double FEEDFORWARD_KS = 0.14;
   }
+
+  public static class DriveMotorConstants {
+    /** If true, use open-loop control. */
+    public static final boolean OPEN_LOOP = true;
+
+    /** Feedback proportional gain in volts per meter per second. */
+    public static final double FEEDBACK_KP = 1.0;
+
+    /** Feedforward static gain in volts. */
+    public static final double FEEDFORWARD_KS = 0.139;
+  }
 }
