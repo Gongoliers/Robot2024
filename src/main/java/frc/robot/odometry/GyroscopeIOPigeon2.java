@@ -42,9 +42,9 @@ public class GyroscopeIOPigeon2 implements GyroscopeIO {
     pitch.refresh();
     yaw.refresh();
 
-    values.rollRotations = roll.getValue();
-    values.pitchRotations = pitch.getValue();
-    values.yawRotations = yaw.getValue();
+    values.rollRotations = Units.degreesToRotations(roll.getValue());
+    values.pitchRotations = Units.degreesToRotations(pitch.getValue());
+    values.yawRotations = Units.degreesToRotations(yaw.getValue());
   }
 
   @Override
