@@ -31,7 +31,7 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
   public SteerMotorIOTalonFXPID(CAN steerMotorCAN, CAN azimuthEncoderCAN) {
     super(steerMotorCAN, azimuthEncoderCAN);
 
-    positionFeedback.enableContinuousInput(0, 1);
+    positionFeedback.enableContinuousInput(-0.5, 0.5);
     positionFeedback.setTolerance(SteerMotorConstants.TOLERANCE.getRotations());
   }
 
