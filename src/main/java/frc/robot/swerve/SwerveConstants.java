@@ -72,7 +72,7 @@ public class SwerveConstants {
   /** Constants for steer feedback controllers. */
   public static class SteerMotorConstants {
     /** Maximum attainable speed. */
-    public static final Rotation2d MAXIMUM_SPEED = Rotation2d.fromRotations(1.0);
+    public static final Rotation2d MAXIMUM_SPEED = Rotation2d.fromRotations(1.5);
 
     /** Maximum attainable acceleration. */
     public static final Rotation2d MAXIMUM_ACCELERATION = Rotation2d.fromRotations(1.0);
@@ -88,11 +88,11 @@ public class SwerveConstants {
     public static final double FEEDBACK_KD = 0.25;
 
     /** Feedforward static constant in volts. */
-    public static final double FEEDFORWARD_KS = 0.14;
+    public static final double FEEDFORWARD_KS = 0.16;
 
     /** Feedforward velocity constant in volts per rotation per second. */
     // TODO Tune
-    public static final double FEEDFORWARD_KV = 0.0;
+    public static final double FEEDFORWARD_KV = 0.42;
   }
 
   public static class DriveMotorConstants {
