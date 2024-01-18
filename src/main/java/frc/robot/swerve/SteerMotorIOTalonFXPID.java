@@ -59,7 +59,7 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
     if (positionFeedback.atSetpoint()) {
       talonFX.setControl(new CoastOut());
     } else {
-      talonFX.setControl(calculatePositionVoltage(positionRotations));
+      talonFX.setControl(new VoltageOut(calculatePositionVoltage(positionRotations)));
     }
   }
 
@@ -69,7 +69,7 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
    * @param positionRotations the steer motor's setpoint.
    * @return the voltage to apply.
    */
-  private VoltageOut calculatePositionVoltage(double positionRotations) {
+  private double calculatePositionVoltage(double positionRotations) {
     double measuredPositionRotations =
         BaseStatusSignal.getLatencyCompensatedValue(
             this.positionRotations, this.velocityRotationsPerSecond);
@@ -80,6 +80,6 @@ public class SteerMotorIOTalonFXPID extends SteerMotorIOTalonFX {
     double positionFeedforwardVolts =
         positionFeedforward.calculate(positionFeedback.getSetpoint().velocity);
 
-    return new VoltageOut(positionFeedbackVolts + positionFeedforwardVolts);
+    return positionFeedbackVolts + positionFeedforwardVolts;
   }
 }
