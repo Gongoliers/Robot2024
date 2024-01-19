@@ -3,6 +3,8 @@ package frc.robot.odometry;
 import frc.robot.RobotConstants;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.util.Units;
+
 /** Simulated gyroscope. */
 public class GyroscopeIOSim implements GyroscopeIO {
 
@@ -16,7 +18,7 @@ public class GyroscopeIOSim implements GyroscopeIO {
     yawRotations = 0.0;
 
     yawVelocityRotationsPerSecondSupplier =
-        () -> odometry.getVelocity().getRotation().getRotations();
+        () -> Units.radiansToRotations(odometry.getVelocity().dtheta);
   }
 
   @Override

@@ -28,7 +28,7 @@ public class SteerMotorIOSim implements SteerMotorIO {
   private static PIDFConstants pidfConstants = new PIDFConstants();
 
   static {
-    pidfConstants.kP = 1.0; // volts per rotation
+    pidfConstants.kP = 64.0; // volts per rotation
     pidfConstants.kVelocityConstraint = 10.0; // volts per rotation per second
     pidfConstants.kAccelerationConstraint = 64.0; // volts per rotation per second per second
   }

@@ -3,8 +3,7 @@ package frc.robot.odometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -91,11 +90,9 @@ public class Odometry extends Subsystem {
 
     ShuffleboardLayout velocity = Telemetry.addColumn(tab, "Velocity");
 
-    velocity.addDouble("X Velocity (mps)", () -> getVelocity().getX());
-    velocity.addDouble("Y Velocity (mps)", () -> getVelocity().getY());
-    velocity.addDouble(
-        "Translation Velocity (mps)", () -> getVelocity().getTranslation().getNorm());
-    velocity.addDouble("Rotation Velocity (dps)", () -> getVelocity().getRotation().getDegrees());
+    velocity.addDouble("X Velocity (mps)", () -> getVelocity().dx);
+    velocity.addDouble("Y Velocity (mps)", () -> getVelocity().dy);
+    velocity.addDouble("Rotation Velocity (dps)", () -> getVelocity().dtheta);
   }
 
   /**
@@ -124,10 +121,10 @@ public class Odometry extends Subsystem {
    *
    * @return the velocity of the robot on the field.
    */
-  public Transform2d getVelocity() {
+  public Twist2d getVelocity() {
     // TODO Guards against simulated odometry hardware calling before the swerve pose estimator is
     // intialized
-    if (swervePoseEstimator == null) return new Transform2d();
+    if (swervePoseEstimator == null) return new Twist2d();
 
     ChassisSpeeds chassisSpeeds = swerveChassisSpeedsSupplier.get();
 
@@ -140,11 +137,6 @@ public class Odometry extends Subsystem {
         chassisSpeeds.vxMetersPerSecond * rotation.getSin()
             + chassisSpeeds.vyMetersPerSecond * rotation.getCos();
 
-    Translation2d translationVelocity =
-        new Translation2d(xVelocityMetersPerSecond, yVelocityMetersPerSecond);
-
-    Rotation2d rotationVelocity = Rotation2d.fromRadians(chassisSpeeds.omegaRadiansPerSecond);
-
-    return new Transform2d(translationVelocity, rotationVelocity);
+    return new Twist2d(xVelocityMetersPerSecond, yVelocityMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond);
   }
 }
