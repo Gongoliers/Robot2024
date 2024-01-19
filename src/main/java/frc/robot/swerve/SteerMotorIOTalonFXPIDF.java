@@ -20,7 +20,7 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
   static {
     pidfConstants.kP = 48.0; // volts per rotation
     pidfConstants.kD = 0.25; // volts per rotation per second
-    pidfConstants.kPositionTolerance = Units.degreesToRotations(3); // rotations
+    pidfConstants.kPositionTolerance = Units.degreesToRotations(3);
     pidfConstants.kVelocityConstraint = 10.0; // rotations per second
     pidfConstants.kAccelerationConstraint = 64.0; // rotations per second per second
     pidfConstants.kS = 0.16; // volts
@@ -55,17 +55,19 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
   @Override
   public void setSetpoint(double positionRotations) {
     if (pidf.atGoal()) {
-      talonFX.setControl(new CoastOut());
-    } else {
-      Rotation2d measuredPosition =
-          Rotation2d.fromRotations(
-              BaseStatusSignal.getLatencyCompensatedValue(
-                  this.positionRotations, this.velocityRotationsPerSecond));
+      // TODO Doesn't work for some reason...
+      //talonFX.setControl(new CoastOut());
+      //return;
+    } 
 
-      double voltage =
-          pidf.calculate(measuredPosition, Rotation2d.fromRotations(positionRotations));
+    Rotation2d measuredPosition =
+        Rotation2d.fromRotations(
+            BaseStatusSignal.getLatencyCompensatedValue(
+                this.positionRotations, this.velocityRotationsPerSecond));
 
-      talonFX.setControl(new VoltageOut(voltage));
-    }
+    double voltage =
+        pidf.calculate(measuredPosition, Rotation2d.fromRotations(positionRotations));
+
+    talonFX.setControl(new VoltageOut(voltage));
   }
 }
