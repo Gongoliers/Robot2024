@@ -69,31 +69,6 @@ public class SwerveConstants {
   public static final Rotation2d MAXIMUM_ROTATION_SPEED =
       Rotation2d.fromRadians(NORTH_WEST_MODULE_CONFIG.position().getNorm() * MAXIMUM_SPEED);
 
-  /** Constants for steer feedback controllers. */
-  public static class SteerMotorConstants {
-    /** Maximum attainable speed. */
-    public static final Rotation2d MAXIMUM_SPEED = Rotation2d.fromRotations(10.0);
-
-    /** Maximum attainable acceleration. */
-    public static final Rotation2d MAXIMUM_ACCELERATION = Rotation2d.fromRotations(64.0);
-
-    /** Feedback tolerance. */
-    // TODO See if it is possible to tighten tolerance further, less than 1 degree?
-    public static final Rotation2d FEEDBACK_TOLERANCE = Rotation2d.fromDegrees(3.0);
-
-    /** Feedback proportional gain in volts per rotation. */
-    public static final double FEEDBACK_KP = 48.0;
-
-    /** Feedback derivative gain in volts per rotation per second. */
-    public static final double FEEDBACK_KD = 0.25;
-
-    /** Feedforward static constant in volts. */
-    public static final double FEEDFORWARD_KS = 0.16;
-
-    /** Feedforward velocity constant in volts per rotation per second. */
-    public static final double FEEDFORWARD_KV = 0.407363;
-  }
-
   public static class DriveMotorConstants {
     /** If true, use open-loop control. */
     public static final boolean OPEN_LOOP = true;
