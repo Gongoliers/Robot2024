@@ -117,6 +117,17 @@ public class Odometry extends Subsystem {
   }
 
   /**
+   * Sets the rotation of the robot on the field.
+   * 
+   * @param rotation the rotation of the robot on the field.
+   */
+  public void setRotation(Rotation2d rotation) {
+    Pose2d position = getPosition();
+
+    setPosition(new Pose2d(position.getTranslation(), rotation));
+  }
+
+  /**
    * Gets the velocity of the robot on the field.
    *
    * @return the velocity of the robot on the field.
