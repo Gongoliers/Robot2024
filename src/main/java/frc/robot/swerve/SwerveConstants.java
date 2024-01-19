@@ -91,7 +91,7 @@ public class SwerveConstants {
     public static final double FEEDFORWARD_KS = 0.16;
 
     /** Feedforward velocity constant in volts per rotation per second. */
-    public static final double FEEDFORWARD_KV = 0.42;
+    public static final double FEEDFORWARD_KV = 0.407363;
   }
 
   public static class DriveMotorConstants {

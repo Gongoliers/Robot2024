@@ -24,8 +24,10 @@ public class Drive extends Command {
 
   /* Drift feedback controller. */
   private final RotationPIDController driftFeedback = new RotationPIDController(1, 0, 0);
+
   /* Heading feedback controller. */
-  private final RotationPIDController headingFeedback = new RotationPIDController(1.25, 0, 0);
+  // TODO Needs tuning, seems to pirouette 
+  private final RotationPIDController headingFeedback = new RotationPIDController(0.5, 0, 0);
 
   /** Heading setpoint. */
   private Rotation2d headingSetpoint = new Rotation2d();
