@@ -1,9 +1,10 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.lib.PIDFConstants;
 import frc.robot.RobotConstants;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
@@ -23,15 +24,23 @@ public class SteerMotorIOSim implements SteerMotorIO {
   /** Represents the velocity of the steer motor. */
   private double velocityRotationsPerSecond;
 
-  /** Feedback controller for the position. */
-  // TODO
-  private final PIDController positionFeedback = new PIDController(1.0, 0, 0.25);
+  /** Constants for PIDF position controller. */
+  private static PIDFConstants pidfConstants = new PIDFConstants();
+
+  static {
+    pidfConstants.kP = 1.0; // volts per rotation
+    pidfConstants.kVelocityConstraint = 10.0; // volts per rotation per second
+    pidfConstants.kAccelerationConstraint = 64.0; // volts per rotation per second per second
+  }
+
+  /** PIDF position controller. */
+  private final SteerMotorPIDF pidf;
 
   public SteerMotorIOSim() {
     positionRotations = 0.0;
     velocityRotationsPerSecond = 0.0;
 
-    positionFeedback.enableContinuousInput(0, 1);
+    pidf = new SteerMotorPIDF(pidfConstants);
   }
 
   @Override
@@ -50,7 +59,10 @@ public class SteerMotorIOSim implements SteerMotorIO {
 
   @Override
   public void setSetpoint(double positionRotations) {
-    double voltage = positionFeedback.calculate(this.positionRotations, positionRotations);
+    double voltage =
+        pidf.calculate(
+            Rotation2d.fromRotations(this.positionRotations),
+            Rotation2d.fromRotations(positionRotations));
 
     wheelSim.setInputVoltage(voltage);
     wheelSim.update(RobotConstants.PERIODIC_DURATION);

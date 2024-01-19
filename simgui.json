@@ -15,10 +15,13 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
-        "Swerve": {
-          "Module 0": {
+        "Odometry": {
+          "Velocity": {
             "open": true
           },
+          "open": true
+        },
+        "Swerve": {
           "Module 1": {
             "open": true
           },
@@ -30,8 +33,7 @@
           },
           "North East Module": {
             "open": true
-          },
-          "open": true
+          }
         },
         "open": true
       },
