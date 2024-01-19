@@ -26,8 +26,7 @@ public class Drive extends Command {
   private final RotationPIDController driftFeedback = new RotationPIDController(1, 0, 0);
 
   /* Heading feedback controller. */
-  // TODO Needs tuning, seems to pirouette
-  private final RotationPIDController headingFeedback = new RotationPIDController(0.5, 0, 0);
+  private final RotationPIDController headingFeedback = new RotationPIDController(1, 0, 0);
 
   /** Heading setpoint. */
   private Rotation2d headingSetpoint = new Rotation2d();
@@ -93,7 +92,7 @@ public class Drive extends Command {
     double maxOmegaRadiansPerSecond = SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians();
 
     if (Math.abs(chassisSpeeds.omegaRadiansPerSecond) > maxOmegaRadiansPerSecond) {
-      chassisSpeeds.omegaRadiansPerSecond = maxOmegaRadiansPerSecond;
+      chassisSpeeds.omegaRadiansPerSecond = Math.signum(chassisSpeeds.omegaRadiansPerSecond) * maxOmegaRadiansPerSecond;
     }
 
     swerve.setChassisSpeeds(chassisSpeeds);
