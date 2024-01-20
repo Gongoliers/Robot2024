@@ -1,6 +1,9 @@
 package frc.lib;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.BooleanEntry;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -94,5 +97,60 @@ public class Telemetry {
 
           return doubles;
         });
+  }
+
+  /**
+   * Adds a boolean entry to the Network Tables table.
+   *
+   * @param table the Network Tables table.
+   * @param name the name of the boolean entry.
+   * @param defaultValue the default value of the entry.
+   * @return the boolean entry.
+   */
+  public static BooleanEntry addBooleanEntry(
+      NetworkTable table, String name, boolean defaultValue) {
+    BooleanEntry entry = table.getBooleanTopic(name).getEntry(defaultValue);
+
+    entry.set(defaultValue);
+
+    return entry;
+  }
+
+  /**
+   * Adds a boolean entry to the Network Tables table.
+   *
+   * @param table the Network Tables table.
+   * @param name the name of the boolean entry.
+   * @return the boolean entry.
+   */
+  public static BooleanEntry addBooleanEntry(NetworkTable table, String name) {
+    return addBooleanEntry(table, name, false);
+  }
+
+  /**
+   * Adds a double entry to the Network Tables table.
+   *
+   * @param table the Network Tables table.
+   * @param name the name of the boolean entry.
+   * @param defaultValue the default value of the entry.
+   * @return the double entry.
+   */
+  public static DoubleEntry addDoubleEntry(NetworkTable table, String name, double defaultValue) {
+    DoubleEntry entry = table.getDoubleTopic(name).getEntry(defaultValue);
+
+    entry.set(defaultValue);
+
+    return entry;
+  }
+
+  /**
+   * Adds a double entry to the Network Tables table.
+   *
+   * @param table the Network Tables table.
+   * @param name the name of the boolean entry.
+   * @return the double entry.
+   */
+  public static DoubleEntry addDoubleEntry(NetworkTable table, String name) {
+    return addDoubleEntry(table, name, 0.0);
   }
 }

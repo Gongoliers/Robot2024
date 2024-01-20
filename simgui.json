@@ -34,8 +34,7 @@
             "open": true
           },
           "open": true
-        },
-        "open": true
+        }
       },
       "shooter": {
         "beamBreakSensorSim": {

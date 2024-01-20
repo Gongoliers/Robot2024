@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.CustomXboxController;
 import frc.lib.ProfiledRotationPIDController;
 import frc.lib.RotationPIDController;
+import frc.lib.Telemetry;
 import frc.robot.odometry.Odometry;
 import frc.robot.swerve.DriveRequest.TranslationMode;
 
@@ -38,14 +39,14 @@ public class Drive extends Command {
       new ProfiledRotationPIDController(
           8, 0, 0, new Constraints(SwerveConstants.MAXIMUM_ROTATION_SPEED.getRotations(), 0.25));
 
-  private final DoubleEntry headingSetpointEntry,
-      headingVelocitySetpointEntry,
-      headingVelocityEntry;
+  private final DoubleEntry headingEntry,
+      headingVelocityEntry,
+      headingGoalEntry,
+      headingSetpointEntry,
+      headingVelocitySetpointEntry;
 
   /** Heading setpoint. */
   private Rotation2d headingGoal = new Rotation2d();
-
-  private final DoubleEntry headingEntry, headingGoalEntry;
 
   public Drive(CustomXboxController driverController) {
     swerve = Swerve.getInstance();
@@ -58,20 +59,13 @@ public class Drive extends Command {
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("swerve/driveCommand");
 
-    headingSetpointEntry = table.getDoubleTopic("headingSetpoint").getEntry(0);
-    headingSetpointEntry.set(0);
+    headingEntry = Telemetry.addDoubleEntry(table, "heading");
+    headingVelocityEntry = Telemetry.addDoubleEntry(table, "headingVelocity");
 
-    headingVelocitySetpointEntry = table.getDoubleTopic("headingVelocitySetpoint").getEntry(0);
-    headingVelocitySetpointEntry.set(0);
+    headingGoalEntry = Telemetry.addDoubleEntry(table, "headingGoal");
 
-    headingVelocityEntry = table.getDoubleTopic("headingVelocity").getEntry(0);
-    headingVelocityEntry.set(0);
-
-    headingEntry = table.getDoubleTopic("heading").getEntry(0);
-    headingEntry.set(0);
-
-    headingGoalEntry = table.getDoubleTopic("headingGoal").getEntry(0);
-    headingGoalEntry.set(0);
+    headingSetpointEntry = Telemetry.addDoubleEntry(table, "headingSetpoint");
+    headingVelocitySetpointEntry = Telemetry.addDoubleEntry(table, "headingVelocitySetpoint");
   }
 
   @Override
