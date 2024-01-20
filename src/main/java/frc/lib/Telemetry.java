@@ -6,9 +6,11 @@ import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
@@ -69,9 +71,10 @@ public class Telemetry {
    * @param tab the Shuffleboard tab to add the Sendable to.
    * @param title the title of the sendable.
    * @param sendable the sendable to add.
+   * @return the sendable widget.
    */
-  public static void addFullscreen(ShuffleboardTab tab, String title, Sendable sendable) {
-    tab.add(title, sendable).withPosition(0, 0).withSize(10, 4);
+  public static ComplexWidget addFullscreen(ShuffleboardTab tab, String title, Sendable sendable) {
+    return tab.add(title, sendable).withPosition(0, 0).withSize(10, 4);
   }
 
   /**
@@ -80,10 +83,11 @@ public class Telemetry {
    * @param tab the Shuffleboard tab to add the swerve module states to.
    * @param title the title of the swerve module states.
    * @param swerveModuleStatesSupplier a supplier for swerve module states.
+   * @return the swerve module states widget.
    */
-  public static void addSwerveModuleStates(
+  public static SuppliedValueWidget<double[]> addSwerveModuleStates(
       ShuffleboardTab tab, String title, Supplier<SwerveModuleState[]> swerveModuleStatesSupplier) {
-    tab.addDoubleArray(
+    return tab.addDoubleArray(
         title,
         () -> {
           SwerveModuleState[] states = swerveModuleStatesSupplier.get();
