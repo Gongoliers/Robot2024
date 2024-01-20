@@ -64,7 +64,9 @@ public class RobotContainer {
 
     driverController.a().whileTrue(swerve.forwards());
     driverController.b().whileTrue(swerve.sideways());
-    driverController.y().onTrue(Commands.runOnce(() -> odometry.setRotation(Rotation2d.fromDegrees(0))));
+    driverController
+        .y()
+        .onTrue(Commands.runOnce(() -> odometry.setRotation(Rotation2d.fromDegrees(0))));
 
     operatorController.leftBumper().whileTrue(shooter.intake());
     operatorController.leftTrigger().whileTrue(shooter.smartIntake());

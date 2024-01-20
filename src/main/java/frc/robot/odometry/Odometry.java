@@ -118,7 +118,7 @@ public class Odometry extends Subsystem {
 
   /**
    * Sets the rotation of the robot on the field.
-   * 
+   *
    * @param rotation the rotation of the robot on the field.
    */
   public void setRotation(Rotation2d rotation) {
@@ -148,6 +148,7 @@ public class Odometry extends Subsystem {
         chassisSpeeds.vxMetersPerSecond * rotation.getSin()
             + chassisSpeeds.vyMetersPerSecond * rotation.getCos();
 
-    return new Twist2d(xVelocityMetersPerSecond, yVelocityMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond);
+    return new Twist2d(
+        xVelocityMetersPerSecond, yVelocityMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond);
   }
 }

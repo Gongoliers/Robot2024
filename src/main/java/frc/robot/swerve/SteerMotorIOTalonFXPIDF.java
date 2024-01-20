@@ -2,7 +2,6 @@ package frc.robot.swerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -56,17 +55,16 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
   public void setSetpoint(double positionRotations) {
     if (pidf.atGoal()) {
       // TODO Doesn't work for some reason...
-      //talonFX.setControl(new CoastOut());
-      //return;
-    } 
+      // talonFX.setControl(new CoastOut());
+      // return;
+    }
 
     Rotation2d measuredPosition =
         Rotation2d.fromRotations(
             BaseStatusSignal.getLatencyCompensatedValue(
                 this.positionRotations, this.velocityRotationsPerSecond));
 
-    double voltage =
-        pidf.calculate(measuredPosition, Rotation2d.fromRotations(positionRotations));
+    double voltage = pidf.calculate(measuredPosition, Rotation2d.fromRotations(positionRotations));
 
     talonFX.setControl(new VoltageOut(voltage));
   }

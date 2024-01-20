@@ -1,9 +1,8 @@
 package frc.robot.odometry;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.RobotConstants;
 import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.util.Units;
 
 /** Simulated gyroscope. */
 public class GyroscopeIOSim implements GyroscopeIO {
