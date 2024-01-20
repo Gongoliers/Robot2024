@@ -64,7 +64,7 @@ public class SwerveConstants {
           Rotation2d.fromRotations(-0.954346));
 
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_SPEED = Units.feetToMeters(4.0);
+  public static final double MAXIMUM_SPEED = Units.feetToMeters(18.38719);
 
   /** Maximum attainable rotational speed. */
   public static final Rotation2d MAXIMUM_ROTATION_SPEED =
@@ -82,7 +82,7 @@ public class SwerveConstants {
 
     /** Feedforward velocity constant in volts per meter per second. */
     // TODO Tune, make sure to convert volts per rotation per second to volts per meter per second
-    public static final double FEEDFORWARD_KV = 0.0;
+    public static final double FEEDFORWARD_KV = 0.652628161;
   }
 
   /** Constants for steer motor PIDF position controllers. */

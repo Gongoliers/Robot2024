@@ -123,10 +123,7 @@ public class Drive extends Command {
 
     double maxOmegaRadiansPerSecond = SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians();
 
-    if (Math.abs(chassisSpeeds.omegaRadiansPerSecond) > maxOmegaRadiansPerSecond) {
-      chassisSpeeds.omegaRadiansPerSecond =
-          Math.signum(chassisSpeeds.omegaRadiansPerSecond) * maxOmegaRadiansPerSecond;
-    }
+    chassisSpeeds.omegaRadiansPerSecond = Math.signum(maxOmegaRadiansPerSecond) * Math.min(maxOmegaRadiansPerSecond, Math.abs(chassisSpeeds.omegaRadiansPerSecond));
 
     headingVelocityEntry.set(Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond));
 
