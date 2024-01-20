@@ -43,13 +43,13 @@ public class SteerMotorPIDF {
   /**
    * Calculates the voltage to reach a goal position from a measured position.
    *
-   * @param measuredPosition the measured position of the steer motor.
-   * @param goalPosition the goal position to reach.
+   * @param measurement the measured position of the steer motor.
+   * @param goal the goal position to reach.
    * @return the voltage to apply to the steer motor.
    */
-  public double calculate(Rotation2d measuredPosition, Rotation2d goalPosition) {
+  public double calculate(Rotation2d measurement, Rotation2d goal) {
     double positionFeedbackVolts =
-        positionFeedback.calculate(measuredPosition.getRotations(), goalPosition.getRotations());
+        positionFeedback.calculate(measurement.getRotations(), goal.getRotations());
 
     double positionFeedforwardVolts =
         positionFeedforward.calculate(positionFeedback.getSetpoint().velocity);

@@ -3,8 +3,14 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.CustomXboxController;
+import frc.lib.ProfiledRotationPIDController;
 import frc.lib.RotationPIDController;
 import frc.robot.odometry.Odometry;
 import frc.robot.swerve.DriveRequest.TranslationMode;
@@ -23,13 +29,23 @@ public class Drive extends Command {
   private DriveRequest request, previousRequest;
 
   /* Drift feedback controller. */
-  private final RotationPIDController driftFeedback = new RotationPIDController(1, 0, 0);
+  // TODO Retune to account for change from radians -> rotations
+  private final RotationPIDController driftFeedback = new RotationPIDController(0, 0, 0);
 
   /* Heading feedback controller. */
-  private final RotationPIDController headingFeedback = new RotationPIDController(1, 0, 0);
+  // TODO Retune to account for change from radians -> rotations
+  private final ProfiledRotationPIDController headingFeedback =
+      new ProfiledRotationPIDController(
+          8, 0, 0, new Constraints(SwerveConstants.MAXIMUM_ROTATION_SPEED.getRotations(), 0.25));
+
+  private final DoubleEntry headingSetpointEntry,
+      headingVelocitySetpointEntry,
+      headingVelocityEntry;
 
   /** Heading setpoint. */
-  private Rotation2d headingSetpoint = new Rotation2d();
+  private Rotation2d headingGoal = new Rotation2d();
+
+  private final DoubleEntry headingEntry, headingGoalEntry;
 
   public Drive(CustomXboxController driverController) {
     swerve = Swerve.getInstance();
@@ -38,8 +54,24 @@ public class Drive extends Command {
     addRequirements(swerve);
 
     this.driverController = driverController;
-
     previousRequest = DriveRequest.fromController(driverController);
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("swerve/driveCommand");
+
+    headingSetpointEntry = table.getDoubleTopic("headingSetpoint").getEntry(0);
+    headingSetpointEntry.set(0);
+
+    headingVelocitySetpointEntry = table.getDoubleTopic("headingVelocitySetpoint").getEntry(0);
+    headingVelocitySetpointEntry.set(0);
+
+    headingVelocityEntry = table.getDoubleTopic("headingVelocity").getEntry(0);
+    headingVelocityEntry.set(0);
+
+    headingEntry = table.getDoubleTopic("heading").getEntry(0);
+    headingEntry.set(0);
+
+    headingGoalEntry = table.getDoubleTopic("headingGoal").getEntry(0);
+    headingGoalEntry.set(0);
   }
 
   @Override
@@ -53,8 +85,10 @@ public class Drive extends Command {
 
     final Rotation2d positionHeading = odometry.getPosition().getRotation();
 
+    headingEntry.set(positionHeading.getRotations());
+
     if (DriveRequest.startedDrifting(previousRequest, request)) {
-      headingSetpoint = positionHeading;
+      headingGoal = positionHeading;
     }
 
     Rotation2d rotationVelocity = new Rotation2d();
@@ -64,11 +98,15 @@ public class Drive extends Command {
         rotationVelocity = request.getRotationVelocity();
         break;
       case SNAPPING:
-        headingSetpoint = request.getHeading();
-        rotationVelocity = headingFeedback.calculate(positionHeading, headingSetpoint);
+        headingGoal = request.getHeading();
+        rotationVelocity = headingFeedback.calculate(positionHeading, headingGoal);
+
+        headingGoalEntry.set(headingGoal.getRotations());
+        headingSetpointEntry.set(headingFeedback.getSetpoint().position);
+        headingVelocitySetpointEntry.set(headingFeedback.getSetpoint().velocity);
         break;
       case DRIFTING:
-        rotationVelocity = driftFeedback.calculate(positionHeading, headingSetpoint);
+        rotationVelocity = driftFeedback.calculate(positionHeading, headingGoal);
         break;
     }
 
@@ -95,6 +133,8 @@ public class Drive extends Command {
       chassisSpeeds.omegaRadiansPerSecond =
           Math.signum(chassisSpeeds.omegaRadiansPerSecond) * maxOmegaRadiansPerSecond;
     }
+
+    headingVelocityEntry.set(Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond));
 
     swerve.setChassisSpeeds(chassisSpeeds);
 

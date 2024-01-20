@@ -8,14 +8,18 @@ public class RotationPIDController extends PIDController {
   public RotationPIDController(double kp, double ki, double kd) {
     super(kp, ki, kd);
 
-    this.enableContinuousInput(-Math.PI, Math.PI);
+    this.enableContinuousInput(-0.5, 0.5);
   }
 
-  public Rotation2d calculate(Rotation2d rotation) {
-    return Rotation2d.fromRadians(calculate(rotation.getRadians()));
+  public Rotation2d calculate(Rotation2d measurement) {
+    double velocityRotationsPerSecond = calculate(measurement.getRadians());
+
+    return Rotation2d.fromRotations(velocityRotationsPerSecond);
   }
 
-  public Rotation2d calculate(Rotation2d rotation, Rotation2d setpoint) {
-    return Rotation2d.fromRadians(calculate(rotation.getRadians(), setpoint.getRadians()));
+  public Rotation2d calculate(Rotation2d measurement, Rotation2d goal) {
+    double velocityRotationsPerSecond = calculate(measurement.getRadians(), goal.getRadians());
+
+    return Rotation2d.fromRotations(velocityRotationsPerSecond);
   }
 }
