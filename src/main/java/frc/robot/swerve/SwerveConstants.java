@@ -17,13 +17,13 @@ public class SwerveConstants {
     public static final double STEER_MOI = 0.004; // TODO
 
     /** Gearing between the drive motor and the wheel. */
-    public static final double DRIVE_GEARING = 6.12;
+    public static final double DRIVE_GEARING = 6.75;
 
     /** Diameter of the MK4i's wheels in meters. */
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
 
     /** Conversion between wheel rotations and distances in meters. */
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI / 1.073729;
   }
 
   /** Module X offset in meters. */
