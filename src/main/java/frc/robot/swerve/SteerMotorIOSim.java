@@ -12,7 +12,7 @@ import frc.robot.swerve.SwerveConstants.MK4iConstants;
 public class SteerMotorIOSim implements SteerMotorIO {
 
   /** Represents the motor used to steer the wheel. */
-  private final DCMotor motorSim = DCMotor.getFalcon500(1); // TODO
+  private final DCMotor motorSim = DCMotor.getFalcon500(1);
 
   /** Represents the wheel steered by the motor. */
   private final FlywheelSim wheelSim =
@@ -24,21 +24,18 @@ public class SteerMotorIOSim implements SteerMotorIO {
   /** Represents the velocity of the steer motor. */
   private double velocityRotationsPerSecond;
 
-  /** Constants for PIDF position controller. */
-  private static PIDFConstants pidfConstants = new PIDFConstants();
-
-  static {
-    pidfConstants.kP = 64.0; // volts per rotation
-    pidfConstants.kVelocityConstraint = 10.0; // volts per rotation per second
-    pidfConstants.kAccelerationConstraint = 64.0; // volts per rotation per second per second
-  }
-
   /** PIDF position controller. */
   private final SteerMotorPIDF pidf;
 
   public SteerMotorIOSim() {
     positionRotations = 0.0;
     velocityRotationsPerSecond = 0.0;
+
+    PIDFConstants pidfConstants = SwerveConstants.STEER_PIDF_CONSTANTS;
+
+    // Simulation is an ideal environment that does not have friction
+    pidfConstants.kPositionTolerance = 0.0;
+    pidfConstants.kS = 0.0;
 
     pidf = new SteerMotorPIDF(pidfConstants);
   }

@@ -18,8 +18,7 @@
         "Odometry": {
           "Velocity": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Swerve": {
           "Module 1": {
@@ -33,7 +32,8 @@
           },
           "North East Module": {
             "open": true
-          }
+          },
+          "open": true
         },
         "open": true
       },
