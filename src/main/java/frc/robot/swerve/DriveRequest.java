@@ -87,8 +87,8 @@ public class DriveRequest {
     return translationVector.times(scalar);
   }
 
-  public Rotation2d getRotationVelocity() {
-    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotationVector.getY());
+  public double getRotationVelocity() {
+    return SwerveConstants.MAXIMUM_ROTATION_SPEED * 0.25 * this.rotationVector.getY();
   }
 
   private Rotation2d snapToNearest(Rotation2d angle, Rotation2d multiple) {

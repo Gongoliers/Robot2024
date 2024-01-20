@@ -12,15 +12,11 @@ public class ProfiledRotationPIDController extends ProfiledPIDController {
     this.enableContinuousInput(-0.5, 0.5);
   }
 
-  public Rotation2d calculate(Rotation2d measurement) {
-    double velocityRotationsPerSecond = calculate(measurement.getRotations());
-
-    return Rotation2d.fromRotations(velocityRotationsPerSecond);
+  public double calculate(Rotation2d measurement) {
+    return calculate(measurement.getRotations());
   }
 
-  public Rotation2d calculate(Rotation2d measurement, Rotation2d goal) {
-    double velocityRotationsPerSecond = calculate(measurement.getRotations(), goal.getRotations());
-
-    return Rotation2d.fromRotations(velocityRotationsPerSecond);
+  public double calculate(Rotation2d measurement, Rotation2d goal) {
+    return calculate(measurement.getRotations(), goal.getRotations());
   }
 }

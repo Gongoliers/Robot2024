@@ -30,14 +30,13 @@ public class Drive extends Command {
   private DriveRequest request, previousRequest;
 
   /* Drift feedback controller. */
-  // TODO Retune to account for change from radians -> rotations
+  // TODO
   private final RotationPIDController driftFeedback = new RotationPIDController(0, 0, 0);
 
   /* Heading feedback controller. */
-  // TODO Retune to account for change from radians -> rotations
   private final ProfiledRotationPIDController headingFeedback =
       new ProfiledRotationPIDController(
-          8, 0, 0, new Constraints(SwerveConstants.MAXIMUM_ROTATION_SPEED.getRotations(), 0.25));
+          6, 0, 0.1, new Constraints(0.25 * SwerveConstants.MAXIMUM_ROTATION_SPEED, 4));
 
   private final DoubleEntry headingEntry,
       headingVelocityEntry,
@@ -83,24 +82,26 @@ public class Drive extends Command {
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
       headingGoal = positionHeading;
+      headingGoalEntry.set(headingGoal.getRotations());
     }
 
-    Rotation2d rotationVelocity = new Rotation2d();
+    double rotationVelocityRotationsPerSecond = 0.0;
 
     switch (request.rotationMode) {
       case SPINNING:
-        rotationVelocity = request.getRotationVelocity();
+        rotationVelocityRotationsPerSecond = request.getRotationVelocity();
         break;
       case SNAPPING:
         headingGoal = request.getHeading();
-        rotationVelocity = headingFeedback.calculate(positionHeading, headingGoal);
+        rotationVelocityRotationsPerSecond =
+            headingFeedback.calculate(positionHeading, headingGoal);
 
         headingGoalEntry.set(headingGoal.getRotations());
         headingSetpointEntry.set(headingFeedback.getSetpoint().position);
         headingVelocitySetpointEntry.set(headingFeedback.getSetpoint().velocity);
         break;
       case DRIFTING:
-        rotationVelocity = driftFeedback.calculate(positionHeading, headingGoal);
+        rotationVelocityRotationsPerSecond = driftFeedback.calculate(positionHeading, headingGoal);
         break;
     }
 
@@ -111,19 +112,22 @@ public class Drive extends Command {
           new ChassisSpeeds(
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
-              rotationVelocity.getRadians());
+              Units.rotationsToRadians(rotationVelocityRotationsPerSecond));
     } else {
       chassisSpeeds =
           ChassisSpeeds.fromFieldRelativeSpeeds(
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
-              rotationVelocity.getRadians(),
+              Units.rotationsToRadians(rotationVelocityRotationsPerSecond),
               positionHeading);
     }
 
-    double maxOmegaRadiansPerSecond = SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians();
+    double maxOmegaRadiansPerSecond =
+        Units.rotationsToRadians(SwerveConstants.MAXIMUM_ROTATION_SPEED);
 
-    chassisSpeeds.omegaRadiansPerSecond = Math.signum(maxOmegaRadiansPerSecond) * Math.min(maxOmegaRadiansPerSecond, Math.abs(chassisSpeeds.omegaRadiansPerSecond));
+    chassisSpeeds.omegaRadiansPerSecond =
+        Math.signum(chassisSpeeds.omegaRadiansPerSecond)
+            * Math.min(maxOmegaRadiansPerSecond, Math.abs(chassisSpeeds.omegaRadiansPerSecond));
 
     headingVelocityEntry.set(Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond));
 
