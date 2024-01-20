@@ -1,5 +1,7 @@
 package frc.lib;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+
 /** Constants for PID feedback controllers and feedforward controllers. */
 public class PIDFConstants {
 
@@ -26,4 +28,16 @@ public class PIDFConstants {
 
   /** Feedforward controller velocity gain. */
   public double kV = 0.0;
+
+  public Slot0Configs asSlot0Configs() {
+    Slot0Configs slot0Configs = new Slot0Configs();
+
+    slot0Configs.kP = kP;
+    slot0Configs.kI = kI;
+    slot0Configs.kD = kD;
+    slot0Configs.kS = kS;
+    slot0Configs.kV = kV;
+
+    return slot0Configs;
+  }
 }
