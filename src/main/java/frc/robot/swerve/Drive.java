@@ -36,7 +36,7 @@ public class Drive extends Command {
   /* Heading feedback controller. */
   private final ProfiledRotationPIDController headingFeedback =
       new ProfiledRotationPIDController(
-          6, 0, 0.1, new Constraints(0.25 * SwerveConstants.MAXIMUM_ROTATION_SPEED, 4));
+          6, 0, 0.1, new Constraints(0.25 * SwerveConstants.MAXIMUM_ROTATION_SPEED, 8));
 
   private final DoubleEntry headingEntry,
       headingVelocityEntry,
