@@ -2,10 +2,17 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/Shuffleboard/Auto/Auto Chooser": "String Chooser"
+      "/Shuffleboard/Auto/Auto Chooser": "String Chooser",
+      "/Shuffleboard/Vision/Field": "Field2d",
+      "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d"
     },
     "windows": {
       "/Shuffleboard/Auto/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": {
         "window": {
           "visible": true
         }
@@ -16,9 +23,13 @@
     "transitory": {
       "Shuffleboard": {
         "Odometry": {
+          "Position": {
+            "open": true
+          },
           "Velocity": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Swerve": {
           "Module 1": {
@@ -32,9 +43,18 @@
           },
           "North East Module": {
             "open": true
+          }
+        },
+        "Vision": {
+          "Vision Pose": {
+            "open": true
           },
           "open": true
-        }
+        },
+        "open": true
+      },
+      "photonvision": {
+        "open": true
       },
       "shooter": {
         "beamBreakSensorSim": {
@@ -44,8 +64,7 @@
       "swerve": {
         "driveCommand": {
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },
