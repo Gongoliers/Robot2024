@@ -22,8 +22,17 @@ public class SwerveConstants {
     /** Diameter of the MK4i's wheels in meters. */
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
 
+    /** Actual distance driven during the odometry test in meters. */
+    public static final double ODOMETRY_TEST_ACTUAL_DISTANCE = 6.985;
+
+    /** Reported distance driven during the odometry test in meters. */
+    public static final double ODOMETRY_TEST_REPORTED_DISTANCE = 8.219;
+
+    /** Conversion between odometry distance and actual distance travelled.  */
+    public static final double ODOMETRY_ERROR = ODOMETRY_TEST_ACTUAL_DISTANCE / ODOMETRY_TEST_REPORTED_DISTANCE;
+
     /** Conversion between wheel rotations and distances in meters. */
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI / 1.073729;
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI * ODOMETRY_ERROR;
   }
 
   /** Module X offset in meters. */
