@@ -1,13 +1,11 @@
 package frc.robot.lights;
 
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.lib.Subsystem;
-import frc.lib.Telemetry;
 import frc.robot.lights.LEDControllerIO.LEDControllerIOValues;
+import frc.robot.lights.LightsConstants.Animations;
 import java.util.Map;
 
 /** Subsystem class for the lights subsystem. */
@@ -22,11 +20,16 @@ public class Lights extends Subsystem {
   /** LED controller values. */
   private final LEDControllerIOValues ledControllerValues = new LEDControllerIOValues();
 
-  private SimpleWidget mainLightWidget;
+  /** Widget for displaying color on Shuffleboard. */
+  private SimpleWidget lightWidget;
+
+  private LEDAnimation animation;
 
   /** Creates a new instance of the lights subsystem. */
   private Lights() {
     ledController = LightsFactory.createLEDController();
+
+    animation = Animations.FOLLOW_RSL;
   }
 
   /**
@@ -46,25 +49,17 @@ public class Lights extends Subsystem {
   public void periodic() {
     ledController.update(ledControllerValues);
 
-    if (RobotController.getRSLState()) {
-      setColor(Color.kOrangeRed);
-    } else {
-      setColor(Color.kBlack);
-    }
+    setColor(animation.getColor());
 
-    if (mainLightWidget != null) {
-      mainLightWidget =
-          mainLightWidget.withProperties(Map.of("colorWhenTrue", getColor().toHexString()));
+    if (lightWidget != null) {
+      lightWidget = lightWidget.withProperties(Map.of("colorWhenTrue", getColor().toHexString()));
     }
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout mainColumn = Telemetry.addColumn(tab, "Main Light");
-
-    mainLightWidget =
-        mainColumn
-            .add("Main Light Color", true)
+    lightWidget =
+        tab.add("Light Color", true)
             .withProperties(
                 Map.of("colorWhenFalse", "#000000", "colorWhenTrue", getColor().toHexString()));
   }
@@ -85,5 +80,14 @@ public class Lights extends Subsystem {
    */
   public void setColor(Color color) {
     ledController.setColor(color.red, color.green, color.blue);
+  }
+
+  /**
+   * Sets the animation of the lights.
+   *
+   * @param animation the animation of the lights.
+   */
+  public void setAnimation(LEDAnimation animation) {
+    this.animation = animation;
   }
 }
