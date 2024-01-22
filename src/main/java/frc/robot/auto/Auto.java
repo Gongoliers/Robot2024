@@ -79,7 +79,7 @@ public class Auto extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    Telemetry.addFullscreen(tab, "Auto Chooser", autoChooser);
+    Telemetry.makeFullscreen(tab.add("Auto Chooser", autoChooser));
   }
 
   /**

@@ -4,10 +4,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
@@ -66,15 +65,14 @@ public class Telemetry {
   }
 
   /**
-   * Adds a fullscreen sendable to a Shuffleboard tab.
+   * Makes a Shuffleboard component fullscreen.
    *
-   * @param tab the Shuffleboard tab to add the Sendable to.
-   * @param title the title of the sendable.
-   * @param sendable the sendable to add.
-   * @return the sendable widget.
+   * @param component the component to make fullscreen.
+   * @return the fullscreen component.
    */
-  public static ComplexWidget addFullscreen(ShuffleboardTab tab, String title, Sendable sendable) {
-    return tab.add(title, sendable).withPosition(0, 0).withSize(10, 4);
+  // TODO
+  public static ShuffleboardComponent makeFullscreen(ShuffleboardComponent component) {
+    return component.withPosition(0, 0).withSize(10, 4);
   }
 
   /**

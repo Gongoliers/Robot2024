@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.lib.Subsystem;
+import frc.lib.Telemetry;
 import frc.robot.lights.LEDControllerIO.LEDControllerIOValues;
 import frc.robot.lights.LightsConstants.Animations;
 import java.util.Map;
@@ -62,6 +63,8 @@ public class Lights extends Subsystem {
         tab.add("Light Color", true)
             .withProperties(
                 Map.of("colorWhenFalse", "#000000", "colorWhenTrue", getColor().toHexString()));
+
+    Telemetry.makeFullscreen(lightWidget);
   }
 
   /**

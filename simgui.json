@@ -3,6 +3,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Auto/Auto Chooser": "String Chooser",
+      "/Shuffleboard/Auto/SendableChooser[0]": "String Chooser",
       "/Shuffleboard/Vision/Field": "Field2d",
       "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d"
     },
