@@ -70,7 +70,7 @@ public class RobotContainer {
         .y()
         .onTrue(Commands.runOnce(() -> odometry.setRotation(Rotation2d.fromDegrees(0))));
 
-    operatorController.leftBumper().whileTrue(shooter.intake());
+    operatorController.leftBumper().whileTrue(intake.intake()).whileTrue(shooter.intake());
     operatorController.leftTrigger().whileTrue(shooter.smartIntake());
 
     operatorController.rightBumper().whileTrue(shooter.shoot());

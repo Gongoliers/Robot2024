@@ -1,7 +1,11 @@
 package frc.robot.intake;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
+import frc.robot.intake.IntakeConstants.IntakeMotorConstants;
+import frc.robot.intake.IntakeMotorIO.IntakeMotorIOValues;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -9,8 +13,16 @@ public class Intake extends Subsystem {
   /** Instance variable for the intake subsystem singleton. */
   private static Intake instance = null;
 
+  /** Intake motor. */
+  private final IntakeMotorIO intakeMotor;
+
+  /** Intake motor values. */
+  private final IntakeMotorIOValues intakeMotorValues = new IntakeMotorIOValues();
+
   /** Creates a new instance of the intake subsystem. */
-  private Intake() {}
+  private Intake() {
+    intakeMotor = IntakeFactory.createIntakeMotor();
+  }
 
   /**
    * Gets the instance of the intake subsystem.
@@ -26,8 +38,15 @@ public class Intake extends Subsystem {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    intakeMotor.update(intakeMotorValues);
+  }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {}
+
+  public Command intake() {
+    return Commands.run(() -> intakeMotor.setVoltage(IntakeMotorConstants.INTAKE_VOLTAGE))
+        .finallyDo(intakeMotor::stop);
+  }
 }

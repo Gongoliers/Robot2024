@@ -28,8 +28,9 @@ public class SwerveConstants {
     /** Reported distance driven during the odometry test in meters. */
     public static final double ODOMETRY_TEST_REPORTED_DISTANCE = 8.219;
 
-    /** Conversion between odometry distance and actual distance travelled.  */
-    public static final double ODOMETRY_ERROR = ODOMETRY_TEST_ACTUAL_DISTANCE / ODOMETRY_TEST_REPORTED_DISTANCE;
+    /** Conversion between odometry distance and actual distance travelled. */
+    public static final double ODOMETRY_ERROR =
+        ODOMETRY_TEST_ACTUAL_DISTANCE / ODOMETRY_TEST_REPORTED_DISTANCE;
 
     /** Conversion between wheel rotations and distances in meters. */
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI * ODOMETRY_ERROR;
