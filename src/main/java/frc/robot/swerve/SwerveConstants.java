@@ -3,6 +3,7 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.lib.MotorCurrentLimits;
 import frc.lib.PIDFConstants;
 
 /** Constants for the swerve subsystem. */
@@ -93,6 +94,11 @@ public class SwerveConstants {
     /** Feedforward velocity constant in volts per meter per second. */
     // TODO Tune, make sure to convert volts per rotation per second to volts per meter per second
     public static final double FEEDFORWARD_KV = 0.652628161;
+
+    /** Current limits for the drive motor. */
+    // TODO Copied from Citrus Circuits 2023 release
+    public static final MotorCurrentLimits CURRENT_LIMITS =
+        new MotorCurrentLimits(300.0, 40.0, 100.0, 1.0);
   }
 
   /** Constants for steer motor PIDF position controllers. */

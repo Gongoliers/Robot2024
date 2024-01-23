@@ -3,7 +3,9 @@ package frc.robot.swerve;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
+import frc.lib.MotorCurrentLimits;
 import frc.robot.Robot;
+import frc.robot.swerve.SwerveConstants.DriveMotorConstants;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** Helper class for creating hardware for the swerve subsystem. */
@@ -67,6 +69,10 @@ public class SwerveFactory {
 
     steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
+    // TODO Copied from Nutrons 2023 release
+    steerMotorConfig.CurrentLimits =
+        new MotorCurrentLimits(0.0, 40.0, 3.0, 1.0).asCurrentLimitsConfigs();
+
     return steerMotorConfig;
   }
 
@@ -93,10 +99,7 @@ public class SwerveFactory {
 
     driveMotorConfig.Feedback.SensorToMechanismRatio = MK4iConstants.DRIVE_GEARING;
 
-    driveMotorConfig.CurrentLimits.SupplyCurrentLimit = 40; // amps
-    driveMotorConfig.CurrentLimits.SupplyCurrentThreshold = 60; // amps
-    driveMotorConfig.CurrentLimits.SupplyTimeThreshold = 1.0; // seconds
-    driveMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    driveMotorConfig.CurrentLimits = DriveMotorConstants.CURRENT_LIMITS.asCurrentLimitsConfigs();
 
     return driveMotorConfig;
   }

@@ -29,6 +29,11 @@ public class PIDFConstants {
   /** Feedforward controller velocity gain. */
   public double kV = 0.0;
 
+  /**
+   * Creates a Phoenix PIDF configuration using the PIDF constants.
+   *
+   * @return a Phoenix PIDF configuration.
+   */
   public Slot0Configs asSlot0Configs() {
     Slot0Configs slot0Configs = new Slot0Configs();
 
