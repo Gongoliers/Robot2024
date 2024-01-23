@@ -74,8 +74,12 @@ public class SwerveConstants {
           new Translation2d(-X_OFFSET, Y_OFFSET),
           Rotation2d.fromRotations(-0.954346));
 
+  /** Velocity of the drive motor's rotor at 12 volts in rotations per second. */
+  private static final double DRIVE_MOTOR_ROTOR_VELOCITY_12_VOLTS = 108.2;
+
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_ATTAINABLE_SPEED = Units.feetToMeters(18.38719);
+  public static final double MAXIMUM_ATTAINABLE_SPEED =
+      DRIVE_MOTOR_ROTOR_VELOCITY_12_VOLTS / MK4iConstants.DRIVE_GEARING * MK4iConstants.WHEEL_CIRCUMFERENCE;
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
