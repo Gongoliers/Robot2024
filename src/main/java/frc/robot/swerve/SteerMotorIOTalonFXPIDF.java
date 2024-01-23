@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.CAN;
-import frc.lib.ConfigApplier;
+import frc.lib.Configurator;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** TalonFX steer motor controlled by an external PIDF controller. */
@@ -33,7 +33,7 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
 
     config.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
 
-    ConfigApplier.applyTalonFXConfig(talonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(talonFX.getConfigurator(), config);
   }
 
   @Override
