@@ -7,6 +7,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 
@@ -164,52 +166,53 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Set the steer motor setpoints for each of the swerve modules.
+   * Set the steer motor setpoints for each of the swerve modules. 
    *
-   * @param steerSetpoints the steer motor setpoints for each swerve module.
+   * @param orientations orientations for each swerve modules.
+   * @return a command that orients all swerve modules.
    */
-  public void setSteerSetpoints(Rotation2d... steerSetpoints) {
-    // TODO Throw error?
-    if (steerSetpoints.length != 4) return;
-
-    setSetpoints(
-        new SwerveModuleState[] {
-          new SwerveModuleState(0.0, steerSetpoints[0]),
-          new SwerveModuleState(0.0, steerSetpoints[1]),
-          new SwerveModuleState(0.0, steerSetpoints[2]),
-          new SwerveModuleState(0.0, steerSetpoints[3]),
-        },
-        true);
+  public Command orientModules(Rotation2d[] orientations) {
+    return Commands.run(
+        () -> {
+          setSetpoints(
+              new SwerveModuleState[] {
+                new SwerveModuleState(0.0, orientations[0]),
+                new SwerveModuleState(0.0, orientations[1]),
+                new SwerveModuleState(0.0, orientations[2]),
+                new SwerveModuleState(0.0, orientations[3]),
+              },
+              false);
+        });
   }
 
-  /** Sets the steer motor setpoints to point the swerve modules forwards. */
-  public void pointForwards() {
-    setSteerSetpoints(
-        Rotation2d.fromDegrees(0.0),
-        Rotation2d.fromDegrees(0.0),
-        Rotation2d.fromDegrees(0.0),
-        Rotation2d.fromDegrees(0.0));
+  public Command forwards() {
+    return orientModules(
+        new Rotation2d[] {
+          Rotation2d.fromDegrees(0.0),
+          Rotation2d.fromDegrees(0.0),
+          Rotation2d.fromDegrees(0.0),
+          Rotation2d.fromDegrees(0.0)
+        });
   }
 
-  /** Sets the steer motor setpoints to point the swerve modules sideways. */
-  public void pointSideways() {
-    setSteerSetpoints(
-        Rotation2d.fromDegrees(90.0),
-        Rotation2d.fromDegrees(90.0),
-        Rotation2d.fromDegrees(90.0),
-        Rotation2d.fromDegrees(90.0));
+  public Command sideways() {
+    return orientModules(
+        new Rotation2d[] {
+          Rotation2d.fromDegrees(90.0),
+          Rotation2d.fromDegrees(90.0),
+          Rotation2d.fromDegrees(90.0),
+          Rotation2d.fromDegrees(90.0)
+        });
   }
 
-  /**
-   * Sets the steer motor setpoints to point the swerve modules inwards, like a cross or "X"
-   * pattern.
-   */
-  public void pointInwards() {
-    setSteerSetpoints(
-        Rotation2d.fromDegrees(45.0),
-        Rotation2d.fromDegrees(-45.0),
-        Rotation2d.fromDegrees(45.0),
-        Rotation2d.fromDegrees(-45.0));
+  public Command cross() {
+    return orientModules(
+        new Rotation2d[] {
+          Rotation2d.fromDegrees(45.0),
+          Rotation2d.fromDegrees(-45.0),
+          Rotation2d.fromDegrees(45.0),
+          Rotation2d.fromDegrees(-45.0)
+        });
   }
 
   /**

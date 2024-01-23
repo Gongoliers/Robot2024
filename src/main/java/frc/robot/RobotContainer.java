@@ -64,12 +64,12 @@ public class RobotContainer {
   private void configureBindings() {
     swerve.setDefaultCommand(new Drive(driverController));
 
-    driverController.a().whileTrue(Commands.run(swerve::pointForwards, swerve));
-    driverController.b().whileTrue(Commands.run(swerve::pointSideways, swerve));
+    driverController.a().whileTrue(swerve.forwards());
+    driverController.b().whileTrue(swerve.sideways());
     driverController
         .y()
         .onTrue(Commands.runOnce(() -> odometry.setRotation(Rotation2d.fromDegrees(0))));
-    driverController.x().whileTrue(Commands.run(swerve::pointInwards, swerve));
+    driverController.x().whileTrue(swerve.cross());
 
     operatorController.leftBumper().whileTrue(intake.intake()).whileTrue(shooter.intake());
     operatorController.leftTrigger().whileTrue(shooter.smartIntake());
