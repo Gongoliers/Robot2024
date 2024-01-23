@@ -1,6 +1,7 @@
 package frc.robot.intake;
 
 import frc.lib.CAN;
+import frc.lib.MotorCurrentLimits;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
@@ -15,5 +16,7 @@ public class IntakeConstants {
 
     /** Voltage to apply when intaking in volts. */
     public static final double INTAKE_VOLTAGE = -7.2;
+
+    public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(20);
   }
 }

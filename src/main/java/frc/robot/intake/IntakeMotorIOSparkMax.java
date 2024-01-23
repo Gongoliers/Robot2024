@@ -19,6 +19,8 @@ public class IntakeMotorIOSparkMax implements IntakeMotorIO {
     sparkMax.restoreFactoryDefaults();
 
     sparkMax.setInverted(IntakeMotorConstants.IS_INVERTED);
+
+    sparkMax.setSmartCurrentLimit((int) IntakeMotorConstants.CURRENT_LIMITS.breakerAmps());
   }
 
   @Override

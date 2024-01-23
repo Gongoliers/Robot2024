@@ -23,6 +23,15 @@ public record MotorCurrentLimits(
   }
 
   /**
+   * Creates motor current limiting constants.
+   *
+   * @param breakerAmps the amount of current allowed at the breaker for an extended duration.
+   */
+  public MotorCurrentLimits(double breakerAmps) {
+    this(0.0, breakerAmps, 0.0, 0.0);
+  }
+
+  /**
    * Creates a Phoenix current limiting configuration using the current limiting constants.
    *
    * @return a Phoenix current limiting configuration.
@@ -35,7 +44,7 @@ public record MotorCurrentLimits(
       config.StatorCurrentLimitEnable = true;
     }
 
-    if (breakerAmps > 0.0 && breakerPeakAmps > 0.0 && peakDurationSeconds > 0.0) {
+    if (breakerAmps > 0.0 && breakerPeakAmps >= 0.0 && peakDurationSeconds >= 0.0) {
       config.SupplyCurrentLimit = breakerAmps;
       config.SupplyCurrentThreshold = breakerPeakAmps;
       config.SupplyTimeThreshold = peakDurationSeconds;
