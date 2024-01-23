@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.lib.CustomXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
@@ -32,7 +31,7 @@ public class RobotContainer {
   private final Swerve swerve = Swerve.getInstance();
   private final Vision vision = Vision.getInstance();
 
-  private final CustomXboxController driverController = new CustomXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
 
   /** Creates a new instance of the robot container. */

@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.CustomXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.ProfiledRotationPIDController;
 import frc.lib.RotationPIDController;
 import frc.lib.Telemetry;
@@ -24,7 +24,7 @@ public class Drive extends Command {
   private final Odometry odometry;
 
   /* Xbox controller used to get driver input. */
-  private final CustomXboxController driverController;
+  private final CommandXboxController driverController;
 
   /* Current and previous requests from the driver controller. */
   private DriveRequest request, previousRequest;
@@ -52,7 +52,7 @@ public class Drive extends Command {
   /** Heading setpoint. */
   private Rotation2d headingGoal = new Rotation2d();
 
-  public Drive(CustomXboxController driverController) {
+  public Drive(CommandXboxController driverController) {
     swerve = Swerve.getInstance();
     odometry = Odometry.getInstance();
 
@@ -79,7 +79,7 @@ public class Drive extends Command {
   public void execute() {
     request = DriveRequest.fromController(driverController);
 
-    Translation2d translationVelocityMetersPerSecond = request.getTranslationVelocity();
+    Translation2d translationVelocityMetersPerSecond = request.translationVector.times(SwerveConstants.MAXIMUM_SPEED);
 
     final Rotation2d positionHeading = odometry.getPosition().getRotation();
 

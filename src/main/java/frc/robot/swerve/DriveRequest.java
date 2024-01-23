@@ -1,8 +1,9 @@
 package frc.robot.swerve;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.lib.CustomXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class DriveRequest {
 
@@ -47,17 +48,30 @@ public class DriveRequest {
     return Math.abs(heading.getY()) < kOmegaDeadband;
   }
 
-  static DriveRequest fromController(CustomXboxController controller) {
+  static DriveRequest fromController(CommandXboxController controller) {
     boolean snipingRequested = controller.leftTrigger().getAsBoolean();
     boolean aligningRequested = controller.rightTrigger().getAsBoolean();
 
-    Translation2d translationVector =
-        new Translation2d(-controller.getLeftY(), -controller.getLeftX());
-    Translation2d rotationVector =
-        new Translation2d(-controller.getRightY(), -controller.getRightX());
+    double translationX = -controller.getLeftY();
+    double translationY = -controller.getLeftX();
+
+    double translationMagnitude = Math.hypot(translationX, translationY);
+    Rotation2d translationDirection = new Rotation2d(translationX, translationY);
+
+    translationMagnitude = MathUtil.applyDeadband(translationMagnitude, 0.1);
+    translationMagnitude = Math.copySign(translationMagnitude * translationMagnitude, translationMagnitude);
+
+    if (snipingRequested) {
+      translationMagnitude *= 0.25;
+    }
+
+    Translation2d translationVector = new Translation2d(translationMagnitude, translationDirection);
 
     TranslationMode translationMode =
         snipingRequested ? TranslationMode.ROBOT_CENTRIC : TranslationMode.FIELD_CENTRIC;
+
+    Translation2d rotationVector =
+        new Translation2d(-controller.getRightY(), -controller.getRightX());
 
     RotationMode rotationMode;
 
@@ -75,16 +89,6 @@ public class DriveRequest {
   public static boolean startedDrifting(DriveRequest past, DriveRequest present) {
     return past.rotationMode == RotationMode.SPINNING
         && present.rotationMode == RotationMode.DRIFTING;
-  }
-
-  public Translation2d getTranslationVelocity() {
-    double scalar = SwerveConstants.MAXIMUM_SPEED;
-
-    if (translationMode == TranslationMode.ROBOT_CENTRIC) {
-      scalar *= 0.25;
-    }
-
-    return translationVector.times(scalar);
   }
 
   public double getRotationVelocity() {
