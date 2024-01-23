@@ -87,7 +87,7 @@ public class SwerveConstants {
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
 
   /** Maximum acceleration in meters per second per second. */
-  public static final double MAXIMUM_ACCELERATION = MAXIMUM_SPEED * 2;
+  public static final double MAXIMUM_ACCELERATION = 0.5 * MAXIMUM_SPEED;
 
   /** Maximum attainable rotational speed in rotations per second. */
   public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =
