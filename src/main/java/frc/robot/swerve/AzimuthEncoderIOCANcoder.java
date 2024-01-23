@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.CAN;
-import frc.lib.ConfigApplier;
+import frc.lib.Configurator;
 
 /** CANcoder azimuth encoder. */
 public class AzimuthEncoderIOCANcoder implements AzimuthEncoderIO {
@@ -39,7 +39,7 @@ public class AzimuthEncoderIOCANcoder implements AzimuthEncoderIO {
 
     config.MagnetSensor.MagnetOffset = magnetOffset.getRotations();
 
-    ConfigApplier.applyCANcoderConfig(cancoder.getConfigurator(), config);
+    Configurator.configureCANcoder(cancoder.getConfigurator(), config);
   }
 
   @Override

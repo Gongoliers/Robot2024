@@ -3,7 +3,7 @@ package frc.robot.swerve;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import frc.lib.CAN;
-import frc.lib.ConfigApplier;
+import frc.lib.Configurator;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** TalonFX steer motor controlled by an internal controller. */
@@ -28,7 +28,7 @@ public class SteerMotorIOTalonFXIntegrated extends SteerMotorIOTalonFX {
     config.MotionMagic.MotionMagicCruiseVelocity = 100.0 / MK4iConstants.STEER_GEARING;
     config.MotionMagic.MotionMagicAcceleration = config.MotionMagic.MotionMagicCruiseVelocity * 10;
 
-    ConfigApplier.applyTalonFXConfig(talonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(talonFX.getConfigurator(), config);
   }
 
   @Override

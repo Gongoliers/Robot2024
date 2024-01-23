@@ -6,7 +6,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.CAN;
-import frc.lib.ConfigApplier;
+import frc.lib.Configurator;
 import frc.robot.RobotConstants;
 import frc.robot.swerve.SwerveConstants.DriveMotorConstants;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
@@ -35,7 +35,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
   public void configure() {
     TalonFXConfiguration config = SwerveFactory.createDriveMotorConfig();
 
-    ConfigApplier.applyTalonFXConfig(talonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(talonFX.getConfigurator(), config);
   }
 
   @Override

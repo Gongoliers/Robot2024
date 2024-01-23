@@ -2,6 +2,7 @@ package frc.robot.intake;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import frc.lib.Configurator;
 import frc.robot.intake.IntakeConstants.IntakeMotorConstants;
 
 /** Intake motor using a Spark Max. */
@@ -16,9 +17,13 @@ public class IntakeMotorIOSparkMax implements IntakeMotorIO {
 
   @Override
   public void configure() {
-    sparkMax.restoreFactoryDefaults();
+    Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
     sparkMax.setInverted(IntakeMotorConstants.IS_INVERTED);
+
+    Configurator.configureREV(
+        () ->
+            sparkMax.setSmartCurrentLimit((int) IntakeMotorConstants.CURRENT_LIMITS.breakerAmps()));
   }
 
   @Override
