@@ -35,4 +35,11 @@ public interface DriveMotorIO {
    * @param velocityMetersPerSecond the drive motor's setpoint.
    */
   public void setSetpoint(double velocityMetersPerSecond);
+
+  /**
+   * Sets the drive motor's brake mode.
+   *
+   * @param brake if true, brake.
+   */
+  public void setBrake(boolean brake);
 }

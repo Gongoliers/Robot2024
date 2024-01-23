@@ -3,15 +3,24 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.swerve.Swerve;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
 
   private RobotContainer robotContainer;
+  private Swerve swerve;
 
   @Override
   public void robotInit() {
     robotContainer = RobotContainer.getInstance();
+    swerve = Swerve.getInstance();
+
+    new Trigger(this::isDisabled)
+        .debounce(RobotConstants.DISABLE_COAST_DELAY)
+        .onTrue(Commands.runOnce(() -> swerve.setBrake(false), swerve).ignoringDisable(true));
   }
 
   @Override
@@ -30,6 +39,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    swerve.setBrake(true);
+
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
@@ -45,6 +56,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    swerve.setBrake(true);
+
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }

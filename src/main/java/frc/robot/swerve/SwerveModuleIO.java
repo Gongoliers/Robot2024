@@ -42,4 +42,11 @@ public interface SwerveModuleIO {
    * @return the position of the swerve module.
    */
   public SwerveModulePosition getPosition();
+
+  /**
+   * Sets the swerve module's brake mode.
+   *
+   * @param brake if true, brake.
+   */
+  public void setBrake(boolean brake);
 }

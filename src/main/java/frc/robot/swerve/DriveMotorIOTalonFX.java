@@ -3,6 +3,7 @@ package frc.robot.swerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.lib.CAN;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
@@ -49,4 +50,13 @@ public abstract class DriveMotorIOTalonFX implements DriveMotorIO {
 
   @Override
   public abstract void setSetpoint(double velocityMetersPerSecond);
+
+  @Override
+  public void setBrake(boolean brake) {
+    if (brake) {
+      talonFX.setNeutralMode(NeutralModeValue.Brake);
+    } else {
+      talonFX.setNeutralMode(NeutralModeValue.Coast);
+    }
+  }
 }

@@ -31,4 +31,7 @@ public class DriveMotorIOSim implements DriveMotorIO {
   public void setSetpoint(double velocityMetersPerSecond) {
     this.velocityMetersPerSecond = velocityMetersPerSecond;
   }
+
+  @Override
+  public void setBrake(boolean brake) {}
 }

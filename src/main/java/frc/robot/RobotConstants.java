@@ -11,4 +11,10 @@ public class RobotConstants {
 
   /** Voltage of the robot's battery, */
   public static final double BATTERY_VOLTAGE = 12.0;
+
+  /**
+   * Duration between the robot being disabled and the swerve subsystem is allowed to coast in
+   * seconds.
+   */
+  public static final double DISABLE_COAST_DELAY = 3.0;
 }

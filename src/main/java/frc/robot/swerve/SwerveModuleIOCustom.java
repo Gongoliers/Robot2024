@@ -120,4 +120,9 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
         driveMotorValues.positionMeters,
         Rotation2d.fromRotations(steerMotorValues.positionRotations));
   }
+
+  @Override
+  public void setBrake(boolean brake) {
+    driveMotor.setBrake(brake);
+  }
 }

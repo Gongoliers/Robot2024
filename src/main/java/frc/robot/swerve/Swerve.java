@@ -203,4 +203,15 @@ public class Swerve extends Subsystem {
           Rotation2d.fromDegrees(90.0)
         });
   }
+
+  /**
+   * Sets the swerve's brake mode.
+   *
+   * @param brake if true, brake.
+   */
+  public void setBrake(boolean brake) {
+    for (SwerveModuleIO swerveModule : swerveModules) {
+      swerveModule.setBrake(brake);
+    }
+  }
 }
