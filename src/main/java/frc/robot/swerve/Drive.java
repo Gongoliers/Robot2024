@@ -1,5 +1,6 @@
 package frc.robot.swerve;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.ProfiledRotationPIDController;
 import frc.lib.RotationPIDController;
 import frc.lib.Telemetry;
+import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
 import frc.robot.swerve.DriveRequest.TranslationMode;
 
@@ -25,6 +27,9 @@ public class Drive extends Command {
 
   /* Xbox controller used to get driver input. */
   private final CommandXboxController driverController;
+
+  /** Previous requested chassis speed. */
+  private ChassisSpeeds previousChassisSpeeds;
 
   /* Current and previous requests from the driver controller. */
   private DriveRequest request, previousRequest;
@@ -58,6 +63,8 @@ public class Drive extends Command {
 
     addRequirements(swerve);
 
+    previousChassisSpeeds = new ChassisSpeeds();
+
     this.driverController = driverController;
     previousRequest = DriveRequest.fromController(driverController);
 
@@ -79,7 +86,8 @@ public class Drive extends Command {
   public void execute() {
     request = DriveRequest.fromController(driverController);
 
-    Translation2d translationVelocityMetersPerSecond = request.translationVector.times(SwerveConstants.MAXIMUM_SPEED);
+    Translation2d translationVelocityMetersPerSecond =
+        request.translationVector.times(SwerveConstants.MAXIMUM_SPEED);
 
     final Rotation2d positionHeading = odometry.getPosition().getRotation();
 
@@ -127,17 +135,36 @@ public class Drive extends Command {
               positionHeading);
     }
 
+    chassisSpeeds.vxMetersPerSecond =
+        MathUtil.clamp(
+            chassisSpeeds.vxMetersPerSecond,
+            previousChassisSpeeds.vxMetersPerSecond
+                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
+            previousChassisSpeeds.vxMetersPerSecond
+                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
+
+    chassisSpeeds.vyMetersPerSecond =
+        MathUtil.clamp(
+            chassisSpeeds.vyMetersPerSecond,
+            previousChassisSpeeds.vyMetersPerSecond
+                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
+            previousChassisSpeeds.vyMetersPerSecond
+                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
+
     double maxOmegaRadiansPerSecond =
         Units.rotationsToRadians(SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED);
 
-    // Clamp angular velocity
     chassisSpeeds.omegaRadiansPerSecond =
-        Math.signum(chassisSpeeds.omegaRadiansPerSecond)
-            * Math.min(maxOmegaRadiansPerSecond, Math.abs(chassisSpeeds.omegaRadiansPerSecond));
+        MathUtil.clamp(
+            chassisSpeeds.omegaRadiansPerSecond,
+            -maxOmegaRadiansPerSecond,
+            maxOmegaRadiansPerSecond);
 
     headingVelocityEntry.set(Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond));
 
     swerve.setChassisSpeeds(chassisSpeeds);
+
+    previousChassisSpeeds = chassisSpeeds;
 
     previousRequest = request;
   }

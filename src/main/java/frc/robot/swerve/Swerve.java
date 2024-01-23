@@ -166,7 +166,7 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Set the steer motor setpoints for each of the swerve modules. 
+   * Set the steer motor setpoints for each of the swerve modules.
    *
    * @param orientations orientations for each swerve modules.
    * @return a command that orients all swerve modules.

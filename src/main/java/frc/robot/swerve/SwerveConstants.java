@@ -79,10 +79,15 @@ public class SwerveConstants {
 
   /** Maximum attainable speed in meters per second. */
   public static final double MAXIMUM_ATTAINABLE_SPEED =
-      DRIVE_MOTOR_ROTOR_VELOCITY_12_VOLTS / MK4iConstants.DRIVE_GEARING * MK4iConstants.WHEEL_CIRCUMFERENCE;
+      DRIVE_MOTOR_ROTOR_VELOCITY_12_VOLTS
+          / MK4iConstants.DRIVE_GEARING
+          * MK4iConstants.WHEEL_CIRCUMFERENCE;
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
+
+  /** Maximum acceleration in meters per second per second. */
+  public static final double MAXIMUM_ACCELERATION = MAXIMUM_SPEED * 2;
 
   /** Maximum attainable rotational speed in rotations per second. */
   public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =

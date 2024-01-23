@@ -59,7 +59,8 @@ public class DriveRequest {
     Rotation2d translationDirection = new Rotation2d(translationX, translationY);
 
     translationMagnitude = MathUtil.applyDeadband(translationMagnitude, 0.1);
-    translationMagnitude = Math.copySign(translationMagnitude * translationMagnitude, translationMagnitude);
+    translationMagnitude =
+        Math.copySign(translationMagnitude * translationMagnitude, translationMagnitude);
 
     if (snipingRequested) {
       translationMagnitude *= 0.25;
