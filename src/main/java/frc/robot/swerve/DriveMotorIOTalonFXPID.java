@@ -68,7 +68,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    * @return the voltage to apply.
    */
   private VoltageOut calculateOpenLoopVelocityVoltage(double velocityMetersPerSecond) {
-    double velocityPercent = velocityMetersPerSecond / SwerveConstants.MAXIMUM_SPEED;
+    double velocityPercent = velocityMetersPerSecond / SwerveConstants.MAXIMUM_ATTAINABLE_SPEED;
 
     double velocityVolts = velocityPercent * RobotConstants.BATTERY_VOLTAGE;
 

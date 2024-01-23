@@ -36,7 +36,12 @@ public class Drive extends Command {
   /* Heading feedback controller. */
   private final ProfiledRotationPIDController headingFeedback =
       new ProfiledRotationPIDController(
-          6, 0, 0.1, new Constraints(0.25 * SwerveConstants.MAXIMUM_ROTATION_SPEED, 8));
+          6,
+          0,
+          0.1,
+          new Constraints(
+              SwerveConstants.MAXIMUM_ROTATION_SPEED,
+              SwerveConstants.MAXIMUM_ROTATION_ACCELERATION));
 
   private final DoubleEntry headingEntry,
       headingVelocityEntry,
@@ -123,8 +128,9 @@ public class Drive extends Command {
     }
 
     double maxOmegaRadiansPerSecond =
-        Units.rotationsToRadians(SwerveConstants.MAXIMUM_ROTATION_SPEED);
+        Units.rotationsToRadians(SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED);
 
+    // Clamp angular velocity
     chassisSpeeds.omegaRadiansPerSecond =
         Math.signum(chassisSpeeds.omegaRadiansPerSecond)
             * Math.min(maxOmegaRadiansPerSecond, Math.abs(chassisSpeeds.omegaRadiansPerSecond));

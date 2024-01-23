@@ -75,11 +75,22 @@ public class SwerveConstants {
           Rotation2d.fromRotations(-0.954346));
 
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_SPEED = Units.feetToMeters(18.38719);
+  public static final double MAXIMUM_ATTAINABLE_SPEED = Units.feetToMeters(18.38719);
+
+  /** Maximum speed in meters per second. */
+  public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
 
   /** Maximum attainable rotational speed in rotations per second. */
-  public static final double MAXIMUM_ROTATION_SPEED =
-      NORTH_WEST_MODULE_CONFIG.position().getNorm() * MAXIMUM_SPEED;
+  public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =
+      NORTH_WEST_MODULE_CONFIG.position().getNorm() * MAXIMUM_ATTAINABLE_SPEED;
+
+  /** Maximum rotational speed while snapping to heading in rotations per second. */
+  public static final double MAXIMUM_ROTATION_SPEED = 0.5;
+
+  /**
+   * Maximum rotational acceleration while snapping to heading in rotations per second per second.
+   */
+  public static final double MAXIMUM_ROTATION_ACCELERATION = 8.0;
 
   public static class DriveMotorConstants {
     /** If true, use open-loop control. */

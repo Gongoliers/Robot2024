@@ -45,7 +45,7 @@ public class Auto extends Subsystem {
         new HolonomicPathFollowerConfig(
             new PIDConstants(1.0),
             new PIDConstants(1.0),
-            SwerveConstants.MAXIMUM_SPEED,
+            SwerveConstants.MAXIMUM_ATTAINABLE_SPEED,
             SwerveConstants.NORTH_EAST_MODULE_CONFIG.position().getNorm(),
             new ReplanningConfig());
 

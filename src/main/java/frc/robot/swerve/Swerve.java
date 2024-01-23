@@ -155,7 +155,8 @@ public class Swerve extends Subsystem {
    * @param lazy if true, optimize the module setpoint.
    */
   public void setSetpoints(SwerveModuleState[] setpoints, boolean lazy) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpoints, SwerveConstants.MAXIMUM_SPEED);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        setpoints, SwerveConstants.MAXIMUM_ATTAINABLE_SPEED);
 
     for (int i = 0; i < 4; i++) {
       swerveModules[i].setSetpoint(setpoints[i], lazy);
@@ -163,7 +164,7 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Set the steer motor setpoints for each of the swerve modules. 
+   * Set the steer motor setpoints for each of the swerve modules.
    *
    * @param steerSetpoints the steer motor setpoints for each swerve module.
    */
@@ -199,7 +200,10 @@ public class Swerve extends Subsystem {
         Rotation2d.fromDegrees(90.0));
   }
 
-  /** Sets the steer motor setpoints to point the swerve modules inwards, like a cross or "X" pattern. */
+  /**
+   * Sets the steer motor setpoints to point the swerve modules inwards, like a cross or "X"
+   * pattern.
+   */
   public void pointInwards() {
     setSteerSetpoints(
         Rotation2d.fromDegrees(45.0),
