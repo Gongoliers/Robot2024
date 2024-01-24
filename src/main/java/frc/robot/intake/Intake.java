@@ -43,10 +43,17 @@ public class Intake extends Subsystem {
   }
 
   @Override
-  public void addToShuffleboard(ShuffleboardTab tab) {}
+  public void addToShuffleboard(ShuffleboardTab tab) {
+    tab.addDouble("Current", () -> intakeMotorValues.currentAmps);
+  }
 
   public Command intake() {
     return Commands.run(() -> intakeMotor.setVoltage(IntakeMotorConstants.INTAKE_VOLTAGE))
+        .finallyDo(intakeMotor::stop);
+  }
+
+  public Command outtake() {
+    return Commands.run(() -> intakeMotor.setVoltage(-IntakeMotorConstants.INTAKE_VOLTAGE))
         .finallyDo(intakeMotor::stop);
   }
 }

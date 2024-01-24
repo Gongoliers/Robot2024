@@ -11,7 +11,7 @@ public class IntakeFactory {
    * @return an intake motor.
    */
   public static IntakeMotorIO createIntakeMotor() {
-    //if (Robot.isReal()) return new IntakeMotorIOSparkMax();
+    if (Robot.isReal()) return new IntakeMotorIOSparkMax();
 
     return new IntakeMotorIOSim();
   }

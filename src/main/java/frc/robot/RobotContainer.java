@@ -73,7 +73,7 @@ public class RobotContainer {
     operatorController.leftBumper().whileTrue(intake.intake()).whileTrue(shooter.intake());
     operatorController.leftTrigger().whileTrue(shooter.smartIntake());
 
-    operatorController.rightBumper().whileTrue(shooter.shoot());
+    operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
     operatorController.rightTrigger().whileTrue(shooter.smartShoot());
   }
 

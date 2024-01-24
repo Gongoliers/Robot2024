@@ -15,8 +15,8 @@ public class IntakeConstants {
     public static final boolean IS_INVERTED = false;
 
     /** Voltage to apply when intaking in volts. */
-    public static final double INTAKE_VOLTAGE = -7.2;
+    public static final double INTAKE_VOLTAGE = -10;
 
-    public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(20);
+    public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
   }
 }
