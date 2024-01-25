@@ -74,20 +74,35 @@ public class SwerveConstants {
           new Translation2d(-X_OFFSET, Y_OFFSET),
           Rotation2d.fromRotations(-0.954346));
 
-  /** Velocity of the drive motor's rotor at 12 volts in rotations per second. */
-  private static final double DRIVE_MOTOR_ROTOR_VELOCITY_12_VOLTS = 108.2;
+  /**
+   * Calculates the maximum attainable open loop speed in meters per second.
+   * 
+   * @param rotorVelocityRotationsPerSecondAt12Volts the rotor velocity of the drive motor in rotations per second when the motor is supplied 12 volts.
+   * @return the maximum attainable open loop speed in meters per second.
+   */
+  private static double calculateMaximumAttainableSpeed(double rotorVelocityRotationsPerSecondAt12Volts) {
+    return rotorVelocityRotationsPerSecondAt12Volts / MK4iConstants.DRIVE_GEARING * MK4iConstants.WHEEL_CIRCUMFERENCE;
+  }
 
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_ATTAINABLE_SPEED =
-      DRIVE_MOTOR_ROTOR_VELOCITY_12_VOLTS
-          / MK4iConstants.DRIVE_GEARING
-          * MK4iConstants.WHEEL_CIRCUMFERENCE;
+  public static final double MAXIMUM_ATTAINABLE_SPEED = calculateMaximumAttainableSpeed(108.2);
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
 
+  /**
+   * Calculates an acceleration using a ramp duration.
+   * 
+   * @param maximumSpeed the maximum speed.
+   * @param rampDurationSeconds the desired duration to ramp from no speed to full speed.
+   * @return the acceleration.
+   */
+  public static double calculateAcceleration(double maximumSpeed, double rampDurationSeconds) {
+    return maximumSpeed / rampDurationSeconds;
+  }
+
   /** Maximum acceleration in meters per second per second. */
-  public static final double MAXIMUM_ACCELERATION = 10 * MAXIMUM_SPEED;
+  public static final double MAXIMUM_ACCELERATION = calculateAcceleration(MAXIMUM_SPEED, 0.1);
 
   /** Maximum attainable rotational speed in rotations per second. */
   public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =
@@ -96,10 +111,8 @@ public class SwerveConstants {
   /** Maximum rotational speed while snapping to heading in rotations per second. */
   public static final double MAXIMUM_ROTATION_SPEED = 0.5;
 
-  /**
-   * Maximum rotational acceleration while snapping to heading in rotations per second per second.
-   */
-  public static final double MAXIMUM_ROTATION_ACCELERATION = 8.0;
+  /** Maximum acceleration in rotations per second per second. */
+  public static final double MAXIMUM_ROTATION_ACCELERATION = calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
 
   public static class DriveMotorConstants {
     /** If true, use open-loop control. */
