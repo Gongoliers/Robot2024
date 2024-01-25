@@ -29,11 +29,14 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
 
   @Override
   public void configure() {
-    TalonFXConfiguration config = SwerveFactory.createSteerMotorConfig();
+    TalonFXConfiguration talonFXPIDFConfig = new TalonFXConfiguration();
 
-    config.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
+    // TODO
+    talonFXPIDFConfig.deserialize(talonFXBaseConfig.serialize());
 
-    Configurator.configureTalonFX(talonFX.getConfigurator(), config);
+    talonFXPIDFConfig.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
+
+    Configurator.configureTalonFX(talonFX.getConfigurator(), talonFXPIDFConfig);
   }
 
   @Override

@@ -1,12 +1,7 @@
 package frc.robot.swerve;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.signals.InvertedValue;
-import frc.lib.MotorCurrentLimits;
 import frc.robot.Robot;
-import frc.robot.swerve.SwerveConstants.DriveMotorConstants;
-import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** Helper class for creating hardware for the swerve subsystem. */
 public class SwerveFactory {
@@ -58,25 +53,6 @@ public class SwerveFactory {
   }
 
   /**
-   * Creates a steer motor configuration.
-   *
-   * @return a steer motor configuration.
-   */
-  public static TalonFXConfiguration createSteerMotorConfig() {
-    TalonFXConfiguration steerMotorConfig = new TalonFXConfiguration();
-
-    steerMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    steerMotorConfig.ClosedLoopGeneral.ContinuousWrap = true;
-
-    // TODO Copied from Nutrons 2023 release
-    steerMotorConfig.CurrentLimits =
-        new MotorCurrentLimits(0.0, 40.0, 3.0, 1.0).asCurrentLimitsConfigs();
-
-    return steerMotorConfig;
-  }
-
-  /**
    * Creates a drive motor.
    *
    * @return a drive motor.
@@ -85,22 +61,5 @@ public class SwerveFactory {
     if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
 
     return new DriveMotorIOSim();
-  }
-
-  /**
-   * Creates a drive motor configuration.
-   *
-   * @return a drive motor configuration.
-   */
-  public static TalonFXConfiguration createDriveMotorConfig() {
-    TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
-
-    driveMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    driveMotorConfig.Feedback.SensorToMechanismRatio = MK4iConstants.DRIVE_GEARING;
-
-    driveMotorConfig.CurrentLimits = DriveMotorConstants.CURRENT_LIMITS.asCurrentLimitsConfigs();
-
-    return driveMotorConfig;
   }
 }

@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
@@ -125,6 +127,15 @@ public class Odometry extends Subsystem {
     Pose2d position = getPosition();
 
     setPosition(new Pose2d(position.getTranslation(), rotation));
+  }
+
+  /**
+   * Tares the rotation of the robot.
+   *
+   * @return a command that zeroes the rotation of the robot.
+   */
+  public Command tare() {
+    return Commands.runOnce(() -> setRotation(Rotation2d.fromDegrees(0)));
   }
 
   /**

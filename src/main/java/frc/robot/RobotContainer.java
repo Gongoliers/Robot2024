@@ -1,8 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
@@ -16,6 +14,7 @@ import frc.robot.swerve.Drive;
 import frc.robot.swerve.Swerve;
 import frc.robot.vision.Vision;
 
+/** Initializes subsystems and commands. */
 public class RobotContainer {
 
   /** Instance variable for the robot container singleton. */
@@ -63,11 +62,7 @@ public class RobotContainer {
   private void configureBindings() {
     swerve.setDefaultCommand(new Drive(driverController));
 
-    driverController.a().whileTrue(swerve.forwards());
-    driverController.b().whileTrue(swerve.sideways());
-    driverController
-        .y()
-        .onTrue(Commands.runOnce(() -> odometry.setRotation(Rotation2d.fromDegrees(0))));
+    driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
 
     operatorController.leftBumper().whileTrue(intake.intake()).whileTrue(shooter.intake());

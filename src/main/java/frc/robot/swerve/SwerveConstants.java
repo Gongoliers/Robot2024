@@ -76,12 +76,16 @@ public class SwerveConstants {
 
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
-   * 
-   * @param rotorVelocityRotationsPerSecondAt12Volts the rotor velocity of the drive motor in rotations per second when the motor is supplied 12 volts.
+   *
+   * @param rotorVelocityRotationsPerSecondAt12Volts the rotor velocity of the drive motor in
+   *     rotations per second when the motor is supplied 12 volts.
    * @return the maximum attainable open loop speed in meters per second.
    */
-  private static double calculateMaximumAttainableSpeed(double rotorVelocityRotationsPerSecondAt12Volts) {
-    return rotorVelocityRotationsPerSecondAt12Volts / MK4iConstants.DRIVE_GEARING * MK4iConstants.WHEEL_CIRCUMFERENCE;
+  private static double calculateMaximumAttainableSpeed(
+      double rotorVelocityRotationsPerSecondAt12Volts) {
+    return rotorVelocityRotationsPerSecondAt12Volts
+        / MK4iConstants.DRIVE_GEARING
+        * MK4iConstants.WHEEL_CIRCUMFERENCE;
   }
 
   /** Maximum attainable speed in meters per second. */
@@ -92,10 +96,10 @@ public class SwerveConstants {
 
   /**
    * Calculates an acceleration using a ramp duration.
-   * 
-   * @param maximumSpeed the maximum speed.
+   *
+   * @param maximumSpeed the maximum speed in units per second.
    * @param rampDurationSeconds the desired duration to ramp from no speed to full speed.
-   * @return the acceleration.
+   * @return the acceleration in units per second per second.
    */
   public static double calculateAcceleration(double maximumSpeed, double rampDurationSeconds) {
     return maximumSpeed / rampDurationSeconds;
@@ -112,7 +116,8 @@ public class SwerveConstants {
   public static final double MAXIMUM_ROTATION_SPEED = 0.5;
 
   /** Maximum acceleration in rotations per second per second. */
-  public static final double MAXIMUM_ROTATION_ACCELERATION = calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
+  public static final double MAXIMUM_ROTATION_ACCELERATION =
+      calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
 
   public static class DriveMotorConstants {
     /** If true, use open-loop control. */

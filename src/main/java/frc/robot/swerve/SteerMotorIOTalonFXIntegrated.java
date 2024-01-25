@@ -17,18 +17,23 @@ public class SteerMotorIOTalonFXIntegrated extends SteerMotorIOTalonFX {
 
   @Override
   public void configure() {
-    TalonFXConfiguration config = SwerveFactory.createSteerMotorConfig();
+    TalonFXConfiguration talonFXIntegratedConfig = new TalonFXConfiguration();
 
-    config.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
+    // TODO
+    talonFXIntegratedConfig.deserialize(talonFXBaseConfig.serialize());
 
-    config.Slot0 = SwerveConstants.STEER_PIDF_CONSTANTS.asSlot0Configs();
+    talonFXIntegratedConfig.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
+
+    talonFXIntegratedConfig.Slot0 = SwerveConstants.STEER_PIDF_CONSTANTS.asSlot0Configs();
 
     // TODO Copied from CTRE swerve library
     // https://api.ctr-electronics.com/phoenix6/release/java/src-html/com/ctre/phoenix6/mechanisms/swerve/SwerveModule.html#line.123
-    config.MotionMagic.MotionMagicCruiseVelocity = 100.0 / MK4iConstants.STEER_GEARING;
-    config.MotionMagic.MotionMagicAcceleration = config.MotionMagic.MotionMagicCruiseVelocity * 10;
+    talonFXIntegratedConfig.MotionMagic.MotionMagicCruiseVelocity =
+        100.0 / MK4iConstants.STEER_GEARING;
+    talonFXIntegratedConfig.MotionMagic.MotionMagicAcceleration =
+        talonFXIntegratedConfig.MotionMagic.MotionMagicCruiseVelocity * 10;
 
-    Configurator.configureTalonFX(talonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(talonFX.getConfigurator(), talonFXIntegratedConfig);
   }
 
   @Override

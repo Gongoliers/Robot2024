@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.controller.PIDController;
@@ -33,9 +32,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
 
   @Override
   public void configure() {
-    TalonFXConfiguration config = SwerveFactory.createDriveMotorConfig();
-
-    Configurator.configureTalonFX(talonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(talonFX.getConfigurator(), talonFXBaseConfig);
   }
 
   @Override
