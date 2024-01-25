@@ -55,7 +55,12 @@ public class Intake extends Subsystem {
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
     roller.addDouble("Current (A)", () -> rollerMotorValues.currentAmps);
-    roller.addDouble("Speed (rps)", () -> rollerMotorValues.angularVelocityRotationsPerSecond);
+    roller.addDouble(
+        "Rotor Velocity (rps)", () -> rollerMotorValues.angularVelocityRotationsPerSecond);
+    roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
+    roller.addBoolean("Current Spike?", this::rollerCurrentSpike);
+    roller.addBoolean("Slowed Down?", this::rollerSlowedDown);
+    roller.addBoolean("Has Note?", this::hasNote);
   }
 
   public Command intake() {
@@ -68,16 +73,43 @@ public class Intake extends Subsystem {
    *
    * @return true if the roller motor has a current spike.
    */
-  public boolean rollerCurrentSpike() {
+  private boolean rollerCurrentSpike() {
     return rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps)
         > RollerMotorConstants.NOTE_CURRENT;
+  }
+
+  /**
+   * Gets the velocity of the rollers in rotations per second.
+   *
+   * @return the velocity of the roller in rotations per second.
+   */
+  private double getRollerVelocity() {
+    return rollerMotorValues.angularVelocityRotationsPerSecond / RollerMotorConstants.GEARING;
+  }
+
+  /**
+   * Returns true if the roller speed drops below the speed for intaking notes.
+   *
+   * @return true if the roller speed drops below the speed for intaking notes.
+   */
+  private boolean rollerSlowedDown() {
+    return Math.abs(getRollerVelocity()) < RollerMotorConstants.NOTE_SPEED;
+  }
+
+  /**
+   * Returns true if the rollers have a note.
+   *
+   * @return true if the rollers have a note.
+   */
+  private boolean hasNote() {
+    return rollerCurrentSpike() || rollerSlowedDown();
   }
 
   public Command smartIntake() {
     return run(() -> rollerMotor.setVoltage(RollerMotorConstants.INTAKE_VOLTAGE))
         .raceWith(
-            Commands.waitSeconds(IntakeCommandConstants.CURRENT_SPIKE_DELAY)
-                .andThen(Commands.waitUntil(this::rollerCurrentSpike)))
+            Commands.waitSeconds(IntakeCommandConstants.NOTE_DETECTION_DELAY)
+                .andThen(Commands.waitUntil(this::hasNote)))
         .finallyDo(rollerMotor::stop);
   }
 

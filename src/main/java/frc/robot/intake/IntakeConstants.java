@@ -17,6 +17,9 @@ public class IntakeConstants {
     /** If true, invert the roller motor. */
     public static final boolean IS_INVERTED = false;
 
+    /** Gearing between the roller motor and the rollers. */
+    public static final double GEARING = 1.0; // TODO
+
     /** Voltage to apply when intaking in volts. */
     public static final double INTAKE_VOLTAGE = -10;
 
@@ -24,12 +27,15 @@ public class IntakeConstants {
     public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
 
     /** Size of the current spike when intaking a note in amps. */
-    public static final double NOTE_CURRENT = 20;
+    public static final double NOTE_CURRENT = 0.0; // TODO
+
+    /** Speed that the rollers slow to when intaking a note in rotations per second. */
+    public static final double NOTE_SPEED = 0.0; // TODO
   }
 
   /** Constants for intake commands. */
   public static class IntakeCommandConstants {
-    /** Delay between starting intaking and detecting current spikes in seconds. */
-    public static final double CURRENT_SPIKE_DELAY = 0.1;
+    /** Delay between starting intaking and detecting notes in seconds. */
+    public static final double NOTE_DETECTION_DELAY = 0.1;
   }
 }
