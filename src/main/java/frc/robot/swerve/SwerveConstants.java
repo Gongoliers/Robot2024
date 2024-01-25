@@ -110,7 +110,7 @@ public class SwerveConstants {
 
   /** Maximum attainable rotational speed in rotations per second. */
   public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =
-      NORTH_WEST_MODULE_CONFIG.position().getNorm() * MAXIMUM_ATTAINABLE_SPEED;
+      MAXIMUM_ATTAINABLE_SPEED / NORTH_WEST_MODULE_CONFIG.position().getNorm();
 
   /** Maximum rotational speed while snapping to heading in rotations per second. */
   public static final double MAXIMUM_ROTATION_SPEED = 0.5;

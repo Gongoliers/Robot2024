@@ -24,33 +24,29 @@
     "transitory": {
       "Shuffleboard": {
         "Odometry": {
-          "Position": {
-            "open": true
-          },
           "Velocity": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Swerve": {
-          "Module 1": {
-            "open": true
-          },
-          "Module 2": {
-            "open": true
-          },
-          "Module 3": {
+          "Constants": {
             "open": true
           },
           "North East Module": {
             "open": true
-          }
+          },
+          "Rotation Constants": {
+            "open": true
+          },
+          "Translation Constants": {
+            "open": true
+          },
+          "open": true
         },
         "Vision": {
           "Vision Pose": {
             "open": true
-          },
-          "open": true
+          }
         },
         "open": true
       },
