@@ -11,7 +11,7 @@ public class VisionFactory {
    * @return a vision pose estimator.
    */
   public static VisionPoseEstimatorIO createVisionPoseEstimator() {
-    if (Robot.isReal()) return new VisionPoseEstimatorIOSim(); // TODO
+    if (Robot.isReal()) return new VisionPoseEstimatorIONull();
 
     return new VisionPoseEstimatorIOSim();
   }
