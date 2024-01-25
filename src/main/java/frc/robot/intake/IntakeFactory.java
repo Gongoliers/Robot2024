@@ -6,13 +6,13 @@ import frc.robot.Robot;
 public class IntakeFactory {
 
   /**
-   * Creates an intake motor.
+   * Creates a roller motor.
    *
-   * @return an intake motor.
+   * @return a roller motor.
    */
-  public static IntakeMotorIO createIntakeMotor() {
-    if (Robot.isReal()) return new IntakeMotorIOSparkMax();
+  public static RollerMotorIO createRollerMotor() {
+    if (Robot.isReal()) return new RollerMotorIOSparkMax();
 
-    return new IntakeMotorIOSim();
+    return new RollerMotorIOSim();
   }
 }

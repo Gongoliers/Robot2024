@@ -27,7 +27,8 @@ public class Shooter extends Subsystem {
   /** Beam break sensor values. */
   private final BeamBreakSensorIOValues beamBreakSensorValues = new BeamBreakSensorIOValues();
 
-  private final Debouncer beamBreakDebouncer =
+  /** Beam break sensor debouncer. */
+  private final Debouncer beamBreakSensorDebouncer =
       new Debouncer(
           SensorConstants.BEAM_BREAK_DEBOUNCE_PERIOD, SensorConstants.BEAM_BREAK_DEBOUNCE_TYPE);
 
@@ -67,7 +68,7 @@ public class Shooter extends Subsystem {
   public void periodic() {
     beamBreakSensor.update(beamBreakSensorValues);
 
-    beamBreakDebouncer.calculate(beamBreakSensorValues.isBroken);
+    beamBreakSensorDebouncer.calculate(beamBreakSensorValues.isBroken);
 
     serializerMotor.update(serializerMotorValues);
     flywheelMotor.update(flywheelMotorValues);
@@ -97,7 +98,7 @@ public class Shooter extends Subsystem {
    * @return true if the shooter is holding a note.
    */
   private boolean holdingNote() {
-    return beamBreakDebouncer.calculate(beamBreakSensorValues.isBroken);
+    return beamBreakSensorDebouncer.calculate(beamBreakSensorValues.isBroken);
   }
 
   /**

@@ -1,13 +1,13 @@
 package frc.robot.intake;
 
-/** Simulated intake motor. */
-public class IntakeMotorIOSim implements IntakeMotorIO {
+/** Simulated roller motor. */
+public class RollerMotorIOSim implements RollerMotorIO {
 
   @Override
   public void configure() {}
 
   @Override
-  public void update(IntakeMotorIOValues values) {}
+  public void update(RollerMotorIOValues values) {}
 
   @Override
   public void setVoltage(double volts) {}
