@@ -81,7 +81,7 @@ public class Intake extends Subsystem {
   /**
    * Gets the velocity of the rollers in rotations per second.
    *
-   * @return the velocity of the roller in rotations per second.
+   * @return the velocity of the rollers in rotations per second.
    */
   private double getRollerVelocity() {
     return rollerMotorValues.angularVelocityRotationsPerSecond / RollerMotorConstants.GEARING;
