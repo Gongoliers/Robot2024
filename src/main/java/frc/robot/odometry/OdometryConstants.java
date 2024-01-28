@@ -6,5 +6,5 @@ import frc.lib.CAN;
 public class OdometryConstants {
 
   /** Gyroscope's CAN identifier. */
-  public static final CAN GYROSCOPE_CAN = new CAN(7, "swerve"); // TODO
+  public static final CAN GYROSCOPE_CAN = new CAN(21, "swerve");
 }

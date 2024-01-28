@@ -12,7 +12,7 @@ public class IntakeConstants {
   /** Constants for the roller motor. */
   public static class RollerMotorConstants {
     /** Roller motor's CAN identifier. */
-    public static final CAN ID = new CAN(62);
+    public static final CAN ID = new CAN(4);
 
     /** If true, invert the roller motor. */
     public static final boolean IS_INVERTED = false;
