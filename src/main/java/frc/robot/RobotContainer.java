@@ -66,7 +66,10 @@ public class RobotContainer {
     driverController.x().whileTrue(swerve.cross());
 
     operatorController.leftBumper().whileTrue(intake.intake()).whileTrue(shooter.intake());
-    operatorController.leftTrigger().whileTrue(shooter.smartIntake());
+    operatorController
+        .leftTrigger()
+        .whileTrue(intake.smartIntake())
+        .whileTrue(shooter.smartIntake());
 
     operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
     operatorController.rightTrigger().whileTrue(shooter.smartShoot());

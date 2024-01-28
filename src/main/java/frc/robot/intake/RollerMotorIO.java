@@ -1,10 +1,10 @@
 package frc.robot.intake;
 
 /** Intake motor hardware interface. */
-public interface IntakeMotorIO {
+public interface RollerMotorIO {
 
-  /** Values for the intake motor hardware interface. */
-  public static class IntakeMotorIOValues {
+  /** Values for the roller motor hardware interface. */
+  public static class RollerMotorIOValues {
     /** Angular velocity of the flywheel in rotations per second. */
     public double angularVelocityRotationsPerSecond = 0.0;
 
@@ -12,23 +12,23 @@ public interface IntakeMotorIO {
     public double currentAmps = 0.0;
   }
 
-  /** Configures the intake motor. */
+  /** Configures the roller motor. */
   public void configure();
 
   /**
-   * Updates the intake motor's values/
+   * Updates the roller motor's values.
    *
    * @param values
    */
-  public void update(IntakeMotorIOValues values);
+  public void update(RollerMotorIOValues values);
 
   /**
-   * Run the intake motor with the specified voltage.
+   * Run the roller motor with the specified voltage.
    *
    * @param volts the voltage to apply to the voltage motor.
    */
   public void setVoltage(double volts);
 
-  /** Stops the intake motor. */
+  /** Stops the roller motor. */
   public void stop();
 }

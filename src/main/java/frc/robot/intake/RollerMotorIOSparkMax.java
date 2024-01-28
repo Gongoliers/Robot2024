@@ -3,31 +3,31 @@ package frc.robot.intake;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.lib.Configurator;
-import frc.robot.intake.IntakeConstants.IntakeMotorConstants;
+import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 
-/** Intake motor using a Spark Max. */
-public class IntakeMotorIOSparkMax implements IntakeMotorIO {
+/** Roller motor using a Spark Max. */
+public class RollerMotorIOSparkMax implements RollerMotorIO {
 
   /** Hardware Spark Max. */
   private final CANSparkMax sparkMax;
 
-  public IntakeMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(IntakeMotorConstants.ID.id(), MotorType.kBrushless);
+  public RollerMotorIOSparkMax() {
+    sparkMax = new CANSparkMax(RollerMotorConstants.ID.id(), MotorType.kBrushless);
   }
 
   @Override
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
-    sparkMax.setInverted(IntakeMotorConstants.IS_INVERTED);
+    sparkMax.setInverted(RollerMotorConstants.IS_INVERTED);
 
     Configurator.configureREV(
         () ->
-            sparkMax.setSmartCurrentLimit((int) IntakeMotorConstants.CURRENT_LIMITS.breakerAmps()));
+            sparkMax.setSmartCurrentLimit((int) RollerMotorConstants.CURRENT_LIMITS.breakerAmps()));
   }
 
   @Override
-  public void update(IntakeMotorIOValues values) {
+  public void update(RollerMotorIOValues values) {
     values.angularVelocityRotationsPerSecond = sparkMax.getEncoder().getVelocity() / 60.0;
     values.currentAmps = sparkMax.getOutputCurrent();
   }
