@@ -59,14 +59,20 @@ public class Swerve extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout translationConstants = Telemetry.addColumn(tab, "Translation Constants");
 
-    translationConstants.addDouble("Maximum Attainable Velocity (mps)", () -> SwerveConstants.MAXIMUM_ATTAINABLE_SPEED);
+    translationConstants.addDouble(
+        "Maximum Attainable Velocity (mps)", () -> SwerveConstants.MAXIMUM_ATTAINABLE_SPEED);
     translationConstants.addDouble("Maximum Velocity (mps)", () -> SwerveConstants.MAXIMUM_SPEED);
-    translationConstants.addDouble("Maximum Accleration (mpsps)", () -> SwerveConstants.MAXIMUM_ACCELERATION);
+    translationConstants.addDouble(
+        "Maximum Accleration (mpsps)", () -> SwerveConstants.MAXIMUM_ACCELERATION);
 
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
-    rotationConstants.addDouble("Maximum Attainable Velocity (rps)", () -> SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED);
-    rotationConstants.addDouble("Maximum Velocity (rps)", () -> SwerveConstants.MAXIMUM_ROTATION_SPEED);
-    rotationConstants.addDouble("Maximum Acceleration (rpsps)", () -> SwerveConstants.MAXIMUM_ROTATION_ACCELERATION);
+    rotationConstants.addDouble(
+        "Maximum Attainable Velocity (rps)",
+        () -> SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED);
+    rotationConstants.addDouble(
+        "Maximum Velocity (rps)", () -> SwerveConstants.MAXIMUM_ROTATION_SPEED);
+    rotationConstants.addDouble(
+        "Maximum Acceleration (rpsps)", () -> SwerveConstants.MAXIMUM_ROTATION_ACCELERATION);
 
     Telemetry.addSwerveModuleStates(tab, "Swerve Module States", this::getModuleStates);
     Telemetry.addSwerveModuleStates(tab, "Swerve Module Setpoints", this::getModuleSetpoints);
