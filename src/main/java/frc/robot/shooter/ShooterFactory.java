@@ -22,7 +22,7 @@ public class ShooterFactory {
    * @return a serializer motor.
    */
   public static SerializerMotorIO createSerializerMotor() {
-    if (Robot.isReal()) return new SerializerMotorIOSim(); // TODO
+    if (Robot.isReal()) return new SerializerMotorIOSparkMax();
 
     return new SerializerMotorIOSim();
   }
@@ -33,7 +33,7 @@ public class ShooterFactory {
    * @return a flywheel motor.
    */
   public static FlywheelMotorIO createFlywheelMotor() {
-    if (Robot.isReal()) return new FlywheelMotorIOSim(); // TODO
+    if (Robot.isReal()) return new FlywheelMotorIOSparkMax(); // TODO
 
     return new FlywheelMotorIOSim();
   }
