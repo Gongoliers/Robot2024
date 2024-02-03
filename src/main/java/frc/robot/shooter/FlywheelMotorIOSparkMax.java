@@ -8,34 +8,34 @@ import frc.lib.Configurator;
 public class FlywheelMotorIOSparkMax implements FlywheelMotorIO {
 
   /** Hardware Spark Max for leading. */
-  private final CANSparkMax leader;
+  private final CANSparkMax leaderSparkMax;
 
   /** Hardware Spark Max for following. */
-  private final CANSparkMax follower;
+  private final CANSparkMax followerSparkMax;
 
   /** Creates a new flywheel motor using Spark Maxes. */
   public FlywheelMotorIOSparkMax() {
-    leader = new CANSparkMax(19, MotorType.kBrushless);
-    follower = new CANSparkMax(20, MotorType.kBrushless);
+    leaderSparkMax = new CANSparkMax(19, MotorType.kBrushless);
+    followerSparkMax = new CANSparkMax(20, MotorType.kBrushless);
   }
 
   @Override
   public void configure() {
-    Configurator.configureREV(leader::restoreFactoryDefaults);
-    Configurator.configureREV(follower::restoreFactoryDefaults);
+    Configurator.configureREV(leaderSparkMax::restoreFactoryDefaults);
+    Configurator.configureREV(followerSparkMax::restoreFactoryDefaults);
 
-    follower.follow(leader, true);
+    followerSparkMax.follow(leaderSparkMax, true);
   }
 
   @Override
   public void update(FlywheelMotorIOValues values) {
-    values.angularVelocityRotationsPerSecond = leader.getEncoder().getVelocity() / 60.0;
-    values.currentAmps = follower.getOutputCurrent();
+    values.angularVelocityRotationsPerSecond = leaderSparkMax.getEncoder().getVelocity() / 60.0;
+    values.currentAmps = leaderSparkMax.getOutputCurrent();
   }
 
   @Override
   public void setVoltage(double volts) {
-    leader.setVoltage(volts);
+    leaderSparkMax.setVoltage(volts);
   }
 
   @Override
