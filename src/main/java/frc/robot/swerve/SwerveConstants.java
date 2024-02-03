@@ -101,7 +101,8 @@ public class SwerveConstants {
    * @param desiredRampDurationSeconds the desired duration to ramp from no speed to full speed.
    * @return the acceleration in units per second per second.
    */
-  private static double calculateAcceleration(double maximumSpeed, double desiredRampDurationSeconds) {
+  private static double calculateAcceleration(
+      double maximumSpeed, double desiredRampDurationSeconds) {
     return maximumSpeed / desiredRampDurationSeconds;
   }
 

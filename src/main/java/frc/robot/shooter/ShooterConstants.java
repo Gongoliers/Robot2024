@@ -40,12 +40,12 @@ public class ShooterConstants {
     public static final double INTAKE_VOLTAGE = -2.0; // TODO
 
     /** Voltage to apply while serializing in volts. */
-    public static final double SERIALIZE_VOLTAGE = 4.0; // TODO
+    public static final double SERIALIZE_VOLTAGE = 6.0;
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
   public static class FlywheelConstants {
-    /** Flywheel motor controller's CAN identifier. */
+    /** Leading flywheel motor controller's CAN identifier. */
     public static final CAN ID = new CAN(0); // TODO
 
     /** If true, invert the flywheel motor controller's direction. */
@@ -60,11 +60,8 @@ public class ShooterConstants {
     /** Radius of the flywheel wheel in meters. */
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
-    /** Voltage to apply while intaking in volts. */
-    public static final double INTAKE_VOLTAGE = -2.0; // TODO
-
     /** Voltage to apply while shooting in volts. */
-    public static final double SHOOT_VOLTAGE = 8.0; // TODO
+    public static final double SHOOT_VOLTAGE = -7.2; // TODO invert voltage to CCW+/CW+?
   }
 
   /** Constants for commands used in the shooter subsystem. */

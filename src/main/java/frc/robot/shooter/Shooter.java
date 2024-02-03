@@ -125,11 +125,8 @@ public class Shooter extends Subsystem {
    * @return a command that intakes a note.
    */
   public Command intake() {
-    return Commands.parallel(
-        Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.INTAKE_VOLTAGE))
-            .finallyDo(serializerMotor::stop),
-        Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.INTAKE_VOLTAGE))
-            .finallyDo(flywheelMotor::stop));
+    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.INTAKE_VOLTAGE))
+        .finallyDo(serializerMotor::stop);
   }
 
   /**
