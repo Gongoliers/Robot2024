@@ -7,7 +7,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.CAN;
 import frc.lib.Configurator;
 import frc.robot.RobotConstants;
-import frc.robot.swerve.SwerveConstants.DriveMotorConstants;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** TalonFX drive motor controlled by an external PID controller. */
@@ -15,11 +14,12 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
 
   /** Feedback controller for TalonFX velocity. */
   private final PIDController velocityFeedback =
-      new PIDController(DriveMotorConstants.FEEDBACK_KP, 0, 0);
+      new PIDController(SwerveConstants.DRIVE_PIDF_CONSTANTS.kP, 0, 0);
 
   /** Feedforward controller for TalonFX velocity. */
   private final SimpleMotorFeedforward velocityFeedforward =
-      new SimpleMotorFeedforward(DriveMotorConstants.FEEDFORWARD_KS, DriveMotorConstants.FEEDFORWARD_KV);
+      new SimpleMotorFeedforward(
+          SwerveConstants.DRIVE_PIDF_CONSTANTS.kS, SwerveConstants.DRIVE_PIDF_CONSTANTS.kV);
 
   /**
    * Creates a new TalonFX drive motor controlled by an external PID controller.
@@ -40,8 +40,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
     if (velocityMetersPerSecond == 0.0) {
       talonFX.setControl(new CoastOut());
     } else {
-      talonFX.setControl(
-          calculateVelocityVoltage(velocityMetersPerSecond, DriveMotorConstants.OPEN_LOOP));
+      talonFX.setControl(calculateVelocityVoltage(velocityMetersPerSecond, false));
     }
   }
 

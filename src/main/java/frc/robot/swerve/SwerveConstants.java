@@ -3,7 +3,6 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import frc.lib.MotorCurrentLimits;
 import frc.lib.PIDFConstants;
 
 /** Constants for the swerve subsystem. */
@@ -120,24 +119,24 @@ public class SwerveConstants {
   public static final double MAXIMUM_ROTATION_ACCELERATION =
       calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
 
-  public static class DriveMotorConstants {
-    /** If true, use open-loop control. */
-    public static final boolean OPEN_LOOP = false;
+  public static final PIDFConstants DRIVE_PIDF_CONSTANTS = new PIDFConstants();
 
-    /** Feedback proportional gain in volts per meter per second. */
-    public static final double FEEDBACK_KP = 0.0;
+  /**
+   * Converts a kV constant in volts per rotor rotation per second to a kV constant in volts per
+   * meters per second.
+   *
+   * @param voltsPerRotorRotationPerSecond a kV constant in volts per rotor rotations per second.
+   * @return a kV constant in volts per rotor rotations per second.
+   */
+  private static double calculateKv(double voltsPerRotorRotationPerSecond) {
+    return voltsPerRotorRotationPerSecond
+        * MK4iConstants.DRIVE_GEARING
+        / MK4iConstants.WHEEL_CIRCUMFERENCE;
+  }
 
-    /** Feedforward static constant in volts. */
-    public static final double FEEDFORWARD_KS = 0.139;
-
-    /** Feedforward velocity constant in volts per rotation per second. */
-    // TODO Tune on ground
-    public static final double FEEDFORWARD_KV = 2.717489302;
-
-    /** Current limits for the drive motor. */
-    // TODO Copied from Citrus Circuits 2023 release
-    public static final MotorCurrentLimits CURRENT_LIMITS =
-        new MotorCurrentLimits(300.0, 40.0, 100.0, 1.0);
+  static {
+    DRIVE_PIDF_CONSTANTS.kS = 0.139; // volts
+    DRIVE_PIDF_CONSTANTS.kV = calculateKv(0.1092081577); // volts per meter per second
   }
 
   /** Constants for steer motor PIDF position controllers. */

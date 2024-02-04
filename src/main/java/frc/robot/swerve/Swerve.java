@@ -63,7 +63,8 @@ public class Swerve extends Subsystem {
     translationConstants.addDouble("Maximum Velocity (mps)", () -> SwerveConstants.MAXIMUM_SPEED);
     translationConstants.addDouble(
         "Maximum Accleration (mpsps)", () -> SwerveConstants.MAXIMUM_ACCELERATION);
-    translationConstants.addDouble("Wheel Circumference (m)", () -> SwerveConstants.MK4iConstants.WHEEL_CIRCUMFERENCE);
+    translationConstants.addDouble(
+        "Wheel Circumference (m)", () -> SwerveConstants.MK4iConstants.WHEEL_CIRCUMFERENCE);
 
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
     rotationConstants.addDouble(
