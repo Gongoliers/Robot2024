@@ -8,7 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 
@@ -64,6 +63,7 @@ public class Swerve extends Subsystem {
     translationConstants.addDouble("Maximum Velocity (mps)", () -> SwerveConstants.MAXIMUM_SPEED);
     translationConstants.addDouble(
         "Maximum Accleration (mpsps)", () -> SwerveConstants.MAXIMUM_ACCELERATION);
+    translationConstants.addDouble("Wheel Circumference (m)", () -> SwerveConstants.MK4iConstants.WHEEL_CIRCUMFERENCE);
 
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
     rotationConstants.addDouble(
@@ -189,7 +189,7 @@ public class Swerve extends Subsystem {
    * @return a command that orients all swerve modules.
    */
   public Command orientModules(Rotation2d[] orientations) {
-    return Commands.run(
+    return run(
         () -> {
           setSetpoints(
               new SwerveModuleState[] {

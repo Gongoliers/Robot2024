@@ -122,18 +122,17 @@ public class SwerveConstants {
 
   public static class DriveMotorConstants {
     /** If true, use open-loop control. */
-    public static final boolean OPEN_LOOP = true;
+    public static final boolean OPEN_LOOP = false;
 
     /** Feedback proportional gain in volts per meter per second. */
-    // TODO Tune
-    public static final double FEEDBACK_KP = 0.1;
+    public static final double FEEDBACK_KP = 0.0;
 
     /** Feedforward static constant in volts. */
     public static final double FEEDFORWARD_KS = 0.139;
 
-    /** Feedforward velocity constant in volts per meter per second. */
-    // TODO Tune
-    public static final double FEEDFORWARD_KV = 1 / 0.652628161;
+    /** Feedforward velocity constant in volts per rotation per second. */
+    // TODO Tune on ground
+    public static final double FEEDFORWARD_KV = 2.717489302;
 
     /** Current limits for the drive motor. */
     // TODO Copied from Citrus Circuits 2023 release
