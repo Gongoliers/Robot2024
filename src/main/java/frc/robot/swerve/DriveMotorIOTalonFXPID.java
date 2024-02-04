@@ -19,7 +19,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
 
   /** Feedforward controller for TalonFX velocity. */
   private final SimpleMotorFeedforward velocityFeedforward =
-      new SimpleMotorFeedforward(DriveMotorConstants.FEEDFORWARD_KS, 0);
+      new SimpleMotorFeedforward(DriveMotorConstants.FEEDFORWARD_KS, DriveMotorConstants.FEEDFORWARD_KV);
 
   /**
    * Creates a new TalonFX drive motor controlled by an external PID controller.
