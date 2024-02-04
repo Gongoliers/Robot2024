@@ -79,7 +79,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    */
   private VoltageOut calculateClosedLoopVelocityVoltage(double velocityMetersPerSecond) {
     double measuredVelocityMetersPerSecond =
-        velocityRotationsPerSecond.getValue() / MK4iConstants.WHEEL_CIRCUMFERENCE;
+        velocityRotationsPerSecond.getValue() * MK4iConstants.WHEEL_CIRCUMFERENCE;
 
     double velocityFeedbackVolts =
         velocityFeedback.calculate(measuredVelocityMetersPerSecond, velocityMetersPerSecond);
