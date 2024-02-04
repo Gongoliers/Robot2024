@@ -19,7 +19,7 @@ import frc.robot.odometry.Odometry;
 import frc.robot.swerve.DriveRequest.TranslationMode;
 
 /** Drives the swerve using driver input. */
-public class Drive extends Command {
+public class DriveCommand extends Command {
   /* Swerve subsystem. */
   private final Swerve swerve;
   /* Odometry subsystem. */
@@ -57,7 +57,7 @@ public class Drive extends Command {
   /** Heading setpoint. */
   private Rotation2d headingGoal = new Rotation2d();
 
-  public Drive(CommandXboxController driverController) {
+  public DriveCommand(CommandXboxController driverController) {
     swerve = Swerve.getInstance();
     odometry = Odometry.getInstance();
 

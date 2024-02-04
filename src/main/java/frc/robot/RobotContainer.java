@@ -10,7 +10,7 @@ import frc.robot.intake.Intake;
 import frc.robot.lights.Lights;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
-import frc.robot.swerve.Drive;
+import frc.robot.swerve.DriveCommand;
 import frc.robot.swerve.Swerve;
 import frc.robot.vision.Vision;
 
@@ -60,7 +60,7 @@ public class RobotContainer {
 
   /** Configures operator controller bindings. */
   private void configureBindings() {
-    swerve.setDefaultCommand(new Drive(driverController));
+    swerve.setDefaultCommand(new DriveCommand(driverController));
 
     driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
