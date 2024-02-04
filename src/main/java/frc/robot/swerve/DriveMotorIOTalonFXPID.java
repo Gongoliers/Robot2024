@@ -54,7 +54,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
   private VoltageOut calculateVelocityVoltage(double velocityMetersPerSecond, boolean isOpenLoop) {
     return isOpenLoop
         ? calculateOpenLoopVelocityVoltage(velocityMetersPerSecond)
-        : calculateFeedbackVelocityVoltage(velocityMetersPerSecond);
+        : calculateClosedLoopVelocityVoltage(velocityMetersPerSecond);
   }
 
   /**
@@ -72,12 +72,12 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
   }
 
   /**
-   * Calculates the TalonFX's applied voltage for a velocity setpoint using feedback.
+   * Calculates the TalonFX's applied voltage for a velocity setpoint using closed-loop.
    *
    * @param velocityMetersPerSecond the velocity setpoint.
    * @return the voltage to apply.
    */
-  private VoltageOut calculateFeedbackVelocityVoltage(double velocityMetersPerSecond) {
+  private VoltageOut calculateClosedLoopVelocityVoltage(double velocityMetersPerSecond) {
     double measuredVelocityMetersPerSecond =
         velocityRotationsPerSecond.getValue() / MK4iConstants.WHEEL_CIRCUMFERENCE;
 
