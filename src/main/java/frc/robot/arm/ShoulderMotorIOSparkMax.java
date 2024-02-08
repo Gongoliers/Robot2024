@@ -33,6 +33,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
+
+    sparkMax.setInverted(ShoulderMotorConstants.IS_INVERTED);
   }
 
   @Override
@@ -43,7 +45,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   @Override
   public void setPosition(double positionRotations) {
-    // TODO
+    sparkMax.getEncoder().setPosition(positionRotations * ShoulderMotorConstants.GEARING);
   }
 
   @Override
@@ -79,6 +81,6 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
    * @return the absolute position of the shoulder in rotations.
    */
   private double getPositionRotations() {
-    return sparkMax.getEncoder().getPosition();
+    return sparkMax.getEncoder().getPosition() / ShoulderMotorConstants.GEARING;
   }
 }

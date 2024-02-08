@@ -13,7 +13,7 @@ public class OdometryFactory {
    * @return a gyroscope.
    */
   public static GyroscopeIO createGyroscope(CAN gyroscopeCAN, Odometry odometry) {
-    if (Robot.isReal()) return new GyroscopeIOPigeon2(gyroscopeCAN);
+    //if (Robot.isReal()) return new GyroscopeIOPigeon2(gyroscopeCAN);
 
     return new GyroscopeIOSim(odometry);
   }

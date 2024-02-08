@@ -22,8 +22,6 @@ public class ArmFactory {
    * @return an elbow motor.
    */
   public static ElbowMotorIO createElbowMotor() {
-    if (Robot.isReal()) return new ElbowMotorIOSparkMax();
-
-    return new ElbowMotorIOSparkMax();
+    return new ElbowMotorIOSim();
   }
 }

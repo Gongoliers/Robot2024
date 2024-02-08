@@ -11,7 +11,7 @@ public class LightsFactory {
    * @return an LED controller.
    */
   public static LEDControllerIO createLEDController() {
-    if (Robot.isReal()) return new LEDControllerIOCANdle();
+    //if (Robot.isReal()) return new LEDControllerIOCANdle();
 
     return new LEDControllerIOSim();
   }
