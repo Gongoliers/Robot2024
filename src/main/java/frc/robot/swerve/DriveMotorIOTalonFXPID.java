@@ -36,7 +36,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
   }
 
   @Override
-  public void setSetpoint(double velocityMetersPerSecond) {
+  public void runSetpoint(double velocityMetersPerSecond) {
     if (velocityMetersPerSecond == 0.0) {
       talonFX.setControl(new CoastOut());
     } else {

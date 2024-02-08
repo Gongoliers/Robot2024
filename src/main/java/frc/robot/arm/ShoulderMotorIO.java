@@ -30,11 +30,11 @@ public interface ShoulderMotorIO {
   public void setPosition(double positionRotations);
 
   /**
-   * Sets the shoulder motor's setpoint.
+   * Runs the shoulder motor's setpoint.
    *
    * @param positionRotations the shoulder motor's setpoint.
    */
-  public void setSetpoint(double positionRotations);
+  public void runSetpoint(double positionRotations);
 
   // TODO Remove, only for characterization
   /**
