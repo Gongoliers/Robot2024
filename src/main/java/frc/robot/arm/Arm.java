@@ -1,7 +1,15 @@
 package frc.robot.arm;
 
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
+import frc.lib.Telemetry;
+import frc.robot.arm.ArmConstants.ElbowMotorConstants;
+import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
+import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
+import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -9,8 +17,23 @@ public class Arm extends Subsystem {
   /** Instance variable for the arm subsystem singleton. */
   private static Arm instance = null;
 
+  /** Shoulder motor. */
+  private final ShoulderMotorIO shoulderMotor;
+
+  /** Shoulder motor values. */
+  private final ShoulderMotorIOValues shoulderMotorValues = new ShoulderMotorIOValues();
+
+  /** Elbow motor. */
+  private final ElbowMotorIO elbowMotor;
+
+  /** Elbow motor values. */
+  private final ElbowMotorIOValues elbowMotorValues = new ElbowMotorIOValues();
+
   /** Creates a new instance of the arm subsystem. */
-  private Arm() {}
+  private Arm() {
+    shoulderMotor = ArmFactory.createShoulderMotor();
+    elbowMotor = ArmFactory.createElbowMotor();
+  }
 
   /**
    * Gets the instance of the arm subsystem.
@@ -26,8 +49,32 @@ public class Arm extends Subsystem {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    shoulderMotor.update(shoulderMotorValues);
+  }
 
   @Override
-  public void addToShuffleboard(ShuffleboardTab tab) {}
+  public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout shoulder = Telemetry.addColumn(tab, "Shoulder");
+
+    shoulder.addDouble("Position (rot)", () -> shoulderMotorValues.positionRotations);
+
+    ShuffleboardLayout elbow = Telemetry.addColumn(tab, "Elbow");
+
+    elbow.addDouble("Position (rot)", () -> elbowMotorValues.positionRotations);
+  }
+
+  public Command driveShoulderWithJoystick(DoubleSupplier joystickSupplier) {
+    return run(() ->
+            shoulderMotor.setVoltage(
+                joystickSupplier.getAsDouble() * ShoulderMotorConstants.MAXIMUM_VOLTAGE))
+        .finallyDo(shoulderMotor::stop);
+  }
+
+  public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
+    return run(() ->
+            elbowMotor.setVoltage(
+                joystickSupplier.getAsDouble() * ElbowMotorConstants.MAXIMUM_VOLTAGE))
+        .finallyDo(shoulderMotor::stop);
+  }
 }

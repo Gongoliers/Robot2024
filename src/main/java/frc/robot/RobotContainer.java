@@ -73,6 +73,9 @@ public class RobotContainer {
 
     operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
     operatorController.rightTrigger().whileTrue(shooter.smartShoot());
+
+    operatorController.a().whileTrue(arm.driveShoulderWithJoystick(operatorController::getLeftY));
+    operatorController.b().whileTrue(arm.driveElbowWithJoystick(operatorController::getLeftY));
   }
 
   /**
