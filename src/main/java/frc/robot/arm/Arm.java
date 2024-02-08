@@ -35,6 +35,8 @@ public class Arm extends Subsystem {
   private Arm() {
     shoulderMotor = ArmFactory.createShoulderMotor();
     elbowMotor = ArmFactory.createElbowMotor();
+
+    setState(new ArmState(Rotation2d.fromDegrees(90), new Rotation2d(), new Rotation2d()));
   }
 
   /**
@@ -64,6 +66,12 @@ public class Arm extends Subsystem {
     ShuffleboardLayout elbow = Telemetry.addColumn(tab, "Elbow");
 
     elbow.addDouble("Position (rot)", () -> elbowMotorValues.positionRotations);
+  }
+
+  public void setState(ArmState state) {
+    shoulderMotor.setPosition(state.shoulder().getRotations());
+    elbowMotor.setPosition(state.elbow().getRotations());
+    // wristMotor.setPosition(state.wrist().getRotations());
   }
 
   /**
