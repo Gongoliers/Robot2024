@@ -1,5 +1,6 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,6 +11,7 @@ import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -62,6 +64,32 @@ public class Arm extends Subsystem {
     ShuffleboardLayout elbow = Telemetry.addColumn(tab, "Elbow");
 
     elbow.addDouble("Position (rot)", () -> elbowMotorValues.positionRotations);
+  }
+
+  /**
+   * Gets the state of the arm.
+   *
+   * @return the state of the arm.
+   */
+  public ArmState getState() {
+    return new ArmState(
+        Rotation2d.fromRotations(shoulderMotorValues.positionRotations),
+        Rotation2d.fromRotations(elbowMotorValues.positionRotations),
+        Rotation2d.fromRotations(0));
+  }
+
+  private void runSetpoint(ArmState state) {
+    shoulderMotor.runSetpoint(state.shoulder().getRotations());
+    elbowMotor.runSetpoint(state.elbow().getRotations());
+    // wristMotor.runSetpoint(state.wrist().getRotations());
+  }
+
+  public Command runSetpoint(Supplier<ArmState> stateSupplier) {
+    return run(() -> runSetpoint(stateSupplier.get()));
+  }
+
+  public Command hold() {
+    return runSetpoint(this::getState);
   }
 
   public Command driveShoulderWithJoystick(DoubleSupplier joystickSupplier) {

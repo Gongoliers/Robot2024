@@ -60,6 +60,7 @@ public class RobotContainer {
 
   /** Configures operator controller bindings. */
   private void configureBindings() {
+    arm.setDefaultCommand(arm.hold());
     swerve.setDefaultCommand(new DriveCommand(driverController));
 
     driverController.y().onTrue(odometry.tare());
