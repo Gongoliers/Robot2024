@@ -29,6 +29,15 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
+        "Arm": {
+          "Position": {
+            "open": true
+          },
+          "Setpoint": {
+            "open": true
+          },
+          "open": true
+        },
         "Odometry": {
           "Velocity": {
             "open": true

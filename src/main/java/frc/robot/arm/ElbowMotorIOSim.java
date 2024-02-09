@@ -13,7 +13,7 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
   public void setPosition(double positionRotations) {}
 
   @Override
-  public void runSetpoint(double positionRotations) {}
+  public void setSetpoint(double positionRotations) {}
 
   @Override
   public void setVoltage(double volts) {}

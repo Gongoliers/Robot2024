@@ -47,7 +47,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   }
 
   @Override
-  public void runSetpoint(double positionRotations) {
+  public void setSetpoint(double positionRotations) {
     double measuredPositionRotations = getPositionRotations();
 
     double feedbackVolts = feedback.calculate(positionRotations, measuredPositionRotations);

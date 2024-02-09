@@ -25,8 +25,22 @@ public class ArmMechanism {
   private ArmMechanism() {
     mechanism = new Mechanism2d(1, 1);
     root = mechanism.getRoot("arm", 0.15, 0);
-    shoulder = root.append(new MechanismLigament2d("shoulder", ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE, 90, THICKNESS, new Color8Bit(Color.kOrange)));
-    elbow = shoulder.append(new MechanismLigament2d("elbow", ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE, 90, THICKNESS, new Color8Bit(Color.kGreen)));
+    shoulder =
+        root.append(
+            new MechanismLigament2d(
+                "shoulder",
+                ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
+                90,
+                THICKNESS,
+                new Color8Bit(Color.kOrange)));
+    elbow =
+        shoulder.append(
+            new MechanismLigament2d(
+                "elbow",
+                ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE,
+                90,
+                THICKNESS,
+                new Color8Bit(Color.kGreen)));
   }
 
   public static ArmMechanism getInstance() {

@@ -34,7 +34,7 @@ public interface ShoulderMotorIO {
    *
    * @param positionRotations the shoulder motor's setpoint.
    */
-  public void runSetpoint(double positionRotations);
+  public void setSetpoint(double positionRotations);
 
   // TODO Remove, only for characterization
   /**
