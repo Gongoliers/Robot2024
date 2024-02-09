@@ -3,8 +3,8 @@ package frc.robot.arm;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import frc.lib.Configurator;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
@@ -15,7 +15,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   private final CANSparkMax sparkMax;
 
   /** Feedback controller for shoulder position. */
-  private final PIDController feedback = new PIDController(0, 0, 0);
+  private final PIDController feedback = new PIDController(24, 0, 0);
 
   // private final ProfiledPIDController feedback =
   //     new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
@@ -50,12 +50,14 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   public void setSetpoint(double positionRotations) {
     double measuredPositionRotations = getPositionRotations();
 
-    double feedbackVolts = feedback.calculate(positionRotations, measuredPositionRotations);
+    double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     // double feedforwardVolts =
     //     feedforward.calculate(measuredPositionRotations, feedback.getSetpoint().velocity);
 
-    double feedforwardVolts = 0.0;
+    double kG = 0.1222 / Math.cos(Units.degreesToRadians(18.0));
+
+    double feedforwardVolts = kG * Math.cos(Units.rotationsToRadians(measuredPositionRotations));
 
     setVoltage(feedbackVolts + feedforwardVolts);
   }
@@ -63,10 +65,6 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   // TODO Remove, only for characterization
   @Override
   public void setVoltage(double volts) {
-    volts =
-        MathUtil.clamp(
-            volts, -ShoulderMotorConstants.MAXIMUM_VOLTAGE, ShoulderMotorConstants.MAXIMUM_VOLTAGE);
-
     if (volts > 0.0
         && getPositionRotations() > ShoulderMotorConstants.MAXIMUM_ANGLE.getRotations()) {
       volts = 0.0;
