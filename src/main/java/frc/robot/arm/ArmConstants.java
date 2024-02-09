@@ -14,6 +14,9 @@ public class ArmConstants {
     /** Gearing between the soulder motor and the shoulder joint. */
     public static final double GEARING = 51.2;
 
+    /** Moment of intertia of the shoulder, in kilograms meters squared. */
+    public static final double MOI = 0.15093;
+
     /** Maximum voltage that can be applied to the shoulder motor. */
     public static final double MAXIMUM_VOLTAGE = 2.0;
 

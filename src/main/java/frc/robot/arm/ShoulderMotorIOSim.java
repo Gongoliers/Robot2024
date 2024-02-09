@@ -23,7 +23,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
         new SingleJointedArmSim(
             DCMotor.getNEO(1),
             ShoulderMotorConstants.GEARING,
-            0.1,
+            0.15093,
             ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
             ShoulderMotorConstants.MINIMUM_ANGLE.getRadians(),
             ShoulderMotorConstants.MAXIMUM_ANGLE.getRadians(),
