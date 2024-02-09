@@ -3,10 +3,12 @@ package frc.robot.arm;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
 import frc.lib.Configurator;
+import frc.lib.FeedforwardUtil;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
 /** Shoulder motor using a Spark Max. */
@@ -19,7 +21,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   private final ProfiledPIDController feedback;
 
   /** Feedforward controller for shoulder position. */
-  // private final ArmFeedforward feedforward = new ArmFeedforward(0, 0, 0);
+  private final ArmFeedforward feedforward;
 
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
@@ -32,6 +34,12 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
             0,
             new Constraints(
                 ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
+
+    feedforward =
+        new ArmFeedforward(
+            0,
+            FeedforwardUtil.calculateArmGravityCompensation(Rotation2d.fromDegrees(18.0), 0.1222),
+            0);
   }
 
   @Override
@@ -58,12 +66,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-    // double feedforwardVolts =
-    //     feedforward.calculate(measuredPositionRotations, feedback.getSetpoint().velocity);
-
-    double kG = 0.1222 / Math.cos(Units.degreesToRadians(18.0));
-
-    double feedforwardVolts = kG * Math.cos(Units.rotationsToRadians(measuredPositionRotations));
+    double feedforwardVolts =
+        feedforward.calculate(measuredPositionRotations, feedback.getSetpoint().velocity);
 
     sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }

@@ -2,10 +2,12 @@ package frc.robot.arm;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.FeedforwardUtil;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
@@ -39,9 +41,12 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
             new Constraints(
                 ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
 
-    double kG = 0.101859 / Math.cos(Units.degreesToRadians(70.81));
-
-    feedforward = new ArmFeedforward(0, kG, 0);
+    feedforward =
+        new ArmFeedforward(
+            0,
+            FeedforwardUtil.calculateArmGravityCompensation(
+                Rotation2d.fromDegrees(70.81), 0.101859),
+            0);
   }
 
   @Override
