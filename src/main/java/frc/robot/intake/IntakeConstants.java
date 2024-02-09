@@ -21,7 +21,7 @@ public class IntakeConstants {
     public static final double GEARING = 4.5;
 
     /** Voltage to apply when intaking in volts. */
-    public static final double INTAKE_VOLTAGE = -10;
+    public static final double INTAKE_VOLTAGE = 8;
 
     /** Current limits for the roller motor. */
     public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
@@ -33,6 +33,6 @@ public class IntakeConstants {
   /** Constants for intake commands. */
   public static class IntakeCommandConstants {
     /** Delay between starting intaking and detecting notes in seconds. */
-    public static final double NOTE_DETECTION_DELAY = 1.0;
+    public static final double NOTE_DETECTION_DELAY = 0.5;
   }
 }
