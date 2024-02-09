@@ -1,8 +1,9 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.RobotConstants;
@@ -13,7 +14,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   private final SingleJointedArmSim singleJointedArmSim;
 
-  private final PIDController feedback;
+  private final ProfiledPIDController feedback;
 
   private final ArmFeedforward feedforward;
 
@@ -23,14 +24,20 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
         new SingleJointedArmSim(
             DCMotor.getNEO(1),
             ShoulderMotorConstants.GEARING,
-            0.15093,
+            ShoulderMotorConstants.MOI,
             ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
             ShoulderMotorConstants.MINIMUM_ANGLE.getRadians(),
             ShoulderMotorConstants.MAXIMUM_ANGLE.getRadians(),
             true,
             Units.degreesToRadians(90));
 
-    feedback = new PIDController(10.0, 0, 0);
+    feedback =
+        new ProfiledPIDController(
+            ShoulderMotorConstants.KP,
+            0,
+            0,
+            new Constraints(
+                ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
 
     double kG = 0.101859 / Math.cos(Units.degreesToRadians(70.81));
 
@@ -61,17 +68,6 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
     double feedforwardVolts = feedforward.calculate(measuredPositionRotations, 0.0);
 
-    setVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  // TODO Remove, only for characterization
-  @Override
-  public void setVoltage(double volts) {
-    singleJointedArmSim.setInputVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
+    singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
   }
 }

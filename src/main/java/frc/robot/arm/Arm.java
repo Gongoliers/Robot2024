@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
-import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import java.util.function.DoubleSupplier;
@@ -119,21 +118,12 @@ public class Arm extends Subsystem {
     return runOnce(() -> setSetpoint(getState())).andThen(runSetpoint(this::getSetpoint));
   }
 
-  public Command driveShoulderWithJoystick(DoubleSupplier joystickSupplier) {
-    return run(() ->
-            shoulderMotor.setVoltage(
-                joystickSupplier.getAsDouble()
-                    * -1
-                    * Math.abs(ShoulderMotorConstants.MAXIMUM_VOLTAGE)))
-        .finallyDo(shoulderMotor::stop);
-  }
-
   public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
     return run(() ->
             elbowMotor.setVoltage(
                 joystickSupplier.getAsDouble()
                     * -1
                     * Math.abs(ElbowMotorConstants.MAXIMUM_VOLTAGE)))
-        .finallyDo(shoulderMotor::stop);
+        .finallyDo(elbowMotor::stop);
   }
 }

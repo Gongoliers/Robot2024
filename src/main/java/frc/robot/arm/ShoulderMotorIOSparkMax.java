@@ -3,7 +3,8 @@ package frc.robot.arm;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.lib.Configurator;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
@@ -15,10 +16,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   private final CANSparkMax sparkMax;
 
   /** Feedback controller for shoulder position. */
-  private final PIDController feedback = new PIDController(24, 0, 0);
-
-  // private final ProfiledPIDController feedback =
-  //     new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
+  private final ProfiledPIDController feedback;
 
   /** Feedforward controller for shoulder position. */
   // private final ArmFeedforward feedforward = new ArmFeedforward(0, 0, 0);
@@ -26,6 +24,14 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
     sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
+
+    feedback =
+        new ProfiledPIDController(
+            ShoulderMotorConstants.KP,
+            0,
+            0,
+            new Constraints(
+                ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
   }
 
   @Override
@@ -59,26 +65,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
     double feedforwardVolts = kG * Math.cos(Units.rotationsToRadians(measuredPositionRotations));
 
-    setVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  // TODO Remove, only for characterization
-  @Override
-  public void setVoltage(double volts) {
-    if (volts > 0.0
-        && getPositionRotations() > ShoulderMotorConstants.MAXIMUM_ANGLE.getRotations()) {
-      volts = 0.0;
-    } else if (volts < 0.0
-        && getPositionRotations() < ShoulderMotorConstants.MINIMUM_ANGLE.getRotations()) {
-      volts = 0.0;
-    }
-
-    sparkMax.setVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
+    sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   /**

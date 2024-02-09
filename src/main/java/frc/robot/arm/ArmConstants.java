@@ -17,9 +17,6 @@ public class ArmConstants {
     /** Moment of intertia of the shoulder, in kilograms meters squared. */
     public static final double MOI = 0.15093;
 
-    /** Maximum voltage that can be applied to the shoulder motor. */
-    public static final double MAXIMUM_VOLTAGE = 2.0;
-
     /** Minumum angle of the shoulder joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(20);
 
@@ -28,6 +25,15 @@ public class ArmConstants {
 
     /** Shoulder pivot to elbow pivot distance in meters. */
     public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
+
+    /** Proportional gain in volts per rotation. */
+    public static final double KP = 24.0;
+
+    /** Maximum speed of the shoulder joint in rotations per second. */
+    public static final double MAXIMUM_SPEED = 1.5;
+
+    /** Maximum acceleration of the shoulder joint in rotations per second per second. */
+    public static final double MAXIMUM_ACCELERATION = 20.0;
   }
 
   /** Constants for the elbow motor. */

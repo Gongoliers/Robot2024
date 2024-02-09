@@ -35,15 +35,4 @@ public interface ShoulderMotorIO {
    * @param positionRotations the shoulder motor's setpoint.
    */
   public void setSetpoint(double positionRotations);
-
-  // TODO Remove, only for characterization
-  /**
-   * Run the shoulder motor with the specified voltage.
-   *
-   * @param volts volts to apply to the shoulder motor.
-   */
-  public void setVoltage(double volts);
-
-  /** Stop the shoulder motor. */
-  public void stop();
 }
