@@ -27,13 +27,13 @@ public class ArmConstants {
     public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
 
     /** Proportional gain in volts per rotation. */
-    public static final double KP = 24.0;
+    public static final double KP = 36.0;
 
     /** Maximum speed of the shoulder joint in rotations per second. */
     public static final double MAXIMUM_SPEED = 1.5;
 
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION = 20.0;
+    public static final double MAXIMUM_ACCELERATION = 5.0;
   }
 
   /** Constants for the elbow motor. */
