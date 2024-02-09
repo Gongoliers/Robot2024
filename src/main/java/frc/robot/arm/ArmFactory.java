@@ -13,7 +13,7 @@ public class ArmFactory {
   public static ShoulderMotorIO createShoulderMotor() {
     if (Robot.isReal()) return new ShoulderMotorIOSparkMax();
 
-    return new ShoulderMotorIOSparkMax();
+    return new ShoulderMotorIOSim();
   }
 
   /**

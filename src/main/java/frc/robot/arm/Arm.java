@@ -55,6 +55,8 @@ public class Arm extends Subsystem {
   @Override
   public void periodic() {
     shoulderMotor.update(shoulderMotorValues);
+
+    ArmMechanism.getInstance().setState(getState());
   }
 
   @Override
@@ -103,14 +105,14 @@ public class Arm extends Subsystem {
   public Command driveShoulderWithJoystick(DoubleSupplier joystickSupplier) {
     return run(() ->
             shoulderMotor.setVoltage(
-                joystickSupplier.getAsDouble() * ShoulderMotorConstants.MAXIMUM_VOLTAGE))
+                joystickSupplier.getAsDouble() * -1 * Math.abs(ShoulderMotorConstants.MAXIMUM_VOLTAGE)))
         .finallyDo(shoulderMotor::stop);
   }
 
   public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
     return run(() ->
             elbowMotor.setVoltage(
-                joystickSupplier.getAsDouble() * ElbowMotorConstants.MAXIMUM_VOLTAGE))
+                joystickSupplier.getAsDouble() * -1 * Math.abs(ElbowMotorConstants.MAXIMUM_VOLTAGE)))
         .finallyDo(shoulderMotor::stop);
   }
 }

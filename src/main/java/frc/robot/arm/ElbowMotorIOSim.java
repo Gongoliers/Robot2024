@@ -1,7 +1,7 @@
 package frc.robot.arm;
 
 /** Simulated elbow motor. */
-public class ElbowMotorIOSim  implements ElbowMotorIO {
+public class ElbowMotorIOSim implements ElbowMotorIO {
 
   @Override
   public void configure() {}

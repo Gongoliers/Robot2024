@@ -47,7 +47,8 @@ public class SwerveFactory {
    */
   public static SteerMotorIO createSteerMotor(SwerveModuleConfig config) {
     // if (Robot.isReal())
-    //   return new SteerMotorIOTalonFXPIDF(config.moduleCAN().steer(), config.moduleCAN().azimuth());
+    //   return new SteerMotorIOTalonFXPIDF(config.moduleCAN().steer(),
+    // config.moduleCAN().azimuth());
 
     return new SteerMotorIOSim();
   }
@@ -58,7 +59,7 @@ public class SwerveFactory {
    * @return a drive motor.
    */
   public static DriveMotorIO createDriveMotor(SwerveModuleConfig config) {
-    //if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
+    // if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
 
     return new DriveMotorIOSim();
   }

@@ -16,6 +16,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   /** Feedback controller for shoulder position. */
   private final PIDController feedback = new PIDController(0, 0, 0);
+
   // private final ProfiledPIDController feedback =
   //     new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
 
@@ -32,10 +33,6 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
-
-    sparkMax.setInverted(ShoulderMotorConstants.MOTOR_IS_INVERTED);
-
-    Configurator.configureREV(() -> sparkMax.getEncoder().setInverted(ShoulderMotorConstants.ENCODER_IS_INVERTED));
   }
 
   @Override
