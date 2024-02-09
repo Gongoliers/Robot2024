@@ -67,6 +67,14 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
         MathUtil.clamp(
             volts, -ShoulderMotorConstants.MAXIMUM_VOLTAGE, ShoulderMotorConstants.MAXIMUM_VOLTAGE);
 
+    if (volts > 0.0
+        && getPositionRotations() > ShoulderMotorConstants.MAXIMUM_ANGLE.getRotations()) {
+      volts = 0.0;
+    } else if (volts < 0.0
+        && getPositionRotations() < ShoulderMotorConstants.MINIMUM_ANGLE.getRotations()) {
+      volts = 0.0;
+    }
+
     sparkMax.setVoltage(volts);
   }
 

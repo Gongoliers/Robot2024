@@ -25,8 +25,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
             ShoulderMotorConstants.GEARING,
             0.1,
             ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
-            Units.degreesToRadians(10),
-            Units.degreesToRadians(90),
+            ShoulderMotorConstants.MINIMUM_ANGLE.getRadians(),
+            ShoulderMotorConstants.MAXIMUM_ANGLE.getRadians(),
             true,
             Units.degreesToRadians(90));
 
@@ -67,8 +67,6 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   // TODO Remove, only for characterization
   @Override
   public void setVoltage(double volts) {
-    System.out.println(volts);
-
     singleJointedArmSim.setInputVoltage(volts);
   }
 

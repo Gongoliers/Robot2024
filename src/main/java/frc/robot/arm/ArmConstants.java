@@ -1,5 +1,6 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 
@@ -15,6 +16,12 @@ public class ArmConstants {
 
     /** Maximum voltage that can be applied to the shoulder motor. */
     public static final double MAXIMUM_VOLTAGE = 2.0;
+
+    /** Minumum angle of the shoulder joint. */
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(20);
+
+    /** Maximum angle of the shoulder joint. */
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
 
     /** Shoulder pivot to elbow pivot distance in meters. */
     public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
