@@ -1,5 +1,7 @@
 package frc.robot.intake;
 
+import frc.robot.Robot;
+
 /** Helper class for creating hardware for the intake subsystem. */
 public class IntakeFactory {
 
@@ -9,7 +11,7 @@ public class IntakeFactory {
    * @return a roller motor.
    */
   public static RollerMotorIO createRollerMotor() {
-    // if (Robot.isReal()) return new RollerMotorIOSparkMax();
+    if (Robot.isReal()) return new RollerMotorIOSparkMax();
 
     return new RollerMotorIOSim();
   }

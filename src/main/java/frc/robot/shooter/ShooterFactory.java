@@ -1,7 +1,5 @@
 package frc.robot.shooter;
 
-import frc.robot.Robot;
-
 /** Helper class for creating hardware for the shooter subsystem. */
 public class ShooterFactory {
 
@@ -11,7 +9,7 @@ public class ShooterFactory {
    * @return a beam break sensor.
    */
   public static BeamBreakSensorIO createBeamBreakSensor() {
-    if (Robot.isReal()) return new BeamBreakSensorIOSim(); // TODO
+    // if (Robot.isReal()) return new BeamBreakSensorIOSim(); // TODO
 
     return new BeamBreakSensorIOSim();
   }
