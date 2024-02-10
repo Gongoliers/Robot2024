@@ -11,7 +11,6 @@ import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -38,10 +37,10 @@ public class Arm extends Subsystem {
     shoulderMotor = ArmFactory.createShoulderMotor();
     elbowMotor = ArmFactory.createElbowMotor();
 
-    setState(new ArmState(Rotation2d.fromDegrees(90), new Rotation2d(), new Rotation2d()));
+    setPosition(new ArmState(Rotation2d.fromDegrees(90), new Rotation2d(), new Rotation2d()));
 
-    goal = getState();
-    setpoint = getState();
+    goal = getPosition();
+    setpoint = getPosition();
   }
 
   /**
@@ -61,7 +60,7 @@ public class Arm extends Subsystem {
   public void periodic() {
     shoulderMotor.update(shoulderMotorValues);
 
-    ArmMechanism.getInstance().setState(getState());
+    ArmMechanism.getInstance().setState(getPosition());
   }
 
   @Override
@@ -76,29 +75,36 @@ public class Arm extends Subsystem {
 
     ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
 
-    setpoint.addDouble("Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.shoulder().position));
-    setpoint.addDouble("Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.elbow().position));
-    setpoint.addDouble("Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.wrist().position));
+    setpoint.addDouble(
+        "Shoulder Setpoint (deg)",
+        () -> Units.rotationsToDegrees(getSetpoint().shoulder().position));
+    setpoint.addDouble(
+        "Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().elbow().position));
+    setpoint.addDouble(
+        "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().wrist().position));
 
     ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
 
-    goal.addDouble("Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.shoulder().position));
-    goal.addDouble("Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.elbow().position));
-    goal.addDouble("Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.wrist().position));
+    goal.addDouble(
+        "Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().shoulder().position));
+    goal.addDouble(
+        "Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().elbow().position));
+    goal.addDouble(
+        "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().wrist().position));
   }
 
-  public void setState(ArmState state) {
+  public void setPosition(ArmState state) {
     shoulderMotor.setPosition(state.shoulder().position);
     elbowMotor.setPosition(state.elbow().position);
     // wristMotor.setPosition(state.wrist().getRotations());
   }
 
   /**
-   * Gets the state of the arm.
+   * Gets the position of the arm.
    *
-   * @return the state of the arm.
+   * @return the position of the arm.
    */
-  public ArmState getState() {
+  public ArmState getPosition() {
     shoulderMotor.update(shoulderMotorValues);
     elbowMotor.update(elbowMotorValues);
 
@@ -114,19 +120,27 @@ public class Arm extends Subsystem {
 
   private void setGoal(ArmState goal) {
     this.goal = goal;
-    this.setpoint = this.setpoint.nextSetpoint(goal);
+    setSetpoint(getSetpoint().nextSetpoint(goal));
+  }
 
-    shoulderMotor.setSetpoint(this.setpoint.shoulder().position, this.setpoint.shoulder().velocity);
-    elbowMotor.setSetpoint(this.setpoint.elbow().position);
+  public ArmState getSetpoint() {
+    return setpoint;
+  }
+
+  private void setSetpoint(ArmState setpoint) {
+    this.setpoint = setpoint;
+
+    shoulderMotor.setSetpoint(setpoint.shoulder().position, setpoint.shoulder().velocity);
+    elbowMotor.setSetpoint(setpoint.elbow().position);
     // wristMotor.runSetpoint(state.wrist().getRotations());
   }
 
-  public Command runSetpoint(Supplier<ArmState> setpointSupplier) {
-    return run(() -> setGoal(setpointSupplier.get()));
+  public Command runGoal(ArmState goal) {
+    return run(() -> setGoal(goal));
   }
 
   public Command hold() {
-    return runOnce(() -> setGoal(getState())).andThen(runSetpoint(this::getGoal));
+    return run(() -> setSetpoint(getGoal())).beforeStarting(() -> setGoal(getPosition()));
   }
 
   public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
