@@ -3,6 +3,7 @@ package frc.robot.arm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
+import frc.lib.MotionProfileCalculator;
 
 /** Constants for the arm subsystem. */
 public class ArmConstants {
@@ -33,7 +34,8 @@ public class ArmConstants {
     public static final double MAXIMUM_SPEED = 1.5;
 
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION = 5.0;
+    public static final double MAXIMUM_ACCELERATION =
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.3);
   }
 
   /** Constants for the elbow motor. */

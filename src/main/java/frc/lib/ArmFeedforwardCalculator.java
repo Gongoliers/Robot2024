@@ -2,8 +2,8 @@ package frc.lib;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
-/** Helper class to assist with feedforward calculations. */
-public class FeedforwardUtil {
+/** Helper class to assist with arm feedforward calculations. */
+public class ArmFeedforwardCalculator {
 
   /**
    * Calculates the gravity compensation constant for an arm given the voltage applied at an

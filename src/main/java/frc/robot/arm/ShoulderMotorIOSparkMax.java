@@ -7,8 +7,8 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.lib.ArmFeedforwardCalculator;
 import frc.lib.Configurator;
-import frc.lib.FeedforwardUtil;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
 /** Shoulder motor using a Spark Max. */
@@ -38,7 +38,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     feedforward =
         new ArmFeedforward(
             0,
-            FeedforwardUtil.calculateArmGravityCompensation(Rotation2d.fromDegrees(18.0), 0.1222),
+            ArmFeedforwardCalculator.calculateArmGravityCompensation(
+                Rotation2d.fromDegrees(18.0), 0.1222),
             0);
   }
 

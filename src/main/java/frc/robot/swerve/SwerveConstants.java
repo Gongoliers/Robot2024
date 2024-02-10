@@ -3,6 +3,7 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.lib.MotionProfileCalculator;
 import frc.lib.PIDFConstants;
 
 /** Constants for the swerve subsystem. */
@@ -93,20 +94,9 @@ public class SwerveConstants {
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
 
-  /**
-   * Calculates an acceleration using a ramp duration.
-   *
-   * @param maximumSpeed the maximum speed in units per second.
-   * @param desiredRampDurationSeconds the desired duration to ramp from no speed to full speed.
-   * @return the acceleration in units per second per second.
-   */
-  private static double calculateAcceleration(
-      double maximumSpeed, double desiredRampDurationSeconds) {
-    return maximumSpeed / desiredRampDurationSeconds;
-  }
-
   /** Maximum acceleration in meters per second per second. */
-  public static final double MAXIMUM_ACCELERATION = calculateAcceleration(MAXIMUM_SPEED, 0.1);
+  public static final double MAXIMUM_ACCELERATION =
+      MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
 
   /** Maximum attainable rotational speed in rotations per second. */
   public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =
@@ -117,7 +107,7 @@ public class SwerveConstants {
 
   /** Maximum acceleration in rotations per second per second. */
   public static final double MAXIMUM_ROTATION_ACCELERATION =
-      calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
+      MotionProfileCalculator.calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
 
   public static final PIDFConstants DRIVE_PIDF_CONSTANTS = new PIDFConstants();
 

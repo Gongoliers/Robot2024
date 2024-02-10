@@ -7,7 +7,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.lib.FeedforwardUtil;
+import frc.lib.ArmFeedforwardCalculator;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
@@ -44,7 +44,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     feedforward =
         new ArmFeedforward(
             0,
-            FeedforwardUtil.calculateArmGravityCompensation(
+            ArmFeedforwardCalculator.calculateArmGravityCompensation(
                 Rotation2d.fromDegrees(70.81), 0.101859),
             0);
   }
