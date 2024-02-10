@@ -59,12 +59,13 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   }
 
   @Override
-  public void setSetpoint(double positionRotations) {
+  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
     double measuredPositionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-    double feedforwardVolts = feedforward.calculate(measuredPositionRotations, 0.0);
+    double feedforwardVolts =
+        feedforward.calculate(measuredPositionRotations, velocityRotationsPerSecond);
 
     singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
   }

@@ -99,6 +99,9 @@ public class Arm extends Subsystem {
    * @return the state of the arm.
    */
   public ArmState getState() {
+    shoulderMotor.update(shoulderMotorValues);
+    elbowMotor.update(elbowMotorValues);
+
     return new ArmState(
         Rotation2d.fromRotations(shoulderMotorValues.positionRotations),
         Rotation2d.fromRotations(elbowMotorValues.positionRotations),
@@ -113,7 +116,7 @@ public class Arm extends Subsystem {
     this.goal = goal;
     this.setpoint = this.setpoint.nextSetpoint(goal);
 
-    shoulderMotor.setSetpoint(this.setpoint.shoulder().position);
+    shoulderMotor.setSetpoint(this.setpoint.shoulder().position, this.setpoint.shoulder().velocity);
     elbowMotor.setSetpoint(this.setpoint.elbow().position);
     // wristMotor.runSetpoint(state.wrist().getRotations());
   }

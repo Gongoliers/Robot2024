@@ -59,7 +59,7 @@ public class ArmMechanism {
   public void setState(ArmState state) {
     Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulder().position);
     Rotation2d elbowRotation = Rotation2d.fromRotations(state.elbow().position);
-    //Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
+    // Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
 
     shoulder.setAngle(shoulderRotation);
     elbow.setAngle(elbowRotation.minus(shoulderRotation));
