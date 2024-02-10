@@ -23,6 +23,12 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
+        "Intake": {
+          "Roller": {
+            "open": true
+          },
+          "open": true
+        },
         "Odometry": {
           "Velocity": {
             "open": true
@@ -34,14 +40,7 @@
           },
           "North East Module": {
             "open": true
-          },
-          "Rotation Constants": {
-            "open": true
-          },
-          "Translation Constants": {
-            "open": true
-          },
-          "open": true
+          }
         },
         "Vision": {
           "Vision Pose": {
