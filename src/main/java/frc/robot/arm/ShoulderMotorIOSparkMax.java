@@ -4,9 +4,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.lib.ArmFeedforwardCalculator;
 import frc.lib.Configurator;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
@@ -18,7 +17,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   private final CANSparkMax sparkMax;
 
   /** Feedback controller for shoulder position. */
-  private final ProfiledPIDController feedback;
+  private final PIDController feedback;
 
   /** Feedforward controller for shoulder position. */
   private final ArmFeedforward feedforward;
@@ -27,13 +26,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   public ShoulderMotorIOSparkMax() {
     sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
 
-    feedback =
-        new ProfiledPIDController(
-            ShoulderMotorConstants.KP,
-            0,
-            0,
-            new Constraints(
-                ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
+    feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 
     feedforward =
         new ArmFeedforward(
@@ -62,13 +55,13 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   }
 
   @Override
-  public void setSetpoint(double positionRotations) {
+  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
     double measuredPositionRotations = getPositionRotations();
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     double feedforwardVolts =
-        feedforward.calculate(measuredPositionRotations, feedback.getSetpoint().velocity);
+        feedforward.calculate(measuredPositionRotations, velocityRotationsPerSecond);
 
     sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }

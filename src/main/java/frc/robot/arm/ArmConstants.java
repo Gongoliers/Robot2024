@@ -1,6 +1,7 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.MotionProfileCalculator;
@@ -36,6 +37,13 @@ public class ArmConstants {
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
         MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.3);
+
+    /** Maximum speed and acceleration of the shoulder joint. */
+    public static final TrapezoidProfile.Constraints CONSTRAINTS =
+        new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
+
+    /** Motion profile of the shoulder joint using constraints. */
+    public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
 
   /** Constants for the elbow motor. */

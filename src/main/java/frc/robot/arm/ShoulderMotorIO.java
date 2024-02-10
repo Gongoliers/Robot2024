@@ -32,7 +32,8 @@ public interface ShoulderMotorIO {
   /**
    * Runs the shoulder motor's setpoint.
    *
-   * @param positionRotations the shoulder motor's setpoint.
+   * @param positionRotations the shoulder motor's position setpoint.
+   * @param velocityRotationsPerSecond the shoulder motor's velocity setpoint.
    */
-  public void setSetpoint(double positionRotations);
+  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
 }
