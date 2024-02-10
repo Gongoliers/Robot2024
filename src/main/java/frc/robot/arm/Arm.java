@@ -41,8 +41,6 @@ public class Arm extends Subsystem {
 
     goal = getPosition();
     setpoint = getPosition();
-
-    this.setDefaultCommand(run(() -> setGoal(getGoal())));
   }
 
   /**
