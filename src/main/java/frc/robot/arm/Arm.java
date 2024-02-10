@@ -92,6 +92,8 @@ public class Arm extends Subsystem {
    * @return the state of the arm.
    */
   public ArmState getState() {
+    shoulderMotor.update(shoulderMotorValues);
+
     return new ArmState(
         Rotation2d.fromRotations(shoulderMotorValues.positionRotations),
         Rotation2d.fromRotations(elbowMotorValues.positionRotations),
