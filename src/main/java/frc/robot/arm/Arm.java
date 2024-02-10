@@ -76,15 +76,15 @@ public class Arm extends Subsystem {
 
     ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
 
-    setpoint.addDouble("Shoulder Setpoint (deg)", () -> this.goal.shoulder().position);
-    setpoint.addDouble("Elbow Setpoint (deg)", () -> this.goal.elbow().position);
-    setpoint.addDouble("Wrist Setpoint (deg)", () -> this.goal.wrist().position);
+    setpoint.addDouble("Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.shoulder().position));
+    setpoint.addDouble("Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.elbow().position));
+    setpoint.addDouble("Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.wrist().position));
 
     ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
 
-    goal.addDouble("Shoulder Setpoint (deg)", () -> this.goal.shoulder().position);
-    goal.addDouble("Elbow Setpoint (deg)", () -> this.goal.elbow().position);
-    goal.addDouble("Wrist Setpoint (deg)", () -> this.goal.wrist().position);
+    goal.addDouble("Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.shoulder().position));
+    goal.addDouble("Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.elbow().position));
+    goal.addDouble("Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(this.goal.wrist().position));
   }
 
   public void setState(ArmState state) {
