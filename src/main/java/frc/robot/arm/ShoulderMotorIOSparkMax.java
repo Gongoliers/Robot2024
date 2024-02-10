@@ -3,10 +3,11 @@ package frc.robot.arm;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import frc.lib.ArmFeedforwardCalculator;
 import frc.lib.Configurator;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
@@ -17,15 +18,29 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   private final CANSparkMax sparkMax;
 
   /** Feedback controller for shoulder position. */
-  private final ProfiledPIDController feedback =
-      new ProfiledPIDController(0, 0, 0, new Constraints(0, 0));
+  private final ProfiledPIDController feedback;
 
   /** Feedforward controller for shoulder position. */
-  private final ArmFeedforward feedforward = new ArmFeedforward(0, 0, 0);
+  private final ArmFeedforward feedforward;
 
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(32, MotorType.kBrushless);
+    sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
+
+    feedback =
+        new ProfiledPIDController(
+            ShoulderMotorConstants.KP,
+            0,
+            0,
+            new Constraints(
+                ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
+
+    feedforward =
+        new ArmFeedforward(
+            0,
+            ArmFeedforwardCalculator.calculateArmGravityCompensation(
+                Rotation2d.fromDegrees(18.0), 0.1222),
+            0);
   }
 
   @Override
@@ -43,34 +58,19 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   @Override
   public void setPosition(double positionRotations) {
-    // TODO
+    sparkMax.getEncoder().setPosition(positionRotations * ShoulderMotorConstants.GEARING);
   }
 
   @Override
-  public void runSetpoint(double positionRotations) {
+  public void setSetpoint(double positionRotations) {
     double measuredPositionRotations = getPositionRotations();
 
-    double feedbackVolts = feedback.calculate(positionRotations, measuredPositionRotations);
+    double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     double feedforwardVolts =
         feedforward.calculate(measuredPositionRotations, feedback.getSetpoint().velocity);
 
-    setVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  // TODO Remove, only for characterization
-  @Override
-  public void setVoltage(double volts) {
-    volts =
-        MathUtil.clamp(
-            volts, -ShoulderMotorConstants.MAXIMUM_VOLTAGE, ShoulderMotorConstants.MAXIMUM_VOLTAGE);
-
-    sparkMax.setVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
+    sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   /**
@@ -79,6 +79,6 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
    * @return the absolute position of the shoulder in rotations.
    */
   private double getPositionRotations() {
-    return sparkMax.getEncoder().getPosition();
+    return sparkMax.getEncoder().getPosition() / ShoulderMotorConstants.GEARING;
   }
 }

@@ -1,13 +1,13 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
-import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import java.util.function.DoubleSupplier;
@@ -31,12 +31,16 @@ public class Arm extends Subsystem {
   /** Elbow motor values. */
   private final ElbowMotorIOValues elbowMotorValues = new ElbowMotorIOValues();
 
+  private ArmState setpoint;
+
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
     shoulderMotor = ArmFactory.createShoulderMotor();
     elbowMotor = ArmFactory.createElbowMotor();
 
     setState(new ArmState(Rotation2d.fromDegrees(90), new Rotation2d(), new Rotation2d()));
+
+    setpoint = getState();
   }
 
   /**
@@ -55,17 +59,25 @@ public class Arm extends Subsystem {
   @Override
   public void periodic() {
     shoulderMotor.update(shoulderMotorValues);
+
+    ArmMechanism.getInstance().setState(getState());
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout shoulder = Telemetry.addColumn(tab, "Shoulder");
+    ShuffleboardLayout position = Telemetry.addColumn(tab, "Position");
 
-    shoulder.addDouble("Position (rot)", () -> shoulderMotorValues.positionRotations);
+    position.addDouble(
+        "Shoulder Position (deg)",
+        () -> Units.rotationsToDegrees(shoulderMotorValues.positionRotations));
+    position.addDouble(
+        "Elbow Position (deg)", () -> Units.rotationsToDegrees(elbowMotorValues.positionRotations));
 
-    ShuffleboardLayout elbow = Telemetry.addColumn(tab, "Elbow");
+    ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
 
-    elbow.addDouble("Position (rot)", () -> elbowMotorValues.positionRotations);
+    setpoint.addDouble("Shoulder Setpoint (deg)", () -> this.setpoint.shoulder().getDegrees());
+    setpoint.addDouble("Elbow Setpoint (deg)", () -> this.setpoint.elbow().getDegrees());
+    setpoint.addDouble("Wrist Setpoint (deg)", () -> this.setpoint.wrist().getDegrees());
   }
 
   public void setState(ArmState state) {
@@ -86,31 +98,32 @@ public class Arm extends Subsystem {
         Rotation2d.fromRotations(0));
   }
 
-  private void runSetpoint(ArmState state) {
-    shoulderMotor.runSetpoint(state.shoulder().getRotations());
-    elbowMotor.runSetpoint(state.elbow().getRotations());
+  public ArmState getSetpoint() {
+    return setpoint;
+  }
+
+  private void setSetpoint(ArmState setpoint) {
+    this.setpoint = setpoint;
+
+    shoulderMotor.setSetpoint(setpoint.shoulder().getRotations());
+    elbowMotor.setSetpoint(setpoint.elbow().getRotations());
     // wristMotor.runSetpoint(state.wrist().getRotations());
   }
 
-  public Command runSetpoint(Supplier<ArmState> stateSupplier) {
-    return run(() -> runSetpoint(stateSupplier.get()));
+  public Command runSetpoint(Supplier<ArmState> setpointSupplier) {
+    return run(() -> setSetpoint(setpointSupplier.get()));
   }
 
   public Command hold() {
-    return runSetpoint(this::getState);
-  }
-
-  public Command driveShoulderWithJoystick(DoubleSupplier joystickSupplier) {
-    return run(() ->
-            shoulderMotor.setVoltage(
-                joystickSupplier.getAsDouble() * ShoulderMotorConstants.MAXIMUM_VOLTAGE))
-        .finallyDo(shoulderMotor::stop);
+    return runOnce(() -> setSetpoint(getState())).andThen(runSetpoint(this::getSetpoint));
   }
 
   public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
     return run(() ->
             elbowMotor.setVoltage(
-                joystickSupplier.getAsDouble() * ElbowMotorConstants.MAXIMUM_VOLTAGE))
-        .finallyDo(shoulderMotor::stop);
+                joystickSupplier.getAsDouble()
+                    * -1
+                    * Math.abs(ElbowMotorConstants.MAXIMUM_VOLTAGE)))
+        .finallyDo(elbowMotor::stop);
   }
 }
