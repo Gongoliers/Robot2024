@@ -49,14 +49,7 @@
           },
           "North East Module": {
             "open": true
-          },
-          "Rotation Constants": {
-            "open": true
-          },
-          "Translation Constants": {
-            "open": true
-          },
-          "open": true
+          }
         },
         "Vision": {
           "Vision Pose": {
