@@ -37,7 +37,7 @@ public class Arm extends Subsystem {
     shoulderMotor = ArmFactory.createShoulderMotor();
     elbowMotor = ArmFactory.createElbowMotor();
 
-    setPosition(new ArmState(Rotation2d.fromDegrees(90), new Rotation2d(), new Rotation2d()));
+    setPosition(ArmState.UP);
 
     goal = getPosition();
     setpoint = getPosition();

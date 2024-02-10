@@ -9,6 +9,18 @@ import java.util.Objects;
 /** State of the arm. */
 public record ArmState(State shoulder, State elbow, State wrist) {
 
+  public static ArmState UP =
+      new ArmState(
+          ShoulderMotorConstants.MAXIMUM_ANGLE,
+          Rotation2d.fromDegrees(0),
+          Rotation2d.fromDegrees(0));
+
+  public static ArmState DOWN =
+      new ArmState(
+          ShoulderMotorConstants.MINIMUM_ANGLE,
+          Rotation2d.fromDegrees(0),
+          Rotation2d.fromDegrees(0));
+
   /**
    * Creates an arm state.
    *
