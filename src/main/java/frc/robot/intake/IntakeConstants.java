@@ -36,7 +36,7 @@ public class IntakeConstants {
     public static final double NOTE_CURRENT = 18.0; // TODO
 
     /** Duration of the current spike when intaking a note. */
-    public static final double STALL_DURATION = 0.25;
+    public static final double STALL_DURATION = 0.35;
   }
 
   /** Constants for intake commands. */
