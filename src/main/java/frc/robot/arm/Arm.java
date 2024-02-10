@@ -41,6 +41,8 @@ public class Arm extends Subsystem {
 
     goal = getPosition();
     setpoint = getPosition();
+
+    this.setDefaultCommand(run(() -> setGoal(getGoal())));
   }
 
   /**
@@ -59,6 +61,8 @@ public class Arm extends Subsystem {
   @Override
   public void periodic() {
     shoulderMotor.update(shoulderMotorValues);
+
+    setSetpoint(getSetpoint().nextSetpoint(goal));
 
     ArmMechanism.getInstance().setState(getPosition());
   }
@@ -118,9 +122,8 @@ public class Arm extends Subsystem {
     return goal;
   }
 
-  private void setGoal(ArmState goal) {
+  public void setGoal(ArmState goal) {
     this.goal = goal;
-    setSetpoint(getSetpoint().nextSetpoint(goal));
   }
 
   public ArmState getSetpoint() {
@@ -133,14 +136,6 @@ public class Arm extends Subsystem {
     shoulderMotor.setSetpoint(setpoint.shoulder().position, setpoint.shoulder().velocity);
     elbowMotor.setSetpoint(setpoint.elbow().position);
     // wristMotor.runSetpoint(state.wrist().getRotations());
-  }
-
-  public Command runGoal(ArmState goal) {
-    return run(() -> setGoal(goal));
-  }
-
-  public Command hold() {
-    return run(() -> setSetpoint(getGoal())).beforeStarting(() -> setGoal(getPosition()));
   }
 
   public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
