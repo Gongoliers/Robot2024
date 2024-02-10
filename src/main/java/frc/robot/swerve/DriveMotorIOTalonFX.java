@@ -64,7 +64,7 @@ public abstract class DriveMotorIOTalonFX implements DriveMotorIO {
   }
 
   @Override
-  public abstract void setSetpoint(double velocityMetersPerSecond);
+  public abstract void runSetpoint(double velocityMetersPerSecond);
 
   @Override
   public void setBrake(boolean brake) {

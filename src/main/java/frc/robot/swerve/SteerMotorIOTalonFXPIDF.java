@@ -40,7 +40,7 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
   }
 
   @Override
-  public void setSetpoint(double positionRotations) {
+  public void runSetpoint(double positionRotations) {
     if (pidf.atGoal()) {
       // TODO Doesn't work for some reason...
       // talonFX.setControl(new CoastOut());

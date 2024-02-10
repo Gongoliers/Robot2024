@@ -37,7 +37,7 @@ public class SteerMotorIOTalonFXIntegrated extends SteerMotorIOTalonFX {
   }
 
   @Override
-  public void setSetpoint(double positionRotations) {
+  public void runSetpoint(double positionRotations) {
     talonFX.setControl(motionMagicVoltageSetter.withPosition(positionRotations));
   }
 }

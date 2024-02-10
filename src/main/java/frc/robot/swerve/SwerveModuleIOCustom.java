@@ -75,13 +75,13 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   }
 
   @Override
-  public void setSetpoint(SwerveModuleState setpoint, boolean lazy) {
+  public void runSetpoint(SwerveModuleState setpoint, boolean lazy) {
     if (lazy) {
       setpoint = optimize(setpoint, getState());
     }
 
-    steerMotor.setSetpoint(setpoint.angle.getRotations());
-    driveMotor.setSetpoint(setpoint.speedMetersPerSecond);
+    steerMotor.runSetpoint(setpoint.angle.getRotations());
+    driveMotor.runSetpoint(setpoint.speedMetersPerSecond);
 
     this.setpoint = setpoint;
   }

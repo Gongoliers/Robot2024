@@ -67,5 +67,5 @@ public abstract class SteerMotorIOTalonFX implements SteerMotorIO {
   }
 
   @Override
-  public abstract void setSetpoint(double positionRotations);
+  public abstract void runSetpoint(double positionRotations);
 }

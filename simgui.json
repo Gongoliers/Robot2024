@@ -5,10 +5,16 @@
       "/Shuffleboard/Auto/Auto Chooser": "String Chooser",
       "/Shuffleboard/Auto/SendableChooser[0]": "String Chooser",
       "/Shuffleboard/Vision/Field": "Field2d",
+      "/SmartDashboard/Arm Mechanism": "Mechanism2d",
       "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d"
     },
     "windows": {
       "/Shuffleboard/Auto/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Arm Mechanism": {
         "window": {
           "visible": true
         }
@@ -23,8 +29,11 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
-        "Intake": {
-          "Roller": {
+        "Arm": {
+          "Position": {
+            "open": true
+          },
+          "Setpoint": {
             "open": true
           },
           "open": true

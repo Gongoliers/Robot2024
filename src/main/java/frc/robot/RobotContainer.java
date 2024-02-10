@@ -1,9 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
+import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ArmMechanism;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
@@ -56,10 +59,13 @@ public class RobotContainer {
   private void initializeTelemetry() {
     Telemetry.initializeShuffleboards(
         arm, auto, climber, intake, lights, odometry, shooter, swerve, vision);
+
+    SmartDashboard.putData("Arm Mechanism", ArmMechanism.getInstance().getMechanism());
   }
 
   /** Configures operator controller bindings. */
   private void configureBindings() {
+    arm.setDefaultCommand(arm.hold());
     swerve.setDefaultCommand(new DriveCommand(driverController));
 
     driverController.y().onTrue(odometry.tare());
@@ -73,6 +79,19 @@ public class RobotContainer {
 
     operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
     operatorController.rightTrigger().whileTrue(shooter.smartShoot());
+
+    operatorController
+        .x()
+        .whileTrue(
+            arm.runSetpoint(
+                () -> arm.getState().withShoulder(ShoulderMotorConstants.MINIMUM_ANGLE)));
+    operatorController
+        .y()
+        .whileTrue(
+            arm.runSetpoint(
+                () -> arm.getState().withShoulder(ShoulderMotorConstants.MAXIMUM_ANGLE)));
+
+    operatorController.b().whileTrue(arm.driveElbowWithJoystick(operatorController::getLeftY));
   }
 
   /**
