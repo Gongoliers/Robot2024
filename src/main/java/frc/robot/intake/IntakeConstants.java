@@ -20,19 +20,28 @@ public class IntakeConstants {
     /** Gearing between the roller motor and the rollers. */
     public static final double GEARING = 4.5;
 
+    /** Moment of inertia of the roller in joules kilograms meters squared. */
+    public static final double MOI = 0.5343;
+
     /** Voltage to apply when intaking in volts. */
-    public static final double INTAKE_VOLTAGE = -10;
+    public static final double INTAKE_VOLTAGE = 8;
+
+    /** Voltage to apply when outtaking in volts. */
+    public static final double OUTTAKE_VOLTAGE = -8;
 
     /** Current limits for the roller motor. */
     public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
 
     /** Size of the current spike when intaking a note in amps. */
     public static final double NOTE_CURRENT = 18.0; // TODO
+
+    /** Duration of the current spike when intaking a note. */
+    public static final double STALL_DURATION = 0.35;
   }
 
   /** Constants for intake commands. */
   public static class IntakeCommandConstants {
     /** Delay between starting intaking and detecting notes in seconds. */
-    public static final double NOTE_DETECTION_DELAY = 1.0;
+    public static final double NOTE_DETECTION_DELAY = 0.5;
   }
 }
