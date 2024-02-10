@@ -1,10 +1,9 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.ArmFeedforwardCalculator;
@@ -16,7 +15,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   private final SingleJointedArmSim singleJointedArmSim;
 
-  private final ProfiledPIDController feedback;
+  private final PIDController feedback;
 
   private final ArmFeedforward feedforward;
 
@@ -33,13 +32,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
             true,
             Units.degreesToRadians(90));
 
-    feedback =
-        new ProfiledPIDController(
-            ShoulderMotorConstants.KP,
-            0,
-            0,
-            new Constraints(
-                ShoulderMotorConstants.MAXIMUM_SPEED, ShoulderMotorConstants.MAXIMUM_ACCELERATION));
+    feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 
     feedforward =
         new ArmFeedforward(

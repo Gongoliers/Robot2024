@@ -30,6 +30,9 @@
     "transitory": {
       "Shuffleboard": {
         "Arm": {
+          "Goal": {
+            "open": true
+          },
           "Position": {
             "open": true
           },

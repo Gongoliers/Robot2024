@@ -1,5 +1,6 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -56,7 +57,11 @@ public class ArmMechanism {
   }
 
   public void setState(ArmState state) {
-    shoulder.setAngle(state.shoulder());
-    elbow.setAngle(state.elbow().minus(state.shoulder()));
+    Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulder().position);
+    Rotation2d elbowRotation = Rotation2d.fromRotations(state.elbow().position);
+    //Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
+
+    shoulder.setAngle(shoulderRotation);
+    elbow.setAngle(elbowRotation.minus(shoulderRotation));
   }
 }
