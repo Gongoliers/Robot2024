@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
+      "x": 2.0,
       "y": 7.0
     },
     "rotation": 0
@@ -14,7 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "+5m -5m spin"
+            "pathName": "+5 spin 90"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "-5m"
           }
         }
       ]
