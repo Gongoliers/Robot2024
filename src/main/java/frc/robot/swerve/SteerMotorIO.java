@@ -30,9 +30,9 @@ public interface SteerMotorIO {
   public void setPosition(double positionRotations);
 
   /**
-   * Runs the steer motor's setpoint.
+   * Sets the steer motor's setpoint.
    *
    * @param positionRotations the steer motor's setpoint.
    */
-  public void runSetpoint(double positionRotations);
+  public void setSetpoint(double positionRotations);
 }

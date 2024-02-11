@@ -168,21 +168,21 @@ public class Swerve extends Subsystem {
 
     SwerveModuleState[] setpoints = swerveKinematics.toSwerveModuleStates(speeds);
 
-    runSetpoints(setpoints, true);
+    setSetpoints(setpoints, true);
   }
 
   /**
-   * Runs each of the swerve modules' setpoints.
+   * Sets each of the swerve modules' setpoints.
    *
    * @param setpoints the setpoints for each of the swerve's modules.
    * @param lazy if true, optimize the module setpoint.
    */
-  public void runSetpoints(SwerveModuleState[] setpoints, boolean lazy) {
+  public void setSetpoints(SwerveModuleState[] setpoints, boolean lazy) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         setpoints, SwerveConstants.MAXIMUM_ATTAINABLE_SPEED);
 
     for (int i = 0; i < 4; i++) {
-      swerveModules[i].runSetpoint(setpoints[i], lazy);
+      swerveModules[i].setSetpoint(setpoints[i], lazy);
     }
   }
 
@@ -195,7 +195,7 @@ public class Swerve extends Subsystem {
   public Command orientModules(Rotation2d[] orientations) {
     return run(
         () -> {
-          runSetpoints(
+          setSetpoints(
               new SwerveModuleState[] {
                 new SwerveModuleState(0.0, orientations[0]),
                 new SwerveModuleState(0.0, orientations[1]),

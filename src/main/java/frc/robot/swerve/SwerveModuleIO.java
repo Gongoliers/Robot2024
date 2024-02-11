@@ -29,12 +29,12 @@ public interface SwerveModuleIO {
   public SwerveModuleState getSetpoint();
 
   /**
-   * Runs the swerve module setpoint.
+   * Sets the swerve module setpoint.
    *
    * @param setpoint the swerve module setpoint.
    * @param lazy if true, optimize the swerve module setpoint.
    */
-  public void runSetpoint(SwerveModuleState setpoint, boolean lazy);
+  public void setSetpoint(SwerveModuleState setpoint, boolean lazy);
 
   /**
    * Gets the position of the swerve module.

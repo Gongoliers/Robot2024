@@ -1,34 +1,27 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.lib.PIDFConstants;
 
 /** Utility class for calculating PIDF for steer motors. */
 public class SteerMotorPIDF {
 
   /** Feedback controller for position. */
-  private final ProfiledPIDController positionFeedback;
+  private final PIDController feedback;
 
   /** Feedforward controller for position. */
-  private final SimpleMotorFeedforward positionFeedforward;
+  private final SimpleMotorFeedforward feedforward;
 
   /** Creates a PIDF utility class. */
   public SteerMotorPIDF(PIDFConstants pidfConstants) {
-    positionFeedback =
-        new ProfiledPIDController(
-            pidfConstants.kP,
-            pidfConstants.kI,
-            pidfConstants.kD,
-            new Constraints(
-                pidfConstants.kVelocityConstraint, pidfConstants.kAccelerationConstraint));
+    feedback = new PIDController(pidfConstants.kP, 0.0, pidfConstants.kD);
 
-    positionFeedback.enableContinuousInput(-0.5, 0.5);
-    positionFeedback.setTolerance(pidfConstants.kPositionTolerance);
+    feedback.enableContinuousInput(-0.5, 0.5);
+    feedback.setTolerance(pidfConstants.kPositionTolerance);
 
-    positionFeedforward = new SimpleMotorFeedforward(pidfConstants.kS, pidfConstants.kV);
+    feedforward = new SimpleMotorFeedforward(pidfConstants.kS, 0.0);
   }
 
   /**
@@ -36,24 +29,23 @@ public class SteerMotorPIDF {
    *
    * @return true if feedback error is within tolerance.
    */
-  public boolean atGoal() {
-    return positionFeedback.atGoal();
+  public boolean atSetpoint() {
+    return feedback.atSetpoint();
   }
 
   /**
-   * Calculates the voltage to reach a goal position from a measured position.
+   * Calculates the voltage to reach a setpoint position from a measured position.
    *
    * @param measurement the measured position of the steer motor.
-   * @param goal the goal position to reach.
+   * @param setpoint the setpoint position.
    * @return the voltage to apply to the steer motor.
    */
-  public double calculate(Rotation2d measurement, Rotation2d goal) {
-    double positionFeedbackVolts =
-        positionFeedback.calculate(measurement.getRotations(), goal.getRotations());
+  public double calculate(Rotation2d measurement, Rotation2d setpoint) {
+    double feedbackVolts = feedback.calculate(measurement.getRotations(), setpoint.getRotations());
 
-    double positionFeedforwardVolts =
-        positionFeedforward.calculate(positionFeedback.getSetpoint().velocity);
+    // TODO Determine if/how velocity feedforward could be used
+    double feedforwardVolts = feedforward.calculate(0.0);
 
-    return positionFeedbackVolts + positionFeedforwardVolts;
+    return feedbackVolts + feedforwardVolts;
   }
 }

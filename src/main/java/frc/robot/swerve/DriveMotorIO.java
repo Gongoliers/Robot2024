@@ -30,11 +30,11 @@ public interface DriveMotorIO {
   public void setPosition(double positionMeters);
 
   /**
-   * Runs the drive motor's setpoint.
+   * Sets the drive motor's setpoint.
    *
    * @param velocityMetersPerSecond the drive motor's setpoint.
    */
-  public void runSetpoint(double velocityMetersPerSecond);
+  public void setSetpoint(double velocityMetersPerSecond);
 
   /**
    * Sets the drive motor's brake mode.

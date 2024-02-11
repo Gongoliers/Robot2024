@@ -55,7 +55,7 @@ public class SteerMotorIOSim implements SteerMotorIO {
   }
 
   @Override
-  public void runSetpoint(double positionRotations) {
+  public void setSetpoint(double positionRotations) {
     double voltage =
         pidf.calculate(
             Rotation2d.fromRotations(this.positionRotations),
