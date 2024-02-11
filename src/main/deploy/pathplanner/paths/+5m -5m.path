@@ -11,7 +11,7 @@
         "x": 3.118033988749895,
         "y": 7.0
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     },
     {
@@ -20,11 +20,27 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 3.479309367425449,
+        "x": 4.88,
+        "y": 7.0
+      },
+      "nextControl": {
+        "x": 5.1154848849079295,
+        "y": 7.0
+      },
+      "isLocked": true,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 0.47930936742544894,
         "y": 7.0
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     }
   ],
@@ -45,5 +61,5 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
