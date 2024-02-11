@@ -53,8 +53,7 @@
           },
           "Velocity": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Swerve": {
           "Constants": {
@@ -71,18 +70,13 @@
           },
           "North East Module": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Vision": {
           "Vision Pose": {
             "open": true
           }
-        },
-        "open": true
-      },
-      "photonvision": {
-        "open": true
+        }
       },
       "shooter": {
         "beamBreakSensorSim": {
@@ -92,9 +86,13 @@
       "swerve": {
         "driveCommand": {
           "open": true
-        }
+        },
+        "open": true
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   },
   "Plot": {
     "Plot <0>": {

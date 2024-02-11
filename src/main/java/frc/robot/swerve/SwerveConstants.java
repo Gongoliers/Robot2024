@@ -2,6 +2,7 @@ package frc.robot.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.MotionProfileCalculator;
 import frc.lib.PIDFConstants;
@@ -108,6 +109,14 @@ public class SwerveConstants {
   /** Maximum acceleration in rotations per second per second. */
   public static final double MAXIMUM_ROTATION_ACCELERATION =
       MotionProfileCalculator.calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
+
+  /** Maximum rotation speed and rotation acceleration. */
+  public static final TrapezoidProfile.Constraints ROTATION_CONSTRAINTS =
+      new TrapezoidProfile.Constraints(MAXIMUM_ROTATION_SPEED, MAXIMUM_ROTATION_ACCELERATION);
+
+  /** Rotation motion profile. */
+  public static final TrapezoidProfile ROTATION_MOTION_PROFILE =
+      new TrapezoidProfile(ROTATION_CONSTRAINTS);
 
   public static final PIDFConstants DRIVE_PIDF_CONSTANTS = new PIDFConstants();
 

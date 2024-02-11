@@ -1,17 +1,14 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.lib.ProfiledRotationPIDController;
-import frc.lib.RotationPIDController;
-import frc.lib.Telemetry;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
 import frc.robot.swerve.DriveRequest.TranslationMode;
@@ -32,28 +29,11 @@ public class DriveCommand extends Command {
   /* Current and previous requests from the driver controller. */
   private DriveRequest request, previousRequest;
 
-  /* Drift feedback controller. */
-  // TODO
-  private final RotationPIDController driftFeedback = new RotationPIDController(0, 0, 0);
-
   /* Heading feedback controller. */
-  private final ProfiledRotationPIDController headingFeedback =
-      new ProfiledRotationPIDController(
-          6,
-          0,
-          0.1,
-          new Constraints(
-              SwerveConstants.MAXIMUM_ROTATION_SPEED,
-              SwerveConstants.MAXIMUM_ROTATION_ACCELERATION));
+  private final PIDController headingFeedback;
 
-  private final DoubleEntry headingEntry,
-      headingVelocityEntry,
-      headingGoalEntry,
-      headingSetpointEntry,
-      headingVelocitySetpointEntry;
-
-  /** Heading setpoint. */
-  private Rotation2d headingGoal = new Rotation2d();
+  /** Heading goal. */
+  private State headingGoal, headingSetpoint;
 
   public DriveCommand(CommandXboxController driverController) {
     swerve = Swerve.getInstance();
@@ -61,19 +41,15 @@ public class DriveCommand extends Command {
 
     addRequirements(swerve);
 
+    headingFeedback = new PIDController(6.0, 0.0, 0.1);
+
+    headingGoal = new State(0.0, 0.0);
+    headingSetpoint = new State(0.0, 0.0);
+
     previousChassisSpeeds = new ChassisSpeeds();
 
     this.driverController = driverController;
     previousRequest = DriveRequest.fromController(driverController);
-
-    headingEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "heading");
-    headingVelocityEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "headingVelocity");
-
-    headingGoalEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "headingGoal");
-
-    headingSetpointEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "headingSetpoint");
-    headingVelocitySetpointEntry =
-        Telemetry.addDoubleEntry("swerve/driveCommand", "headingVelocitySetpoint");
   }
 
   @Override
@@ -86,32 +62,33 @@ public class DriveCommand extends Command {
     Translation2d translationVelocityMetersPerSecond =
         request.translationVector.times(SwerveConstants.MAXIMUM_SPEED);
 
-    final Rotation2d positionHeading = odometry.getPosition().getRotation();
-
-    headingEntry.set(positionHeading.getRotations());
+    Rotation2d measuredHeading = odometry.getPosition().getRotation();
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
-      headingGoal = positionHeading;
-      headingGoalEntry.set(headingGoal.getRotations());
+      headingGoal = new State(measuredHeading.getRotations(), 0.0);
     }
 
-    double rotationVelocityRotationsPerSecond = 0.0;
+    Rotation2d rotationVelocity = new Rotation2d();
 
     switch (request.rotationMode) {
       case SPINNING:
-        rotationVelocityRotationsPerSecond = request.getRotationVelocity();
+        rotationVelocity = request.getRotationVelocity();
+
+        headingSetpoint =
+            new State(measuredHeading.getRotations(), request.getRotationVelocity().getRotations());
         break;
       case SNAPPING:
-        headingGoal = request.getHeading();
-        rotationVelocityRotationsPerSecond =
-            headingFeedback.calculate(positionHeading, headingGoal);
-
-        headingGoalEntry.set(headingGoal.getRotations());
-        headingSetpointEntry.set(headingFeedback.getSetpoint().position);
-        headingVelocitySetpointEntry.set(headingFeedback.getSetpoint().velocity);
-        break;
+        headingGoal = new State(request.getHeading().getRotations(), 0.0);
+        // fallthrough
       case DRIFTING:
-        rotationVelocityRotationsPerSecond = driftFeedback.calculate(positionHeading, headingGoal);
+        headingSetpoint =
+            SwerveConstants.ROTATION_MOTION_PROFILE.calculate(
+                RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
+
+        rotationVelocity =
+            Rotation2d.fromRotations(
+                headingFeedback.calculate(
+                    measuredHeading.getRotations(), headingSetpoint.position));
         break;
     }
 
@@ -122,14 +99,14 @@ public class DriveCommand extends Command {
           new ChassisSpeeds(
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
-              Units.rotationsToRadians(rotationVelocityRotationsPerSecond));
+              rotationVelocity.getRadians());
     } else {
       chassisSpeeds =
           ChassisSpeeds.fromFieldRelativeSpeeds(
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
-              Units.rotationsToRadians(rotationVelocityRotationsPerSecond),
-              positionHeading);
+              rotationVelocity.getRadians(),
+              measuredHeading);
     }
 
     chassisSpeeds.vxMetersPerSecond =
@@ -156,8 +133,6 @@ public class DriveCommand extends Command {
             chassisSpeeds.omegaRadiansPerSecond,
             -maxOmegaRadiansPerSecond,
             maxOmegaRadiansPerSecond);
-
-    headingVelocityEntry.set(Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond));
 
     swerve.setChassisSpeeds(chassisSpeeds);
 

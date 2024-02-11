@@ -92,8 +92,9 @@ public class DriveRequest {
         && present.rotationMode == RotationMode.DRIFTING;
   }
 
-  public double getRotationVelocity() {
-    return SwerveConstants.MAXIMUM_ROTATION_SPEED * this.rotationVector.getY() * 0.5;
+  public Rotation2d getRotationVelocity() {
+    return Rotation2d.fromRotations(
+        SwerveConstants.MAXIMUM_ROTATION_SPEED * this.rotationVector.getY() * 0.5);
   }
 
   private Rotation2d snapToNearest(Rotation2d angle, Rotation2d multiple) {
