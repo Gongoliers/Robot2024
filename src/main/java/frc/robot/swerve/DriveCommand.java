@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
-import frc.robot.swerve.DriveRequest.TranslationMode;
 
 /** Drives the swerve using driver input. */
 public class DriveCommand extends Command {
@@ -61,42 +60,40 @@ public class DriveCommand extends Command {
     request = DriveRequest.fromController(driverController);
 
     Translation2d translationVelocityMetersPerSecond =
-        request.translationVector.times(SwerveConstants.MAXIMUM_SPEED);
+        request.translation().times(SwerveConstants.MAXIMUM_SPEED);
 
-    Rotation2d poseRotation = odometry.getPosition().getRotation();
+    Rotation2d poseHeading = odometry.getPosition().getRotation();
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
-      headingGoal = wrap(new State(poseRotation.getRotations(), 0.0), poseRotation.getRotations());
+      headingGoal = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());
     }
 
-    double omegaRotationsPerSecond;
+    if (request.isSnapping()) {
+      headingGoal =
+          wrap(new State(request.heading().getRotations(), 0.0), poseHeading.getRotations());
+    }
 
-    switch (request.rotationMode) {
-      case SPINNING:
-        omegaRotationsPerSecond = request.getRotationVelocity().getRotations();
+    double omegaRotationsPerSecond = 0.0;
 
-        headingSetpoint =
-            wrap(new State(poseRotation.getRotations(), omegaRotationsPerSecond), poseRotation.getRotations());
-        break;
-      case SNAPPING:
-        headingGoal = wrap(new State(request.getHeading().getRotations(), 0.0), poseRotation.getRotations());
-        // fallthrough
-      case DRIFTING:
-        headingSetpoint =
-            SwerveConstants.ROTATION_MOTION_PROFILE.calculate(
-                RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
+    if (request.isSpinning()) {
+      headingSetpoint =
+          wrap(
+              new State(poseHeading.getRotations(), request.omega().getRotations()),
+              poseHeading.getRotations());
 
-        omegaRotationsPerSecond =
-                headingFeedback.calculate(poseRotation.getRotations(), headingSetpoint.position);
-        break;
-      default:
-      omegaRotationsPerSecond = 0.0;
-        break;
+      omegaRotationsPerSecond = headingSetpoint.velocity;
+    } else {
+      headingSetpoint =
+          SwerveConstants.ROTATION_MOTION_PROFILE.calculate(
+              RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
+
+      omegaRotationsPerSecond =
+          headingFeedback.calculate(poseHeading.getRotations(), headingSetpoint.position);
     }
 
     ChassisSpeeds chassisSpeeds;
 
-    if (request.translationMode == TranslationMode.ROBOT_CENTRIC) {
+    if (request.isRobotCentric()) {
       chassisSpeeds =
           new ChassisSpeeds(
               translationVelocityMetersPerSecond.getX(),
@@ -108,7 +105,7 @@ public class DriveCommand extends Command {
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
               Units.rotationsToRadians(omegaRotationsPerSecond),
-              poseRotation);
+              poseHeading);
     }
 
     chassisSpeeds.vxMetersPerSecond =
@@ -150,7 +147,7 @@ public class DriveCommand extends Command {
 
   /**
    * Wraps an input state to be within the range of a measured position.
-   * 
+   *
    * @param state the input state.
    * @param measurement the measured position.
    * @return a new state within the range of the measured position.
@@ -159,5 +156,4 @@ public class DriveCommand extends Command {
     double minError = MathUtil.inputModulus(state.position - measurement, -0.5, 0.5);
     return new State(minError + measurement, state.velocity);
   }
-
 }

@@ -5,7 +5,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-public class DriveRequest {
+public record DriveRequest(
+    DriveRequest.TranslationMode translationMode,
+    DriveRequest.RotationMode rotationMode,
+    Translation2d translation,
+    Translation2d rotation) {
 
   public enum TranslationMode {
     FIELD_CENTRIC,
@@ -16,24 +20,6 @@ public class DriveRequest {
     DRIFTING,
     SPINNING,
     SNAPPING
-  }
-
-  public final TranslationMode translationMode;
-  public final RotationMode rotationMode;
-
-  public final Translation2d translationVector;
-  public final Translation2d rotationVector;
-
-  private DriveRequest(
-      TranslationMode translationMode,
-      RotationMode rotationMode,
-      Translation2d translationVector,
-      Translation2d rotationVector) {
-    this.translationMode = translationMode;
-    this.rotationMode = rotationMode;
-
-    this.translationVector = translationVector;
-    this.rotationVector = rotationVector;
   }
 
   private static boolean isDrifting(Translation2d heading, boolean aligning) {
@@ -48,7 +34,7 @@ public class DriveRequest {
     return Math.abs(heading.getY()) < kOmegaDeadband;
   }
 
-  static DriveRequest fromController(CommandXboxController controller) {
+  public static DriveRequest fromController(CommandXboxController controller) {
     boolean snipingRequested = controller.leftTrigger().getAsBoolean();
     boolean aligningRequested = controller.rightTrigger().getAsBoolean();
 
@@ -92,8 +78,24 @@ public class DriveRequest {
         && present.rotationMode == RotationMode.DRIFTING;
   }
 
-  public Rotation2d getRotationVelocity() {
-    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotationVector.getY() * 0.5);
+  public boolean isRobotCentric() {
+    return translationMode == TranslationMode.ROBOT_CENTRIC;
+  }
+
+  public boolean isSpinning() {
+    return rotationMode == RotationMode.SPINNING;
+  }
+
+  public boolean isSnapping() {
+    return rotationMode == RotationMode.SNAPPING;
+  }
+
+  public boolean isDrifting() {
+    return rotationMode == RotationMode.DRIFTING;
+  }
+
+  public Rotation2d omega() {
+    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotation().getY() * 0.5);
   }
 
   private Rotation2d snapToNearest(Rotation2d angle, Rotation2d multiple) {
@@ -106,9 +108,9 @@ public class DriveRequest {
     return Math.round(n / multiple) * multiple;
   }
 
-  public Rotation2d getHeading() {
+  public Rotation2d heading() {
     double kSnapMultipleDegrees = 90;
 
-    return snapToNearest(rotationVector.getAngle(), Rotation2d.fromDegrees(kSnapMultipleDegrees));
+    return snapToNearest(rotation().getAngle(), Rotation2d.fromDegrees(kSnapMultipleDegrees));
   }
 }
