@@ -25,14 +25,14 @@ public class SwerveConstants {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
 
     /** Actual distance driven during the odometry test in meters. */
-    public static final double ODOMETRY_TEST_ACTUAL_DISTANCE = 6.985;
+    public static final double ODOMETRY_TEST_ACTUAL_DISTANCE = 5.49;
 
     /** Reported distance driven during the odometry test in meters. */
-    public static final double ODOMETRY_TEST_REPORTED_DISTANCE = 8.219;
+    public static final double ODOMETRY_TEST_REPORTED_DISTANCE = 5.0;
 
     /** Conversion between odometry distance and actual distance travelled. */
     public static final double ODOMETRY_ERROR =
-        ODOMETRY_TEST_ACTUAL_DISTANCE / ODOMETRY_TEST_REPORTED_DISTANCE;
+        ODOMETRY_TEST_REPORTED_DISTANCE / ODOMETRY_TEST_ACTUAL_DISTANCE;
 
     /** Conversion between wheel rotations and distances in meters. */
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI * ODOMETRY_ERROR;

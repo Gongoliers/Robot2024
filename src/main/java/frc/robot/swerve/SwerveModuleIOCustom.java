@@ -1,5 +1,6 @@
 package frc.robot.swerve;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -25,8 +26,11 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   /** Drive motor. */
   private final DriveMotorIO driveMotor;
 
-  /** Driver motor values. */
+  /** Drive motor values. */
   private final DriveMotorIOValues driveMotorValues = new DriveMotorIOValues();
+
+  /** Speeds below this speed are zeroed. */
+  private final double kSpeedDeadbandMetersPerSecond = 0.025;
 
   /** Module setpoint */
   private SwerveModuleState setpoint;
@@ -76,9 +80,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
 
   @Override
   public void setSetpoint(SwerveModuleState setpoint, boolean lazy) {
-    if (lazy) {
-      setpoint = optimize(setpoint, getState());
-    }
+    setpoint = optimize(setpoint, getState(), lazy);
 
     steerMotor.setSetpoint(setpoint.angle.getRotations());
     driveMotor.setSetpoint(setpoint.speedMetersPerSecond);
@@ -91,18 +93,33 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    *
    * @param setpoint the setpoint to optimize.
    * @param state the state of the module.
+   * @param lazy if true, perform additional optimizations on the setpoint.
    * @return the optimized setpoint.
    */
-  private SwerveModuleState optimize(SwerveModuleState setpoint, SwerveModuleState state) {
+  private SwerveModuleState optimize(SwerveModuleState setpoint, SwerveModuleState state, boolean lazy) {
+    // Always perform this optimization, even when lazy
     setpoint = SwerveModuleState.optimize(setpoint, state.angle);
 
+    // If we aren't lazy, don't perform additional optimizations
+    if (!lazy) {
+      return setpoint;
+    }
+
+    // Since we are lazy, perform additional optimizations
+    
+    // Deadband the module speed
+    if (MathUtil.isNear(0.0, setpoint.speedMetersPerSecond, kSpeedDeadbandMetersPerSecond)) {
+      setpoint.speedMetersPerSecond = 0.0;
+    }
+
+    // Keep previous angle if we aren't moving
     if (setpoint.speedMetersPerSecond == 0.0) {
       setpoint.angle = state.angle;
-    } else {
-      Rotation2d angleError = setpoint.angle.minus(state.angle);
-
-      setpoint.speedMetersPerSecond *= angleError.getCos();
     }
+
+    // Scale our speed by the module's error
+    Rotation2d error = setpoint.angle.minus(state.angle);
+    setpoint.speedMetersPerSecond *= error.getCos();
 
     return setpoint;
   }

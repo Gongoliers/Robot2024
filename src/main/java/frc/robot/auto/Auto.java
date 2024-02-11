@@ -26,20 +26,30 @@ public class Auto extends Subsystem {
   /** Instance variable for the auto subsystem singleton. */
   private static Auto instance = null;
 
+  /** Reference to the odometry subsystem. */
+  private final Odometry odometry;
+
+  /** Reference to the swerve subsystem. */
+  private final Swerve swerve;
+
+  /** Sendable chooser for the subsystem. */
   private final SendableChooser<Command> autoChooser;
 
   /** Creates a new instance of the auto subsystem. */
   private Auto() {
-    Supplier<Pose2d> robotPositionSupplier = () -> Odometry.getInstance().getPosition();
+    odometry = Odometry.getInstance();
+    swerve = Swerve.getInstance();
+
+    Supplier<Pose2d> robotPositionSupplier = () -> odometry.getPosition();
 
     Consumer<Pose2d> robotPositionConsumer =
-        position -> Odometry.getInstance().setPosition(position);
+        position -> odometry.setPosition(position);
 
     Supplier<ChassisSpeeds> swerveChassisSpeedsSupplier =
-        () -> Swerve.getInstance().getChassisSpeeds();
+        () -> swerve.getChassisSpeeds();
 
     Consumer<ChassisSpeeds> swerveChassisSpeedsConsumer =
-        chassisSpeeds -> Swerve.getInstance().setChassisSpeeds(chassisSpeeds);
+        chassisSpeeds -> swerve.setChassisSpeeds(chassisSpeeds);
 
     HolonomicPathFollowerConfig holonomicPathFollowerConfig =
         new HolonomicPathFollowerConfig(
@@ -56,7 +66,7 @@ public class Auto extends Subsystem {
         swerveChassisSpeedsConsumer,
         holonomicPathFollowerConfig,
         this::shouldFlipPath,
-        this);
+        swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }

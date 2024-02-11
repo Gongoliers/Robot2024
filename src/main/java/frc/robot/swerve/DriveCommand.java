@@ -53,7 +53,13 @@ public class DriveCommand extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    Rotation2d poseHeading = odometry.getPosition().getRotation();
+
+    // TODO Determine which of these, if not both, need to be set to prevent immediate spinning
+    headingGoal = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());
+    headingSetpoint = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());
+  }
 
   @Override
   public void execute() {
