@@ -7,8 +7,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.ProfiledRotationPIDController;
@@ -68,15 +66,14 @@ public class DriveCommand extends Command {
     this.driverController = driverController;
     previousRequest = DriveRequest.fromController(driverController);
 
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("swerve/driveCommand");
+    headingEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "heading");
+    headingVelocityEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "headingVelocity");
 
-    headingEntry = Telemetry.addDoubleEntry(table, "heading");
-    headingVelocityEntry = Telemetry.addDoubleEntry(table, "headingVelocity");
+    headingGoalEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "headingGoal");
 
-    headingGoalEntry = Telemetry.addDoubleEntry(table, "headingGoal");
-
-    headingSetpointEntry = Telemetry.addDoubleEntry(table, "headingSetpoint");
-    headingVelocitySetpointEntry = Telemetry.addDoubleEntry(table, "headingVelocitySetpoint");
+    headingSetpointEntry = Telemetry.addDoubleEntry("swerve/driveCommand", "headingSetpoint");
+    headingVelocitySetpointEntry =
+        Telemetry.addDoubleEntry("swerve/driveCommand", "headingVelocitySetpoint");
   }
 
   @Override

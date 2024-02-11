@@ -1,8 +1,6 @@
 package frc.robot.shooter;
 
 import edu.wpi.first.networktables.BooleanEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.lib.Telemetry;
 
 /** Simulated beam break sensor. */
@@ -13,9 +11,7 @@ public class BeamBreakSensorIOSim implements BeamBreakSensorIO {
 
   /** Creates a simulated beam break sensor. */
   public BeamBreakSensorIOSim() {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("shooter/beamBreakSensorSim");
-
-    isBrokenEntry = Telemetry.addBooleanEntry(table, "isBroken");
+    isBrokenEntry = Telemetry.addBooleanEntry("shooter/beamBreakSensorSim", "isBroken");
   }
 
   @Override
