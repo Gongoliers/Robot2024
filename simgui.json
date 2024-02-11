@@ -38,21 +38,34 @@
           },
           "Setpoint": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Odometry": {
+          "Position": {
+            "open": true
+          },
           "Velocity": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Swerve": {
           "Constants": {
             "open": true
           },
+          "Module 0": {
+            "open": true
+          },
+          "Module 1": {
+            "open": true
+          },
+          "Module 2": {
+            "open": true
+          },
           "North East Module": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Vision": {
           "Vision Pose": {
