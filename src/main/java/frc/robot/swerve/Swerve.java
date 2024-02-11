@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.RobotConstants;
 
 /** Subsystem class for the swerve subsystem. */
 public class Swerve extends Subsystem {
@@ -163,6 +164,8 @@ public class Swerve extends Subsystem {
    * @param speeds the swerve's speeds.
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
+    speeds = ChassisSpeeds.discretize(speeds, RobotConstants.PERIODIC_DURATION);
+
     SwerveModuleState[] setpoints = swerveKinematics.toSwerveModuleStates(speeds);
 
     runSetpoints(setpoints, true);
