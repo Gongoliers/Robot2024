@@ -23,8 +23,8 @@ public class SwerveFactory {
    * @return an azimuth encoder.
    */
   public static AzimuthEncoderIO createAzimuthEncoder(SwerveModuleConfig config) {
-    // if (Robot.isReal())
-    //   return new AzimuthEncoderIOCANcoder(config.moduleCAN().azimuth(), config.offset());
+    if (Robot.isReal())
+      return new AzimuthEncoderIOCANcoder(config.moduleCAN().azimuth(), config.offset());
 
     return new AzimuthEncoderIOSim();
   }
@@ -46,9 +46,9 @@ public class SwerveFactory {
    * @return a steer motor.
    */
   public static SteerMotorIO createSteerMotor(SwerveModuleConfig config) {
-    // if (Robot.isReal())
-    //   return new SteerMotorIOTalonFXPIDF(config.moduleCAN().steer(),
-    // config.moduleCAN().azimuth());
+    if (Robot.isReal())
+      return new SteerMotorIOTalonFXPIDF(config.moduleCAN().steer(),
+    config.moduleCAN().azimuth());
 
     return new SteerMotorIOSim();
   }
@@ -59,7 +59,7 @@ public class SwerveFactory {
    * @return a drive motor.
    */
   public static DriveMotorIO createDriveMotor(SwerveModuleConfig config) {
-    // if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
+    if (Robot.isReal()) return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
 
     return new DriveMotorIOSim();
   }
