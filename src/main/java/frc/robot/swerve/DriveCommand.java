@@ -42,6 +42,7 @@ public class DriveCommand extends Command {
     addRequirements(swerve);
 
     headingFeedback = new PIDController(6.0, 0.0, 0.1);
+    headingFeedback.enableContinuousInput(-0.5, 0.5);
 
     headingGoal = new State(0.0, 0.0);
     headingSetpoint = new State(0.0, 0.0);
@@ -62,33 +63,34 @@ public class DriveCommand extends Command {
     Translation2d translationVelocityMetersPerSecond =
         request.translationVector.times(SwerveConstants.MAXIMUM_SPEED);
 
-    Rotation2d measuredHeading = odometry.getPosition().getRotation();
+    Rotation2d poseRotation = odometry.getPosition().getRotation();
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
-      headingGoal = new State(measuredHeading.getRotations(), 0.0);
+      headingGoal = wrap(new State(poseRotation.getRotations(), 0.0), poseRotation.getRotations());
     }
 
-    Rotation2d rotationVelocity = new Rotation2d();
+    double omegaRotationsPerSecond;
 
     switch (request.rotationMode) {
       case SPINNING:
-        rotationVelocity = request.getRotationVelocity();
+        omegaRotationsPerSecond = request.getRotationVelocity().getRotations();
 
         headingSetpoint =
-            new State(measuredHeading.getRotations(), request.getRotationVelocity().getRotations());
+            wrap(new State(poseRotation.getRotations(), omegaRotationsPerSecond), poseRotation.getRotations());
         break;
       case SNAPPING:
-        headingGoal = new State(request.getHeading().getRotations(), 0.0);
+        headingGoal = wrap(new State(request.getHeading().getRotations(), 0.0), poseRotation.getRotations());
         // fallthrough
       case DRIFTING:
         headingSetpoint =
             SwerveConstants.ROTATION_MOTION_PROFILE.calculate(
                 RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
 
-        rotationVelocity =
-            Rotation2d.fromRotations(
-                headingFeedback.calculate(
-                    measuredHeading.getRotations(), headingSetpoint.position));
+        omegaRotationsPerSecond =
+                headingFeedback.calculate(poseRotation.getRotations(), headingSetpoint.position);
+        break;
+      default:
+      omegaRotationsPerSecond = 0.0;
         break;
     }
 
@@ -99,14 +101,14 @@ public class DriveCommand extends Command {
           new ChassisSpeeds(
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
-              rotationVelocity.getRadians());
+              Units.rotationsToRadians(omegaRotationsPerSecond));
     } else {
       chassisSpeeds =
           ChassisSpeeds.fromFieldRelativeSpeeds(
               translationVelocityMetersPerSecond.getX(),
               translationVelocityMetersPerSecond.getY(),
-              rotationVelocity.getRadians(),
-              measuredHeading);
+              Units.rotationsToRadians(omegaRotationsPerSecond),
+              poseRotation);
     }
 
     chassisSpeeds.vxMetersPerSecond =
@@ -125,14 +127,11 @@ public class DriveCommand extends Command {
             previousChassisSpeeds.vyMetersPerSecond
                 + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
 
-    double maxOmegaRadiansPerSecond =
-        Units.rotationsToRadians(SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED);
-
     chassisSpeeds.omegaRadiansPerSecond =
         MathUtil.clamp(
             chassisSpeeds.omegaRadiansPerSecond,
-            -maxOmegaRadiansPerSecond,
-            maxOmegaRadiansPerSecond);
+            -SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians(),
+            SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians());
 
     swerve.setChassisSpeeds(chassisSpeeds);
 
@@ -148,4 +147,17 @@ public class DriveCommand extends Command {
   public boolean isFinished() {
     return false;
   }
+
+  /**
+   * Wraps an input state to be within the range of a measured position.
+   * 
+   * @param state the input state.
+   * @param measurement the measured position.
+   * @return a new state within the range of the measured position.
+   */
+  private State wrap(State state, double measurement) {
+    double minError = MathUtil.inputModulus(state.position - measurement, -0.5, 0.5);
+    return new State(minError + measurement, state.velocity);
+  }
+
 }

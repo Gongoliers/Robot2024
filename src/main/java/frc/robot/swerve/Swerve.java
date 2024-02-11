@@ -70,11 +70,12 @@ public class Swerve extends Subsystem {
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
     rotationConstants.addDouble(
         "Maximum Attainable Velocity (rps)",
-        () -> SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED);
+        () -> SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRotations());
     rotationConstants.addDouble(
-        "Maximum Velocity (rps)", () -> SwerveConstants.MAXIMUM_ROTATION_SPEED);
+        "Maximum Velocity (rps)", () -> SwerveConstants.MAXIMUM_ROTATION_SPEED.getRotations());
     rotationConstants.addDouble(
-        "Maximum Acceleration (rpsps)", () -> SwerveConstants.MAXIMUM_ROTATION_ACCELERATION);
+        "Maximum Acceleration (rpsps)",
+        () -> SwerveConstants.MAXIMUM_ROTATION_ACCELERATION.getRotations());
 
     Telemetry.addSwerveModuleStates(tab, "Swerve Module States", this::getModuleStates);
     Telemetry.addSwerveModuleStates(tab, "Swerve Module Setpoints", this::getModuleSetpoints);

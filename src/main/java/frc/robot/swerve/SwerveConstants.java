@@ -99,20 +99,24 @@ public class SwerveConstants {
   public static final double MAXIMUM_ACCELERATION =
       MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
 
-  /** Maximum attainable rotational speed in rotations per second. */
-  public static final double MAXIMUM_ATTAINABLE_ROTATION_SPEED =
-      MAXIMUM_ATTAINABLE_SPEED / NORTH_WEST_MODULE_CONFIG.position().getNorm();
+  /** Maximum attainable rotational speed. */
+  public static final Rotation2d MAXIMUM_ATTAINABLE_ROTATION_SPEED =
+      Rotation2d.fromRotations(
+          MAXIMUM_ATTAINABLE_SPEED / NORTH_WEST_MODULE_CONFIG.position().getNorm());
 
-  /** Maximum rotational speed while snapping to heading in rotations per second. */
-  public static final double MAXIMUM_ROTATION_SPEED = 0.5;
+  /** Maximum rotational speed. */
+  public static final Rotation2d MAXIMUM_ROTATION_SPEED = Rotation2d.fromRotations(0.5);
 
   /** Maximum acceleration in rotations per second per second. */
-  public static final double MAXIMUM_ROTATION_ACCELERATION =
-      MotionProfileCalculator.calculateAcceleration(MAXIMUM_ROTATION_SPEED, 0.1);
+  public static final Rotation2d MAXIMUM_ROTATION_ACCELERATION =
+      Rotation2d.fromRotations(
+          MotionProfileCalculator.calculateAcceleration(
+              MAXIMUM_ROTATION_SPEED.getRotations(), 0.1));
 
   /** Maximum rotation speed and rotation acceleration. */
   public static final TrapezoidProfile.Constraints ROTATION_CONSTRAINTS =
-      new TrapezoidProfile.Constraints(MAXIMUM_ROTATION_SPEED, MAXIMUM_ROTATION_ACCELERATION);
+      new TrapezoidProfile.Constraints(
+          MAXIMUM_ROTATION_SPEED.getRotations(), MAXIMUM_ROTATION_ACCELERATION.getRotations());
 
   /** Rotation motion profile. */
   public static final TrapezoidProfile ROTATION_MOTION_PROFILE =
