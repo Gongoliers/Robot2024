@@ -96,7 +96,8 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    * @param lazy if true, perform additional optimizations on the setpoint.
    * @return the optimized setpoint.
    */
-  private SwerveModuleState optimize(SwerveModuleState setpoint, SwerveModuleState state, boolean lazy) {
+  private SwerveModuleState optimize(
+      SwerveModuleState setpoint, SwerveModuleState state, boolean lazy) {
     // Always perform this optimization, even when lazy
     setpoint = SwerveModuleState.optimize(setpoint, state.angle);
 
@@ -106,7 +107,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     }
 
     // Since we are lazy, perform additional optimizations
-    
+
     // Deadband the module speed
     if (MathUtil.isNear(0.0, setpoint.speedMetersPerSecond, kSpeedDeadbandMetersPerSecond)) {
       setpoint.speedMetersPerSecond = 0.0;

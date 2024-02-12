@@ -1,6 +1,7 @@
 package frc.robot.arm;
 
 import frc.robot.Robot;
+import frc.robot.RobotConstants.HardwareConstants;
 
 /** Helper class for creating hardware for the arm subsystem. */
 public class ArmFactory {
@@ -11,7 +12,7 @@ public class ArmFactory {
    * @return a shoulder motor.
    */
   public static ShoulderMotorIO createShoulderMotor() {
-    // if (Robot.isReal()) return new ShoulderMotorIOSparkMax();
+    if (Robot.isReal() && HardwareConstants.REAL_ARM) return new ShoulderMotorIOSparkMax();
 
     return new ShoulderMotorIOSim();
   }

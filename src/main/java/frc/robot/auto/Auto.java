@@ -42,11 +42,9 @@ public class Auto extends Subsystem {
 
     Supplier<Pose2d> robotPositionSupplier = () -> odometry.getPosition();
 
-    Consumer<Pose2d> robotPositionConsumer =
-        position -> odometry.setPosition(position);
+    Consumer<Pose2d> robotPositionConsumer = position -> odometry.setPosition(position);
 
-    Supplier<ChassisSpeeds> swerveChassisSpeedsSupplier =
-        () -> swerve.getChassisSpeeds();
+    Supplier<ChassisSpeeds> swerveChassisSpeedsSupplier = () -> swerve.getChassisSpeeds();
 
     Consumer<ChassisSpeeds> swerveChassisSpeedsConsumer =
         chassisSpeeds -> swerve.setChassisSpeeds(chassisSpeeds);
