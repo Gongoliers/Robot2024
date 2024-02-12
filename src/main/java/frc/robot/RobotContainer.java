@@ -71,19 +71,21 @@ public class RobotContainer {
     driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
 
-    operatorController.leftBumper().whileTrue(intake.intake()).whileTrue(shooter.intake());
     operatorController
         .leftTrigger()
-        .whileTrue(intake.smartIntake())
-        .whileTrue(shooter.smartIntake());
+        .whileTrue(
+            Commands.parallel(arm.to(ArmState.INTAKE))
+                .andThen(Commands.parallel(intake.intake(), shooter.intake())));
+
+    operatorController
+        .rightTrigger()
+        .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot()));
 
     operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
     operatorController.rightTrigger().whileTrue(shooter.smartShoot());
 
-    operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
-    operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.SHOOT)));
-    operatorController.x().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.INTAKE)));
-    operatorController.y().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
+    operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
+    operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
   }
 
   /**

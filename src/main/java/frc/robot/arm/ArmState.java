@@ -118,13 +118,21 @@ public record ArmState(State shoulder, State elbow, State wrist) {
 
   /**
    * Returns true if the arm states are equal.
-   * 
+   *
    * @param other the other arm state.
    * @return true if the arm states are equal.
    */
   public boolean at(ArmState other) {
-    boolean atShoulder = MathUtil.isNear(this.shoulder().position, other.shoulder().position, ShoulderMotorConstants.TOLERANCE.getRotations());
-    boolean atElbow = MathUtil.isNear(this.elbow().position, other.elbow().position, ElbowMotorConstants.TOLERANCE.getRotations());
+    boolean atShoulder =
+        MathUtil.isNear(
+            this.shoulder().position,
+            other.shoulder().position,
+            ShoulderMotorConstants.TOLERANCE.getRotations());
+    boolean atElbow =
+        MathUtil.isNear(
+            this.elbow().position,
+            other.elbow().position,
+            ElbowMotorConstants.TOLERANCE.getRotations());
 
     return atShoulder && atElbow;
   }

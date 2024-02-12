@@ -4,6 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
@@ -141,5 +143,9 @@ public class Arm extends Subsystem {
     shoulderMotor.setSetpoint(setpoint.shoulder().position, setpoint.shoulder().velocity);
     elbowMotor.setSetpoint(setpoint.elbow().position, setpoint.elbow().velocity);
     // wristMotor.runSetpoint(state.wrist().getRotations());
+  }
+
+  public Command to(ArmState goal) {
+    return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
   }
 }
