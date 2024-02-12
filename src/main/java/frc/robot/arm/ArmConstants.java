@@ -21,7 +21,7 @@ public class ArmConstants {
     public static final double MOI = 0.15093;
 
     /** Minimum angle of the shoulder joint. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(20);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(12.5);
 
     /** Maximum angle of the shoulder joint. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);

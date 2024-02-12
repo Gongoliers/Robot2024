@@ -10,17 +10,27 @@ import java.util.Objects;
 /** State of the arm. */
 public record ArmState(State shoulder, State elbow, State wrist) {
 
-  public static ArmState UP =
+  public static final ArmState STOW =
       new ArmState(
-          ShoulderMotorConstants.MAXIMUM_ANGLE,
-          ElbowMotorConstants.MAXIMUM_ANGLE,
+          Rotation2d.fromDegrees(12.5),
+          Rotation2d.fromDegrees(180 - 18.125),
           Rotation2d.fromDegrees(0));
 
-  public static ArmState DOWN =
+  public static final ArmState SHOOT =
       new ArmState(
-          ShoulderMotorConstants.MINIMUM_ANGLE,
-          ElbowMotorConstants.MINIMUM_ANGLE,
+          Rotation2d.fromDegrees(12.5),
+          Rotation2d.fromDegrees(180 - 35),
           Rotation2d.fromDegrees(0));
+
+  public static final ArmState INTAKE =
+      new ArmState(
+          Rotation2d.fromDegrees(115.6),
+          Rotation2d.fromDegrees(-16.325),
+          Rotation2d.fromDegrees(-50));
+
+  public static final ArmState AMP =
+      new ArmState(
+          Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(0));
 
   /**
    * Creates an arm state.

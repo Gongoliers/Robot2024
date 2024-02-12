@@ -80,8 +80,10 @@ public class RobotContainer {
     operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
     operatorController.rightTrigger().whileTrue(shooter.smartShoot());
 
-    operatorController.x().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.DOWN)));
-    operatorController.y().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.UP)));
+    operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+    operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.SHOOT)));
+    operatorController.x().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.INTAKE)));
+    operatorController.y().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
   }
 
   /**
