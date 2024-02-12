@@ -3,7 +3,8 @@ package frc.robot.odometry;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import frc.lib.CAN;
 import frc.robot.Robot;
-import frc.robot.RobotConstants.HardwareConstants;
+import frc.robot.RobotConstants;
+import frc.robot.RobotConstants.Subsystem;
 
 /** Helper class for creating hardware for the odometry subsystem. */
 public class OdometryFactory {
@@ -14,7 +15,7 @@ public class OdometryFactory {
    * @return a gyroscope.
    */
   public static GyroscopeIO createGyroscope(CAN gyroscopeCAN, Odometry odometry) {
-    if (Robot.isReal() && HardwareConstants.REAL_ODOMETRY)
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ODOMETRY))
       return new GyroscopeIOPigeon2(gyroscopeCAN);
 
     return new GyroscopeIOSim(odometry);

@@ -1,7 +1,8 @@
 package frc.robot.vision;
 
 import frc.robot.Robot;
-import frc.robot.RobotConstants.HardwareConstants;
+import frc.robot.RobotConstants;
+import frc.robot.RobotConstants.Subsystem;
 
 /** Helper class for creating hardware for the vision subsystem. */
 public class VisionFactory {
@@ -12,7 +13,8 @@ public class VisionFactory {
    * @return a vision pose estimator.
    */
   public static VisionPoseEstimatorIO createVisionPoseEstimator() {
-    if (Robot.isReal() && HardwareConstants.REAL_VISION) return new VisionPoseEstimatorIONull();
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.VISION))
+      return new VisionPoseEstimatorIONull();
 
     return new VisionPoseEstimatorIOSim();
   }
