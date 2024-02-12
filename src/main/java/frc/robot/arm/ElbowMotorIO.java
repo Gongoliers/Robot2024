@@ -33,7 +33,7 @@ public interface ElbowMotorIO {
    *
    * @param positionRotations the elbow motor's setpoint.
    */
-  public void setSetpoint(double positionRotations);
+  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
 
   // TODO Remove, only for characterization
   /**

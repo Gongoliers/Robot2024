@@ -4,13 +4,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
-import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -132,16 +129,7 @@ public class Arm extends Subsystem {
     this.setpoint = setpoint;
 
     shoulderMotor.setSetpoint(setpoint.shoulder().position, setpoint.shoulder().velocity);
-    elbowMotor.setSetpoint(setpoint.elbow().position);
+    elbowMotor.setSetpoint(setpoint.elbow().position, setpoint.elbow().velocity);
     // wristMotor.runSetpoint(state.wrist().getRotations());
-  }
-
-  public Command driveElbowWithJoystick(DoubleSupplier joystickSupplier) {
-    return run(() ->
-            elbowMotor.setVoltage(
-                joystickSupplier.getAsDouble()
-                    * -1
-                    * Math.abs(ElbowMotorConstants.MAXIMUM_VOLTAGE)))
-        .finallyDo(elbowMotor::stop);
   }
 }

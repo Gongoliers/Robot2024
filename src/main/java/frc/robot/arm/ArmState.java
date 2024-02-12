@@ -3,6 +3,7 @@ package frc.robot.arm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
+import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import java.util.Objects;
 
@@ -12,13 +13,13 @@ public record ArmState(State shoulder, State elbow, State wrist) {
   public static ArmState UP =
       new ArmState(
           ShoulderMotorConstants.MAXIMUM_ANGLE,
-          Rotation2d.fromDegrees(0),
+          ElbowMotorConstants.MAXIMUM_ANGLE,
           Rotation2d.fromDegrees(0));
 
   public static ArmState DOWN =
       new ArmState(
           ShoulderMotorConstants.MINIMUM_ANGLE,
-          Rotation2d.fromDegrees(0),
+          ElbowMotorConstants.MINIMUM_ANGLE,
           Rotation2d.fromDegrees(0));
 
   /**
@@ -73,6 +74,10 @@ public record ArmState(State shoulder, State elbow, State wrist) {
         ShoulderMotorConstants.MOTION_PROFILE.calculate(
             RobotConstants.PERIODIC_DURATION, this.shoulder, goal.shoulder);
 
-    return withShoulder(nextShoulderState);
+    State nextElbowState =
+        ElbowMotorConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION, this.elbow, goal.elbow);
+
+    return new ArmState(nextShoulderState, nextElbowState, new State(0.0, 0.0));
   }
 }

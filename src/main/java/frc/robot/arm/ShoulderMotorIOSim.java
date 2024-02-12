@@ -13,6 +13,8 @@ import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 /** Simulated shoulder motor. */
 public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
+  private final DCMotor motor = DCMotor.getNEO(1);
+
   private final SingleJointedArmSim singleJointedArmSim;
 
   private final PIDController feedback;
@@ -23,14 +25,14 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   public ShoulderMotorIOSim() {
     singleJointedArmSim =
         new SingleJointedArmSim(
-            DCMotor.getNEO(1),
+            motor,
             ShoulderMotorConstants.GEARING,
             ShoulderMotorConstants.MOI,
             ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
             ShoulderMotorConstants.MINIMUM_ANGLE.getRadians(),
             ShoulderMotorConstants.MAXIMUM_ANGLE.getRadians(),
             true,
-            Units.degreesToRadians(90));
+            0.0);
 
     feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 

@@ -48,7 +48,8 @@
           },
           "Setpoint": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Odometry": {
           "Position": {
@@ -79,7 +80,14 @@
           "Vision Pose": {
             "open": true
           }
-        }
+        },
+        "open": true
+      },
+      "arm": {
+        "elbow": {
+          "open": true
+        },
+        "open": true
       },
       "shooter": {
         "beamBreakSensorSim": {

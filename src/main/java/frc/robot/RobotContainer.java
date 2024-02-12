@@ -82,8 +82,6 @@ public class RobotContainer {
 
     operatorController.x().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.DOWN)));
     operatorController.y().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.UP)));
-
-    operatorController.b().whileTrue(arm.driveElbowWithJoystick(operatorController::getLeftY));
   }
 
   /**
