@@ -6,17 +6,15 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.Odometry;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -63,7 +61,7 @@ public class Auto extends Subsystem {
         swerveChassisSpeedsSupplier,
         swerveChassisSpeedsConsumer,
         holonomicPathFollowerConfig,
-        this::shouldFlipPath,
+        AllianceFlipHelper::shouldFlip,
         swerve);
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -88,19 +86,6 @@ public class Auto extends Subsystem {
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     Telemetry.makeFullscreen(tab.add("Auto Chooser", autoChooser));
-  }
-
-  /**
-   * Determines whether a path should be flipped.
-   *
-   * @return whether the path should be flipped.
-   */
-  private boolean shouldFlipPath() {
-    Optional<Alliance> alliance = DriverStation.getAlliance();
-
-    if (alliance.isEmpty()) return false;
-
-    return alliance.get() == DriverStation.Alliance.Red;
   }
 
   /**
