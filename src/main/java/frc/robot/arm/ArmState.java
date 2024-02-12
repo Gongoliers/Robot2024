@@ -1,5 +1,6 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
@@ -20,7 +21,7 @@ public record ArmState(State shoulder, State elbow, State wrist) {
 
   public static final ArmState INTAKE =
       new ArmState(
-          Rotation2d.fromDegrees(115.6),
+          Rotation2d.fromDegrees(90 - 25.6),
           Rotation2d.fromDegrees(-16.325),
           Rotation2d.fromDegrees(-50));
 
@@ -113,6 +114,19 @@ public record ArmState(State shoulder, State elbow, State wrist) {
    */
   public ArmState withWrist(State newWrist) {
     return new ArmState(shoulder, elbow, newWrist);
+  }
+
+  /**
+   * Returns true if the arm states are equal.
+   * 
+   * @param other the other arm state.
+   * @return true if the arm states are equal.
+   */
+  public boolean at(ArmState other) {
+    boolean atShoulder = MathUtil.isNear(this.shoulder().position, other.shoulder().position, ShoulderMotorConstants.TOLERANCE.getRotations());
+    boolean atElbow = MathUtil.isNear(this.elbow().position, other.elbow().position, ElbowMotorConstants.TOLERANCE.getRotations());
+
+    return atShoulder && atElbow;
   }
 
   public ArmState nextSetpoint(ArmState goal) {

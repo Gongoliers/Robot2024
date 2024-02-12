@@ -24,7 +24,10 @@ public class ArmConstants {
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(12.5);
 
     /** Maximum angle of the shoulder joint. */
-    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(115);
+
+    /** Tolerance of the shoulder joint. */
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
 
     /** Shoulder pivot to elbow pivot distance in meters. */
     public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
@@ -53,7 +56,7 @@ public class ArmConstants {
     public static final CAN CAN = new CAN(32); // TODO
 
     /** Gearing between the elbow motor and the elbow joint. */
-    public static final double GEARING = 31.37254902;
+    public static final double GEARING = 39.29411765;
 
     /** Moment of inertia of the shoulder, in kilograms meters squared. */
     public static final double MOI = 0.05235;
@@ -64,11 +67,14 @@ public class ArmConstants {
     /** Maximum angle of the elbow joint. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
 
+    /** Tolerance of the elbow joint. */
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
+
     /** Elbow pivot to wrist pivot distance in meters. */
     public static final double ELBOW_TO_WRIST_DISTANCE = Units.inchesToMeters(16.825);
 
     /** Proportional gain in volts per rotation. */
-    public static final double KP = 36.0;
+    public static final double KP = 48.0;
 
     /** Maximum speed of the shoulder joint in rotations per second. */
     public static final double MAXIMUM_SPEED = 2.0;

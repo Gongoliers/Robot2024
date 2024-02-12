@@ -81,6 +81,7 @@ public class Arm extends Subsystem {
         "Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().elbow().position));
     setpoint.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().wrist().position));
+    setpoint.addBoolean("At Setpoint?", this::atSetpoint);
 
     ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
 
@@ -90,6 +91,7 @@ public class Arm extends Subsystem {
         "Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().elbow().position));
     goal.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().wrist().position));
+    goal.addBoolean("At Goal?", this::atGoal);
   }
 
   public void setPosition(ArmState state) {
@@ -117,12 +119,20 @@ public class Arm extends Subsystem {
     return goal;
   }
 
+  public boolean atGoal() {
+    return atSetpoint() && setpoint.at(goal);
+  }
+
   public void setGoal(ArmState goal) {
     this.goal = goal;
   }
 
   public ArmState getSetpoint() {
     return setpoint;
+  }
+
+  public boolean atSetpoint() {
+    return getPosition().at(setpoint);
   }
 
   private void setSetpoint(ArmState setpoint) {
