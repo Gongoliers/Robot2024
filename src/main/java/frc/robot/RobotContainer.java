@@ -81,8 +81,7 @@ public class RobotContainer {
         .rightTrigger()
         .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot()));
 
-    operatorController.rightBumper().whileTrue(intake.outtake()).whileTrue(shooter.shoot());
-    operatorController.rightTrigger().whileTrue(shooter.smartShoot());
+    operatorController.rightBumper().whileTrue(shooter.shoot());
 
     operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
     operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
