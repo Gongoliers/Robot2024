@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
@@ -24,14 +25,25 @@ public class ArmMechanism {
   private final double THICKNESS = Units.inchesToMeters(2) * 100;
 
   private ArmMechanism() {
-    mechanism = new Mechanism2d(1, 1);
-    root = mechanism.getRoot("arm", 0.15, 0);
+    mechanism =
+        new Mechanism2d(
+            2
+                * (RobotConstants.FRAME_PERIMETER_TO_ORIGIN_DISTANCE
+                    + RobotConstants.MAX_HORIZONTAL_EXTENSION_DISTANCE),
+            RobotConstants.MAX_VERTICAL_EXTENSION_DISTANCE);
+    root =
+        mechanism.getRoot(
+            "arm",
+            RobotConstants.FRAME_PERIMETER_TO_ORIGIN_DISTANCE
+                + RobotConstants.MAX_HORIZONTAL_EXTENSION_DISTANCE
+                - ShoulderMotorConstants.SHOULDER_TRANSLATION.getX(),
+            ShoulderMotorConstants.SHOULDER_TRANSLATION.getY());
     shoulder =
         root.append(
             new MechanismLigament2d(
                 "shoulder",
                 ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
-                90,
+                0,
                 THICKNESS,
                 new Color8Bit(Color.kOrange)));
     elbow =
@@ -39,7 +51,7 @@ public class ArmMechanism {
             new MechanismLigament2d(
                 "elbow",
                 ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE,
-                90,
+                0,
                 THICKNESS,
                 new Color8Bit(Color.kGreen)));
   }

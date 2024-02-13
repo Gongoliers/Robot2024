@@ -1,6 +1,7 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
@@ -28,6 +29,10 @@ public class ArmConstants {
 
     /** Tolerance of the shoulder joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
+
+    /** Translation of the shoulder joint relative to the origin. */
+    public static final Translation2d SHOULDER_TRANSLATION =
+        new Translation2d(Units.inchesToMeters(11.361), Units.inchesToMeters(7.721));
 
     /** Shoulder pivot to elbow pivot distance in meters. */
     public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
