@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.RobotMechanisms;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 
@@ -61,7 +62,7 @@ public class Arm extends Subsystem {
 
     setSetpoint(getSetpoint().nextSetpoint(goal));
 
-    ArmMechanism.getInstance().setState(getPosition());
+    RobotMechanisms.getInstance().setArmState(getPosition());
   }
 
   @Override

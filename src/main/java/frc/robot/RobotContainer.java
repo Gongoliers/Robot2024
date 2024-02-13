@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
-import frc.robot.arm.ArmMechanism;
 import frc.robot.arm.ArmState;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
@@ -61,7 +60,7 @@ public class RobotContainer {
     Telemetry.initializeShuffleboards(
         arm, auto, climber, intake, lights, odometry, shooter, swerve, vision);
 
-    SmartDashboard.putData("Arm Mechanism", ArmMechanism.getInstance().getMechanism());
+    SmartDashboard.putData("Arm Mechanism", RobotMechanisms.getInstance().getMechanism());
   }
 
   /** Configures operator controller bindings. */
