@@ -1,5 +1,6 @@
 package frc.lib;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import org.ejml.data.MatrixType;
 import org.ejml.simple.SimpleMatrix;
@@ -59,10 +60,10 @@ public class TwoJointedArmFeedforward {
   /**
    * Calculates the M matrix.
    *
-   * @param theta2 the angle of the elbow joint. [rad]
+   * @param elbowPosition the position of the elbow joint.
    */
-  public void updateMMatrix(double theta2) {
-    double c2 = Math.cos(theta2);
+  public void updateMMatrix(Rotation2d elbowPosition) {
+    double c2 = elbowPosition.getCos();
     double diagonal = m2 * (r2 * r2 + l1 * r2 * c2) + I2;
 
     M_MATRIX.set(0, 0, m1 * r1 * r1 + m2 * (l1 * l1 + r2 * r2 + 2 * l1 * r2 * c2) + I1 + I2);
@@ -74,28 +75,30 @@ public class TwoJointedArmFeedforward {
   /**
    * Calculates the C matrix.
    *
-   * @param theta2 the angle of the elbow joint. [rad]
-   * @param theta1Dot the angular velocity of the shoulder joint. [rad/s]
-   * @param theta2Dot the angular velocity of the elbow joint. [rad/s]
+   * @param elbowPosition the position of the elbow joint.
+   * @param shoulderVelocity the velocity of the shoulder joint.
+   * @param elbowVelocity the velocity of the elbow joint.
    */
-  public void updateCMatrix(double theta2, double theta1Dot, double theta2Dot) {
-    double s2 = Math.sin(theta2);
+  public void updateCMatrix(
+      Rotation2d elbowPosition, Rotation2d shoulderVelocity, Rotation2d elbowVelocity) {
+    double s2 = elbowPosition.getSin();
 
-    C_MATRIX.set(0, 0, -m2 * l1 * r2 * s2 * theta2Dot);
-    C_MATRIX.set(0, 1, -m2 * l1 * r2 * s2 * (theta1Dot + theta2Dot));
-    C_MATRIX.set(1, 0, m2 * l1 * r2 * s2 * theta1Dot);
+    C_MATRIX.set(0, 0, -m2 * l1 * r2 * s2 * elbowVelocity.getRadians());
+    C_MATRIX.set(
+        0, 1, -m2 * l1 * r2 * s2 * (shoulderVelocity.getRadians() + elbowVelocity.getRadians()));
+    C_MATRIX.set(1, 0, m2 * l1 * r2 * s2 * shoulderVelocity.getRadians());
     C_MATRIX.set(1, 1, 0);
   }
 
   /**
    * Calculates the Tg vector.
    *
-   * @param theta1 the angle of the shoulder joint. [rad]
-   * @param theta2 the angle of the elbow joint. [rad]
+   * @param shoulderPosition the position of the shoulder joint.
+   * @param elbowPosition the position of the elbow joint.
    */
-  public void updateTgVector(double theta1, double theta2) {
-    double c1 = Math.cos(theta1);
-    double c12 = Math.cos(theta1 + theta2);
+  public void updateTgVector(Rotation2d shoulderPosition, Rotation2d elbowPosition) {
+    double c1 = shoulderPosition.getCos();
+    double c12 = shoulderPosition.plus(elbowPosition).getCos();
 
     Tg_VECTOR.set(0, 0, (m1 * r1 + m2 * l1) * g1 * c1 + m2 * r2 * g2 * c12);
     Tg_VECTOR.set(1, 0, m2 * r2 * g2 * c12);
@@ -104,32 +107,32 @@ public class TwoJointedArmFeedforward {
   /**
    * Calculates the voltage feedforward required to move the arm in a certain state.
    *
-   * @param theta1 the angle of the shoulder joint. [rad]
-   * @param theta2 the angle of the elbow joint. [rad]
-   * @param theta1Dot the angular velocity of the shoulder joint. [rad/s]
-   * @param theta2Dot the angular velocity of the elbow joint. [rad/s]
-   * @param theta1DotDot the angular acceleration of the shoulder joint. [rad/s^2]
-   * @param theta2DotDot the angular acceleration of the elbow joint. [rad/s^2]
-   * @return the voltage feedforward required to move the arm in the given state. [V]
+   * @param shoulderPosition the angle of the shoulder joint.
+   * @param elbowPosition the angle of the elbow joint.
+   * @param shoulderVelocity the angular velocity of the shoulder joint.
+   * @param elbowVelocity the angular velocity of the elbow joint.
+   * @param shoulderAcceleration the angular acceleration of the shoulder joint.
+   * @param elbowAcceleration the angular acceleration of the elbow joint.
+   * @return the voltage feedforward required to move the arm in the given state.
    */
   public ArmFeedForward calculateFeedForward(
-      double theta1,
-      double theta2,
-      double theta1Dot,
-      double theta2Dot,
-      double theta1DotDot,
-      double theta2DotDot) {
-    updateMMatrix(theta2);
-    updateCMatrix(theta2, theta1Dot, theta2Dot);
-    updateTgVector(theta1, theta2);
+      Rotation2d shoulderPosition,
+      Rotation2d elbowPosition,
+      Rotation2d shoulderVelocity,
+      Rotation2d elbowVelocity,
+      Rotation2d shoulderAcceleration,
+      Rotation2d elbowAcceleration) {
+    updateMMatrix(elbowPosition);
+    updateCMatrix(elbowPosition, shoulderVelocity, elbowVelocity);
+    updateTgVector(shoulderPosition, elbowPosition);
 
     var thetaDotVector = new SimpleMatrix(2, 1, MatrixType.DDRM);
-    thetaDotVector.set(0, 0, theta1Dot);
-    thetaDotVector.set(1, 0, theta2Dot);
+    thetaDotVector.set(0, 0, shoulderVelocity.getRadians());
+    thetaDotVector.set(1, 0, elbowVelocity.getRadians());
 
     var thetaDotDotVector = new SimpleMatrix(2, 1, MatrixType.DDRM);
-    thetaDotDotVector.set(0, 0, theta1DotDot);
-    thetaDotDotVector.set(1, 0, theta2DotDot);
+    thetaDotDotVector.set(0, 0, shoulderAcceleration.getRadians());
+    thetaDotDotVector.set(1, 0, elbowAcceleration.getRadians());
 
     var M = M_MATRIX.mult(thetaDotDotVector);
     var C = C_MATRIX.mult(thetaDotVector);
