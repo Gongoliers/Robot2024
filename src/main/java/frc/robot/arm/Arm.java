@@ -95,6 +95,11 @@ public class Arm extends Subsystem {
     goal.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().wrist().position));
     goal.addBoolean("At Goal?", this::atGoal);
+
+    ShuffleboardLayout voltages = Telemetry.addColumn(tab, "Voltages");
+
+    voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.appliedVolts);
+    voltages.addDouble("Elbow Voltage (V)", () -> elbowMotorValues.appliedVolts);
   }
 
   public void setPosition(ArmState state) {

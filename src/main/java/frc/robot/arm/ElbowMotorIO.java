@@ -9,6 +9,9 @@ public interface ElbowMotorIO {
 
     /** Current drawn by the elbow motor in amps. */
     public double currentAmps = 0.0;
+
+    /** Voltage applied to the elbow motor in volts. */
+    public double appliedVolts = 0.0;
   }
 
   /** Configures the elbow motor. */

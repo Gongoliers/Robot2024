@@ -48,7 +48,11 @@
           },
           "Setpoint": {
             "open": true
-          }
+          },
+          "Voltages": {
+            "open": true
+          },
+          "open": true
         },
         "Intake": {
           "Roller": {

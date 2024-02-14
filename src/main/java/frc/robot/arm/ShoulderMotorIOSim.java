@@ -13,7 +13,7 @@ import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 /** Simulated shoulder motor. */
 public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
-  private final DCMotor motor = DCMotor.getNEO(1);
+  private final DCMotor motor;
 
   private final SingleJointedArmSim singleJointedArmSim;
 
@@ -21,8 +21,12 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   private final ArmFeedforward feedforward;
 
+  private double appliedVolts;
+
   /** Creates a new simulated shoulder motor. */
   public ShoulderMotorIOSim() {
+    motor = DCMotor.getNEO(1);
+
     singleJointedArmSim =
         new SingleJointedArmSim(
             motor,
@@ -52,6 +56,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+    values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
   }
 
@@ -69,6 +74,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     double feedforwardVolts =
         feedforward.calculate(measuredPositionRotations, velocityRotationsPerSecond);
 
-    singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
+    appliedVolts = feedbackVolts + feedforwardVolts;
+
+    singleJointedArmSim.setInputVoltage(appliedVolts);
   }
 }

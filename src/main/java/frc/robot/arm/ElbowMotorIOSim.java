@@ -13,7 +13,7 @@ import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 /** Simulated elbow motor. */
 public class ElbowMotorIOSim implements ElbowMotorIO {
 
-  private final DCMotor motor = DCMotor.getNEO(1);
+  private final DCMotor motor;
 
   private final SingleJointedArmSim singleJointedArmSim;
 
@@ -21,8 +21,12 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
 
   private final ArmFeedforward feedforward;
 
+  private double appliedVolts;
+
   /** Creates a new simulated elbow motor. */
   public ElbowMotorIOSim() {
+    motor = DCMotor.getNEO(1);
+
     singleJointedArmSim =
         new SingleJointedArmSim(
             motor,
@@ -52,6 +56,7 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
     singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+    values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
   }
 
@@ -74,6 +79,8 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
 
   @Override
   public void setVoltage(double volts) {
+    appliedVolts = volts;
+
     singleJointedArmSim.setInputVoltage(volts);
   }
 
