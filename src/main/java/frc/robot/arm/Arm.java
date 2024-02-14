@@ -109,6 +109,15 @@ public class Arm extends Subsystem {
 
     voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.appliedVolts);
     voltages.addDouble("Elbow Voltage (V)", () -> elbowMotorValues.appliedVolts);
+
+    ShuffleboardLayout velocities = Telemetry.addColumn(tab, "Velocities");
+
+    velocities.addDouble(
+        "Shoulder Velocity (degps)",
+        () -> Units.rotationsToDegrees(shoulderMotorValues.velocityRotationsPerSecond));
+    velocities.addDouble(
+        "Elbow Velocity (degps)",
+        () -> Units.rotationsToDegrees(elbowMotorValues.velocityRotationsPerSecond));
   }
 
   public void setPosition(ArmState state) {

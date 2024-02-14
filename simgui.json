@@ -49,6 +49,9 @@
           "Setpoint": {
             "open": true
           },
+          "Velocities": {
+            "open": true
+          },
           "Voltages": {
             "open": true
           },

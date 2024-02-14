@@ -8,6 +8,9 @@ public interface ShoulderMotorIO {
     /** Position of the shoulder motor in rotations. */
     public double positionRotations = 0.0;
 
+    /** Velocity of the shoulder motor in rotations per second. */
+    public double velocityRotationsPerSecond = 0.0;
+
     /** Current drawn by the shoulder motor in amps. */
     public double currentAmps = 0.0;
 

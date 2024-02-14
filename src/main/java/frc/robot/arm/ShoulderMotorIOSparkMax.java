@@ -46,6 +46,9 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   @Override
   public void update(ShoulderMotorIOValues values) {
     values.positionRotations = getPositionRotations();
+    values.velocityRotationsPerSecond =
+        sparkMax.getEncoder().getVelocity() / ShoulderMotorConstants.JOINT_CONSTANTS.gearing();
+
     values.currentAmps = sparkMax.getOutputCurrent();
     values.appliedVolts = sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
   }

@@ -51,6 +51,9 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+    values.velocityRotationsPerSecond =
+        Units.radiansToRotations(singleJointedArmSim.getVelocityRadPerSec());
+
     values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
   }
