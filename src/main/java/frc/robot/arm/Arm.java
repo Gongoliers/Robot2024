@@ -113,11 +113,18 @@ public class Arm extends Subsystem {
     ShuffleboardLayout velocities = Telemetry.addColumn(tab, "Velocities");
 
     velocities.addDouble(
-        "Shoulder Velocity (degps)",
+        "Shoulder Velocity (dps)",
         () -> Units.rotationsToDegrees(shoulderMotorValues.velocityRotationsPerSecond));
     velocities.addDouble(
-        "Elbow Velocity (degps)",
+        "Shoulder Acceleration (dpsps)",
+        () ->
+            Units.rotationsToDegrees(shoulderMotorValues.accelerationRotationsPerSecondPerSecond));
+    velocities.addDouble(
+        "Elbow Velocity (dps)",
         () -> Units.rotationsToDegrees(elbowMotorValues.velocityRotationsPerSecond));
+    velocities.addDouble(
+        "Elbow Acceleration (dpsps)",
+        () -> Units.rotationsToDegrees(elbowMotorValues.accelerationRotationsPerSecondPerSecond));
   }
 
   public void setPosition(ArmState state) {

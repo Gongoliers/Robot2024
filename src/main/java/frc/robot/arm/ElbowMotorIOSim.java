@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.AccelerationCalculator;
 import frc.lib.ArmFeedforwardCalculator;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
@@ -17,6 +18,8 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
   private final PIDController feedback;
 
   private final ArmFeedforward feedforward;
+
+  private final AccelerationCalculator accelerationCalculator;
 
   private double appliedVolts;
 
@@ -41,6 +44,8 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
             ArmFeedforwardCalculator.calculateArmGravityCompensation(
                 Rotation2d.fromDegrees(-54.873534), 0.152426),
             0);
+
+    accelerationCalculator = new AccelerationCalculator();
   }
 
   @Override
@@ -53,6 +58,8 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
     values.velocityRotationsPerSecond =
         Units.radiansToRotations(singleJointedArmSim.getVelocityRadPerSec());
+    values.accelerationRotationsPerSecondPerSecond =
+        accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
     values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();

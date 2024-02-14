@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.AccelerationCalculator;
 import frc.lib.ArmFeedforwardCalculator;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
@@ -19,6 +20,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   private final ArmFeedforward feedforward;
 
   private double appliedVolts;
+
+  private final AccelerationCalculator accelerationCalculator;
 
   /** Creates a new simulated shoulder motor. */
   public ShoulderMotorIOSim() {
@@ -41,6 +44,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
             ArmFeedforwardCalculator.calculateArmGravityCompensation(
                 Rotation2d.fromDegrees(70.81), 0.101859),
             0);
+
+    accelerationCalculator = new AccelerationCalculator();
   }
 
   @Override
@@ -53,6 +58,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
     values.velocityRotationsPerSecond =
         Units.radiansToRotations(singleJointedArmSim.getVelocityRadPerSec());
+    values.accelerationRotationsPerSecondPerSecond =
+        accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
     values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();

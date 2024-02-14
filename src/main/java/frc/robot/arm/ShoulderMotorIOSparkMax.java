@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.AccelerationCalculator;
 import frc.lib.ArmFeedforwardCalculator;
 import frc.lib.Configurator;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
@@ -22,6 +23,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   /** Feedforward controller for shoulder position. */
   private final ArmFeedforward feedforward;
 
+  private final AccelerationCalculator accelerationCalculator;
+
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
     sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
@@ -34,6 +37,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
             ArmFeedforwardCalculator.calculateArmGravityCompensation(
                 Rotation2d.fromDegrees(18.0), 0.1222),
             0);
+
+    accelerationCalculator = new AccelerationCalculator();
   }
 
   @Override
@@ -48,6 +53,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     values.positionRotations = getPositionRotations();
     values.velocityRotationsPerSecond =
         sparkMax.getEncoder().getVelocity() / ShoulderMotorConstants.JOINT_CONSTANTS.gearing();
+    values.accelerationRotationsPerSecondPerSecond =
+        accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
     values.currentAmps = sparkMax.getOutputCurrent();
     values.appliedVolts = sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();

@@ -10,6 +10,9 @@ public interface ElbowMotorIO {
     /** Velocity of the elbow motor in rotations per second. */
     public double velocityRotationsPerSecond = 0.0;
 
+    /** Acceleration of the elbow motor in rotations per second per second. */
+    public double accelerationRotationsPerSecondPerSecond = 0.0;
+
     /** Current drawn by the elbow motor in amps. */
     public double currentAmps = 0.0;
 
