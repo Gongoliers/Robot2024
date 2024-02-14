@@ -1,7 +1,6 @@
 package frc.lib;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
 import org.ejml.data.MatrixType;
 import org.ejml.simple.SimpleMatrix;
 
@@ -23,31 +22,24 @@ public class TwoJointedArmFeedforward {
   private final SimpleMatrix Kb_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
   private final SimpleMatrix B_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
 
-  public TwoJointedArmFeedforward(JointConstants shoulderConstants, JointConstants elbowConstants) {
-    this.m1 = shoulderConstants.mass();
-    this.m2 = elbowConstants.mass();
-    this.l1 = shoulderConstants.length();
-    this.r1 = shoulderConstants.radius();
-    this.r2 = elbowConstants.radius();
-    this.I1 = shoulderConstants.moi();
-    this.I2 = elbowConstants.moi();
-    this.g1 = shoulderConstants.gearing();
-    this.g2 = elbowConstants.gearing();
-    int n1 = shoulderConstants.motorCount();
-    int n2 = elbowConstants.motorCount();
+  public TwoJointedArmFeedforward(JointConstants shoulder, JointConstants elbow) {
+    this.m1 = shoulder.mass();
+    this.m2 = elbow.mass();
+    this.l1 = shoulder.length();
+    this.r1 = shoulder.radius();
+    this.r2 = elbow.radius();
+    this.I1 = shoulder.moi();
+    this.I2 = elbow.moi();
+    this.g1 = shoulder.gearing();
+    this.g2 = elbow.gearing();
 
-    DCMotor motor1 = shoulderConstants.motor();
-    DCMotor motor2 = elbowConstants.motor();
-
-    B_MATRIX.set(0, 0, g1 * n1 * motor1.KtNMPerAmp / motor1.rOhms);
-    B_MATRIX.set(1, 1, g2 * n2 * motor2.KtNMPerAmp / motor2.rOhms);
+    B_MATRIX.set(0, 0, shoulder.torque());
+    B_MATRIX.set(1, 1, elbow.torque());
     B_MATRIX.set(1, 0, 0);
     B_MATRIX.set(0, 1, 0);
 
-    Kb_MATRIX.set(
-        0, 0, g1 * g1 * n1 * motor1.KtNMPerAmp / motor1.rOhms / motor1.KvRadPerSecPerVolt);
-    Kb_MATRIX.set(
-        1, 1, g2 * g2 * n2 * motor2.KtNMPerAmp / motor2.rOhms / motor2.KvRadPerSecPerVolt);
+    Kb_MATRIX.set(0, 0, shoulder.torqueLoss());
+    Kb_MATRIX.set(1, 1, elbow.torqueLoss());
     Kb_MATRIX.set(1, 0, 0);
     Kb_MATRIX.set(0, 1, 0);
   }

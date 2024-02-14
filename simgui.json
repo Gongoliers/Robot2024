@@ -40,10 +40,10 @@
     "transitory": {
       "Shuffleboard": {
         "Arm": {
-          "Derivatives": {
+          "Feedforward": {
             "open": true
           },
-          "Feedforward": {
+          "Position": {
             "open": true
           },
           "Velocities": {
