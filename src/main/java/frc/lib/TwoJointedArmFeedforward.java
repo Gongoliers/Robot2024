@@ -23,36 +23,31 @@ public class TwoJointedArmFeedforward {
   private final SimpleMatrix Kb_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
   private final SimpleMatrix B_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
 
-  /**
-   * The constructor for the system model.
-   *
-   * @param systemConstants the system constants of the arm.
-   */
-  public TwoJointedArmFeedforward(SystemConstants systemConstants) {
-    var shoulderJointConstants = systemConstants.getShoulderJointConstants();
-    var elbowJointConstants = systemConstants.getElbowJointConstants();
-    this.m1 = shoulderJointConstants.mass;
-    this.m2 = elbowJointConstants.mass;
-    this.l1 = shoulderJointConstants.length;
-    this.r1 = shoulderJointConstants.cmRadius;
-    this.r2 = elbowJointConstants.cmRadius;
-    this.I1 = shoulderJointConstants.momentOfInertia;
-    this.I2 = elbowJointConstants.momentOfInertia;
-    this.g1 = shoulderJointConstants.gearing;
-    this.g2 = elbowJointConstants.gearing;
-    int n1 = shoulderJointConstants.numberOfMotors;
-    int n2 = elbowJointConstants.numberOfMotors;
+  public TwoJointedArmFeedforward(JointConstants shoulderConstants, JointConstants elbowConstants) {
+    this.m1 = shoulderConstants.mass();
+    this.m2 = elbowConstants.mass();
+    this.l1 = shoulderConstants.length();
+    this.r1 = shoulderConstants.radius();
+    this.r2 = elbowConstants.radius();
+    this.I1 = shoulderConstants.moi();
+    this.I2 = elbowConstants.moi();
+    this.g1 = shoulderConstants.gearing();
+    this.g2 = elbowConstants.gearing();
+    int n1 = shoulderConstants.motorCount();
+    int n2 = elbowConstants.motorCount();
 
-    // TODO
-    var motor = DCMotor.getFalcon500(1);
+    DCMotor motor1 = shoulderConstants.motor();
+    DCMotor motor2 = elbowConstants.motor();
 
-    B_MATRIX.set(0, 0, g1 * n1 * motor.KtNMPerAmp / motor.rOhms);
-    B_MATRIX.set(1, 1, g2 * n2 * motor.KtNMPerAmp / motor.rOhms);
+    B_MATRIX.set(0, 0, g1 * n1 * motor1.KtNMPerAmp / motor1.rOhms);
+    B_MATRIX.set(1, 1, g2 * n2 * motor2.KtNMPerAmp / motor2.rOhms);
     B_MATRIX.set(1, 0, 0);
     B_MATRIX.set(0, 1, 0);
 
-    Kb_MATRIX.set(0, 0, g1 * g1 * n1 * motor.KtNMPerAmp / motor.rOhms / motor.KvRadPerSecPerVolt);
-    Kb_MATRIX.set(1, 1, g2 * g2 * n2 * motor.KtNMPerAmp / motor.rOhms / motor.KvRadPerSecPerVolt);
+    Kb_MATRIX.set(
+        0, 0, g1 * g1 * n1 * motor1.KtNMPerAmp / motor1.rOhms / motor1.KvRadPerSecPerVolt);
+    Kb_MATRIX.set(
+        1, 1, g2 * g2 * n2 * motor2.KtNMPerAmp / motor2.rOhms / motor2.KvRadPerSecPerVolt);
     Kb_MATRIX.set(1, 0, 0);
     Kb_MATRIX.set(0, 1, 0);
   }
@@ -115,7 +110,7 @@ public class TwoJointedArmFeedforward {
    * @param elbowAcceleration the angular acceleration of the elbow joint.
    * @return the voltage feedforward required to move the arm in the given state.
    */
-  public ArmFeedForward calculateFeedForward(
+  public TwoJointedArmFeedforwardResult calculateFeedForward(
       Rotation2d shoulderPosition,
       Rotation2d elbowPosition,
       Rotation2d shoulderVelocity,
@@ -141,23 +136,9 @@ public class TwoJointedArmFeedforward {
 
     var u = B_INV.mult(M.plus(C).plus(Kb).plus(Tg_VECTOR));
 
-    return new ArmFeedForward(u.get(0, 0), u.get(1, 0));
+    return new TwoJointedArmFeedforwardResult(u.get(0, 0), u.get(1, 0));
   }
 
   /** Calculates the voltage feedforward required to move the arm in a certain state. */
-  public static class ArmFeedForward {
-    double shoulderFeedForward;
-    double elbowFeedForward;
-
-    /**
-     * Constructor.
-     *
-     * @param shoulderFeedForward the voltage feedforward required to move the shoulder joint. [V]
-     * @param elbowFeedForward the voltage feedforward required to move the elbow joint. [V]
-     */
-    public ArmFeedForward(double shoulderFeedForward, double elbowFeedForward) {
-      this.shoulderFeedForward = shoulderFeedForward;
-      this.elbowFeedForward = elbowFeedForward;
-    }
-  }
+  public static record TwoJointedArmFeedforwardResult(double shoulderVolts, double elbowVolts) {}
 }

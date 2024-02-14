@@ -2,9 +2,11 @@ package frc.robot.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
+import frc.lib.JointConstants;
 import frc.lib.MotionProfileCalculator;
 
 /** Constants for the arm subsystem. */
@@ -37,6 +39,17 @@ public class ArmConstants {
     /** Shoulder pivot to elbow pivot distance in meters. */
     public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
 
+    /** Mass of the shoulder joint in kilograms. */
+    public static final double MASS = 0.0;
+
+    /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
+    public static final double RADIUS = 0.0;
+
+    /** Joint constants for the shoulder joint. */
+    public static final JointConstants JOINT_CONSTANTS =
+        new JointConstants(
+            MASS, SHOULDER_TO_ELBOW_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
+
     /** Proportional gain in volts per rotation. */
     public static final double KP = 36.0;
 
@@ -66,6 +79,12 @@ public class ArmConstants {
     /** Moment of inertia of the shoulder, in kilograms meters squared. */
     public static final double MOI = 0.05235;
 
+    /** Mass of the shoulder joint in kilograms. */
+    public static final double MASS = 0.0;
+
+    /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
+    public static final double RADIUS = 0.0;
+
     /** Minimum angle of the elbow joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-90);
 
@@ -77,6 +96,11 @@ public class ArmConstants {
 
     /** Elbow pivot to wrist pivot distance in meters. */
     public static final double ELBOW_TO_WRIST_DISTANCE = Units.inchesToMeters(16.825);
+
+    /** Joint constants for the shoulder joint. */
+    public static final JointConstants JOINT_CONSTANTS =
+        new JointConstants(
+            MASS, ELBOW_TO_WRIST_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
 
     /** Proportional gain in volts per rotation. */
     public static final double KP = 48.0;

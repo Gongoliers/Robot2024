@@ -8,7 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.TwoJointedArmFeedforward;
 import frc.robot.RobotMechanisms;
+import frc.robot.arm.ArmConstants.ElbowMotorConstants;
+import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 
@@ -32,6 +35,8 @@ public class Arm extends Subsystem {
 
   private ArmState goal, setpoint;
 
+  private final TwoJointedArmFeedforward feedforward;
+
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
     shoulderMotor = ArmFactory.createShoulderMotor();
@@ -41,6 +46,10 @@ public class Arm extends Subsystem {
 
     goal = getPosition();
     setpoint = getPosition();
+
+    feedforward =
+        new TwoJointedArmFeedforward(
+            ShoulderMotorConstants.JOINT_CONSTANTS, ElbowMotorConstants.JOINT_CONSTANTS);
   }
 
   /**
@@ -153,5 +162,10 @@ public class Arm extends Subsystem {
 
   public Command to(ArmState goal) {
     return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
+  }
+
+  // TODO Replace with a feedforward call that returns a result
+  public TwoJointedArmFeedforward getFeedforward() {
+    return feedforward;
   }
 }
