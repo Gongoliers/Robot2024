@@ -3,7 +3,6 @@ package frc.robot.arm;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.ArmFeedforwardCalculator;
@@ -12,8 +11,6 @@ import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 
 /** Simulated elbow motor. */
 public class ElbowMotorIOSim implements ElbowMotorIO {
-
-  private final DCMotor motor;
 
   private final SingleJointedArmSim singleJointedArmSim;
 
@@ -25,14 +22,12 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
 
   /** Creates a new simulated elbow motor. */
   public ElbowMotorIOSim() {
-    motor = DCMotor.getNEO(1);
-
     singleJointedArmSim =
         new SingleJointedArmSim(
-            motor,
-            ElbowMotorConstants.GEARING,
-            ElbowMotorConstants.MOI,
-            ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE,
+            ElbowMotorConstants.JOINT_CONSTANTS.motor(),
+            ElbowMotorConstants.JOINT_CONSTANTS.gearing(),
+            ElbowMotorConstants.JOINT_CONSTANTS.moi(),
+            ElbowMotorConstants.JOINT_CONSTANTS.length(),
             ElbowMotorConstants.MINIMUM_ANGLE.getRadians(),
             ElbowMotorConstants.MAXIMUM_ANGLE.getRadians(),
             true,

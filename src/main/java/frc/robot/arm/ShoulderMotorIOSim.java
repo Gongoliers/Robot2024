@@ -3,7 +3,6 @@ package frc.robot.arm;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.ArmFeedforwardCalculator;
@@ -12,8 +11,6 @@ import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
 /** Simulated shoulder motor. */
 public class ShoulderMotorIOSim implements ShoulderMotorIO {
-
-  private final DCMotor motor;
 
   private final SingleJointedArmSim singleJointedArmSim;
 
@@ -25,14 +22,12 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   /** Creates a new simulated shoulder motor. */
   public ShoulderMotorIOSim() {
-    motor = DCMotor.getNEO(1);
-
     singleJointedArmSim =
         new SingleJointedArmSim(
-            motor,
-            ShoulderMotorConstants.GEARING,
-            ShoulderMotorConstants.MOI,
-            ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
+            ShoulderMotorConstants.JOINT_CONSTANTS.motor(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.gearing(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.moi(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.length(),
             ShoulderMotorConstants.MINIMUM_ANGLE.getRadians(),
             ShoulderMotorConstants.MAXIMUM_ANGLE.getRadians(),
             true,

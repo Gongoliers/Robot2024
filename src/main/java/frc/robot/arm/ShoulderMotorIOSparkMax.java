@@ -52,7 +52,9 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   @Override
   public void setPosition(double positionRotations) {
-    sparkMax.getEncoder().setPosition(positionRotations * ShoulderMotorConstants.GEARING);
+    sparkMax
+        .getEncoder()
+        .setPosition(positionRotations * ShoulderMotorConstants.JOINT_CONSTANTS.gearing());
   }
 
   @Override
@@ -73,6 +75,6 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
    * @return the absolute position of the shoulder in rotations.
    */
   private double getPositionRotations() {
-    return sparkMax.getEncoder().getPosition() / ShoulderMotorConstants.GEARING;
+    return sparkMax.getEncoder().getPosition() / ShoulderMotorConstants.JOINT_CONSTANTS.gearing();
   }
 }

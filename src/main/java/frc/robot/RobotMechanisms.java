@@ -36,7 +36,7 @@ public class RobotMechanisms {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
 
     initializeArmMechanism();
-    initializeFramePerimeterMechanisms();
+    initializeFramePerimeteMechanisms();
   }
 
   private void initializeArmMechanism() {
@@ -50,7 +50,7 @@ public class RobotMechanisms {
         armRoot.append(
             new MechanismLigament2d(
                 "shoulder",
-                ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
+                ShoulderMotorConstants.JOINT_CONSTANTS.length(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kOrange)));
@@ -58,7 +58,7 @@ public class RobotMechanisms {
         shoulder.append(
             new MechanismLigament2d(
                 "elbow",
-                ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE,
+                ElbowMotorConstants.JOINT_CONSTANTS.length(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kGreen)));

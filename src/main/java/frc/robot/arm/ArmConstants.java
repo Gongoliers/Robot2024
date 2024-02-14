@@ -18,10 +18,24 @@ public class ArmConstants {
     public static final CAN CAN = new CAN(32);
 
     /** Gearing between the soulder motor and the shoulder joint. */
-    public static final double GEARING = 51.2;
+    private static final double GEARING = 51.2;
 
     /** Moment of inertia of the shoulder, in kilograms meters squared. */
-    public static final double MOI = 0.15093;
+    private static final double MOI = 0.15093;
+
+    /** Shoulder pivot to elbow pivot distance in meters. */
+    private static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
+
+    /** Mass of the shoulder joint in kilograms. */
+    private static final double MASS = 0.0;
+
+    /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
+    private static final double RADIUS = 0.0;
+
+    /** Joint constants for the shoulder joint. */
+    public static final JointConstants JOINT_CONSTANTS =
+        new JointConstants(
+            MASS, SHOULDER_TO_ELBOW_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
 
     /** Minimum angle of the shoulder joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(12.5);
@@ -35,20 +49,6 @@ public class ArmConstants {
     /** Translation of the shoulder joint relative to the origin in meters. */
     public static final Translation2d SHOULDER_TO_ORIGIN =
         new Translation2d(Units.inchesToMeters(-11.361), Units.inchesToMeters(7.721));
-
-    /** Shoulder pivot to elbow pivot distance in meters. */
-    public static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
-
-    /** Mass of the shoulder joint in kilograms. */
-    public static final double MASS = 0.0;
-
-    /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
-    public static final double RADIUS = 0.0;
-
-    /** Joint constants for the shoulder joint. */
-    public static final JointConstants JOINT_CONSTANTS =
-        new JointConstants(
-            MASS, SHOULDER_TO_ELBOW_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
 
     /** Proportional gain in volts per rotation. */
     public static final double KP = 36.0;
@@ -74,16 +74,24 @@ public class ArmConstants {
     public static final CAN CAN = new CAN(32); // TODO
 
     /** Gearing between the elbow motor and the elbow joint. */
-    public static final double GEARING = 39.29411765;
+    private static final double GEARING = 39.29411765;
 
     /** Moment of inertia of the shoulder, in kilograms meters squared. */
-    public static final double MOI = 0.05235;
+    private static final double MOI = 0.05235;
 
     /** Mass of the shoulder joint in kilograms. */
-    public static final double MASS = 0.0;
+    private static final double MASS = 0.0;
 
     /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
-    public static final double RADIUS = 0.0;
+    private static final double RADIUS = 0.0;
+
+    /** Elbow pivot to wrist pivot distance in meters. */
+    private static final double ELBOW_TO_WRIST_DISTANCE = Units.inchesToMeters(16.825);
+
+    /** Joint constants for the shoulder joint. */
+    public static final JointConstants JOINT_CONSTANTS =
+        new JointConstants(
+            MASS, ELBOW_TO_WRIST_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
 
     /** Minimum angle of the elbow joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-90);
@@ -93,14 +101,6 @@ public class ArmConstants {
 
     /** Tolerance of the elbow joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
-
-    /** Elbow pivot to wrist pivot distance in meters. */
-    public static final double ELBOW_TO_WRIST_DISTANCE = Units.inchesToMeters(16.825);
-
-    /** Joint constants for the shoulder joint. */
-    public static final JointConstants JOINT_CONSTANTS =
-        new JointConstants(
-            MASS, ELBOW_TO_WRIST_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
 
     /** Proportional gain in volts per rotation. */
     public static final double KP = 48.0;
