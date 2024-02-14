@@ -21,16 +21,16 @@ public class ArmConstants {
     private static final double GEARING = 51.2;
 
     /** Moment of inertia of the shoulder, in kilograms meters squared. */
-    private static final double MOI = 0.15093;
+    private static final double MOI = 0.07415;
 
     /** Shoulder pivot to elbow pivot distance in meters. */
     private static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
 
     /** Mass of the shoulder joint in kilograms. */
-    private static final double MASS = 0.0;
+    private static final double MASS = Units.lbsToKilograms(3.154);
 
     /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
-    private static final double RADIUS = 0.0;
+    private static final double RADIUS = Units.inchesToMeters(8.962869);
 
     /** Joint constants for the shoulder joint. */
     public static final JointConstants JOINT_CONSTANTS =

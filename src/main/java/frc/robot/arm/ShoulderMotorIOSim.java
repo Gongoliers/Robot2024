@@ -41,6 +41,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     feedforward =
         new ArmFeedforward(
             0,
+            // TODO Recalculate
             ArmFeedforwardCalculator.calculateArmGravityCompensation(
                 Rotation2d.fromDegrees(70.81), 0.101859),
             0);
@@ -55,14 +56,24 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   public void update(ShoulderMotorIOValues values) {
     singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
-    values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
-    values.velocityRotationsPerSecond =
-        Units.radiansToRotations(singleJointedArmSim.getVelocityRadPerSec());
-    values.accelerationRotationsPerSecondPerSecond =
-        accelerationCalculator.calculate(values.velocityRotationsPerSecond);
+    values.positionRotations = getPosition();
+    values.velocityRotationsPerSecond = getVelocity();
+    values.accelerationRotationsPerSecondPerSecond = getAcceleration();
 
     values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
+  }
+
+  private double getPosition() {
+    return Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+  }
+
+  private double getVelocity() {
+    return Units.radiansToRotations(singleJointedArmSim.getVelocityRadPerSec());
+  }
+
+  private double getAcceleration() {
+    return accelerationCalculator.calculate(getVelocity());
   }
 
   @Override
@@ -72,7 +83,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   @Override
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    double measuredPositionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+    double measuredPositionRotations = getPosition();
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 

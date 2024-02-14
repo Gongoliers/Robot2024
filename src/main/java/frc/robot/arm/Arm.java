@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.lib.TwoJointedArmFeedforward;
+import frc.lib.TwoJointedArmFeedforward.TwoJointedArmFeedforwardResult;
 import frc.robot.RobotMechanisms;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
@@ -110,21 +111,23 @@ public class Arm extends Subsystem {
     voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.appliedVolts);
     voltages.addDouble("Elbow Voltage (V)", () -> elbowMotorValues.appliedVolts);
 
-    ShuffleboardLayout velocities = Telemetry.addColumn(tab, "Velocities");
+    ShuffleboardLayout derivatives = Telemetry.addColumn(tab, "Derivatives");
 
-    velocities.addDouble(
-        "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(shoulderMotorValues.velocityRotationsPerSecond));
-    velocities.addDouble(
-        "Shoulder Acceleration (dpsps)",
-        () ->
-            Units.rotationsToDegrees(shoulderMotorValues.accelerationRotationsPerSecondPerSecond));
-    velocities.addDouble(
-        "Elbow Velocity (dps)",
-        () -> Units.rotationsToDegrees(elbowMotorValues.velocityRotationsPerSecond));
-    velocities.addDouble(
-        "Elbow Acceleration (dpsps)",
-        () -> Units.rotationsToDegrees(elbowMotorValues.accelerationRotationsPerSecondPerSecond));
+    derivatives.addDouble(
+        "Shoulder Velocity (rps)", () -> shoulderMotorValues.velocityRotationsPerSecond);
+    derivatives.addDouble(
+        "Shoulder Acceleration (rpsps)",
+        () -> shoulderMotorValues.accelerationRotationsPerSecondPerSecond);
+    derivatives.addDouble(
+        "Elbow Velocity (rps)", () -> elbowMotorValues.velocityRotationsPerSecond);
+    derivatives.addDouble(
+        "Elbow Acceleration (rpsps)",
+        () -> elbowMotorValues.accelerationRotationsPerSecondPerSecond);
+
+    ShuffleboardLayout feedforward = Telemetry.addColumn(tab, "Feedforward");
+
+    feedforward.addDouble("Shoulder Feedforward (V)", () -> calculateFeedforward().shoulderVolts());
+    feedforward.addDouble("Elbow Feedforward (V)", () -> calculateFeedforward().elbowVolts());
   }
 
   public void setPosition(ArmState state) {
@@ -180,8 +183,15 @@ public class Arm extends Subsystem {
     return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
   }
 
-  // TODO Replace with a feedforward call that returns a result
-  public TwoJointedArmFeedforward getFeedforward() {
-    return feedforward;
+  public TwoJointedArmFeedforwardResult calculateFeedforward() {
+    ArmState position = getPosition();
+
+    return feedforward.calculateFeedForward(
+        Rotation2d.fromRotations(position.shoulder().position),
+        Rotation2d.fromRotations(position.elbow().position),
+        Rotation2d.fromRotations(shoulderMotorValues.velocityRotationsPerSecond),
+        Rotation2d.fromRotations(elbowMotorValues.velocityRotationsPerSecond),
+        Rotation2d.fromRotations(shoulderMotorValues.accelerationRotationsPerSecondPerSecond),
+        Rotation2d.fromRotations(shoulderMotorValues.accelerationRotationsPerSecondPerSecond));
   }
 }

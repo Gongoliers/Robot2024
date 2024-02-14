@@ -40,19 +40,13 @@
     "transitory": {
       "Shuffleboard": {
         "Arm": {
-          "Goal": {
+          "Derivatives": {
             "open": true
           },
-          "Position": {
-            "open": true
-          },
-          "Setpoint": {
+          "Feedforward": {
             "open": true
           },
           "Velocities": {
-            "open": true
-          },
-          "Voltages": {
             "open": true
           },
           "open": true
