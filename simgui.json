@@ -49,6 +49,9 @@
           "Velocities": {
             "open": true
           },
+          "Voltages": {
+            "open": true
+          },
           "open": true
         },
         "Intake": {
