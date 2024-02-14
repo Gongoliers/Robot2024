@@ -36,7 +36,7 @@ public class RobotMechanisms {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
 
     initializeArmMechanism();
-    initializeFramePerimeteMechanisms();
+    initializeFramePerimeterMechanisms();
   }
 
   private void initializeArmMechanism() {
