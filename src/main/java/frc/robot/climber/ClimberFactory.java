@@ -25,7 +25,7 @@ public class ClimberFactory {
   public static ElevatorIO createElevator() {
     // TODO
     // if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.CLIMBER)) {
-    //     return new SpoolMotorIO775();
+    //     return new ElevatorIONeo();
     // }
 
     return new ElevatorIOSim();

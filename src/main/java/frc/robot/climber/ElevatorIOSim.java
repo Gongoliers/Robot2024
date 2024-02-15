@@ -12,7 +12,7 @@ public class ElevatorIOSim implements ElevatorIO {
   private final ElevatorSim elevatorSim;
 
   public ElevatorIOSim() {
-    motor = DCMotor.getVex775Pro(1);
+    motor = DCMotor.getNEO(1);
 
     double gearing = 1.0;
 
