@@ -24,8 +24,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
         new SingleJointedArmSim(
             ShoulderMotorConstants.JOINT_CONSTANTS.motor(),
             ShoulderMotorConstants.JOINT_CONSTANTS.gearing(),
-            ShoulderMotorConstants.JOINT_CONSTANTS.moi(),
-            ShoulderMotorConstants.JOINT_CONSTANTS.length(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
             ShoulderMotorConstants.MINIMUM_ANGLE.getRadians(),
             ShoulderMotorConstants.MAXIMUM_ANGLE.getRadians(),
             false,

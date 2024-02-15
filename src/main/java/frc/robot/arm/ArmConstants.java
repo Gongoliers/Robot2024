@@ -17,25 +17,16 @@ public class ArmConstants {
     /** Shoulder motor CAN. */
     public static final CAN CAN = new CAN(32);
 
-    /** Gearing between the soulder motor and the shoulder joint. */
-    private static final double GEARING = 51.2;
-
-    /** Moment of inertia of the shoulder, in kilograms meters squared. */
-    private static final double MOI = 0.07415;
-
-    /** Shoulder pivot to elbow pivot distance in meters. */
-    private static final double SHOULDER_TO_ELBOW_DISTANCE = Units.inchesToMeters(16.775);
-
-    /** Mass of the shoulder joint in kilograms. */
-    private static final double MASS = Units.lbsToKilograms(3.154);
-
-    /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
-    private static final double RADIUS = Units.inchesToMeters(8.962869);
-
     /** Joint constants for the shoulder joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
-            MASS, SHOULDER_TO_ELBOW_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
+            Units.lbsToKilograms(3.154), // massKg
+            Units.inchesToMeters(16.775), // lengthMeters
+            Units.inchesToMeters(8.962869), // radiusMeters
+            0.07415,
+            51.2,
+            DCMotor.getNEO(1), // motor
+            1);
 
     /** Minimum angle of the shoulder joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(12.5);
@@ -73,25 +64,16 @@ public class ArmConstants {
     /** Elbow motor CAN. */
     public static final CAN CAN = new CAN(32); // TODO
 
-    /** Gearing between the elbow motor and the elbow joint. */
-    private static final double GEARING = 39.29411765;
-
-    /** Moment of inertia of the shoulder, in kilograms meters squared. */
-    private static final double MOI = 0.5713;
-
-    /** Mass of the shoulder joint in kilograms. */
-    private static final double MASS = Units.lbsToKilograms(13.006);
-
-    /** Distance between the shoulder joint and the shoulder joint's center of mass in meters. */
-    private static final double RADIUS = Units.inchesToMeters(12.25179915);
-
-    /** Elbow pivot to wrist pivot distance in meters. */
-    private static final double ELBOW_TO_WRIST_DISTANCE = Units.inchesToMeters(16.825);
-
-    /** Joint constants for the shoulder joint. */
+    /** Joint constants for the elbow joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
-            MASS, ELBOW_TO_WRIST_DISTANCE, RADIUS, MOI, GEARING, DCMotor.getNEO(1), 1);
+            Units.lbsToKilograms(13.006), // massKg
+            Units.inchesToMeters(16.825), // lengthMeters
+            Units.inchesToMeters(12.251799915), // radiusMeters
+            0.5713,
+            39.2911765,
+            DCMotor.getNEO(1), // motor
+            1);
 
     /** Minimum angle of the elbow joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-90);

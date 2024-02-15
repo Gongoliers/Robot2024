@@ -50,7 +50,7 @@ public class RobotMechanisms {
         armRoot.append(
             new MechanismLigament2d(
                 "shoulder",
-                ShoulderMotorConstants.JOINT_CONSTANTS.length(),
+                ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kOrange)));
@@ -58,7 +58,7 @@ public class RobotMechanisms {
         shoulder.append(
             new MechanismLigament2d(
                 "elbow",
-                ElbowMotorConstants.JOINT_CONSTANTS.length(),
+                ElbowMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kGreen)));

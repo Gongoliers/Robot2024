@@ -24,8 +24,8 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
         new SingleJointedArmSim(
             ElbowMotorConstants.JOINT_CONSTANTS.motor(),
             ElbowMotorConstants.JOINT_CONSTANTS.gearing(),
-            ElbowMotorConstants.JOINT_CONSTANTS.moi(),
-            ElbowMotorConstants.JOINT_CONSTANTS.length(),
+            ElbowMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
+            ElbowMotorConstants.JOINT_CONSTANTS.lengthMeters(),
             ElbowMotorConstants.MINIMUM_ANGLE.getRadians(),
             ElbowMotorConstants.MAXIMUM_ANGLE.getRadians(),
             false,

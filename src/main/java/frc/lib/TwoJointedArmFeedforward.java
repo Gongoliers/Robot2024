@@ -23,13 +23,13 @@ public class TwoJointedArmFeedforward {
   private final SimpleMatrix B_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
 
   public TwoJointedArmFeedforward(JointConstants shoulder, JointConstants elbow) {
-    this.m1 = shoulder.mass();
-    this.m2 = elbow.mass();
-    this.l1 = shoulder.length();
-    this.r1 = shoulder.radius();
-    this.r2 = elbow.radius();
-    this.I1 = shoulder.moi();
-    this.I2 = elbow.moi();
+    this.m1 = shoulder.massKg();
+    this.m2 = elbow.massKg();
+    this.l1 = shoulder.lengthMeters();
+    this.r1 = shoulder.radiusMeters();
+    this.r2 = elbow.radiusMeters();
+    this.I1 = shoulder.moiKgMetersSquared();
+    this.I2 = elbow.moiKgMetersSquared();
     this.g1 = shoulder.gearing();
     this.g2 = elbow.gearing();
 
