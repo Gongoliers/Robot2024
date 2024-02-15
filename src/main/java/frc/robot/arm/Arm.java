@@ -186,12 +186,8 @@ public class Arm extends Subsystem {
   public TwoJointedArmFeedforwardResult calculateFeedforward() {
     ArmState position = getPosition();
 
-    return feedforward.calculateFeedForward(
+    return feedforward.calculateFeedforward(
         Rotation2d.fromRotations(position.shoulder().position),
-        Rotation2d.fromRotations(position.elbow().position),
-        Rotation2d.fromRotations(shoulderMotorValues.velocityRotationsPerSecond),
-        Rotation2d.fromRotations(elbowMotorValues.velocityRotationsPerSecond),
-        Rotation2d.fromRotations(shoulderMotorValues.accelerationRotationsPerSecondPerSecond),
-        Rotation2d.fromRotations(shoulderMotorValues.accelerationRotationsPerSecondPerSecond));
+        Rotation2d.fromRotations(position.elbow().position));
   }
 }

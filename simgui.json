@@ -54,12 +54,6 @@
           },
           "open": true
         },
-        "Intake": {
-          "Roller": {
-            "open": true
-          },
-          "open": true
-        },
         "Odometry": {
           "Position": {
             "open": true

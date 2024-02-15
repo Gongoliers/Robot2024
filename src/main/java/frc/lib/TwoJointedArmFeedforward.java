@@ -102,7 +102,7 @@ public class TwoJointedArmFeedforward {
    * @param elbowAcceleration the angular acceleration of the elbow joint.
    * @return the voltage feedforward required to move the arm in the given state.
    */
-  public TwoJointedArmFeedforwardResult calculateFeedForward(
+  public TwoJointedArmFeedforwardResult calculateFeedforward(
       Rotation2d shoulderPosition,
       Rotation2d elbowPosition,
       Rotation2d shoulderVelocity,
@@ -129,6 +129,24 @@ public class TwoJointedArmFeedforward {
     var u = B_INV.mult(M.plus(C).plus(Kb).plus(Tg_VECTOR));
 
     return new TwoJointedArmFeedforwardResult(u.get(0, 0), u.get(1, 0));
+  }
+
+  /**
+   * Calculates the voltage feedforward required to move the arm in a certain (static) state.
+   *
+   * @param shoulderPosition the angle of the shoulder joint.
+   * @param elbowPosition the angle of the elbow joint.
+   * @return the voltage feedforward required to move the arm in the given (static) state.
+   */
+  public TwoJointedArmFeedforwardResult calculateFeedforward(
+      Rotation2d shoulderPosition, Rotation2d elbowPosition) {
+    return calculateFeedforward(
+        shoulderPosition,
+        elbowPosition,
+        new Rotation2d(),
+        new Rotation2d(),
+        new Rotation2d(),
+        new Rotation2d());
   }
 
   /** Calculates the voltage feedforward required to move the arm in a certain state. */
