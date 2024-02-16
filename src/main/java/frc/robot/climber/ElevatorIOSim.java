@@ -3,6 +3,7 @@ package frc.robot.climber;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.RobotConstants;
+import frc.robot.climber.ClimberConstants.ElevatorConstants;
 
 /** Simulated elevator. */
 public class ElevatorIOSim implements ElevatorIO {
@@ -14,26 +15,16 @@ public class ElevatorIOSim implements ElevatorIO {
   public ElevatorIOSim() {
     motor = DCMotor.getNEO(1);
 
-    double gearing = 1.0;
-
-    double massKg = 1.0;
-
-    double drumDiameterMeters = 1.0;
-
-    double minHeightMeters = 1.0;
-
-    double maxHeightMeters = 1.0;
-
     elevatorSim =
         new ElevatorSim(
             motor,
-            gearing,
-            massKg,
-            drumDiameterMeters,
-            minHeightMeters,
-            maxHeightMeters,
+            ElevatorConstants.GEARING,
+            ElevatorConstants.MASS,
+            ElevatorConstants.DRUM_DIAMETER,
+            ElevatorConstants.MIN_HEIGHT,
+            ElevatorConstants.MAX_HEIGHT,
             true,
-            minHeightMeters);
+            ElevatorConstants.MIN_HEIGHT);
   }
 
   @Override
