@@ -20,6 +20,6 @@ public class LinearActuatorIOSim implements LinearActuatorIO {
 
   @Override
   public void setSetpoint(double positionPercent) {
-    positionPercent = 0.0;
+    this.positionPercent = positionPercent;
   }
 }
