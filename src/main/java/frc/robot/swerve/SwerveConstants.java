@@ -18,8 +18,20 @@ public class SwerveConstants {
     /** Moment of inertia of the wheel when steering in joules kilograms meters squared. */
     public static final double STEER_MOI = 0.004; // TODO
 
+    /** Gearing between the drive motor and the wheel for the L1 gear ratio. */
+    public static final double L1 = 8.14;
+
+    /** Gearing between the drive motor and the wheel for the L2 gear ratio. */
+    public static final double L2 = 6.75;
+
+    /** Gearing between the drive motor and the wheel for the L3 gear ratio. */
+    public static final double L3 = 6.12;
+
+    /** Gearing between the drive motor and the wheel for the L4 gear ratio. */
+    public static final double L4 = 5.14;
+
     /** Gearing between the drive motor and the wheel. */
-    public static final double DRIVE_GEARING = 6.75;
+    public static final double DRIVE_GEARING = L2;
 
     /** Diameter of the MK4i's wheels in meters. */
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
