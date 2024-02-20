@@ -9,13 +9,21 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
+import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
+import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
 
   /** Instance variable for the intake subsystem singleton. */
   private static Intake instance = null;
+
+  /** Pivot motor. */
+  private final PivotMotorIO pivotMotor;
+
+  /** Pivot motor values. */
+  private final PivotMotorIOValues pivotMotorValues = new PivotMotorIOValues();
 
   /** Roller motor. */
   private final RollerMotorIO rollerMotor;
@@ -32,6 +40,7 @@ public class Intake extends Subsystem {
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
+    pivotMotor = IntakeFactory.createPivotMotor();
     rollerMotor = IntakeFactory.createRollerMotor();
   }
 
@@ -50,6 +59,7 @@ public class Intake extends Subsystem {
 
   @Override
   public void periodic() {
+    pivotMotor.update(pivotMotorValues);
     rollerMotor.update(rollerMotorValues);
 
     rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps);
@@ -57,6 +67,10 @@ public class Intake extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout pivot = Telemetry.addColumn(tab, "Pivot");
+
+    pivot.addDouble("Position (rot)", () -> pivotMotorValues.positionRotations);
+
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
     roller.addDouble("Current (A)", () -> rollerMotorValues.currentAmps);
@@ -65,6 +79,10 @@ public class Intake extends Subsystem {
     roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
     roller.addBoolean("Current Spike?", this::rollerCurrentSpike);
     roller.addBoolean("Stalled?", this::rollerStalled);
+  }
+
+  public Command drivePivot(DoubleSupplier voltageSupplier) {
+    return run(() -> pivotMotor.setVoltage(voltageSupplier.getAsDouble())).finallyDo(pivotMotor::stop);
   }
 
   public Command intake() {

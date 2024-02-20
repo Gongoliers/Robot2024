@@ -2,11 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
-import frc.robot.arm.ArmState;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
@@ -70,20 +68,23 @@ public class RobotContainer {
     driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
 
-    operatorController
-        .leftTrigger()
-        .whileTrue(
-            Commands.parallel(arm.to(ArmState.INTAKE))
-                .andThen(Commands.parallel(intake.intake(), shooter.intake())));
+    // operatorController
+    //     .leftTrigger()
+    //     .whileTrue(
+    //         Commands.parallel(arm.to(ArmState.INTAKE))
+    //             .andThen(Commands.parallel(intake.intake(), shooter.intake())));
 
-    operatorController
-        .rightTrigger()
-        .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot()));
+    // operatorController
+    //     .rightTrigger()
+    //     .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot()));
 
-    operatorController.rightBumper().whileTrue(shooter.shoot());
+    // operatorController.rightBumper().whileTrue(shooter.shoot());
 
-    operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
-    operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+    // operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
+    // operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+
+    operatorController.x().whileTrue(intake.drivePivot(() -> operatorController.getLeftY() * 2));
+    operatorController.y().whileTrue(intake.intake());
   }
 
   /**
