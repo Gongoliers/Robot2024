@@ -62,30 +62,34 @@ public class SwerveConstants {
   /** Module configuration for the north west swerve module. */
   public static final SwerveModuleConfig NORTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(22, 1, 0, SWERVE_BUS),
+          // TODO
+          new SwerveModuleCAN(0, 0, 0, SWERVE_BUS),
           new Translation2d(X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.179688));
+          Rotation2d.fromRotations(-0.0));
 
   /** Module configuration for the north east swerve module. */
   public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(23, 19, 18, SWERVE_BUS),
+          // TODO
+          new SwerveModuleCAN(0, 0, 0, SWERVE_BUS),
           new Translation2d(X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(-0.951904));
+          Rotation2d.fromRotations(-0.0));
 
   /** Module configuration for the south east swerve module. */
   public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(24, 11, 10, SWERVE_BUS),
+          // TODO
+          new SwerveModuleCAN(0, 0, 0, SWERVE_BUS),
           new Translation2d(-X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(-0.774568));
+          Rotation2d.fromRotations(-0.0));
 
   /** Module configuration for the south west swerve module. */
   public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
-          new SwerveModuleCAN(25, 9, 8, SWERVE_BUS),
+          // TODO
+          new SwerveModuleCAN(0, 0, 0, SWERVE_BUS),
           new Translation2d(-X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.954346));
+          Rotation2d.fromRotations(-0.0));
 
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
@@ -102,7 +106,7 @@ public class SwerveConstants {
   }
 
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_ATTAINABLE_SPEED = calculateMaximumAttainableSpeed(108.2);
+  public static final double MAXIMUM_ATTAINABLE_SPEED = calculateMaximumAttainableSpeed(0.0); // TODO
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
@@ -150,8 +154,8 @@ public class SwerveConstants {
   }
 
   static {
-    DRIVE_PIDF_CONSTANTS.kS = 0.139; // volts
-    DRIVE_PIDF_CONSTANTS.kV = calculateKv(0.1092081577); // volts per meter per second
+    DRIVE_PIDF_CONSTANTS.kS = 0.0; // TODO volts
+    DRIVE_PIDF_CONSTANTS.kV = calculateKv(0.0); // TODO volts per meter per second
   }
 
   /** Constants for steer motor PIDF position controllers. */
