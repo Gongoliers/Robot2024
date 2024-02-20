@@ -24,7 +24,8 @@ public class IntakeConstants {
     public static final double MOI = 0.5343;
 
     /** Voltage to apply when intaking in volts. */
-    public static final double INTAKE_VOLTAGE = 8;
+    // 12 volts produces enough speed to unscrew the dead axle
+    public static final double INTAKE_VOLTAGE = 11;
 
     /** Voltage to apply when outtaking in volts. */
     public static final double OUTTAKE_VOLTAGE = -8;

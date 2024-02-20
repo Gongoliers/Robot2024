@@ -83,8 +83,9 @@ public class RobotContainer {
     // operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
     // operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
 
-    operatorController.x().whileTrue(intake.drivePivot(() -> operatorController.getLeftY() * 2));
-    operatorController.y().whileTrue(intake.intake());
+    operatorController.x().whileTrue(intake.drivePivot(() -> operatorController.getLeftY() * -4));
+    // operatorController.x().whileTrue(intake.intake());
+    // operatorController.y().whileTrue(intake.outtake());
   }
 
   /**

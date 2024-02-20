@@ -10,8 +10,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     private final TalonSRX talonSRX;
 
     public PivotMotorIOTalonSRX() {
-        // TODO
-        int canId = 0;
+        int canId = 38;
 
         talonSRX = new TalonSRX(canId);
     }
