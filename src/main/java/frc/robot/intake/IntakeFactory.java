@@ -9,11 +9,12 @@ public class IntakeFactory {
 
   /**
    * Creates a pivot motor.
-   * 
+   *
    * @return a pivot motor.
    */
   public static PivotMotorIO createPivotMotor() {
-    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE)) return new PivotMotorIOTalonSRX();
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE))
+      return new PivotMotorIOTalonSRX();
 
     return new PivotMotorIOSim();
   }

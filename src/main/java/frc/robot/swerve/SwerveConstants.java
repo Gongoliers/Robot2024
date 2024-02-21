@@ -106,7 +106,8 @@ public class SwerveConstants {
   }
 
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_ATTAINABLE_SPEED = calculateMaximumAttainableSpeed(0.0); // TODO
+  public static final double MAXIMUM_ATTAINABLE_SPEED =
+      calculateMaximumAttainableSpeed(0.0); // TODO
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;

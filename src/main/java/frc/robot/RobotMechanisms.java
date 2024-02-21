@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
-import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.arm.ArmState;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
 /** Helper class for rendering robot mechanisms. */
 public class RobotMechanisms {
@@ -44,7 +44,8 @@ public class RobotMechanisms {
 
     double armThickness = Units.inchesToMeters(2) * 100;
 
-    MechanismRoot2d armRoot = mechanism.getRoot("arm", armRootTranslation.getX(), armRootTranslation.getY());
+    MechanismRoot2d armRoot =
+        mechanism.getRoot("arm", armRootTranslation.getX(), armRootTranslation.getY());
 
     shoulder =
         armRoot.append(
@@ -97,7 +98,19 @@ public class RobotMechanisms {
   private void initializeIntakeMechanism() {
     double intakeThickness = Units.inchesToMeters(3) * 100;
 
-    intake = mechanism.getRoot("intake", ORIGIN.getX() + Units.inchesToMeters(13.164), ORIGIN.getY() + Units.inchesToMeters(6.283)).append(new MechanismLigament2d("intake_", PivotMotorConstants.DISTANCE, 0.0, intakeThickness, new Color8Bit(Color.kPink)));
+    intake =
+        mechanism
+            .getRoot(
+                "intake",
+                ORIGIN.getX() + Units.inchesToMeters(13.164),
+                ORIGIN.getY() + Units.inchesToMeters(6.283))
+            .append(
+                new MechanismLigament2d(
+                    "intake_",
+                    PivotMotorConstants.DISTANCE,
+                    0.0,
+                    intakeThickness,
+                    new Color8Bit(Color.kPink)));
   }
 
   public static RobotMechanisms getInstance() {

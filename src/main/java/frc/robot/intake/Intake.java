@@ -34,7 +34,7 @@ public class Intake extends Subsystem {
 
   /** Pivot motor goal. */
   private TrapezoidProfile.State pivotGoal;
-  
+
   /** Pivot motor setpoint. */
   private TrapezoidProfile.State pivotSetpoint;
 
@@ -86,14 +86,16 @@ public class Intake extends Subsystem {
 
     rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps);
 
-    RobotMechanisms.getInstance().setIntakeAngle(Rotation2d.fromRotations(pivotMotorValues.positionRotations));
+    RobotMechanisms.getInstance()
+        .setIntakeAngle(Rotation2d.fromRotations(pivotMotorValues.positionRotations));
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout pivot = Telemetry.addColumn(tab, "Pivot");
 
-    pivot.addDouble("Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
+    pivot.addDouble(
+        "Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
@@ -106,7 +108,8 @@ public class Intake extends Subsystem {
   }
 
   public Command drivePivot(DoubleSupplier voltageSupplier) {
-    return run(() -> pivotMotor.setVoltage(voltageSupplier.getAsDouble())).finallyDo(pivotMotor::stop);
+    return run(() -> pivotMotor.setVoltage(voltageSupplier.getAsDouble()))
+        .finallyDo(pivotMotor::stop);
   }
 
   private void setPivotGoal(Rotation2d goal) {
@@ -114,10 +117,12 @@ public class Intake extends Subsystem {
   }
 
   private void updatePivotSetpoint() {
-    pivotSetpoint = PivotMotorConstants.MOTION_PROFILE.calculate(RobotConstants.PERIODIC_DURATION, pivotSetpoint, pivotGoal);
+    pivotSetpoint =
+        PivotMotorConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION, pivotSetpoint, pivotGoal);
 
     pivotMotor.setSetpoint(pivotSetpoint.position, pivotSetpoint.velocity);
-  } 
+  }
 
   private boolean atPivotGoal() {
     return atPivotSetpoint() && pivotGoal.equals(pivotSetpoint);
@@ -126,10 +131,12 @@ public class Intake extends Subsystem {
   private boolean atPivotSetpoint() {
     pivotMotor.update(pivotMotorValues);
 
-    return MathUtil.isNear(pivotSetpoint.position, pivotMotorValues.positionRotations, PivotMotorConstants.TOLERANCE.getRotations());
+    return MathUtil.isNear(
+        pivotSetpoint.position,
+        pivotMotorValues.positionRotations,
+        PivotMotorConstants.TOLERANCE.getRotations());
   }
 
-  
   public Command out() {
     return pivotTo(PivotMotorConstants.MINIMUM_ANGLE);
   }

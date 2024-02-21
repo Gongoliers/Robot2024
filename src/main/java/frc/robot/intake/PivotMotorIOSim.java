@@ -11,58 +11,68 @@ import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 /** Simulated pivot motor. */
 public class PivotMotorIOSim implements PivotMotorIO {
 
-    private final DCMotor motor;
+  private final DCMotor motor;
 
-    private final SingleJointedArmSim singleJointedArmSim;
+  private final SingleJointedArmSim singleJointedArmSim;
 
-    private final PIDController feedback;
+  private final PIDController feedback;
 
-    private final ArmFeedforward feedforward;
+  private final ArmFeedforward feedforward;
 
-    public PivotMotorIOSim() {
-        motor = DCMotor.getVex775Pro(1);
+  public PivotMotorIOSim() {
+    motor = DCMotor.getVex775Pro(1);
 
-        singleJointedArmSim = new SingleJointedArmSim(motor, PivotMotorConstants.MOTOR_GEARING, PivotMotorConstants.MOI, PivotMotorConstants.DISTANCE, PivotMotorConstants.MINIMUM_ANGLE.getRadians(), PivotMotorConstants.MAXIMUM_ANGLE.getRadians(), true, 0.0);
+    singleJointedArmSim =
+        new SingleJointedArmSim(
+            motor,
+            PivotMotorConstants.MOTOR_GEARING,
+            PivotMotorConstants.MOI,
+            PivotMotorConstants.DISTANCE,
+            PivotMotorConstants.MINIMUM_ANGLE.getRadians(),
+            PivotMotorConstants.MAXIMUM_ANGLE.getRadians(),
+            true,
+            0.0);
 
-        feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
+    feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
 
-        feedforward = new ArmFeedforward(0, 0, 0);
-    }
+    feedforward = new ArmFeedforward(0, 0, 0);
+  }
 
-    @Override
-    public void configure() {}
+  @Override
+  public void configure() {}
 
-    @Override
-    public void update(PivotMotorIOValues values) {
-        singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
+  @Override
+  public void update(PivotMotorIOValues values) {
+    singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
-        values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
-    }
+    values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+  }
 
-    @Override
-    public void setPosition(double positionRotations) {
-        singleJointedArmSim.setState(Units.rotationsToRadians(positionRotations), 0.0);
-    }
+  @Override
+  public void setPosition(double positionRotations) {
+    singleJointedArmSim.setState(Units.rotationsToRadians(positionRotations), 0.0);
+  }
 
-    @Override
-    public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-        double measuredPositionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+  @Override
+  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
+    double measuredPositionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
 
-        double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
+    double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-        double feedforwardVolts = feedforward.calculate(Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
+    double feedforwardVolts =
+        feedforward.calculate(
+            Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
 
-        singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
-    }
+    singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
+  }
 
-    @Override
-    public void setVoltage(double volts) {
-        singleJointedArmSim.setInputVoltage(0);
-    }
+  @Override
+  public void setVoltage(double volts) {
+    singleJointedArmSim.setInputVoltage(0);
+  }
 
-    @Override
-    public void stop() {
-       setVoltage(0); 
-    }
-    
+  @Override
+  public void stop() {
+    setVoltage(0);
+  }
 }

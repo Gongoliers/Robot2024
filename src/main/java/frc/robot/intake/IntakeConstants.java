@@ -4,8 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.MotorCurrentLimits;
 import frc.lib.MotionProfileCalculator;
+import frc.lib.MotorCurrentLimits;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
@@ -43,13 +43,15 @@ public class IntakeConstants {
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(1.0);
 
     /** Maximum speed of the pivot in rotations per second. */
-    public static final double MAXIMUM_SPEED = 0.5; 
+    public static final double MAXIMUM_SPEED = 0.5;
 
     /** Maximum acceleration of the pivot in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION = MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
+    public static final double MAXIMUM_ACCELERATION =
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
 
     /** Maximum speed and acceleration of the pivot. */
-    public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
+    public static final TrapezoidProfile.Constraints CONSTRAINTS =
+        new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
 
     /** Motion profile of the pivot using constraints. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
@@ -82,8 +84,8 @@ public class IntakeConstants {
     /** Current limits for the roller motor. */
     public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
 
-  /** Radius of the roller in meters. */
-  public static final double INTAKE_ROLLER_RADIUS = 0.5 * Units.inchesToMeters(1.375);
+    /** Radius of the roller in meters. */
+    public static final double INTAKE_ROLLER_RADIUS = 0.5 * Units.inchesToMeters(1.375);
 
     /** Size of the current spike when intaking a note in amps. */
     public static final double NOTE_CURRENT = 18.0; // TODO
