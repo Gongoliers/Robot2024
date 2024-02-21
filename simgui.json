@@ -13,6 +13,7 @@
       "/Shuffleboard/Auto/SendableChooser[0]": "String Chooser",
       "/Shuffleboard/Vision/Field": "Field2d",
       "/SmartDashboard/Arm Mechanism": "Mechanism2d",
+      "/SmartDashboard/Mechanism": "Mechanism2d",
       "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d"
     },
     "windows": {
@@ -21,7 +22,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Arm Mechanism": {
+      "/SmartDashboard/Mechanism": {
         "window": {
           "visible": true
         }

@@ -28,9 +28,10 @@ public interface PivotMotorIO {
     /**
      * Sets the setpoint of the pivot motor.
      * 
-     * @param positionRotations the setpoint of the pivot motor. 
+     * @param positionRotations the position setpoint of the pivot motor. 
+     * @param velocityRotationsPerSecond the velocity setpoint of the pivot motor.
      */
-    public void setSetpoint(double positionRotations);
+    public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
 
     /**
      * Runs the pivot motor with the specified voltage.

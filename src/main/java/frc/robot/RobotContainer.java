@@ -58,7 +58,7 @@ public class RobotContainer {
     Telemetry.initializeShuffleboards(
         arm, auto, climber, intake, lights, odometry, shooter, swerve, vision);
 
-    SmartDashboard.putData("Arm Mechanism", RobotMechanisms.getInstance().getMechanism());
+    SmartDashboard.putData("Mechanism", RobotMechanisms.getInstance().getMechanism());
   }
 
   /** Configures operator controller bindings. */
@@ -83,9 +83,8 @@ public class RobotContainer {
     // operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
     // operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
 
-    operatorController.x().whileTrue(intake.drivePivot(() -> operatorController.getLeftY() * -4));
-    // operatorController.x().whileTrue(intake.intake());
-    // operatorController.y().whileTrue(intake.outtake());
+    operatorController.x().whileTrue(intake.out());
+    operatorController.y().whileTrue(intake.in());
   }
 
   /**

@@ -1,7 +1,10 @@
 package frc.robot.intake;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -9,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.RobotConstants;
+import frc.robot.RobotMechanisms;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
@@ -26,6 +31,12 @@ public class Intake extends Subsystem {
 
   /** Pivot motor values. */
   private final PivotMotorIOValues pivotMotorValues = new PivotMotorIOValues();
+
+  /** Pivot motor goal. */
+  private TrapezoidProfile.State pivotGoal;
+  
+  /** Pivot motor setpoint. */
+  private TrapezoidProfile.State pivotSetpoint;
 
   /** Roller motor. */
   private final RollerMotorIO rollerMotor;
@@ -46,6 +57,10 @@ public class Intake extends Subsystem {
     rollerMotor = IntakeFactory.createRollerMotor();
 
     pivotMotor.setPosition(PivotMotorConstants.MAXIMUM_ANGLE.getRotations());
+    pivotMotor.update(pivotMotorValues);
+
+    pivotGoal = new TrapezoidProfile.State(pivotMotorValues.positionRotations, 0);
+    pivotSetpoint = new TrapezoidProfile.State(pivotMotorValues.positionRotations, 0);
   }
 
   /**
@@ -64,9 +79,14 @@ public class Intake extends Subsystem {
   @Override
   public void periodic() {
     pivotMotor.update(pivotMotorValues);
+
+    updatePivotSetpoint();
+
     rollerMotor.update(rollerMotorValues);
 
     rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps);
+
+    RobotMechanisms.getInstance().setIntakeAngle(Rotation2d.fromRotations(pivotMotorValues.positionRotations));
   }
 
   @Override
@@ -87,6 +107,39 @@ public class Intake extends Subsystem {
 
   public Command drivePivot(DoubleSupplier voltageSupplier) {
     return run(() -> pivotMotor.setVoltage(voltageSupplier.getAsDouble())).finallyDo(pivotMotor::stop);
+  }
+
+  private void setPivotGoal(Rotation2d goal) {
+    pivotGoal = new TrapezoidProfile.State(goal.getRotations(), 0);
+  }
+
+  private void updatePivotSetpoint() {
+    pivotSetpoint = PivotMotorConstants.MOTION_PROFILE.calculate(RobotConstants.PERIODIC_DURATION, pivotSetpoint, pivotGoal);
+
+    pivotMotor.setSetpoint(pivotSetpoint.position, pivotSetpoint.velocity);
+  } 
+
+  private boolean atPivotGoal() {
+    return atPivotSetpoint() && pivotGoal.equals(pivotSetpoint);
+  }
+
+  private boolean atPivotSetpoint() {
+    pivotMotor.update(pivotMotorValues);
+
+    return MathUtil.isNear(pivotSetpoint.position, pivotMotorValues.positionRotations, PivotMotorConstants.TOLERANCE.getRotations());
+  }
+
+  
+  public Command out() {
+    return pivotTo(PivotMotorConstants.MINIMUM_ANGLE);
+  }
+
+  public Command in() {
+    return pivotTo(PivotMotorConstants.MAXIMUM_ANGLE);
+  }
+
+  private Command pivotTo(Rotation2d angle) {
+    return runOnce(() -> setPivotGoal(angle)).andThen(Commands.waitUntil(this::atPivotGoal));
   }
 
   public Command intake() {

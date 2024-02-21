@@ -1,35 +1,68 @@
 package frc.robot.intake;
 
-public class PivotMotorIOSim  implements PivotMotorIO {
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.RobotConstants;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
-    @Override
-    public void configure() {
+/** Simulated pivot motor. */
+public class PivotMotorIOSim implements PivotMotorIO {
+
+    private final DCMotor motor;
+
+    private final SingleJointedArmSim singleJointedArmSim;
+
+    private final PIDController feedback;
+
+    private final ArmFeedforward feedforward;
+
+    public PivotMotorIOSim() {
+        motor = DCMotor.getVex775Pro(1);
+
+        singleJointedArmSim = new SingleJointedArmSim(motor, PivotMotorConstants.MOTOR_GEARING, PivotMotorConstants.MOI, PivotMotorConstants.DISTANCE, PivotMotorConstants.MINIMUM_ANGLE.getRadians(), PivotMotorConstants.MAXIMUM_ANGLE.getRadians(), true, 0.0);
+
+        feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
+
+        feedforward = new ArmFeedforward(0, 0, 0);
     }
 
     @Override
+    public void configure() {}
+
+    @Override
     public void update(PivotMotorIOValues values) {
-        // TODO
-        values.positionRotations = 0.0;
+        singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
+
+        values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
     }
 
     @Override
     public void setPosition(double positionRotations) {
-        // TODO
+        singleJointedArmSim.setState(Units.rotationsToRadians(positionRotations), 0.0);
     }
 
     @Override
-    public void setSetpoint(double positionRotations) {
-        // TODO
+    public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
+        double measuredPositionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+
+        double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
+
+        double feedforwardVolts = feedforward.calculate(Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
+
+        singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
     }
 
     @Override
     public void setVoltage(double volts) {
-        // TODO
+        singleJointedArmSim.setInputVoltage(0);
     }
 
     @Override
     public void stop() {
-        // TODO
+       setVoltage(0); 
     }
     
 }

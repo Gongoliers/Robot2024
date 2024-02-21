@@ -57,7 +57,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     }
 
     @Override
-    public void setSetpoint(double positionRotations) {
+    public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
         // TODO
     }
 
