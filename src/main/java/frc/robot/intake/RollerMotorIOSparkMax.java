@@ -12,7 +12,7 @@ public class RollerMotorIOSparkMax implements RollerMotorIO {
   private final CANSparkMax sparkMax;
 
   public RollerMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(RollerMotorConstants.ID.id(), MotorType.kBrushless);
+    sparkMax = new CANSparkMax(RollerMotorConstants.CAN.id(), MotorType.kBrushless);
   }
 
   @Override

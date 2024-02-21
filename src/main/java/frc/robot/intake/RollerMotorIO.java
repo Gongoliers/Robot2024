@@ -25,7 +25,7 @@ public interface RollerMotorIO {
   /**
    * Run the roller motor with the specified voltage.
    *
-   * @param volts the voltage to apply to the voltage motor.
+   * @param volts the voltage to apply to the roller motor.
    */
   public void setVoltage(double volts);
 
