@@ -2,12 +2,14 @@ package frc.robot.intake;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
@@ -42,6 +44,8 @@ public class Intake extends Subsystem {
   private Intake() {
     pivotMotor = IntakeFactory.createPivotMotor();
     rollerMotor = IntakeFactory.createRollerMotor();
+
+    pivotMotor.setPosition(PivotMotorConstants.MAXIMUM_ANGLE.getRotations());
   }
 
   /**
@@ -69,7 +73,7 @@ public class Intake extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout pivot = Telemetry.addColumn(tab, "Pivot");
 
-    pivot.addDouble("Position (rot)", () -> pivotMotorValues.positionRotations);
+    pivot.addDouble("Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 

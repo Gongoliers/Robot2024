@@ -1,18 +1,55 @@
 package frc.robot.intake;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.MotorCurrentLimits;
+import frc.lib.MotionProfileCalculator;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
-  public static final double INTAKE_ROLLER_RADIUS = 0.5 * Units.inchesToMeters(1.375);
+  /** Constants for the pivot motor. */
+  public static class PivotMotorConstants {
+    /** Pivot motor's CAN identifier. */
+    public static final CAN CAN = new CAN(38);
+
+    /** If true, invert the pivot motor. */
+    public static final boolean IS_INVERTED = false;
+
+    /** Gearing between the pivot sensor and the pivot. */
+    public static final double SENSOR_GEARING = 16.0 / 18.0; // TODO flip?
+
+    /** Gearing between the motor and the pivot. */
+    public static final double MOTOR_GEARING = 49 * SENSOR_GEARING;
+
+    /** Pivot motor's maximum voltage. */
+    public static final double MAXIMUM_VOLTAGE = 4;
+
+    /** Pivot motor's minimum angle. */
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(0);
+
+    /** Pivot motor's maximum angle. */
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+
+    /** Maximum speed of the pivot in rotations per second. */
+    public static final double MAXIMUM_SPEED = 0.5; 
+
+    /** Maximum acceleration of the pivot in rotations per second per second. */
+    public static final double MAXIMUM_ACCELERATION = MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
+
+    /** Maximum speed and acceleration of the pivot. */
+    public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
+
+    /** Motion profile of the pivot using constraints. */
+    public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
+  }
 
   /** Constants for the roller motor. */
   public static class RollerMotorConstants {
     /** Roller motor's CAN identifier. */
-    public static final CAN ID = new CAN(4);
+    public static final CAN CAN = new CAN(4);
 
     /** If true, invert the roller motor. */
     public static final boolean IS_INVERTED = false;
@@ -32,6 +69,9 @@ public class IntakeConstants {
 
     /** Current limits for the roller motor. */
     public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
+
+  /** Radius of the roller in meters. */
+  public static final double INTAKE_ROLLER_RADIUS = 0.5 * Units.inchesToMeters(1.375);
 
     /** Size of the current spike when intaking a note in amps. */
     public static final double NOTE_CURRENT = 18.0; // TODO

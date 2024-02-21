@@ -1,36 +1,59 @@
 package frc.robot.intake;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import frc.robot.RobotConstants;
+import edu.wpi.first.math.MathUtil;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
+/** Pivot motor using a Talon SRX. */
 public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
+    /** Hardware Talon SRX. */
     private final TalonSRX talonSRX;
 
     public PivotMotorIOTalonSRX() {
-        int canId = 38;
-
-        talonSRX = new TalonSRX(canId);
+        talonSRX = new TalonSRX(PivotMotorConstants.CAN.id());
     }
 
     @Override
     public void configure() {
-        boolean inverted = false;
+        talonSRX.setInverted(PivotMotorConstants.IS_INVERTED);
 
-        talonSRX.setInverted(inverted);
+        talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     }
 
     @Override
     public void update(PivotMotorIOValues values) {
-        // TODO
-        values.positionRotations = 0.0;
+        values.positionRotations = getPivotPosition();
+    }
+
+    /**
+     * Gets the position of the pivot in rotations.
+     * 
+     * @return the position of the pivot in rotations.
+     */
+    private double getPivotPosition() {
+        double rotations = talonSRX.getSelectedSensorPosition() / 2048;
+
+        return rotations / PivotMotorConstants.SENSOR_GEARING;
+    }
+
+    /**
+     * Setes the position of the pivot in rotations.
+     * 
+     * @param positionRotations the position of the pivot in rotations.
+     */
+    private void setPivotPosition(double positionRotations) {
+        double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048;
+
+        talonSRX.setSelectedSensorPosition(units);
     }
 
     @Override
     public void setPosition(double positionRotations) {
-        // TODO
+        setPivotPosition(positionRotations);
     }
 
     @Override
@@ -40,7 +63,11 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
     @Override
     public void setVoltage(double volts) {
-        talonSRX.set(TalonSRXControlMode.PercentOutput, volts / RobotConstants.BATTERY_VOLTAGE);
+        volts = MathUtil.clamp(volts, -PivotMotorConstants.MAXIMUM_VOLTAGE, PivotMotorConstants.MAXIMUM_VOLTAGE);
+
+        double percent = volts / talonSRX.getBusVoltage();
+
+        talonSRX.set(TalonSRXControlMode.PercentOutput, percent);
     }
 
     @Override
