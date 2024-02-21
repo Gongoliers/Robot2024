@@ -49,8 +49,19 @@
           },
           "Velocities": {
             "open": true
+          }
+        },
+        "Climber": {
+          "Elevator": {
+            "open": true
           },
-          "Voltages": {
+          "Linear Actuator": {
+            "open": true
+          },
+          "open": true
+        },
+        "Intake": {
+          "Roller": {
             "open": true
           },
           "open": true
