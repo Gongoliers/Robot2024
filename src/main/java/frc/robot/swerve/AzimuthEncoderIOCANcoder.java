@@ -37,7 +37,7 @@ public class AzimuthEncoderIOCANcoder implements AzimuthEncoderIO {
   public void configure() {
     CANcoderConfiguration config = SwerveFactory.createAzimuthEncoderConfig();
 
-    config.MagnetSensor.MagnetOffset = magnetOffset.getRotations();
+    config.MagnetSensor.MagnetOffset = magnetOffset.unaryMinus().getRotations();
 
     Configurator.configureCANcoder(cancoder.getConfigurator(), config);
   }
