@@ -112,7 +112,7 @@ public class Intake extends Subsystem {
         .finallyDo(pivotMotor::stop);
   }
 
-  private void setPivotGoal(Rotation2d goal) {
+  public void setPivotGoal(Rotation2d goal) {
     pivotGoal = new TrapezoidProfile.State(goal.getRotations(), 0);
   }
 
