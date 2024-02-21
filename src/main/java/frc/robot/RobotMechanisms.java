@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.arm.ArmState;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
 /** Helper class for rendering robot mechanisms. */
 public class RobotMechanisms {
@@ -19,9 +20,7 @@ public class RobotMechanisms {
 
   private final Mechanism2d mechanism;
 
-  private MechanismRoot2d armRoot;
-
-  private MechanismLigament2d shoulder, elbow;
+  private MechanismLigament2d shoulder, elbow, intake;
 
   private final double WIDTH =
       2
@@ -37,6 +36,7 @@ public class RobotMechanisms {
 
     initializeArmMechanism();
     initializeFramePerimeterMechanisms();
+    initializeIntakeMechanism();
   }
 
   private void initializeArmMechanism() {
@@ -44,13 +44,14 @@ public class RobotMechanisms {
 
     double armThickness = Units.inchesToMeters(2) * 100;
 
-    armRoot = mechanism.getRoot("arm", armRootTranslation.getX(), armRootTranslation.getY());
+    MechanismRoot2d armRoot =
+        mechanism.getRoot("arm", armRootTranslation.getX(), armRootTranslation.getY());
 
     shoulder =
         armRoot.append(
             new MechanismLigament2d(
                 "shoulder",
-                ShoulderMotorConstants.SHOULDER_TO_ELBOW_DISTANCE,
+                ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kOrange)));
@@ -58,7 +59,7 @@ public class RobotMechanisms {
         shoulder.append(
             new MechanismLigament2d(
                 "elbow",
-                ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE,
+                ElbowMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kGreen)));
@@ -94,6 +95,24 @@ public class RobotMechanisms {
                 new Color8Bit(Color.kLightGray)));
   }
 
+  private void initializeIntakeMechanism() {
+    double intakeThickness = Units.inchesToMeters(3) * 100;
+
+    intake =
+        mechanism
+            .getRoot(
+                "intake",
+                ORIGIN.getX() + Units.inchesToMeters(13.164),
+                ORIGIN.getY() + Units.inchesToMeters(6.283))
+            .append(
+                new MechanismLigament2d(
+                    "intake_",
+                    PivotMotorConstants.DISTANCE,
+                    0.0,
+                    intakeThickness,
+                    new Color8Bit(Color.kPink)));
+  }
+
   public static RobotMechanisms getInstance() {
     if (instance == null) {
       instance = new RobotMechanisms();
@@ -113,5 +132,9 @@ public class RobotMechanisms {
 
     shoulder.setAngle(shoulderRotation);
     elbow.setAngle(elbowRotation.minus(shoulderRotation));
+  }
+
+  public void setIntakeAngle(Rotation2d angle) {
+    intake.setAngle(angle);
   }
 }

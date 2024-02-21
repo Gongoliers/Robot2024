@@ -1,47 +1,39 @@
 package frc.robot.arm;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.lib.ArmFeedforwardCalculator;
+import frc.lib.AccelerationCalculator;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 
 /** Simulated elbow motor. */
 public class ElbowMotorIOSim implements ElbowMotorIO {
 
-  private final DCMotor motor = DCMotor.getNEO(1);
-
   private final SingleJointedArmSim singleJointedArmSim;
 
   private final PIDController feedback;
 
-  private final ArmFeedforward feedforward;
+  private final AccelerationCalculator accelerationCalculator;
+
+  private double appliedVolts;
 
   /** Creates a new simulated elbow motor. */
   public ElbowMotorIOSim() {
     singleJointedArmSim =
         new SingleJointedArmSim(
-            motor,
-            ElbowMotorConstants.GEARING,
-            ElbowMotorConstants.MOI,
-            ElbowMotorConstants.ELBOW_TO_WRIST_DISTANCE,
+            ElbowMotorConstants.JOINT_CONSTANTS.motor(),
+            ElbowMotorConstants.JOINT_CONSTANTS.gearing(),
+            ElbowMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
+            ElbowMotorConstants.JOINT_CONSTANTS.lengthMeters(),
             ElbowMotorConstants.MINIMUM_ANGLE.getRadians(),
             ElbowMotorConstants.MAXIMUM_ANGLE.getRadians(),
-            true,
+            false,
             0.0);
 
     feedback = new PIDController(ElbowMotorConstants.KP, 0, 0);
 
-    feedforward =
-        new ArmFeedforward(
-            0,
-            ArmFeedforwardCalculator.calculateArmGravityCompensation(
-                Rotation2d.fromDegrees(-54.873534), 0.152426),
-            0);
+    accelerationCalculator = new AccelerationCalculator();
   }
 
   @Override
@@ -52,6 +44,12 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
     singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());
+    values.velocityRotationsPerSecond =
+        Units.radiansToRotations(singleJointedArmSim.getVelocityRadPerSec());
+    values.accelerationRotationsPerSecondPerSecond =
+        accelerationCalculator.calculate(values.velocityRotationsPerSecond);
+
+    values.appliedVolts = appliedVolts;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
   }
 
@@ -66,14 +64,15 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-    double feedforwardVolts =
-        feedforward.calculate(measuredPositionRotations, velocityRotationsPerSecond);
+    double feedforwardVolts = 0.0;
 
     setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   @Override
   public void setVoltage(double volts) {
+    appliedVolts = volts;
+
     singleJointedArmSim.setInputVoltage(volts);
   }
 
