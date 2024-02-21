@@ -2,15 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
-import frc.robot.arm.ArmState;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
-import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.lights.Lights;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
@@ -75,7 +72,9 @@ public class RobotContainer {
     //     .leftTrigger()
     //     .whileTrue(
     //         Commands.parallel(arm.to(ArmState.INTAKE), intake.out())
-    //             .andThen(Commands.parallel(intake.intake(), shooter.intake()))).onFalse(Commands.runOnce(() -> intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE)));
+    //             .andThen(Commands.parallel(intake.intake(),
+    // shooter.intake()))).onFalse(Commands.runOnce(() ->
+    // intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE)));
 
     // operatorController
     //     .rightTrigger()
