@@ -38,7 +38,7 @@ public class ShooterFactory {
    */
   public static FlywheelMotorIO createFlywheelMotor() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER))
-      return new FlywheelMotorIOSparkMax(); // TODO
+      return new FlywheelMotorIOTalonFX();
 
     return new FlywheelMotorIOSim();
   }
