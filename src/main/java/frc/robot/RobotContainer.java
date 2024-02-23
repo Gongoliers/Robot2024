@@ -84,6 +84,9 @@ public class RobotContainer {
 
     // operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
     // operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+
+    operatorController.a().whileTrue(shooter.intake());
+    operatorController.b().whileTrue(intake.intake());
   }
 
   /**
