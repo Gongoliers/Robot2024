@@ -3,12 +3,12 @@ package frc.robot.arm;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.ArmFeedforwardCalculator;
 import frc.lib.Configurator;
+import frc.lib.SingleJointedArmFeedforward;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
 /** Shoulder motor using a Spark Max. */
@@ -21,7 +21,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   private final PIDController feedback;
 
   /** Feedforward controller for shoulder position. */
-  private final ArmFeedforward feedforward;
+  private final SingleJointedArmFeedforward feedforward;
 
   private final AccelerationCalculator accelerationCalculator;
 
@@ -32,7 +32,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 
     feedforward =
-        new ArmFeedforward(
+        new SingleJointedArmFeedforward(
             0,
             ArmFeedforwardCalculator.calculateArmGravityCompensation(
                 Rotation2d.fromDegrees(18.0), 0.1222),
@@ -74,7 +74,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     double feedforwardVolts =
-        feedforward.calculate(measuredPositionRotations, velocityRotationsPerSecond);
+        feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
     sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }
