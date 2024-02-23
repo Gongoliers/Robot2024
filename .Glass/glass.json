@@ -1,0 +1,27 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "Intake": {
+          "Pivot": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Auto/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Mechanism": "Mechanism2d",
+      "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT3)"
+  }
+}
