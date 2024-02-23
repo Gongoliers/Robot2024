@@ -37,7 +37,7 @@ public class ShooterConstants {
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
     /** Voltage to apply while intaking in volts. */
-    public static final double INTAKE_VOLTAGE = -2.0; // TODO
+    public static final double INTAKE_VOLTAGE = -8.0; // TODO
 
     /** Voltage to apply while serializing in volts. */
     public static final double SERIALIZE_VOLTAGE = 6.0;

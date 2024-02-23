@@ -16,10 +16,13 @@ public class IntakeConstants {
     public static final CAN CAN = new CAN(38);
 
     /** If true, invert the pivot motor. */
-    public static final boolean IS_INVERTED = false;
+    public static final boolean IS_MOTOR_INVERTED = false;
+
+    /** If true, invert the pivot motor sensor. */
+    public static final boolean IS_SENSOR_INVERTED = true;
 
     /** Gearing between the pivot sensor and the pivot. */
-    public static final double SENSOR_GEARING = 16.0 / 18.0; // TODO flip?
+    public static final double SENSOR_GEARING = 2.3;
 
     /** Gearing between the motor and the pivot. */
     public static final double MOTOR_GEARING = 49 * SENSOR_GEARING;
@@ -34,13 +37,13 @@ public class IntakeConstants {
     public static final double DISTANCE = Units.inchesToMeters(10.275);
 
     /** Pivot motor's minimum angle. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-25);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-60);
 
     /** Pivot motor's maximum angle. */
-    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(86);
 
     /** Pivot motor's tolerance. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(1.0);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(4.0);
 
     /** Maximum speed of the pivot in rotations per second. */
     public static final double MAXIMUM_SPEED = 0.5;

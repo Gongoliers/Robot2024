@@ -56,6 +56,9 @@ public class Intake extends Subsystem {
     pivotMotor = IntakeFactory.createPivotMotor();
     rollerMotor = IntakeFactory.createRollerMotor();
 
+    pivotMotor.configure();
+    rollerMotor.configure();
+
     pivotMotor.setPosition(PivotMotorConstants.MAXIMUM_ANGLE.getRotations());
     pivotMotor.update(pivotMotorValues);
 
@@ -96,6 +99,10 @@ public class Intake extends Subsystem {
 
     pivot.addDouble(
         "Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
+    pivot.addDouble(
+        "Setpoint (deg)", () -> Units.rotationsToDegrees(pivotSetpoint.position));
+    pivot.addDouble(
+        "Goal (deg)", () -> Units.rotationsToDegrees(pivotGoal.position));
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
