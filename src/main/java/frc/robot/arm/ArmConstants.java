@@ -64,6 +64,9 @@ public class ArmConstants {
     /** Wrist motor CAN. */
     public static final CAN CAN = new CAN(34);
 
+    /** If true, invert the motor. */
+    public static final boolean MOTOR_INVERT = true;
+
     /** Joint constants for the wrist joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
@@ -76,10 +79,10 @@ public class ArmConstants {
             1);
 
     /** Minimum angle of the wrist joint. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-90);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-180); // TODO
 
     /** Maximum angle of the wrist joint. */
-    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(200);
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(85.98);
 
     /** Tolerance of the wrist joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);

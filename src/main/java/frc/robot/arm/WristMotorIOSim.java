@@ -27,7 +27,7 @@ public class WristMotorIOSim implements WristMotorIO {
             ShoulderMotorConstants.JOINT_CONSTANTS.motor(),
             ShoulderMotorConstants.JOINT_CONSTANTS.gearing(),
             ShoulderMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
-            ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters() * 0.5,
             WristMotorConstants.MINIMUM_ANGLE.getRadians(),
             WristMotorConstants.MAXIMUM_ANGLE.getRadians(),
             false,

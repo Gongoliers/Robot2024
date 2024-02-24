@@ -49,7 +49,8 @@
           },
           "Velocities": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Climber": {
           "Elevator": {
@@ -57,14 +58,12 @@
           },
           "Linear Actuator": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Intake": {
           "Roller": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Odometry": {
           "Position": {

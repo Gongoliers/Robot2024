@@ -58,8 +58,7 @@ public class RobotMechanisms {
         shoulder.append(
             new MechanismLigament2d(
                 "wrist",
-                // WristMotorConstants.JOINT_CONSTANTS.lengthMeters(),
-                0.0,
+                ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters() * 0.5,
                 0,
                 armThickness,
                 new Color8Bit(Color.kGreen)));
@@ -130,7 +129,7 @@ public class RobotMechanisms {
     Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
 
     shoulder.setAngle(shoulderRotation);
-    wrist.setAngle(wristRotation.minus(shoulderRotation));
+    wrist.setAngle(wristRotation.plus(Rotation2d.fromDegrees(90)));
   }
 
   public void setIntakeAngle(Rotation2d angle) {

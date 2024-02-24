@@ -12,7 +12,10 @@ import java.util.Objects;
 /** State of the arm. */
 public record ArmState(State shoulder, State wrist) {
 
+  // TODO Determine wrist angles for each of these positions 
   public static final ArmState STOW = new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
+  public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(23.265));
+  public static final ArmState INTAKE = STOW.withWrist(Rotation2d.fromDegrees(6.81));
 
   /**
    * Creates an arm state.
@@ -84,29 +87,70 @@ public record ArmState(State shoulder, State wrist) {
    * @return true if the arm states are equal.
    */
   public boolean at(ArmState other) {
-    boolean atShoulder =
-        MathUtil.isNear(
-            this.shoulder().position,
-            other.shoulder().position,
-            ShoulderMotorConstants.TOLERANCE.getRotations());
-    boolean atWrist =
-        MathUtil.isNear(
-            this.wrist().position,
-            other.wrist().position,
-            WristMotorConstants.TOLERANCE.getRotations());
-
-    return atShoulder && atWrist;
+    return atShoulderGoal(other) && atWristGoal(other);
   }
 
+  /**
+   * Returns true if the arm is at its shoulder goal.
+   * 
+   * @param goal goal state of the arm.
+   * @return true if the arm is at its shoulder goal.
+   */
+  public boolean atShoulderGoal(ArmState goal) {
+    return MathUtil.isNear(
+            this.shoulder().position,
+            goal.shoulder().position,
+            ShoulderMotorConstants.TOLERANCE.getRotations());
+  }
+
+  /**
+   * Returns the next setpoint involving shoulder-only movement.
+   * 
+   * @param goal the arm's goal state.
+   * @return the next setpoint involving shoulder-only movement.
+   */
+  public ArmState nextShoulderSetpoint(ArmState goal) {
+    return this.withShoulder(ShoulderMotorConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION, this.shoulder, goal.shoulder));
+  }
+
+  /**
+   * Returns true if the arm is at its wrist goal.
+   * 
+   * @param goal goal state of the arm.
+   * @return true if the arm is at its wrist goal.
+   */
+  public boolean atWristGoal(ArmState goal) {
+    return MathUtil.isNear(
+            this.wrist().position,
+            goal.wrist().position,
+            WristMotorConstants.TOLERANCE.getRotations());
+  }
+
+  /**
+   * Returns the next setpoint involving wrist-only movement.
+   * 
+   * @param goal the arm's goal state.
+   * @return the next setpoint involving wrist-only movement.
+   */
+  public ArmState nextWristSetpoint(ArmState goal) {
+    return this.withWrist(WristMotorConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION, this.wrist, goal.wrist));
+  }
+
+  /**
+   * Returns the next overall setpoint of the arm's movement.
+   * 
+   * @param goal the arm's goal state.
+   * @return the next overall setpoint.
+   */
   public ArmState nextSetpoint(ArmState goal) {
-    State nextShoulderState =
-        ShoulderMotorConstants.MOTION_PROFILE.calculate(
-            RobotConstants.PERIODIC_DURATION, this.shoulder, goal.shoulder);
+    if (!atShoulderGoal(goal)) {
+      return nextShoulderSetpoint(goal);
+    } else if (!atWristGoal(goal)) {
+      return nextWristSetpoint(goal);
+    }
 
-    State nextWristState =
-        WristMotorConstants.MOTION_PROFILE.calculate(
-            RobotConstants.PERIODIC_DURATION, this.wrist, goal.wrist);
-
-    return new ArmState(nextShoulderState, nextWristState);
+    return this;
   }
 }

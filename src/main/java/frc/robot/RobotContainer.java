@@ -2,9 +2,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
+import frc.robot.arm.ArmState;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
@@ -82,11 +84,9 @@ public class RobotContainer {
 
     // operatorController.rightBumper().whileTrue(shooter.shoot());
 
-    // operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.AMP)));
-    // operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
-
-    operatorController.a().whileTrue(intake.in());
-    operatorController.b().whileTrue(intake.out());
+    operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.SHOOT)));
+    operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+    operatorController.x().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.INTAKE)));
   }
 
   /**
