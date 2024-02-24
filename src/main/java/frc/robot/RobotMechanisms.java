@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ArmConstants.WristMotorConstants;
 import frc.robot.arm.ArmState;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
@@ -58,7 +59,7 @@ public class RobotMechanisms {
         shoulder.append(
             new MechanismLigament2d(
                 "wrist",
-                ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters() * 0.5,
+                WristMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kGreen)));

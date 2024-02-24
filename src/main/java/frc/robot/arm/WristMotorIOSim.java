@@ -24,8 +24,8 @@ public class WristMotorIOSim implements WristMotorIO {
     // TODO
     singleJointedArmSim =
         new SingleJointedArmSim(
-            ShoulderMotorConstants.JOINT_CONSTANTS.motor(),
-            ShoulderMotorConstants.JOINT_CONSTANTS.gearing(),
+            WristMotorConstants.JOINT_CONSTANTS.motor(),
+            WristMotorConstants.JOINT_CONSTANTS.gearing(),
             ShoulderMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
             ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters() * 0.5,
             WristMotorConstants.MINIMUM_ANGLE.getRadians(),

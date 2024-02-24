@@ -31,6 +31,8 @@ public class Arm extends Subsystem {
   /** Wrist motor values. */
   private final WristMotorIOValues wristMotorValues = new WristMotorIOValues();
 
+  private final ArmState initialState = ArmState.UP_SHOOTER_INSIDE;
+
   private ArmState goal, setpoint;
 
   /** Creates a new instance of the arm subsystem. */
@@ -41,9 +43,9 @@ public class Arm extends Subsystem {
     shoulderMotor.configure();
     wristMotor.configure();
 
-    setPosition(ArmState.INIT);
+    setPosition(initialState);
 
-    goal = getPosition();
+    goal = initialState.withWrist(ArmState.STOW.wrist());
     setpoint = getPosition();
   }
 

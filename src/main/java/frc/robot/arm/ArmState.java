@@ -12,7 +12,7 @@ import java.util.Objects;
 /** State of the arm. */
 public record ArmState(State shoulder, State wrist) {
 
-  public static final ArmState INIT = new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, WristMotorConstants.MINIMUM_ANGLE);
+  public static final ArmState UP_SHOOTER_INSIDE = new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, WristMotorConstants.MINIMUM_ANGLE);
   public static final ArmState STOW = new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
   public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(23.265));
   public static final ArmState INTAKE = STOW.withWrist(Rotation2d.fromDegrees(6.81));
@@ -145,7 +145,15 @@ public record ArmState(State shoulder, State wrist) {
    * @return the next overall setpoint.
    */
   public ArmState nextSetpoint(ArmState goal) {
-    if (!atShoulderGoal(goal)) {
+    boolean shooterOnBottom = Rotation2d.fromRotations(wrist.position).getDegrees() < 0.0;
+    boolean shooterNeedsToBeOnTop = Rotation2d.fromRotations(goal.wrist.position).getDegrees() > 0.0;
+    boolean shooterOnWrongSide = shooterOnBottom && shooterNeedsToBeOnTop;
+
+    if (shooterOnWrongSide && !atWristGoal(goal)) {
+      return nextWristSetpoint(goal);
+    }
+
+    if (!atShoulderGoal(goal) ) {
       return nextShoulderSetpoint(goal);
     } else if (!atWristGoal(goal)) {
       return nextWristSetpoint(goal);
