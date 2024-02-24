@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.RobotConstants;
 import frc.robot.RobotMechanisms;
 import frc.robot.arm.WristMotorIO.WristMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
+import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -67,7 +67,7 @@ public class Arm extends Subsystem {
     shoulderMotor.update(shoulderMotorValues);
     wristMotor.update(wristMotorValues);
 
-    setSetpoint(getSetpoint().nextSetpoint(goal));
+    setSetpoint(setpoint.nextSetpoint(goal));
 
     RobotMechanisms.getInstance().setArmState(getPosition());
   }
@@ -166,5 +166,9 @@ public class Arm extends Subsystem {
 
   public Command to(ArmState goal) {
     return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
+  }
+
+  public Command driveWrist(DoubleSupplier joystick) {
+    return run(() -> wristMotor.setVoltage(-joystick.getAsDouble() * 4));
   }
 }

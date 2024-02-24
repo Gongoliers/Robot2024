@@ -78,8 +78,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
 
     @Override
     public void setVoltage(double volts) {
-        // TODO disabled for working on wrist 
-        // sparkMax.setVoltage(volts);
+        sparkMax.setVoltage(volts);
     }
 
     @Override

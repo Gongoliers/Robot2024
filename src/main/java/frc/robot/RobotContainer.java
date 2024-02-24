@@ -71,18 +71,20 @@ public class RobotContainer {
     driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
 
-    operatorController
-        .leftTrigger()
-        .whileTrue(
-            Commands.parallel(arm.to(ArmState.INTAKE), intake.out())
-                .andThen(Commands.parallel(intake.intake(), shooter.intake()))).onFalse(Commands.runOnce(() -> {
-                  intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
-                  arm.setGoal(ArmState.STOW);
-                }));
+    // operatorController
+    //     .leftTrigger()
+    //     .whileTrue(
+    //         Commands.parallel(arm.to(ArmState.INTAKE), intake.out())
+    //             .andThen(Commands.parallel(intake.intake(), shooter.intake()))).onFalse(Commands.runOnce(() -> {
+    //               intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
+    //               arm.setGoal(ArmState.STOW);
+    //             }));
 
-    operatorController
-        .rightTrigger()
-        .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot())).onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+    // operatorController
+    //     .rightTrigger()
+    //     .whileTrue(arm.to(ArmState.SHOOT).andThen(shooter.shoot())).onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+
+    operatorController.a().whileTrue(arm.driveWrist(operatorController::getLeftY));
   }
 
   /**
