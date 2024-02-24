@@ -4,41 +4,24 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
-import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ArmConstants.WristMotorConstants;
+
 import java.util.Objects;
 
 /** State of the arm. */
-public record ArmState(State shoulder, State elbow, State wrist) {
+public record ArmState(State shoulder, State wrist) {
 
-  public static final ArmState STOW =
-      new ArmState(
-          Rotation2d.fromDegrees(12.5),
-          Rotation2d.fromDegrees(180 - 18.125),
-          Rotation2d.fromDegrees(0));
-
-  public static final ArmState SHOOT = STOW.withElbow(Rotation2d.fromDegrees(180 - 35));
-
-  public static final ArmState INTAKE =
-      new ArmState(
-          Rotation2d.fromDegrees(90 - 25.6),
-          Rotation2d.fromDegrees(-16.325),
-          Rotation2d.fromDegrees(-50));
-
-  public static final ArmState AMP =
-      new ArmState(
-          Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(90), Rotation2d.fromDegrees(0));
+  public static final ArmState STOW = new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
 
   /**
    * Creates an arm state.
    *
    * @param shoulder the shoulder's state.
-   * @param elbow the elbow's state.
    * @param wrist the wrist's state.
    */
   public ArmState {
     Objects.requireNonNull(shoulder);
-    Objects.requireNonNull(elbow);
     Objects.requireNonNull(wrist);
   }
 
@@ -46,13 +29,11 @@ public record ArmState(State shoulder, State elbow, State wrist) {
    * Creates an arm state.
    *
    * @param shoulder the shoulder's rotation.
-   * @param elbow the elbow's rotation.
    * @param wrist the wrist's rotation.
    */
-  public ArmState(Rotation2d shoulder, Rotation2d elbow, Rotation2d wrist) {
+  public ArmState(Rotation2d shoulder, Rotation2d wrist) {
     this(
         new State(shoulder.getRotations(), 0.0),
-        new State(elbow.getRotations(), 0.0),
         new State(wrist.getRotations(), 0.0));
   }
 
@@ -73,27 +54,7 @@ public record ArmState(State shoulder, State elbow, State wrist) {
    * @return a copy of this arm state with a new shoulder state.
    */
   public ArmState withShoulder(State newShoulder) {
-    return new ArmState(newShoulder, elbow, wrist);
-  }
-
-  /**
-   * Copies this arm state with a new elbow rotation.
-   *
-   * @param newElbow the new elbow rotation.
-   * @return a copy of this arm state with a new elbow rotation.
-   */
-  public ArmState withElbow(Rotation2d newElbow) {
-    return withElbow(new State(newElbow.getRotations(), 0.0));
-  }
-
-  /**
-   * Copies this arm state with a new elbow state.
-   *
-   * @param newElbow the new elbow state.
-   * @return a copy of this arm state with a new elbow state.
-   */
-  public ArmState withElbow(State newElbow) {
-    return new ArmState(shoulder, newElbow, wrist);
+    return new ArmState(newShoulder, wrist);
   }
 
   /**
@@ -113,7 +74,7 @@ public record ArmState(State shoulder, State elbow, State wrist) {
    * @return a copy of this arm state with a new wrist state.
    */
   public ArmState withWrist(State newWrist) {
-    return new ArmState(shoulder, elbow, newWrist);
+    return new ArmState(shoulder, newWrist);
   }
 
   /**
@@ -128,13 +89,13 @@ public record ArmState(State shoulder, State elbow, State wrist) {
             this.shoulder().position,
             other.shoulder().position,
             ShoulderMotorConstants.TOLERANCE.getRotations());
-    boolean atElbow =
+    boolean atWrist =
         MathUtil.isNear(
-            this.elbow().position,
-            other.elbow().position,
-            ElbowMotorConstants.TOLERANCE.getRotations());
+            this.wrist().position,
+            other.wrist().position,
+            WristMotorConstants.TOLERANCE.getRotations());
 
-    return atShoulder && atElbow;
+    return atShoulder && atWrist;
   }
 
   public ArmState nextSetpoint(ArmState goal) {
@@ -142,10 +103,10 @@ public record ArmState(State shoulder, State elbow, State wrist) {
         ShoulderMotorConstants.MOTION_PROFILE.calculate(
             RobotConstants.PERIODIC_DURATION, this.shoulder, goal.shoulder);
 
-    State nextElbowState =
-        ElbowMotorConstants.MOTION_PROFILE.calculate(
-            RobotConstants.PERIODIC_DURATION, this.elbow, goal.elbow);
+    State nextWristState =
+        WristMotorConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION, this.wrist, goal.wrist);
 
-    return new ArmState(nextShoulderState, nextElbowState, new State(0.0, 0.0));
+    return new ArmState(nextShoulderState, nextWristState);
   }
 }

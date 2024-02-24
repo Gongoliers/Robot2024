@@ -29,7 +29,7 @@ public class ArmConstants {
             1);
 
     /** Minimum angle of the shoulder joint. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(12.5);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(27.5);
 
     /** Maximum angle of the shoulder joint. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
@@ -59,29 +59,29 @@ public class ArmConstants {
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
 
-  /** Constants for the elbow motor. */
-  public static class ElbowMotorConstants {
-    /** Elbow motor CAN. */
-    public static final CAN CAN = new CAN(32); // TODO
+  /** Constants for the wrist motor. */
+  public static class WristMotorConstants {
+    /** Wrist motor CAN. */
+    public static final CAN CAN = new CAN(34);
 
-    /** Joint constants for the elbow joint. */
+    /** Joint constants for the wrist joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
-            Units.lbsToKilograms(13.006), // massKg
-            Units.inchesToMeters(16.825), // lengthMeters
-            Units.inchesToMeters(12.251799915), // radiusMeters
-            0.5713,
-            39.2911765,
+            Units.lbsToKilograms(13.006), // massKg // TODO
+            Units.inchesToMeters(16.825), // lengthMeters // TODO
+            Units.inchesToMeters(12.251799915), // radiusMeters // TODO
+            0.5713, // TODO
+            20.454545,
             DCMotor.getNEO(1), // motor
             1);
 
-    /** Minimum angle of the elbow joint. */
+    /** Minimum angle of the wrist joint. */
     public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-90);
 
-    /** Maximum angle of the elbow joint. */
-    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
+    /** Maximum angle of the wrist joint. */
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(200);
 
-    /** Tolerance of the elbow joint. */
+    /** Tolerance of the wrist joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
 
     /** Proportional gain in volts per rotation. */

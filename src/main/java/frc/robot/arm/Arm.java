@@ -8,12 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.lib.TwoJointedArmFeedforward;
-import frc.lib.TwoJointedArmFeedforward.TwoJointedArmFeedforwardResult;
 import frc.robot.RobotMechanisms;
-import frc.robot.arm.ArmConstants.ElbowMotorConstants;
-import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
-import frc.robot.arm.ElbowMotorIO.ElbowMotorIOValues;
+import frc.robot.arm.WristMotorIO.WristMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 
 /** Subsystem class for the arm subsystem. */
@@ -28,29 +24,26 @@ public class Arm extends Subsystem {
   /** Shoulder motor values. */
   private final ShoulderMotorIOValues shoulderMotorValues = new ShoulderMotorIOValues();
 
-  /** Elbow motor. */
-  private final ElbowMotorIO elbowMotor;
+  /** Wrist motor. */
+  private final WristMotorIO wristMotor;
 
-  /** Elbow motor values. */
-  private final ElbowMotorIOValues elbowMotorValues = new ElbowMotorIOValues();
+  /** Wrist motor values. */
+  private final WristMotorIOValues wristMotorValues = new WristMotorIOValues();
 
   private ArmState goal, setpoint;
-
-  private final TwoJointedArmFeedforward feedforward;
 
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
     shoulderMotor = ArmFactory.createShoulderMotor();
-    elbowMotor = ArmFactory.createElbowMotor();
+    wristMotor = ArmFactory.createWristMotor();
 
-    setPosition(ArmState.STOW.withElbow(Rotation2d.fromDegrees(0)));
+    shoulderMotor.configure();
+    wristMotor.configure();
+
+    setPosition(ArmState.STOW);
 
     goal = getPosition();
     setpoint = getPosition();
-
-    feedforward =
-        new TwoJointedArmFeedforward(
-            ShoulderMotorConstants.JOINT_CONSTANTS, ElbowMotorConstants.JOINT_CONSTANTS);
   }
 
   /**
@@ -69,6 +62,7 @@ public class Arm extends Subsystem {
   @Override
   public void periodic() {
     shoulderMotor.update(shoulderMotorValues);
+    wristMotor.update(wristMotorValues);
 
     setSetpoint(getSetpoint().nextSetpoint(goal));
 
@@ -83,15 +77,13 @@ public class Arm extends Subsystem {
         "Shoulder Position (deg)",
         () -> Units.rotationsToDegrees(shoulderMotorValues.positionRotations));
     position.addDouble(
-        "Elbow Position (deg)", () -> Units.rotationsToDegrees(elbowMotorValues.positionRotations));
+        "Wrist Position (deg)", () -> Units.rotationsToDegrees(wristMotorValues.positionRotations));
 
     ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
 
     setpoint.addDouble(
         "Shoulder Setpoint (deg)",
         () -> Units.rotationsToDegrees(getSetpoint().shoulder().position));
-    setpoint.addDouble(
-        "Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().elbow().position));
     setpoint.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().wrist().position));
     setpoint.addBoolean("At Setpoint?", this::atSetpoint);
@@ -101,15 +93,13 @@ public class Arm extends Subsystem {
     goal.addDouble(
         "Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().shoulder().position));
     goal.addDouble(
-        "Elbow Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().elbow().position));
-    goal.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().wrist().position));
     goal.addBoolean("At Goal?", this::atGoal);
 
     ShuffleboardLayout voltages = Telemetry.addColumn(tab, "Voltages");
 
     voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.appliedVolts);
-    voltages.addDouble("Elbow Voltage (V)", () -> elbowMotorValues.appliedVolts);
+    voltages.addDouble("Wrist Voltage (V)", () -> wristMotorValues.appliedVolts);
 
     ShuffleboardLayout derivatives = Telemetry.addColumn(tab, "Derivatives");
 
@@ -119,21 +109,15 @@ public class Arm extends Subsystem {
         "Shoulder Acceleration (rpsps)",
         () -> shoulderMotorValues.accelerationRotationsPerSecondPerSecond);
     derivatives.addDouble(
-        "Elbow Velocity (rps)", () -> elbowMotorValues.velocityRotationsPerSecond);
+        "Wrist Velocity (rps)", () -> wristMotorValues.velocityRotationsPerSecond);
     derivatives.addDouble(
-        "Elbow Acceleration (rpsps)",
-        () -> elbowMotorValues.accelerationRotationsPerSecondPerSecond);
-
-    ShuffleboardLayout feedforward = Telemetry.addColumn(tab, "Feedforward");
-
-    feedforward.addDouble("Shoulder Feedforward (V)", () -> calculateFeedforward().shoulderVolts());
-    feedforward.addDouble("Elbow Feedforward (V)", () -> calculateFeedforward().elbowVolts());
+        "Wrist Acceleration (rpsps)",
+        () -> wristMotorValues.accelerationRotationsPerSecondPerSecond);
   }
 
   public void setPosition(ArmState state) {
     shoulderMotor.setPosition(state.shoulder().position);
-    elbowMotor.setPosition(state.elbow().position);
-    // wristMotor.setPosition(state.wrist().getRotations());
+     wristMotor.setPosition(state.wrist().position);
   }
 
   /**
@@ -143,12 +127,11 @@ public class Arm extends Subsystem {
    */
   public ArmState getPosition() {
     shoulderMotor.update(shoulderMotorValues);
-    elbowMotor.update(elbowMotorValues);
+    wristMotor.update(wristMotorValues);
 
     return new ArmState(
         Rotation2d.fromRotations(shoulderMotorValues.positionRotations),
-        Rotation2d.fromRotations(elbowMotorValues.positionRotations),
-        Rotation2d.fromRotations(0));
+        Rotation2d.fromRotations(wristMotorValues.positionRotations));
   }
 
   public ArmState getGoal() {
@@ -175,19 +158,10 @@ public class Arm extends Subsystem {
     this.setpoint = setpoint;
 
     shoulderMotor.setSetpoint(setpoint.shoulder().position, setpoint.shoulder().velocity);
-    elbowMotor.setSetpoint(setpoint.elbow().position, setpoint.elbow().velocity);
-    // wristMotor.runSetpoint(state.wrist().getRotations());
+    wristMotor.setSetpoint(setpoint.wrist().position, setpoint.wrist().velocity);
   }
 
   public Command to(ArmState goal) {
     return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
-  }
-
-  public TwoJointedArmFeedforwardResult calculateFeedforward() {
-    ArmState position = getPosition();
-
-    return feedforward.calculateFeedforward(
-        Rotation2d.fromRotations(position.shoulder().position),
-        Rotation2d.fromRotations(position.elbow().position));
   }
 }
