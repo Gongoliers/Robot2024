@@ -59,11 +59,13 @@ public class Intake extends Subsystem {
     pivotMotor.configure();
     rollerMotor.configure();
 
-    pivotMotor.setPosition(PivotMotorConstants.MAXIMUM_ANGLE.getRotations());
+    Rotation2d initialAngle = PivotMotorConstants.MAXIMUM_ANGLE;
+
+    pivotMotor.setPosition(initialAngle.getRotations());
     pivotMotor.update(pivotMotorValues);
 
-    pivotGoal = new TrapezoidProfile.State(pivotMotorValues.positionRotations, 0);
-    pivotSetpoint = new TrapezoidProfile.State(pivotMotorValues.positionRotations, 0);
+    pivotGoal = new TrapezoidProfile.State(initialAngle.getRotations(), 0);
+    pivotSetpoint = new TrapezoidProfile.State(initialAngle.getRotations(), 0);
   }
 
   /**

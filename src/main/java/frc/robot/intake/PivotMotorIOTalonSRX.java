@@ -6,7 +6,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.lib.SingleJointedArmFeedforward;
+import frc.lib.ArmFeedforwardCalculator;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
 /** Pivot motor using a Talon SRX. */
@@ -17,14 +20,16 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
   private final PIDController feedback;
 
-  private final ArmFeedforward feedforward;
+  private final SingleJointedArmFeedforward feedforward;
 
   public PivotMotorIOTalonSRX() {
     talonSRX = new TalonSRX(PivotMotorConstants.CAN.id());
 
     feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
 
-    feedforward = new ArmFeedforward(0, 0, 0);
+    double kg = ArmFeedforwardCalculator.calculateArmGravityCompensation(Rotation2d.fromDegrees(26), 1.8);
+
+    feedforward = new SingleJointedArmFeedforward(0, kg, 0);
   }
 
   @Override
@@ -77,17 +82,13 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
     double feedforwardVolts =
         feedforward.calculate(
-            Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
+            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
     setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   @Override
   public void setVoltage(double volts) {
-    volts =
-        MathUtil.clamp(
-            volts, -PivotMotorConstants.MAXIMUM_VOLTAGE, PivotMotorConstants.MAXIMUM_VOLTAGE);
-
     double percent = volts / talonSRX.getBusVoltage();
 
     talonSRX.set(TalonSRXControlMode.PercentOutput, percent);
