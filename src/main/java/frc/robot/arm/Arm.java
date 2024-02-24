@@ -41,7 +41,7 @@ public class Arm extends Subsystem {
     shoulderMotor.configure();
     wristMotor.configure();
 
-    setPosition(ArmState.STOW);
+    setPosition(ArmState.INIT);
 
     goal = getPosition();
     setpoint = getPosition();

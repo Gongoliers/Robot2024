@@ -12,7 +12,7 @@ import java.util.Objects;
 /** State of the arm. */
 public record ArmState(State shoulder, State wrist) {
 
-  // TODO Determine wrist angles for each of these positions 
+  public static final ArmState INIT = new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, WristMotorConstants.MINIMUM_ANGLE);
   public static final ArmState STOW = new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
   public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(23.265));
   public static final ArmState INTAKE = STOW.withWrist(Rotation2d.fromDegrees(6.81));

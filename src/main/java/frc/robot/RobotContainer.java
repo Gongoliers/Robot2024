@@ -10,6 +10,7 @@ import frc.robot.arm.ArmState;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.lights.Lights;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
@@ -70,23 +71,18 @@ public class RobotContainer {
     driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
 
-    // operatorController
-    //     .leftTrigger()
-    //     .whileTrue(
-    //         Commands.parallel(arm.to(ArmState.INTAKE), intake.out())
-    //             .andThen(Commands.parallel(intake.intake(),
-    // shooter.intake()))).onFalse(Commands.runOnce(() ->
-    // intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE)));
+    operatorController
+        .leftTrigger()
+        .whileTrue(
+            Commands.parallel(arm.to(ArmState.INTAKE), intake.out())
+                .andThen(Commands.parallel(intake.intake(), shooter.intake()))).onFalse(Commands.runOnce(() -> {
+                  intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
+                  arm.setGoal(ArmState.STOW);
+                }));
 
-    // operatorController
-    //     .rightTrigger()
-    //     .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot()));
-
-    // operatorController.rightBumper().whileTrue(shooter.shoot());
-
-    operatorController.a().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.SHOOT)));
-    operatorController.b().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
-    operatorController.x().onTrue(Commands.runOnce(() -> arm.setGoal(ArmState.INTAKE)));
+    operatorController
+        .rightTrigger()
+        .whileTrue(Commands.parallel(arm.to(ArmState.SHOOT)).andThen(shooter.shoot())).onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
   }
 
   /**
