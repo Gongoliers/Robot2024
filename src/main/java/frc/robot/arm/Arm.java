@@ -167,8 +167,4 @@ public class Arm extends Subsystem {
   public Command to(ArmState goal) {
     return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
   }
-
-  public Command driveWrist(DoubleSupplier joystick) {
-    return run(() -> wristMotor.setVoltage(-joystick.getAsDouble() * 4));
-  }
 }

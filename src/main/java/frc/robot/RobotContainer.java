@@ -84,7 +84,7 @@ public class RobotContainer {
     //     .rightTrigger()
     //     .whileTrue(arm.to(ArmState.SHOOT).andThen(shooter.shoot())).onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
 
-    operatorController.a().whileTrue(arm.driveWrist(operatorController::getLeftY));
+    operatorController.a().whileTrue(arm.to(ArmState.INTAKE)).onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
   }
 
   /**

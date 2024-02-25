@@ -91,11 +91,11 @@ public class ArmConstants {
     public static final double KP = 48.0;
 
     /** Maximum speed of the shoulder joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 1.0;
+    public static final double MAXIMUM_SPEED = 0.5;
 
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.5);
 
     /** Maximum speed and acceleration of the shoulder joint. */
     public static final TrapezoidProfile.Constraints CONSTRAINTS =
