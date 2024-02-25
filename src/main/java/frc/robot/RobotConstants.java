@@ -43,5 +43,5 @@ public class RobotConstants {
     VISION
   }
 
-  public static final Set<Subsystem> REAL_SUBSYSTEMS = EnumSet.of(Subsystem.ARM);
+  public static final Set<Subsystem> REAL_SUBSYSTEMS = EnumSet.of(Subsystem.ARM, Subsystem.INTAKE);
 }

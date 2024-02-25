@@ -90,18 +90,18 @@ public class ArmConstants {
     /** Proportional gain in volts per rotation. */
     public static final double KP = 48.0;
 
-    /** Maximum speed of the shoulder joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 0.5;
+    /** Maximum speed of the wrist joint in rotations per second. */
+    public static final double MAXIMUM_SPEED = 2;
 
-    /** Maximum acceleration of the shoulder joint in rotations per second per second. */
+    /** Maximum acceleration of the wrist joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.5);
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
 
-    /** Maximum speed and acceleration of the shoulder joint. */
+    /** Maximum speed and acceleration of the wrist joint. */
     public static final TrapezoidProfile.Constraints CONSTRAINTS =
         new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
 
-    /** Motion profile of the shoulder joint using constraints. */
+    /** Motion profile of the wrist joint using constraints. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
 }
