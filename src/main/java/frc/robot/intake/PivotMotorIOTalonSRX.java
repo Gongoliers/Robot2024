@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.ArmFeedforwardCalculator;
+import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
@@ -33,12 +34,12 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
   @Override
   public void configure() {
-    talonSRX.configFactoryDefault();
+    Configurator.configurePhoenix5(talonSRX::configFactoryDefault);
 
     talonSRX.setSensorPhase(PivotMotorConstants.IS_SENSOR_INVERTED);
     talonSRX.setInverted(PivotMotorConstants.IS_MOTOR_INVERTED);
 
-    talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    Configurator.configurePhoenix5(() -> talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative));
   }
 
   @Override
@@ -63,9 +64,9 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
    * @param positionRotations the position of the pivot in rotations.
    */
   private void setPivotPosition(double positionRotations) {
-    double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048;
+    double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048.0;
 
-    talonSRX.setSelectedSensorPosition(units);
+    Configurator.configurePhoenix5(() -> talonSRX.setSelectedSensorPosition(units));
   }
 
   @Override
