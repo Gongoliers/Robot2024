@@ -5,10 +5,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.AccelerationCalculator;
 import frc.robot.RobotConstants;
-import frc.robot.arm.ArmConstants.ElbowMotorConstants;
+import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ArmConstants.WristMotorConstants;
 
 /** Simulated elbow motor. */
-public class ElbowMotorIOSim implements ElbowMotorIO {
+public class WristMotorIOSim implements WristMotorIO {
 
   private final SingleJointedArmSim singleJointedArmSim;
 
@@ -19,19 +20,20 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
   private double appliedVolts;
 
   /** Creates a new simulated elbow motor. */
-  public ElbowMotorIOSim() {
+  public WristMotorIOSim() {
+    // TODO
     singleJointedArmSim =
         new SingleJointedArmSim(
-            ElbowMotorConstants.JOINT_CONSTANTS.motor(),
-            ElbowMotorConstants.JOINT_CONSTANTS.gearing(),
-            ElbowMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
-            ElbowMotorConstants.JOINT_CONSTANTS.lengthMeters(),
-            ElbowMotorConstants.MINIMUM_ANGLE.getRadians(),
-            ElbowMotorConstants.MAXIMUM_ANGLE.getRadians(),
+            WristMotorConstants.JOINT_CONSTANTS.motor(),
+            WristMotorConstants.JOINT_CONSTANTS.gearing(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.moiKgMetersSquared(),
+            ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters() * 0.5,
+            WristMotorConstants.MINIMUM_ANGLE.getRadians(),
+            WristMotorConstants.MAXIMUM_ANGLE.getRadians(),
             false,
             0.0);
 
-    feedback = new PIDController(ElbowMotorConstants.KP, 0, 0);
+    feedback = new PIDController(WristMotorConstants.KP, 0, 0);
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -40,7 +42,7 @@ public class ElbowMotorIOSim implements ElbowMotorIO {
   public void configure() {}
 
   @Override
-  public void update(ElbowMotorIOValues values) {
+  public void update(WristMotorIOValues values) {
     singleJointedArmSim.update(RobotConstants.PERIODIC_DURATION);
 
     values.positionRotations = Units.radiansToRotations(singleJointedArmSim.getAngleRads());

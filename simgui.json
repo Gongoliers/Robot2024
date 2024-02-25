@@ -41,15 +41,28 @@
     "transitory": {
       "Shuffleboard": {
         "Arm": {
+          "Derivatives": {
+            "open": true
+          },
           "Feedforward": {
+            "open": true
+          },
+          "Goal": {
             "open": true
           },
           "Position": {
             "open": true
           },
+          "Setpoint": {
+            "open": true
+          },
           "Velocities": {
             "open": true
-          }
+          },
+          "Voltages": {
+            "open": true
+          },
+          "open": true
         },
         "Climber": {
           "Elevator": {
@@ -57,14 +70,12 @@
           },
           "Linear Actuator": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Intake": {
           "Roller": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Odometry": {
           "Position": {

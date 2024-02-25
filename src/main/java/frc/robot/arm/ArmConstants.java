@@ -29,7 +29,7 @@ public class ArmConstants {
             1);
 
     /** Minimum angle of the shoulder joint. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(12.5);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(27.5);
 
     /** Maximum angle of the shoulder joint. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
@@ -59,46 +59,49 @@ public class ArmConstants {
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
 
-  /** Constants for the elbow motor. */
-  public static class ElbowMotorConstants {
-    /** Elbow motor CAN. */
-    public static final CAN CAN = new CAN(32); // TODO
+  /** Constants for the wrist motor. */
+  public static class WristMotorConstants {
+    /** Wrist motor CAN. */
+    public static final CAN CAN = new CAN(34);
 
-    /** Joint constants for the elbow joint. */
+    /** If true, invert the motor. */
+    public static final boolean MOTOR_INVERT = true;
+
+    /** Joint constants for the wrist joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
-            Units.lbsToKilograms(13.006), // massKg
-            Units.inchesToMeters(16.825), // lengthMeters
-            Units.inchesToMeters(12.251799915), // radiusMeters
-            0.5713,
-            39.2911765,
+            Units.lbsToKilograms(8.016), // massKg
+            Units.inchesToMeters(5.135), // lengthMeters
+            Units.inchesToMeters(3.47629), // radiusMeters
+            0.02835,
+            20.454545,
             DCMotor.getNEO(1), // motor
             1);
 
-    /** Minimum angle of the elbow joint. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-90);
+    /** Minimum angle of the wrist joint. */
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-86.759);
 
-    /** Maximum angle of the elbow joint. */
-    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
+    /** Maximum angle of the wrist joint. */
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(85.98);
 
-    /** Tolerance of the elbow joint. */
+    /** Tolerance of the wrist joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
 
     /** Proportional gain in volts per rotation. */
     public static final double KP = 48.0;
 
-    /** Maximum speed of the shoulder joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 1.5;
+    /** Maximum speed of the wrist joint in rotations per second. */
+    public static final double MAXIMUM_SPEED = 2.4;
 
-    /** Maximum acceleration of the shoulder joint in rotations per second per second. */
+    /** Maximum acceleration of the wrist joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.3);
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
 
-    /** Maximum speed and acceleration of the shoulder joint. */
+    /** Maximum speed and acceleration of the wrist joint. */
     public static final TrapezoidProfile.Constraints CONSTRAINTS =
         new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
 
-    /** Motion profile of the shoulder joint using constraints. */
+    /** Motion profile of the wrist joint using constraints. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
 }

@@ -1,9 +1,9 @@
 package frc.robot.arm;
 
 /** Elbow motor hardware interface. */
-public interface ElbowMotorIO {
+public interface WristMotorIO {
   /** Values for the elbow motor hardware interface. */
-  public static class ElbowMotorIOValues {
+  public static class WristMotorIOValues {
     /** Position of the elbow motor in rotations. */
     public double positionRotations = 0.0;
 
@@ -28,7 +28,7 @@ public interface ElbowMotorIO {
    *
    * @param values
    */
-  public void update(ElbowMotorIOValues values);
+  public void update(WristMotorIOValues values);
 
   /**
    * Sets the elbow motor's position.

@@ -105,6 +105,7 @@ public class Intake extends Subsystem {
         "Setpoint (deg)", () -> Units.rotationsToDegrees(pivotSetpoint.position));
     pivot.addDouble(
         "Goal (deg)", () -> Units.rotationsToDegrees(pivotGoal.position));
+    pivot.addBoolean("Is Not Stowed?", this::isNotStowed);
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
@@ -156,6 +157,10 @@ public class Intake extends Subsystem {
 
   private Command pivotTo(Rotation2d angle) {
     return runOnce(() -> setPivotGoal(angle)).andThen(Commands.waitUntil(this::atPivotGoal));
+  }
+
+  public boolean isNotStowed() {
+    return pivotMotorValues.positionRotations < PivotMotorConstants.OUT_ANGLE.getRotations();
   }
 
   public Command intake() {
