@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
@@ -70,8 +71,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
 
         double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-        double feedforwardVolts = 0.0;
-        // feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+        double feedforwardVolts = feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
         setVoltage(feedbackVolts + feedforwardVolts);
     }

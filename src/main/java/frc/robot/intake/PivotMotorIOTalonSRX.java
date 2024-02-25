@@ -24,6 +24,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
     feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
 
+    // TODO
     double kg = ArmFeedforwardCalculator.calculateArmGravityCompensation(Rotation2d.fromDegrees(26), 1.8);
 
     feedforward = new SingleJointedArmFeedforward(0, kg, 0);
@@ -33,8 +34,8 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
   public void configure() {
     talonSRX.configFactoryDefault();
 
-    talonSRX.setInverted(PivotMotorConstants.IS_MOTOR_INVERTED);
     talonSRX.setSensorPhase(PivotMotorConstants.IS_SENSOR_INVERTED);
+    talonSRX.setInverted(PivotMotorConstants.IS_MOTOR_INVERTED);
 
     talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
   }

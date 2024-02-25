@@ -160,7 +160,7 @@ public class Intake extends Subsystem {
   }
 
   public boolean isNotStowed() {
-    return Rotation2d.fromRotations(pivotMotorValues.positionRotations).getDegrees() < 50;
+    return pivotMotorValues.positionRotations < PivotMotorConstants.OUT_ANGLE.getRotations();
   }
 
   public Command intake() {

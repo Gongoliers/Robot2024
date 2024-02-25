@@ -39,6 +39,9 @@ public class IntakeConstants {
     /** Pivot motor's maximum angle. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(86);
 
+    /** Pivot motor's "out" angle. */
+    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(-10);
+
     /** Pivot motor's tolerance. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(4.0);
 

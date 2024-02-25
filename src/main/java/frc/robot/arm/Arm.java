@@ -11,7 +11,6 @@ import frc.lib.Telemetry;
 import frc.robot.RobotMechanisms;
 import frc.robot.arm.WristMotorIO.WristMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
-import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
