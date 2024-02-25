@@ -71,24 +71,26 @@ public class RobotContainer {
     driverController.y().onTrue(odometry.tare());
     driverController.x().whileTrue(swerve.cross());
 
-    Command toIntake = Commands.parallel(
-        Commands.waitUntil(intake::isNotStowed).andThen(arm.to(ArmState.INTAKE)),
-        intake.out());
+    Command toIntake =
+        Commands.parallel(
+            Commands.waitUntil(intake::isNotStowed).andThen(arm.to(ArmState.INTAKE)), intake.out());
 
-    Command toStow = Commands.runOnce(() -> {
-      arm.setGoal(ArmState.STOW);
-      intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
-    });
+    Command toStow =
+        Commands.runOnce(
+            () -> {
+              arm.setGoal(ArmState.STOW);
+              intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
+            });
 
     operatorController
         .leftTrigger()
-        .whileTrue(
-            toIntake 
-                .andThen(Commands.parallel(intake.intake(), shooter.intake()))).onFalse(toStow);
+        .whileTrue(toIntake.andThen(Commands.parallel(intake.intake(), shooter.intake())))
+        .onFalse(toStow);
 
     operatorController
         .rightTrigger()
-        .whileTrue(arm.to(ArmState.SHOOT).andThen(shooter.shoot())).onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
+        .whileTrue(arm.to(ArmState.SHOOT).andThen(shooter.shoot()))
+        .onFalse(Commands.runOnce(() -> arm.setGoal(ArmState.STOW)));
   }
 
   /**

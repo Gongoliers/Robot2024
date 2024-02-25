@@ -14,7 +14,7 @@ public class IntakeFactory {
    */
   public static PivotMotorIO createPivotMotor() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE))
-       return new PivotMotorIOTalonSRX();
+      return new PivotMotorIOTalonSRX();
 
     return new PivotMotorIOSim();
   }

@@ -29,11 +29,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
     feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 
-    feedforward =
-        new SingleJointedArmFeedforward(
-            0,
-            0,
-            0);
+    feedforward = new SingleJointedArmFeedforward(0, 0, 0);
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -71,7 +67,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     // double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     // double feedforwardVolts =
-    //     feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+    //     feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations),
+    // velocityRotationsPerSecond);
 
     // sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }

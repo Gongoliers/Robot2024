@@ -6,14 +6,15 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.arm.ArmConstants.WristMotorConstants;
-
 import java.util.Objects;
 
 /** State of the arm. */
 public record ArmState(State shoulder, State wrist) {
 
-  public static final ArmState UP_SHOOTER_INSIDE = new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, WristMotorConstants.MINIMUM_ANGLE);
-  public static final ArmState STOW = new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
+  public static final ArmState UP_SHOOTER_INSIDE =
+      new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, WristMotorConstants.MINIMUM_ANGLE);
+  public static final ArmState STOW =
+      new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
   public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(23.265));
   public static final ArmState INTAKE = STOW.withWrist(Rotation2d.fromDegrees(6.81));
 
@@ -35,9 +36,7 @@ public record ArmState(State shoulder, State wrist) {
    * @param wrist the wrist's rotation.
    */
   public ArmState(Rotation2d shoulder, Rotation2d wrist) {
-    this(
-        new State(shoulder.getRotations(), 0.0),
-        new State(wrist.getRotations(), 0.0));
+    this(new State(shoulder.getRotations(), 0.0), new State(wrist.getRotations(), 0.0));
   }
 
   /**
@@ -92,68 +91,69 @@ public record ArmState(State shoulder, State wrist) {
 
   /**
    * Returns true if the arm is at its shoulder goal.
-   * 
+   *
    * @param goal goal state of the arm.
    * @return true if the arm is at its shoulder goal.
    */
   public boolean atShoulderGoal(ArmState goal) {
     return MathUtil.isNear(
-            this.shoulder().position,
-            goal.shoulder().position,
-            ShoulderMotorConstants.TOLERANCE.getRotations());
+        this.shoulder().position,
+        goal.shoulder().position,
+        ShoulderMotorConstants.TOLERANCE.getRotations());
   }
 
   /**
    * Returns the next setpoint involving shoulder-only movement.
-   * 
+   *
    * @param goal the arm's goal state.
    * @return the next setpoint involving shoulder-only movement.
    */
   public ArmState nextShoulderSetpoint(ArmState goal) {
-    return this.withShoulder(ShoulderMotorConstants.MOTION_PROFILE.calculate(
+    return this.withShoulder(
+        ShoulderMotorConstants.MOTION_PROFILE.calculate(
             RobotConstants.PERIODIC_DURATION, this.shoulder, goal.shoulder));
   }
 
   /**
    * Returns true if the arm is at its wrist goal.
-   * 
+   *
    * @param goal goal state of the arm.
    * @return true if the arm is at its wrist goal.
    */
   public boolean atWristGoal(ArmState goal) {
     return MathUtil.isNear(
-            this.wrist().position,
-            goal.wrist().position,
-            WristMotorConstants.TOLERANCE.getRotations());
+        this.wrist().position, goal.wrist().position, WristMotorConstants.TOLERANCE.getRotations());
   }
 
   /**
    * Returns the next setpoint involving wrist-only movement.
-   * 
+   *
    * @param goal the arm's goal state.
    * @return the next setpoint involving wrist-only movement.
    */
   public ArmState nextWristSetpoint(ArmState goal) {
-    return this.withWrist(WristMotorConstants.MOTION_PROFILE.calculate(
+    return this.withWrist(
+        WristMotorConstants.MOTION_PROFILE.calculate(
             RobotConstants.PERIODIC_DURATION, this.wrist, goal.wrist));
   }
 
   /**
    * Returns the next overall setpoint of the arm's movement.
-   * 
+   *
    * @param goal the arm's goal state.
    * @return the next overall setpoint.
    */
   public ArmState nextSetpoint(ArmState goal) {
     boolean shooterOnBottom = Rotation2d.fromRotations(wrist.position).getDegrees() < 0.0;
-    boolean shooterNeedsToBeOnTop = Rotation2d.fromRotations(goal.wrist.position).getDegrees() > 0.0;
+    boolean shooterNeedsToBeOnTop =
+        Rotation2d.fromRotations(goal.wrist.position).getDegrees() > 0.0;
     boolean shooterOnWrongSide = shooterOnBottom && shooterNeedsToBeOnTop;
 
     if (shooterOnWrongSide && !atWristGoal(goal)) {
       return nextWristSetpoint(goal);
     }
 
-    if (!atShoulderGoal(goal) ) {
+    if (!atShoulderGoal(goal)) {
       return nextShoulderSetpoint(goal);
     } else if (!atWristGoal(goal)) {
       return nextWristSetpoint(goal);

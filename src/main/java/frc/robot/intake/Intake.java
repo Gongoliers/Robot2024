@@ -101,10 +101,8 @@ public class Intake extends Subsystem {
 
     pivot.addDouble(
         "Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
-    pivot.addDouble(
-        "Setpoint (deg)", () -> Units.rotationsToDegrees(pivotSetpoint.position));
-    pivot.addDouble(
-        "Goal (deg)", () -> Units.rotationsToDegrees(pivotGoal.position));
+    pivot.addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(pivotSetpoint.position));
+    pivot.addDouble("Goal (deg)", () -> Units.rotationsToDegrees(pivotGoal.position));
     pivot.addBoolean("Is Not Stowed?", this::isNotStowed);
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");

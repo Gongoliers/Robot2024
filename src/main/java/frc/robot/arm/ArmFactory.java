@@ -26,7 +26,7 @@ public class ArmFactory {
    */
   public static WristMotorIO createWristMotor() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
-       return new WristMotorIOSparkMax();
+      return new WristMotorIOSparkMax();
 
     return new WristMotorIOSim();
   }

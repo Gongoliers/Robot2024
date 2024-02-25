@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.RobotMechanisms;
-import frc.robot.arm.WristMotorIO.WristMotorIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
+import frc.robot.arm.WristMotorIO.WristMotorIOValues;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -119,7 +119,7 @@ public class Arm extends Subsystem {
 
   public void setPosition(ArmState state) {
     shoulderMotor.setPosition(state.shoulder().position);
-     wristMotor.setPosition(state.wrist().position);
+    wristMotor.setPosition(state.wrist().position);
   }
 
   /**

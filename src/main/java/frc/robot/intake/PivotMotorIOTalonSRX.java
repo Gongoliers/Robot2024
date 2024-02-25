@@ -5,8 +5,8 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.lib.SingleJointedArmFeedforward;
 import frc.lib.ArmFeedforwardCalculator;
+import frc.lib.SingleJointedArmFeedforward;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
 /** Pivot motor using a Talon SRX. */
@@ -25,7 +25,8 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
 
     // TODO
-    double kg = ArmFeedforwardCalculator.calculateArmGravityCompensation(Rotation2d.fromDegrees(26), 1.8);
+    double kg =
+        ArmFeedforwardCalculator.calculateArmGravityCompensation(Rotation2d.fromDegrees(26), 1.8);
 
     feedforward = new SingleJointedArmFeedforward(0, kg, 0);
   }
