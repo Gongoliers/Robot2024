@@ -8,12 +8,10 @@ import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
 import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
-import frc.robot.lights.Lights;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
 import frc.robot.swerve.DriveCommand;
 import frc.robot.swerve.Swerve;
-import frc.robot.vision.Vision;
 
 /** Initializes subsystems and commands. */
 public class RobotContainer {
@@ -25,11 +23,9 @@ public class RobotContainer {
   private final Auto auto = Auto.getInstance();
   private final Climber climber = Climber.getInstance();
   private final Intake intake = Intake.getInstance();
-  private final Lights lights = Lights.getInstance();
   private final Odometry odometry = Odometry.getInstance();
   private final Shooter shooter = Shooter.getInstance();
   private final Swerve swerve = Swerve.getInstance();
-  private final Vision vision = Vision.getInstance();
 
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
@@ -55,10 +51,11 @@ public class RobotContainer {
 
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
-    Telemetry.initializeShuffleboards(
-        arm, auto, climber, intake, lights, odometry, shooter, swerve, vision);
+    if (RobotConstants.USE_TELEMETRY) {
+      Telemetry.initializeShuffleboards(arm, auto, climber, intake, odometry, shooter, swerve);
+    }
 
-    SmartDashboard.putData("Mechanism", RobotMechanisms.getInstance().getMechanism());
+    SmartDashboard.putData(auto.getAutonomousChooser());
   }
 
   /** Configures operator controller bindings. */

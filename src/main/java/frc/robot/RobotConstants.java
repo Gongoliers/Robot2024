@@ -31,16 +31,17 @@ public class RobotConstants {
   /** Maximum vertical extension distance in meters. */
   public static final double MAX_VERTICAL_EXTENSION_DISTANCE = Units.inchesToMeters(48);
 
+  /** If true, provide additional information using telemetry. */
+  public static final boolean USE_TELEMETRY = true;
+
   /** Robot subsystems. */
   public enum Subsystem {
     ARM,
     CLIMBER,
     INTAKE,
-    LIGHTS,
     ODOMETRY,
     SHOOTER,
     SWERVE,
-    VISION
   }
 
   public static final Set<Subsystem> REAL_SUBSYSTEMS = EnumSet.of(Subsystem.ARM, Subsystem.INTAKE);

@@ -121,6 +121,15 @@ public class Auto extends Subsystem {
     return autoChooser.getSelected();
   }
 
+  /**
+   * Gets the chooser for the command to run during the autonomous period.
+   *
+   * @return the chooser for the command to run during the autonomous period.
+   */
+  public SendableChooser<Command> getAutonomousChooser() {
+    return autoChooser;
+  }
+
   public Command readyIntake() {
     return Commands.parallel(
         Commands.waitUntil(intake::isNotStowed).andThen(arm.to(ArmState.INTAKE)), intake.out());
