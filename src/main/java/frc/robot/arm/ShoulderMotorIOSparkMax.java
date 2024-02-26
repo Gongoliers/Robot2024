@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
@@ -62,15 +63,15 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   @Override
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    // double measuredPositionRotations = getAbsolutePositionRotations();
+    double measuredPositionRotations = getAbsolutePositionRotations();
 
-    // double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
+    double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-    // double feedforwardVolts =
-    //     feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations),
-    // velocityRotationsPerSecond);
+    double feedforwardVolts =
+        feedforward.calculate(
+            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
-    // sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
+    sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   /**
