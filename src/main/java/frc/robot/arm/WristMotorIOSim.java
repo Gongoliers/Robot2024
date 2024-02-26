@@ -2,6 +2,7 @@ package frc.robot.arm;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.AccelerationCalculator;
 import frc.robot.RobotConstants;
@@ -17,7 +18,7 @@ public class WristMotorIOSim implements WristMotorIO {
 
   private final AccelerationCalculator accelerationCalculator;
 
-  private double appliedVolts;
+  private double inputVoltage;
 
   /** Creates a new simulated elbow motor. */
   public WristMotorIOSim() {
@@ -51,7 +52,7 @@ public class WristMotorIOSim implements WristMotorIO {
     values.accelerationRotationsPerSecondPerSecond =
         accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
-    values.appliedVolts = appliedVolts;
+    values.inputVoltage = inputVoltage;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
   }
 
@@ -68,18 +69,11 @@ public class WristMotorIOSim implements WristMotorIO {
 
     double feedforwardVolts = 0.0;
 
-    setVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  @Override
-  public void setVoltage(double volts) {
-    appliedVolts = volts;
-
-    singleJointedArmSim.setInputVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0.0);
+    if (DriverStation.isEnabled()) {
+      inputVoltage = feedbackVolts + feedforwardVolts;
+      singleJointedArmSim.setInputVoltage(inputVoltage);
+    } else {
+      singleJointedArmSim.setInputVoltage(0.0);
+    }
   }
 }

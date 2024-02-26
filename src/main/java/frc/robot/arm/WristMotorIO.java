@@ -17,7 +17,7 @@ public interface WristMotorIO {
     public double currentAmps = 0.0;
 
     /** Voltage applied to the elbow motor in volts. */
-    public double appliedVolts = 0.0;
+    public double inputVoltage = 0.0;
   }
 
   /** Configures the elbow motor. */
@@ -43,15 +43,4 @@ public interface WristMotorIO {
    * @param positionRotations the elbow motor's setpoint.
    */
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
-
-  // TODO Remove, only for characterization
-  /**
-   * Run the elbow motor with the specified voltage.
-   *
-   * @param volts volts to apply to the elbow motor.
-   */
-  public void setVoltage(double volts);
-
-  /** Stop the elbow motor. */
-  public void stop();
 }

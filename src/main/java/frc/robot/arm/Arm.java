@@ -99,8 +99,8 @@ public class Arm extends Subsystem {
 
     ShuffleboardLayout voltages = Telemetry.addColumn(tab, "Voltages");
 
-    voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.appliedVolts);
-    voltages.addDouble("Wrist Voltage (V)", () -> wristMotorValues.appliedVolts);
+    voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.inputVoltage);
+    voltages.addDouble("Wrist Voltage (V)", () -> wristMotorValues.inputVoltage);
 
     ShuffleboardLayout derivatives = Telemetry.addColumn(tab, "Derivatives");
 

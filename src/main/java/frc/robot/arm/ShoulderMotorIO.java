@@ -18,7 +18,7 @@ public interface ShoulderMotorIO {
     public double currentAmps = 0.0;
 
     /** Voltage applied to the shoulder motor in volts. */
-    public double appliedVolts = 0.0;
+    public double inputVoltage = 0.0;
   }
 
   /** Configures the shoulder motor. */

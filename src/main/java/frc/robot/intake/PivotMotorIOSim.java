@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.SingleJointedArmFeedforward;
 import frc.robot.RobotConstants;
@@ -64,16 +65,10 @@ public class PivotMotorIOSim implements PivotMotorIO {
         feedforward.calculate(
             Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
-    singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  @Override
-  public void setVoltage(double volts) {
-    singleJointedArmSim.setInputVoltage(0);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
+    if (DriverStation.isEnabled()) {
+      singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
+    } else {
+      singleJointedArmSim.setInputVoltage(0.0);
+    }
   }
 }

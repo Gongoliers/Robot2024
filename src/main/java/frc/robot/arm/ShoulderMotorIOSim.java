@@ -2,6 +2,7 @@ package frc.robot.arm;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.AccelerationCalculator;
 import frc.robot.RobotConstants;
@@ -14,7 +15,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   private final PIDController feedback;
 
-  private double appliedVolts;
+  private double inputVoltage;
 
   private final AccelerationCalculator accelerationCalculator;
 
@@ -47,7 +48,7 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
     values.velocityRotationsPerSecond = getVelocity();
     values.accelerationRotationsPerSecondPerSecond = getAcceleration();
 
-    values.appliedVolts = appliedVolts;
+    values.inputVoltage = inputVoltage;
     values.currentAmps = singleJointedArmSim.getCurrentDrawAmps();
   }
 
@@ -76,8 +77,11 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
     double feedforwardVolts = 0.0;
 
-    appliedVolts = feedbackVolts + feedforwardVolts;
-
-    singleJointedArmSim.setInputVoltage(appliedVolts);
+    if (DriverStation.isEnabled()) {
+      inputVoltage = feedbackVolts + feedforwardVolts;
+      singleJointedArmSim.setInputVoltage(inputVoltage);
+    } else {
+      singleJointedArmSim.setInputVoltage(0.0);
+    }
   }
 }

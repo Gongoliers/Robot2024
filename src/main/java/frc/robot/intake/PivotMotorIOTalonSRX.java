@@ -83,18 +83,8 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
         feedforward.calculate(
             Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
-    setVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  @Override
-  public void setVoltage(double volts) {
-    double percent = volts / talonSRX.getBusVoltage();
+    double percent = (feedbackVolts + feedforwardVolts) / talonSRX.getBusVoltage();
 
     talonSRX.set(TalonSRXControlMode.PercentOutput, percent);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
   }
 }

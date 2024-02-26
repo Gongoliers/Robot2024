@@ -50,7 +50,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
         accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
     values.currentAmps = sparkMax.getOutputCurrent();
-    values.appliedVolts = sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
+    values.inputVoltage = sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
   }
 
   @Override
@@ -70,17 +70,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
         feedforward.calculate(
             Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
-    setVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  @Override
-  public void setVoltage(double volts) {
-    sparkMax.setVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
+    sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   /**

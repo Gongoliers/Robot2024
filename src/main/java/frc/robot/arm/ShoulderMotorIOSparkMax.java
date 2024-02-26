@@ -50,7 +50,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
         accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
     values.currentAmps = sparkMax.getOutputCurrent();
-    values.appliedVolts = sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
+    values.inputVoltage = sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
   }
 
   @Override

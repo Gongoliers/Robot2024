@@ -18,7 +18,6 @@ import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
-import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -113,11 +112,6 @@ public class Intake extends Subsystem {
     roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
     roller.addBoolean("Current Spike?", this::rollerCurrentSpike);
     roller.addBoolean("Stalled?", this::rollerStalled);
-  }
-
-  public Command drivePivot(DoubleSupplier voltageSupplier) {
-    return run(() -> pivotMotor.setVoltage(voltageSupplier.getAsDouble()))
-        .finallyDo(pivotMotor::stop);
   }
 
   public void setPivotGoal(Rotation2d goal) {
