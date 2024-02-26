@@ -8,18 +8,6 @@ import frc.robot.RobotConstants.Subsystem;
 public class ShooterFactory {
 
   /**
-   * Creates a beam break sensor.
-   *
-   * @return a beam break sensor.
-   */
-  public static BeamBreakSensorIO createBeamBreakSensor() {
-    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER))
-      return new BeamBreakSensorIOSim(); // TODO
-
-    return new BeamBreakSensorIOSim();
-  }
-
-  /**
    * Creates a serializer motor.
    *
    * @return a serializer motor.
