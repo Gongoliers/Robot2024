@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
@@ -72,6 +73,10 @@ public class RobotContainer {
         .onFalse(auto.stow());
 
     operatorController.rightTrigger().whileTrue(auto.shootNote()).onFalse(auto.stow());
+
+    // TODO When stowing, the wrist encoder drifts by ~30% of the shoulder velocity
+    // TODO This **will** throw off wrist angles for the rest of the match
+    // operatorController.a().whileTrue(arm.amp()).onFalse(auto.stow());
   }
 
   /**

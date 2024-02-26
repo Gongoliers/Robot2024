@@ -13,10 +13,13 @@ public record ArmState(State shoulder, State wrist) {
 
   public static final ArmState UP_SHOOTER_INSIDE =
       new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, WristMotorConstants.MINIMUM_ANGLE);
+
   public static final ArmState STOW =
       new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
   public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(23.265));
   public static final ArmState INTAKE = STOW.withWrist(Rotation2d.fromDegrees(6.81));
+
+  public static final ArmState AMP = UP_SHOOTER_INSIDE.withWrist(Rotation2d.fromDegrees(0));
 
   /**
    * Creates an arm state.

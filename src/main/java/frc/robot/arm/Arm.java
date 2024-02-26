@@ -29,7 +29,7 @@ public class Arm extends Subsystem {
   /** Wrist motor values. */
   private final WristMotorIOValues wristMotorValues = new WristMotorIOValues();
 
-  private final ArmState initialState = ArmState.STOW;
+  private final ArmState initialState = ArmState.UP_SHOOTER_INSIDE;
 
   private ArmState goal, setpoint;
 
@@ -162,11 +162,11 @@ public class Arm extends Subsystem {
     wristMotor.setSetpoint(setpoint.wrist().position, setpoint.wrist().velocity);
   }
 
-  public MoveShoulderCommand moveShoulder(ArmState goal) {
+  private MoveShoulderCommand moveShoulder(ArmState goal) {
     return new MoveShoulderCommand(goal);
   }
 
-  public MoveWristCommand moveWrist(ArmState goal) {
+  private MoveWristCommand moveWrist(ArmState goal) {
     return new MoveWristCommand(goal);
   }
 
@@ -178,7 +178,11 @@ public class Arm extends Subsystem {
     return moveWrist(goal).andThen(moveShoulder(goal));
   }
 
-  public Command stow() {
+  public Command stowFromUp() {
     return moveWristThenShoulder(ArmState.STOW);
+  }
+
+  public Command amp() {
+    return moveShoulderThenWrist(ArmState.AMP);
   }
 }
