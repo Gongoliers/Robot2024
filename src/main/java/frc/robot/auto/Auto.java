@@ -86,7 +86,7 @@ public class Auto extends Subsystem {
     NamedCommands.registerCommand("readyIntake", readyIntake());
     NamedCommands.registerCommand("intakeNote", intakeNote());
     NamedCommands.registerCommand("readyStow", stow());
-    NamedCommands.registerCommand("shoot", shoot());
+    NamedCommands.registerCommand("shoot", shootNote());
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }
@@ -132,7 +132,8 @@ public class Auto extends Subsystem {
 
   public Command readyIntake() {
     return Commands.parallel(
-        Commands.waitUntil(intake::isNotStowed).andThen(arm.to(ArmState.INTAKE)), intake.out());
+        Commands.waitUntil(intake::isNotStowed).andThen(arm.moveWrist(ArmState.INTAKE)),
+        intake.out());
   }
 
   public Command intakeNote() {
@@ -147,7 +148,7 @@ public class Auto extends Subsystem {
         });
   }
 
-  public Command shoot() {
-    return arm.to(ArmState.SHOOT).andThen(shoot());
+  public Command shootNote() {
+    return arm.moveWrist(ArmState.SHOOT).andThen(shooter.shoot());
   }
 }

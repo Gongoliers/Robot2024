@@ -5,7 +5,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.RobotMechanisms;
@@ -163,7 +162,23 @@ public class Arm extends Subsystem {
     wristMotor.setSetpoint(setpoint.wrist().position, setpoint.wrist().velocity);
   }
 
-  public Command to(ArmState goal) {
-    return runOnce(() -> setGoal(goal)).andThen(Commands.waitUntil(this::atGoal));
+  public MoveShoulderCommand moveShoulder(ArmState goal) {
+    return new MoveShoulderCommand(goal);
+  }
+
+  public MoveWristCommand moveWrist(ArmState goal) {
+    return new MoveWristCommand(goal);
+  }
+
+  public Command moveShoulderThenWrist(ArmState goal) {
+    return moveShoulder(goal).andThen(moveWrist(goal));
+  }
+
+  public Command moveWristThenShoulder(ArmState goal) {
+    return moveWrist(goal).andThen(moveShoulder(goal));
+  }
+
+  public Command stow() {
+    return moveWristThenShoulder(ArmState.STOW);
   }
 }

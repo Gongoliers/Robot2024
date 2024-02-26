@@ -53,6 +53,7 @@ public class RobotContainer {
   private void initializeTelemetry() {
     if (RobotConstants.USE_TELEMETRY) {
       Telemetry.initializeShuffleboards(arm, auto, climber, intake, odometry, shooter, swerve);
+      SmartDashboard.putData("Arm Mechanism", RobotMechanisms.getInstance().getMechanism());
     }
 
     SmartDashboard.putData(auto.getAutonomousChooser());
@@ -70,7 +71,7 @@ public class RobotContainer {
         .whileTrue(auto.readyIntake().andThen(auto.intakeNote()))
         .onFalse(auto.stow());
 
-    operatorController.rightTrigger().whileTrue(auto.shoot()).onFalse(auto.stow());
+    operatorController.rightTrigger().whileTrue(auto.shootNote()).onFalse(auto.stow());
   }
 
   /**
