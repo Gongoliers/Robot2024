@@ -68,8 +68,10 @@ public class RobotContainer {
   private void configureBindings() {
     swerve.setDefaultCommand(new DriveCommand(driverController));
 
-    driverController.y().onTrue(odometry.tare());
+    driverController.a().whileTrue(swerve.forwards());
+    driverController.b().whileTrue(swerve.sideways());
     driverController.x().whileTrue(swerve.cross());
+    driverController.y().onTrue(odometry.tare());
 
     Command toIntake =
         Commands.parallel(
