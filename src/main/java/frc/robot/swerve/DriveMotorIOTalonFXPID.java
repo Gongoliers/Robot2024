@@ -21,6 +21,9 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
       new SimpleMotorFeedforward(
           SwerveConstants.DRIVE_PIDF_CONSTANTS.kS, SwerveConstants.DRIVE_PIDF_CONSTANTS.kV);
 
+  /** Voltage output request. */
+  private final VoltageOut voltageOutRequest;
+
   /**
    * Creates a new TalonFX drive motor controlled by an external PID controller.
    *
@@ -28,6 +31,8 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    */
   public DriveMotorIOTalonFXPID(CAN can) {
     super(can);
+
+    voltageOutRequest = new VoltageOut(0).withEnableFOC(SwerveConstants.USE_PHOENIX_PRO_FOC);
   }
 
   @Override
@@ -40,7 +45,9 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
     if (velocityMetersPerSecond == 0.0) {
       talonFX.setControl(new CoastOut());
     } else {
-      talonFX.setControl(calculateVelocityVoltage(velocityMetersPerSecond, false));
+      double volts = calculateVelocityVoltage(velocityMetersPerSecond, false);
+
+      talonFX.setControl(voltageOutRequest.withOutput(volts));
     }
   }
 
@@ -51,7 +58,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    * @param isOpenLoop if true, uses open-loop control.
    * @return the voltage to apply.
    */
-  private VoltageOut calculateVelocityVoltage(double velocityMetersPerSecond, boolean isOpenLoop) {
+  private double calculateVelocityVoltage(double velocityMetersPerSecond, boolean isOpenLoop) {
     return isOpenLoop
         ? calculateOpenLoopVelocityVoltage(velocityMetersPerSecond)
         : calculateClosedLoopVelocityVoltage(velocityMetersPerSecond);
@@ -63,12 +70,12 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    * @param velocityMetersPerSecond the velocity setpoint.
    * @return the voltage to apply.
    */
-  private VoltageOut calculateOpenLoopVelocityVoltage(double velocityMetersPerSecond) {
+  private double calculateOpenLoopVelocityVoltage(double velocityMetersPerSecond) {
     double velocityPercent = velocityMetersPerSecond / SwerveConstants.MAXIMUM_ATTAINABLE_SPEED;
 
     double velocityVolts = velocityPercent * RobotConstants.BATTERY_VOLTAGE;
 
-    return new VoltageOut(velocityVolts);
+    return velocityVolts;
   }
 
   /**
@@ -77,7 +84,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    * @param velocityMetersPerSecond the velocity setpoint.
    * @return the voltage to apply.
    */
-  private VoltageOut calculateClosedLoopVelocityVoltage(double velocityMetersPerSecond) {
+  private double calculateClosedLoopVelocityVoltage(double velocityMetersPerSecond) {
     double measuredVelocityMetersPerSecond =
         velocityRotationsPerSecond.getValue() * MK4iConstants.WHEEL_CIRCUMFERENCE;
 
@@ -86,6 +93,6 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
 
     double velocityFeedforwardVolts = velocityFeedforward.calculate(velocityMetersPerSecond);
 
-    return new VoltageOut(velocityFeedbackVolts + velocityFeedforwardVolts);
+    return velocityFeedbackVolts + velocityFeedforwardVolts;
   }
 }
