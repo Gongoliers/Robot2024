@@ -16,6 +16,9 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
   /** PIDF position controller. */
   private final SteerMotorPIDF pidf;
 
+  /** Voltage output request. */
+  private final VoltageOut voltageOutRequest;
+
   /**
    * Creates a new TalonFX steer motor controlled by an external PIDF controller.
    *
@@ -27,6 +30,8 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
     super(steerMotorCAN, azimuthEncoderCAN);
 
     pidf = new SteerMotorPIDF(SwerveConstants.STEER_PIDF_CONSTANTS);
+
+    voltageOutRequest = new VoltageOut(0).withEnableFOC(SwerveConstants.USE_PHOENIX_PRO_FOC);
   }
 
   @Override
@@ -61,6 +66,6 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
 
     double voltage = pidf.calculate(measuredPosition, Rotation2d.fromRotations(positionRotations));
 
-    talonFX.setControl(new VoltageOut(voltage));
+    talonFX.setControl(voltageOutRequest.withOutput(voltage));
   }
 }

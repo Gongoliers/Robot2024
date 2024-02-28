@@ -50,6 +50,9 @@ public class SwerveConstants {
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI * ODOMETRY_ERROR;
   }
 
+  /** If true, use Phoenix Pro Field-Oriented Control requests. */
+  public static final boolean USE_PHOENIX_PRO_FOC = false;
+
   /** Module X offset in meters. */
   public static final double X_OFFSET = Units.inchesToMeters(11.375);
 
