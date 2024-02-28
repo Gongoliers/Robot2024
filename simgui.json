@@ -14,7 +14,9 @@
       "/Shuffleboard/Vision/Field": "Field2d",
       "/SmartDashboard/Arm Mechanism": "Mechanism2d",
       "/SmartDashboard/Mechanism": "Mechanism2d",
-      "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d"
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": "Field2d",
+      "/SmartDashboard/arm mech": "Mechanism2d"
     },
     "windows": {
       "/Shuffleboard/Auto/Auto Chooser": {
@@ -22,7 +24,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Mechanism": {
+      "/SmartDashboard/Arm Mechanism": {
         "window": {
           "visible": true
         }
@@ -41,15 +43,28 @@
     "transitory": {
       "Shuffleboard": {
         "Arm": {
+          "Derivatives": {
+            "open": true
+          },
           "Feedforward": {
+            "open": true
+          },
+          "Goal": {
             "open": true
           },
           "Position": {
             "open": true
           },
+          "Setpoint": {
+            "open": true
+          },
           "Velocities": {
             "open": true
-          }
+          },
+          "Voltages": {
+            "open": true
+          },
+          "open": true
         },
         "Climber": {
           "Elevator": {
@@ -57,14 +72,12 @@
           },
           "Linear Actuator": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Intake": {
           "Roller": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Odometry": {
           "Position": {

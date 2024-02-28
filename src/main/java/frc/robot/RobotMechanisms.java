@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.arm.ArmConstants.ElbowMotorConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ArmConstants.WristMotorConstants;
 import frc.robot.arm.ArmState;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
@@ -20,7 +20,7 @@ public class RobotMechanisms {
 
   private final Mechanism2d mechanism;
 
-  private MechanismLigament2d shoulder, elbow, intake;
+  private MechanismLigament2d shoulder, wrist, intake;
 
   private final double WIDTH =
       2
@@ -55,11 +55,11 @@ public class RobotMechanisms {
                 0,
                 armThickness,
                 new Color8Bit(Color.kOrange)));
-    elbow =
+    wrist =
         shoulder.append(
             new MechanismLigament2d(
-                "elbow",
-                ElbowMotorConstants.JOINT_CONSTANTS.lengthMeters(),
+                "wrist",
+                WristMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 new Color8Bit(Color.kGreen)));
@@ -127,11 +127,10 @@ public class RobotMechanisms {
 
   public void setArmState(ArmState state) {
     Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulder().position);
-    Rotation2d elbowRotation = Rotation2d.fromRotations(state.elbow().position);
-    // Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
+    Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
 
     shoulder.setAngle(shoulderRotation);
-    elbow.setAngle(elbowRotation.minus(shoulderRotation));
+    wrist.setAngle(wristRotation.plus(Rotation2d.fromDegrees(90)));
   }
 
   public void setIntakeAngle(Rotation2d angle) {

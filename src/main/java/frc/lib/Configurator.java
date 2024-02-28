@@ -1,5 +1,6 @@
 package frc.lib;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
@@ -20,11 +21,11 @@ public class Configurator {
   private static final int REV_RETRY_COUNT = 10;
 
   /**
-   * Configures a Phoenix device.
+   * Configures a Phoenix 6 device.
    *
-   * @param config a lambda that configures a Phoenix device.
+   * @param config a lambda that configures a Phoenix 6 device.
    */
-  public static void configurePhoenix(Supplier<StatusCode> config) {
+  public static void configurePhoenix6(Supplier<StatusCode> config) {
     for (int i = 0; i < PHOENIX_RETRY_COUNT; i++) {
       if (config.get() == StatusCode.OK) {
         return;
@@ -40,7 +41,7 @@ public class Configurator {
    */
   public static void configureCANcoder(
       CANcoderConfigurator configurator, CANcoderConfiguration config) {
-    configurePhoenix(() -> configurator.apply(config));
+    configurePhoenix6(() -> configurator.apply(config));
   }
 
   /**
@@ -51,7 +52,7 @@ public class Configurator {
    */
   public static void configureTalonFX(
       TalonFXConfigurator configurator, TalonFXConfiguration config) {
-    configurePhoenix(() -> configurator.apply(config));
+    configurePhoenix6(() -> configurator.apply(config));
   }
 
   /**
@@ -62,7 +63,20 @@ public class Configurator {
    */
   public static void configurePigeon2(
       Pigeon2Configurator configurator, Pigeon2Configuration config) {
-    configurePhoenix(() -> configurator.apply(config));
+    configurePhoenix6(() -> configurator.apply(config));
+  }
+
+  /**
+   * Configures a Phoenix 5 device.
+   *
+   * @param config a lambda that configures a Phoenix 5 device.
+   */
+  public static void configurePhoenix5(Supplier<ErrorCode> config) {
+    for (int i = 0; i < PHOENIX_RETRY_COUNT; i++) {
+      if (config.get() == ErrorCode.OK) {
+        return;
+      }
+    }
   }
 
   /**

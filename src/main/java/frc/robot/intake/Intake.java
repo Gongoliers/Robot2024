@@ -18,7 +18,6 @@ import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
-import java.util.function.DoubleSupplier;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -56,11 +55,16 @@ public class Intake extends Subsystem {
     pivotMotor = IntakeFactory.createPivotMotor();
     rollerMotor = IntakeFactory.createRollerMotor();
 
-    pivotMotor.setPosition(PivotMotorConstants.MAXIMUM_ANGLE.getRotations());
+    pivotMotor.configure();
+    rollerMotor.configure();
+
+    Rotation2d initialAngle = PivotMotorConstants.MAXIMUM_ANGLE;
+
+    pivotMotor.setPosition(initialAngle.getRotations());
     pivotMotor.update(pivotMotorValues);
 
-    pivotGoal = new TrapezoidProfile.State(pivotMotorValues.positionRotations, 0);
-    pivotSetpoint = new TrapezoidProfile.State(pivotMotorValues.positionRotations, 0);
+    pivotGoal = new TrapezoidProfile.State(initialAngle.getRotations(), 0);
+    pivotSetpoint = new TrapezoidProfile.State(initialAngle.getRotations(), 0);
   }
 
   /**
@@ -96,6 +100,9 @@ public class Intake extends Subsystem {
 
     pivot.addDouble(
         "Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
+    pivot.addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(pivotSetpoint.position));
+    pivot.addDouble("Goal (deg)", () -> Units.rotationsToDegrees(pivotGoal.position));
+    pivot.addBoolean("Is Not Stowed?", this::isNotStowed);
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
@@ -105,11 +112,6 @@ public class Intake extends Subsystem {
     roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
     roller.addBoolean("Current Spike?", this::rollerCurrentSpike);
     roller.addBoolean("Stalled?", this::rollerStalled);
-  }
-
-  public Command drivePivot(DoubleSupplier voltageSupplier) {
-    return run(() -> pivotMotor.setVoltage(voltageSupplier.getAsDouble()))
-        .finallyDo(pivotMotor::stop);
   }
 
   public void setPivotGoal(Rotation2d goal) {
@@ -147,6 +149,10 @@ public class Intake extends Subsystem {
 
   private Command pivotTo(Rotation2d angle) {
     return runOnce(() -> setPivotGoal(angle)).andThen(Commands.waitUntil(this::atPivotGoal));
+  }
+
+  public boolean isNotStowed() {
+    return pivotMotorValues.positionRotations < PivotMotorConstants.OUT_ANGLE.getRotations();
   }
 
   public Command intake() {

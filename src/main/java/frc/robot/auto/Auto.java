@@ -1,6 +1,7 @@
 package frc.robot.auto;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -9,10 +10,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.arm.Arm;
+import frc.robot.arm.ArmState;
+import frc.robot.intake.Intake;
+import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.odometry.Odometry;
+import frc.robot.shooter.Shooter;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
 import java.util.function.Consumer;
@@ -24,8 +31,17 @@ public class Auto extends Subsystem {
   /** Instance variable for the auto subsystem singleton. */
   private static Auto instance = null;
 
+  /** Reference to the arm subsystem. */
+  private final Arm arm;
+
+  /** Reference to the intake subsystem. */
+  private final Intake intake;
+
   /** Reference to the odometry subsystem. */
   private final Odometry odometry;
+
+  /** Reference to the shooter subssytem. */
+  private final Shooter shooter;
 
   /** Reference to the swerve subsystem. */
   private final Swerve swerve;
@@ -35,7 +51,10 @@ public class Auto extends Subsystem {
 
   /** Creates a new instance of the auto subsystem. */
   private Auto() {
+    arm = Arm.getInstance();
+    intake = Intake.getInstance();
     odometry = Odometry.getInstance();
+    shooter = Shooter.getInstance();
     swerve = Swerve.getInstance();
 
     Supplier<Pose2d> robotPositionSupplier = () -> odometry.getPosition();
@@ -63,6 +82,11 @@ public class Auto extends Subsystem {
         holonomicPathFollowerConfig,
         AllianceFlipHelper::shouldFlip,
         swerve);
+
+    NamedCommands.registerCommand("readyIntake", readyIntake());
+    NamedCommands.registerCommand("intakeNote", intakeNote());
+    NamedCommands.registerCommand("readyStow", stow());
+    NamedCommands.registerCommand("shoot", shootNote());
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }
@@ -95,5 +119,36 @@ public class Auto extends Subsystem {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+
+  /**
+   * Gets the chooser for the command to run during the autonomous period.
+   *
+   * @return the chooser for the command to run during the autonomous period.
+   */
+  public SendableChooser<Command> getAutonomousChooser() {
+    return autoChooser;
+  }
+
+  public Command readyIntake() {
+    return Commands.parallel(
+        Commands.waitUntil(intake::isNotStowed).andThen(arm.moveShoulderThenWrist(ArmState.INTAKE)),
+        intake.out());
+  }
+
+  public Command intakeNote() {
+    return Commands.parallel(intake.intake(), shooter.intake());
+  }
+
+  public Command stow() {
+    return Commands.runOnce(
+        () -> {
+          arm.setGoal(ArmState.STOW);
+          intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
+        });
+  }
+
+  public Command shootNote() {
+    return arm.moveShoulderThenWrist(ArmState.SHOOT).andThen(shooter.shoot());
   }
 }

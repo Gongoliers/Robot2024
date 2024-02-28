@@ -4,20 +4,6 @@ package frc.robot.climber;
 public class ClimberFactory {
 
   /**
-   * Creates a climber linear actuator.
-   *
-   * @return a climber linear actuator.
-   */
-  public static LinearActuatorIO createLinearActuator() {
-    // TODO
-    // if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.CLIMBER)) {
-    //     return new LinearActuatorIOL16();
-    // }
-
-    return new LinearActuatorIOSim();
-  }
-
-  /**
    * Creates an elevator.
    *
    * @return an elevator.

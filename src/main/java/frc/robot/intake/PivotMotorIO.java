@@ -33,14 +33,4 @@ public interface PivotMotorIO {
    * @param velocityRotationsPerSecond the velocity setpoint of the pivot motor.
    */
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
-
-  /**
-   * Runs the pivot motor with the specified voltage.
-   *
-   * @param volts the voltage to apply to the pivot motor.
-   */
-  public void setVoltage(double volts);
-
-  /** Stops the pivot motor. */
-  public void stop();
 }

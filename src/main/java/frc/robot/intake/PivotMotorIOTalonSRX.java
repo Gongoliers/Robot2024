@@ -3,7 +3,11 @@ package frc.robot.intake;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.ArmFeedforwardCalculator;
+import frc.lib.Configurator;
+import frc.lib.SingleJointedArmFeedforward;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
 /** Pivot motor using a Talon SRX. */
@@ -12,15 +16,30 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
   /** Hardware Talon SRX. */
   private final TalonSRX talonSRX;
 
+  private final PIDController feedback;
+
+  private final SingleJointedArmFeedforward feedforward;
+
   public PivotMotorIOTalonSRX() {
     talonSRX = new TalonSRX(PivotMotorConstants.CAN.id());
+
+    feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
+
+    // TODO
+    double kg =
+        ArmFeedforwardCalculator.calculateArmGravityCompensation(Rotation2d.fromDegrees(26), 1.8);
+
+    feedforward = new SingleJointedArmFeedforward(0, kg, 0);
   }
 
   @Override
   public void configure() {
-    talonSRX.setInverted(PivotMotorConstants.IS_INVERTED);
+    Configurator.configurePhoenix5(talonSRX::configFactoryDefault);
 
-    talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    talonSRX.setSensorPhase(PivotMotorConstants.IS_SENSOR_INVERTED);
+    talonSRX.setInverted(PivotMotorConstants.IS_MOTOR_INVERTED);
+
+    Configurator.configurePhoenix5(() -> talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative));
   }
 
   @Override
@@ -34,7 +53,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
    * @return the position of the pivot in rotations.
    */
   private double getPivotPosition() {
-    double rotations = talonSRX.getSelectedSensorPosition() / 2048;
+    double rotations = talonSRX.getSelectedSensorPosition() / 2048.0;
 
     return rotations / PivotMotorConstants.SENSOR_GEARING;
   }
@@ -45,9 +64,9 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
    * @param positionRotations the position of the pivot in rotations.
    */
   private void setPivotPosition(double positionRotations) {
-    double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048;
+    double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048.0;
 
-    talonSRX.setSelectedSensorPosition(units);
+    Configurator.configurePhoenix5(() -> talonSRX.setSelectedSensorPosition(units));
   }
 
   @Override
@@ -57,22 +76,16 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
   @Override
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    // TODO
-  }
+    double measuredPositionRotations = getPivotPosition();
 
-  @Override
-  public void setVoltage(double volts) {
-    volts =
-        MathUtil.clamp(
-            volts, -PivotMotorConstants.MAXIMUM_VOLTAGE, PivotMotorConstants.MAXIMUM_VOLTAGE);
+    double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-    double percent = volts / talonSRX.getBusVoltage();
+    double feedforwardVolts =
+        feedforward.calculate(
+            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+
+    double percent = (feedbackVolts + feedforwardVolts) / talonSRX.getBusVoltage();
 
     talonSRX.set(TalonSRXControlMode.PercentOutput, percent);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
   }
 }

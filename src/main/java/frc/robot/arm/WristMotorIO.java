@@ -1,9 +1,9 @@
 package frc.robot.arm;
 
 /** Elbow motor hardware interface. */
-public interface ElbowMotorIO {
+public interface WristMotorIO {
   /** Values for the elbow motor hardware interface. */
-  public static class ElbowMotorIOValues {
+  public static class WristMotorIOValues {
     /** Position of the elbow motor in rotations. */
     public double positionRotations = 0.0;
 
@@ -17,7 +17,7 @@ public interface ElbowMotorIO {
     public double currentAmps = 0.0;
 
     /** Voltage applied to the elbow motor in volts. */
-    public double appliedVolts = 0.0;
+    public double inputVoltage = 0.0;
   }
 
   /** Configures the elbow motor. */
@@ -28,7 +28,7 @@ public interface ElbowMotorIO {
    *
    * @param values
    */
-  public void update(ElbowMotorIOValues values);
+  public void update(WristMotorIOValues values);
 
   /**
    * Sets the elbow motor's position.
@@ -43,15 +43,4 @@ public interface ElbowMotorIO {
    * @param positionRotations the elbow motor's setpoint.
    */
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
-
-  // TODO Remove, only for characterization
-  /**
-   * Run the elbow motor with the specified voltage.
-   *
-   * @param volts volts to apply to the elbow motor.
-   */
-  public void setVoltage(double volts);
-
-  /** Stop the elbow motor. */
-  public void stop();
 }

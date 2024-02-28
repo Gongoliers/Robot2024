@@ -1,10 +1,12 @@
 package frc.robot.intake;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.SingleJointedArmFeedforward;
 import frc.robot.RobotConstants;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
@@ -17,7 +19,7 @@ public class PivotMotorIOSim implements PivotMotorIO {
 
   private final PIDController feedback;
 
-  private final ArmFeedforward feedforward;
+  private final SingleJointedArmFeedforward feedforward;
 
   public PivotMotorIOSim() {
     motor = DCMotor.getVex775Pro(1);
@@ -35,7 +37,7 @@ public class PivotMotorIOSim implements PivotMotorIO {
 
     feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
 
-    feedforward = new ArmFeedforward(0, 0, 0);
+    feedforward = new SingleJointedArmFeedforward(0, 0, 0);
   }
 
   @Override
@@ -61,18 +63,12 @@ public class PivotMotorIOSim implements PivotMotorIO {
 
     double feedforwardVolts =
         feedforward.calculate(
-            Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
+            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
-    singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
-  }
-
-  @Override
-  public void setVoltage(double volts) {
-    singleJointedArmSim.setInputVoltage(0);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0);
+    if (DriverStation.isEnabled()) {
+      singleJointedArmSim.setInputVoltage(feedbackVolts + feedforwardVolts);
+    } else {
+      singleJointedArmSim.setInputVoltage(0.0);
+    }
   }
 }

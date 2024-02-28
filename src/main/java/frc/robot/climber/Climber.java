@@ -6,7 +6,6 @@ import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.climber.ClimberConstants.ElevatorConstants;
 import frc.robot.climber.ElevatorIO.ElevatorIOValues;
-import frc.robot.climber.LinearActuatorIO.LinearActuatorIOValues;
 
 /** Subsystem class for the climber subsystem. */
 public class Climber extends Subsystem {
@@ -20,19 +19,11 @@ public class Climber extends Subsystem {
   /** Elevator values. */
   private final ElevatorIOValues elevatorValues = new ElevatorIOValues();
 
-  /** Linear actuator. */
-  private final LinearActuatorIO linearActuator;
-
-  /** Linear actuator values. */
-  private final LinearActuatorIOValues linearActuatorValues = new LinearActuatorIOValues();
-
   /** Creates a new instance of the climber subsystem. */
   private Climber() {
     elevator = ClimberFactory.createElevator();
-    linearActuator = ClimberFactory.createLinearActuator();
 
     elevator.setPosition(ElevatorConstants.MIN_HEIGHT);
-    linearActuator.setPosition(0);
   }
 
   /**
@@ -56,9 +47,5 @@ public class Climber extends Subsystem {
     ShuffleboardLayout elevator = Telemetry.addColumn(tab, "Elevator");
 
     elevator.addDouble("Position (m)", () -> elevatorValues.positionMeters);
-
-    ShuffleboardLayout linearActuator = Telemetry.addColumn(tab, "Linear Actuator");
-
-    linearActuator.addDouble("Position (%)", () -> linearActuatorValues.positionPercent);
   }
 }

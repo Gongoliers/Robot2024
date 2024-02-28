@@ -8,27 +8,24 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
-import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.arm.ArmConstants.WristMotorConstants;
 
-/** Shoulder motor using a Spark Max. */
-public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
+public class WristMotorIOSparkMax implements WristMotorIO {
 
-  /** Hardware Spark Max. */
   private final CANSparkMax sparkMax;
 
-  /** Feedback controller for shoulder position. */
+  /** Feedback controller for wrist position. */
   private final PIDController feedback;
 
-  /** Feedforward controller for shoulder position. */
+  /** Feedforward controller for wrist position. */
   private final SingleJointedArmFeedforward feedforward;
 
   private final AccelerationCalculator accelerationCalculator;
 
-  /** Creates a new shoulder motor using a Spark Max. */
-  public ShoulderMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
+  public WristMotorIOSparkMax() {
+    sparkMax = new CANSparkMax(WristMotorConstants.CAN.id(), MotorType.kBrushless);
 
-    feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
+    feedback = new PIDController(WristMotorConstants.KP, 0, 0);
 
     feedforward = new SingleJointedArmFeedforward(0, 0, 0);
 
@@ -39,14 +36,16 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
+    sparkMax.setInverted(WristMotorConstants.MOTOR_INVERT);
+
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
   }
 
   @Override
-  public void update(ShoulderMotorIOValues values) {
-    values.positionRotations = getAbsolutePositionRotations();
+  public void update(WristMotorIOValues values) {
+    values.positionRotations = getRelativePositionRotations();
     values.velocityRotationsPerSecond =
-        sparkMax.getEncoder().getVelocity() / ShoulderMotorConstants.JOINT_CONSTANTS.gearing();
+        sparkMax.getEncoder().getVelocity() / WristMotorConstants.JOINT_CONSTANTS.gearing();
     values.accelerationRotationsPerSecondPerSecond =
         accelerationCalculator.calculate(values.velocityRotationsPerSecond);
 
@@ -58,12 +57,12 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   public void setPosition(double positionRotations) {
     sparkMax
         .getEncoder()
-        .setPosition(positionRotations * ShoulderMotorConstants.JOINT_CONSTANTS.gearing());
+        .setPosition(positionRotations * WristMotorConstants.JOINT_CONSTANTS.gearing());
   }
 
   @Override
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    double measuredPositionRotations = getAbsolutePositionRotations();
+    double measuredPositionRotations = getRelativePositionRotations();
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
@@ -75,11 +74,11 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
   }
 
   /**
-   * Gets the absolute position of the shoulder in rotations.
+   * Gets the relative position of the wrist in rotations.
    *
-   * @return the absolute position of the shoulder in rotations.
+   * @return the relative position of the wrist in rotations.
    */
-  private double getAbsolutePositionRotations() {
-    return sparkMax.getEncoder().getPosition() / ShoulderMotorConstants.JOINT_CONSTANTS.gearing();
+  private double getRelativePositionRotations() {
+    return sparkMax.getEncoder().getPosition() / WristMotorConstants.JOINT_CONSTANTS.gearing();
   }
 }

@@ -16,10 +16,13 @@ public class IntakeConstants {
     public static final CAN CAN = new CAN(38);
 
     /** If true, invert the pivot motor. */
-    public static final boolean IS_INVERTED = false;
+    public static final boolean IS_MOTOR_INVERTED = false;
+
+    /** If true, invert the pivot motor sensor. */
+    public static final boolean IS_SENSOR_INVERTED = true;
 
     /** Gearing between the pivot sensor and the pivot. */
-    public static final double SENSOR_GEARING = 16.0 / 18.0; // TODO flip?
+    public static final double SENSOR_GEARING = 2.3;
 
     /** Gearing between the motor and the pivot. */
     public static final double MOTOR_GEARING = 49 * SENSOR_GEARING;
@@ -27,23 +30,23 @@ public class IntakeConstants {
     /** Pivot motor's moment of interia in kilograms meters squared. */
     public static final double MOI = 0.02; // TODO
 
-    /** Pivot motor's maximum voltage. */
-    public static final double MAXIMUM_VOLTAGE = 4;
-
     /** Distance between the pivot and the far edge of the intake. */
     public static final double DISTANCE = Units.inchesToMeters(10.275);
 
     /** Pivot motor's minimum angle. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-25);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-60);
 
     /** Pivot motor's maximum angle. */
-    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+    public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(86);
+
+    /** Pivot motor's "out" angle. */
+    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(-10);
 
     /** Pivot motor's tolerance. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(1.0);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(4.0);
 
     /** Maximum speed of the pivot in rotations per second. */
-    public static final double MAXIMUM_SPEED = 0.5;
+    public static final double MAXIMUM_SPEED = 1;
 
     /** Maximum acceleration of the pivot in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
@@ -57,7 +60,7 @@ public class IntakeConstants {
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
 
     /** Proportional gain of the arm in volts per rotation. */
-    public static final double KP = 10.0;
+    public static final double KP = 16.0;
   }
 
   /** Constants for the roller motor. */

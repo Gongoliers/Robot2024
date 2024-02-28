@@ -13,8 +13,8 @@ public class ArmFactory {
    * @return a shoulder motor.
    */
   public static ShoulderMotorIO createShoulderMotor() {
-    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
-      return new ShoulderMotorIOSparkMax();
+    // if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
+    //   return new ShoulderMotorIOSparkMax();
 
     return new ShoulderMotorIOSim();
   }
@@ -24,7 +24,10 @@ public class ArmFactory {
    *
    * @return an elbow motor.
    */
-  public static ElbowMotorIO createElbowMotor() {
-    return new ElbowMotorIOSim();
+  public static WristMotorIO createWristMotor() {
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
+      return new WristMotorIOSparkMax();
+
+    return new WristMotorIOSim();
   }
 }
