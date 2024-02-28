@@ -39,7 +39,8 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     talonSRX.setSensorPhase(PivotMotorConstants.IS_SENSOR_INVERTED);
     talonSRX.setInverted(PivotMotorConstants.IS_MOTOR_INVERTED);
 
-    Configurator.configurePhoenix5(() -> talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative));
+    Configurator.configurePhoenix5(
+        () -> talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative));
   }
 
   @Override
