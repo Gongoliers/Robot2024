@@ -17,6 +17,10 @@ public class SerializerMotorIOSparkMax implements SerializerMotorIO {
   @Override
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
+
+    Configurator.configureREV(
+        () ->
+            sparkMax.setSmartCurrentLimit(20));
   }
 
   @Override

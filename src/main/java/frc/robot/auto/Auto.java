@@ -146,7 +146,7 @@ public class Auto extends Subsystem {
   }
 
   public Command shootNote() {
-    return Commands.parallel(arm.moveShoulderThenWrist(ArmState.SHOOT), intake.out())
+    return Commands.parallel(Commands.waitUntil(intake::isNotStowed).andThen(arm.moveShoulderThenWrist(ArmState.SHOOT)), intake.out())
         .andThen(shooter.shoot());
   }
 }

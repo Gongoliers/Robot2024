@@ -34,13 +34,13 @@ public class IntakeConstants {
     public static final double DISTANCE = Units.inchesToMeters(10.275);
 
     /** Pivot motor's minimum angle. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-60);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(-48);
 
     /** Pivot motor's maximum angle. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(86);
 
     /** Pivot motor's "out" angle. */
-    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(-10);
+    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(0);
 
     /** Pivot motor's tolerance. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(4.0);
