@@ -149,6 +149,6 @@ public class Auto extends Subsystem {
   }
 
   public Command shootNote() {
-    return arm.moveShoulderThenWrist(ArmState.SHOOT).andThen(shooter.shoot());
+    return Commands.parallel(arm.moveShoulderThenWrist(ArmState.SHOOT), intake.out()).andThen(shooter.shoot());
   }
 }
