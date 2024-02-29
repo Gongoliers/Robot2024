@@ -140,7 +140,7 @@ public class Intake extends Subsystem {
   }
 
   public Command out() {
-    return pivotTo(PivotMotorConstants.MINIMUM_ANGLE);
+    return Commands.race(pivotTo(PivotMotorConstants.MINIMUM_ANGLE), Commands.waitSeconds(2.0));
   }
 
   public Command in() {

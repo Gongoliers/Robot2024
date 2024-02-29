@@ -13,7 +13,7 @@ public class IntakeConstants {
   /** Constants for the pivot motor. */
   public static class PivotMotorConstants {
     /** Pivot motor's CAN identifier. */
-    public static final CAN CAN = new CAN(38);
+    public static final CAN CAN = new CAN(8);
 
     /** If true, invert the pivot motor. */
     public static final boolean IS_MOTOR_INVERTED = false;
@@ -66,7 +66,7 @@ public class IntakeConstants {
   /** Constants for the roller motor. */
   public static class RollerMotorConstants {
     /** Roller motor's CAN identifier. */
-    public static final CAN CAN = new CAN(4);
+    public static final CAN CAN = new CAN(5);
 
     /** If true, invert the roller motor. */
     public static final boolean IS_INVERTED = false;

@@ -11,7 +11,7 @@ public class SerializerMotorIOSparkMax implements SerializerMotorIO {
   private final CANSparkMax sparkMax;
 
   public SerializerMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(19, MotorType.kBrushless);
+    sparkMax = new CANSparkMax(4, MotorType.kBrushless);
   }
 
   @Override

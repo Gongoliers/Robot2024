@@ -75,6 +75,8 @@ public class RobotContainer {
 
     operatorController.rightTrigger().whileTrue(auto.shootNote()).onFalse(auto.stow());
 
+    operatorController.a().whileTrue(shooter.shoot());
+
     // TODO When stowing, the wrist encoder drifts by ~30% of the shoulder velocity
     // TODO This **will** throw off wrist angles for the rest of the match
     // operatorController.a().whileTrue(arm.amp()).onFalse(auto.stow());

@@ -11,7 +11,7 @@ public class FlywheelMotorIOTalonFX implements FlywheelMotorIO {
   private final VoltageOut voltageOutRequest;
 
   public FlywheelMotorIOTalonFX() {
-    int canId = 39;
+    int canId = 30;
 
     talonFX = new TalonFX(canId);
 

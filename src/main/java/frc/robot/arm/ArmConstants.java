@@ -15,7 +15,7 @@ public class ArmConstants {
   /** Constants for the shoulder motor. */
   public static class ShoulderMotorConstants {
     /** Shoulder motor CAN. */
-    public static final CAN CAN = new CAN(32);
+    public static final CAN CAN = new CAN(2);
 
     /** Joint constants for the shoulder joint. */
     public static final JointConstants JOINT_CONSTANTS =
@@ -62,7 +62,7 @@ public class ArmConstants {
   /** Constants for the wrist motor. */
   public static class WristMotorConstants {
     /** Wrist motor CAN. */
-    public static final CAN CAN = new CAN(34);
+    public static final CAN CAN = new CAN(1);
 
     /** If true, invert the motor. */
     public static final boolean MOTOR_INVERT = true;
