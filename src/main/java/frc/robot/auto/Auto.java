@@ -17,7 +17,6 @@ import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.arm.ArmState;
 import frc.robot.intake.Intake;
-import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
 import frc.robot.swerve.Swerve;
@@ -141,14 +140,13 @@ public class Auto extends Subsystem {
   }
 
   public Command stow() {
-    return Commands.runOnce(
-        () -> {
-          arm.setGoal(ArmState.STOW);
-          intake.setPivotGoal(PivotMotorConstants.MAXIMUM_ANGLE);
-        });
+    return Commands.parallel(
+        arm.moveWristThenShoulder(ArmState.STOW),
+        Commands.waitUntil(() -> arm.getPosition().at(ArmState.STOW)).andThen(intake.in()));
   }
 
   public Command shootNote() {
-    return Commands.parallel(arm.moveShoulderThenWrist(ArmState.SHOOT), intake.out()).andThen(shooter.shoot());
+    return Commands.parallel(arm.moveShoulderThenWrist(ArmState.SHOOT), intake.out())
+        .andThen(shooter.shoot());
   }
 }

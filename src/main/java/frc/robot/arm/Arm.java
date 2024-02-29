@@ -52,7 +52,8 @@ public class Arm extends Subsystem {
 
     setPosition(initialState);
 
-    // Since setPosition also resets goal and setpoint, this is redundant, but will protect from nullish errors
+    // Since setPosition also resets goal and setpoint, this is redundant, but will protect from
+    // nullish errors
     goal = initialState;
     setpoint = initialState;
   }
