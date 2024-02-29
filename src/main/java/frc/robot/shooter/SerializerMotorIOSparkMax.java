@@ -20,7 +20,7 @@ public class SerializerMotorIOSparkMax implements SerializerMotorIO {
 
     Configurator.configureREV(
         () ->
-            sparkMax.setSmartCurrentLimit(20));
+            sparkMax.setSmartCurrentLimit(30));
   }
 
   @Override

@@ -72,6 +72,7 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(auto.readyIntake().andThen(auto.intakeNote()))
         .whileFalse((auto.stow()));
+    operatorController.leftBumper().whileTrue(intake.out().andThen(intake.outtake())).whileFalse(auto.stow());
 
     operatorController.rightTrigger().whileTrue(auto.shootNote()).whileFalse(auto.stow());
 
