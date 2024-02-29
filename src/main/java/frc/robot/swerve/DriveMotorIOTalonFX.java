@@ -37,7 +37,7 @@ public abstract class DriveMotorIOTalonFX implements DriveMotorIO {
 
     // TODO Copied from Citrus Circuits 2023 release
     talonFXBaseConfig.CurrentLimits =
-        new MotorCurrentLimits(300.0, 40.0, 100.0, 1.0).asCurrentLimitsConfigs();
+        new MotorCurrentLimits(300.0, 30.0, 60.0, 1.0).asCurrentLimitsConfigs();
 
     positionRotations = talonFX.getPosition();
     velocityRotationsPerSecond = talonFX.getVelocity();
