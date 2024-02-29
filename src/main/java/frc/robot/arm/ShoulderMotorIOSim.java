@@ -77,8 +77,13 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
     double feedforwardVolts = 0.0;
 
+    setVoltage(feedbackVolts + feedforwardVolts);
+  }
+
+  @Override
+  public void setVoltage(double volts) {
     if (DriverStation.isEnabled()) {
-      inputVoltage = feedbackVolts + feedforwardVolts;
+      inputVoltage = volts;
       singleJointedArmSim.setInputVoltage(inputVoltage);
     } else {
       singleJointedArmSim.setInputVoltage(0.0);

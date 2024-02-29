@@ -71,7 +71,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
         feedforward.calculate(
             Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
 
-    sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
+    setVoltage(feedbackVolts + feedforwardVolts);
   }
 
   /**
@@ -81,5 +81,10 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
    */
   private double getAbsolutePositionRotations() {
     return sparkMax.getEncoder().getPosition() / ShoulderMotorConstants.JOINT_CONSTANTS.gearing();
+  }
+
+  @Override
+  public void setVoltage(double volts) {
+    sparkMax.setVoltage(volts);
   }
 }

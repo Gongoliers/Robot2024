@@ -115,6 +115,9 @@
         "elbow": {
           "open": true
         },
+        "limitSwitch": {
+          "open": true
+        },
         "open": true
       },
       "shooter": {

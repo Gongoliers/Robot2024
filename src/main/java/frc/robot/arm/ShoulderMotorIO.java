@@ -45,4 +45,11 @@ public interface ShoulderMotorIO {
    * @param velocityRotationsPerSecond the shoulder motor's velocity setpoint.
    */
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond);
+
+  /**
+   * Runs the shoulder motor with a specified voltage.
+   *
+   * @param volts the shoulder motor's voltage.
+   */
+  public void setVoltage(double volts);
 }

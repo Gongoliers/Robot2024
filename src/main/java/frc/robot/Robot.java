@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
     robotContainer = RobotContainer.getInstance();
     swerve = Swerve.getInstance();
 
-    new Trigger(this::isEnabled).onTrue(Arm.getInstance().stowFromUp());
+    new Trigger(this::isEnabled).whileTrue(Arm.getInstance().home());
 
     new Trigger(this::isDisabled)
         .debounce(RobotConstants.DISABLE_COAST_DELAY)

@@ -7,6 +7,13 @@ import frc.robot.RobotConstants.Subsystem;
 /** Helper class for creating hardware for the arm subsystem. */
 public class ArmFactory {
 
+  public static LimitSwitchIO createLimitSwitch() {
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
+      return new LimitSwitchIOPWM();
+
+    return new LimitSwitchIOSim();
+  }
+
   /**
    * Creates a shoulder motor.
    *
