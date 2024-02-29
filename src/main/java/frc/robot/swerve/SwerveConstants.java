@@ -67,28 +67,28 @@ public class SwerveConstants {
       new SwerveModuleConfig(
           new SwerveModuleCAN(11, 10, 12, SWERVE_BUS),
           new Translation2d(X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.306641));
+          Rotation2d.fromRotations(-0.304688));
 
   /** Module configuration for the north east swerve module. */
   public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(2, 1, 3, SWERVE_BUS),
           new Translation2d(X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.292480));
+          Rotation2d.fromRotations(-0.433838));
 
   /** Module configuration for the south east swerve module. */
   public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(5, 4, 6, SWERVE_BUS),
           new Translation2d(-X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(-0.093994));
+          Rotation2d.fromRotations(-0.104980));
 
   /** Module configuration for the south west swerve module. */
   public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(8, 7, 9, SWERVE_BUS),
           new Translation2d(-X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.317139));
+          Rotation2d.fromRotations(-0.290771));
 
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
@@ -162,12 +162,12 @@ public class SwerveConstants {
   public static final PIDFConstants STEER_PIDF_CONSTANTS = new PIDFConstants();
 
   static {
-    STEER_PIDF_CONSTANTS.kP = 24.0; // volts per rotation
+    STEER_PIDF_CONSTANTS.kP = 48.0; // volts per rotation
     STEER_PIDF_CONSTANTS.kD = 0.25; // volts per rotation per second
     STEER_PIDF_CONSTANTS.kPositionTolerance = Units.degreesToRotations(3);
     // STEER_PIDF_CONSTANTS.kVelocityConstraint = 10.0; // rotations per second
     // STEER_PIDF_CONSTANTS.kAccelerationConstraint = 64.0; // rotations per second per second
-    STEER_PIDF_CONSTANTS.kS = 0.0; // TODO volts
+    STEER_PIDF_CONSTANTS.kS = 0.32; // TODO volts
     // STEER_PIDF_CONSTANTS.kV = 0.407363; // volts per rotation per second
   }
 }
