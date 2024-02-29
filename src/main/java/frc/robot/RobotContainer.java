@@ -52,7 +52,6 @@ public class RobotContainer {
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
     if (RobotConstants.USE_TELEMETRY) {
-      Telemetry.initializeShuffleboards(arm, auto, climber, intake, odometry, shooter, swerve);
       SmartDashboard.putData("Arm Mechanism", RobotMechanisms.getInstance().getMechanism());
     }
 

@@ -113,7 +113,7 @@ public class SwerveConstants {
 
   /** Maximum acceleration in meters per second per second. */
   public static final double MAXIMUM_ACCELERATION =
-      MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
+      MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
 
   /** Maximum attainable rotational speed. */
   public static final Rotation2d MAXIMUM_ATTAINABLE_ROTATION_SPEED =

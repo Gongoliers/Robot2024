@@ -95,7 +95,7 @@ public record DriveRequest(
   }
 
   public Rotation2d omega() {
-    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotation().getY() * 0.5);
+    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotation().getY() * 0.75);
   }
 
   private Rotation2d snapToNearest(Rotation2d angle, Rotation2d multiple) {
