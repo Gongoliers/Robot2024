@@ -15,6 +15,6 @@ public class LimitSwitchIODigital implements LimitSwitchIO {
 
   @Override
   public void update(LimitSwitchIOValues values) {
-    values.isPressed = digitalInput.get();
+    values.isPressed = !digitalInput.get();
   }
 }

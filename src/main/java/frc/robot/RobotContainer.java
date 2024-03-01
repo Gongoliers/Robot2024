@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
 import frc.robot.intake.Intake;
@@ -55,6 +56,7 @@ public class RobotContainer {
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
     if (RobotConstants.USE_TELEMETRY) {
+      Telemetry.initializeShuffleboards(arm);
       SmartDashboard.putData("Arm Mechanism", RobotMechanisms.getInstance().getMechanism());
     }
 
