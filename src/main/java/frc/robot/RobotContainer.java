@@ -3,13 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
-import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
-import frc.robot.shooter.Shooter;
 import frc.robot.swerve.DriveCommand;
 import frc.robot.swerve.Swerve;
 
@@ -19,19 +16,25 @@ public class RobotContainer {
   /** Instance variable for the robot container singleton. */
   public static RobotContainer instance = null;
 
-  private final Arm arm = Arm.getInstance();
-  private final Auto auto = Auto.getInstance();
-  private final Climber climber = Climber.getInstance();
-  private final Intake intake = Intake.getInstance();
-  private final Odometry odometry = Odometry.getInstance();
-  private final Shooter shooter = Shooter.getInstance();
-  private final Swerve swerve = Swerve.getInstance();
+  private final Arm arm;
+  private final Auto auto;
+  private final Intake intake;
+  private final Odometry odometry;
+  private final Swerve swerve;
 
-  private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
+  private final CommandXboxController driverController, operatorController;
 
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
+    arm = Arm.getInstance();
+    auto = Auto.getInstance();
+    intake = Intake.getInstance();
+    odometry = Odometry.getInstance();
+    swerve = Swerve.getInstance();
+
+    driverController = new CommandXboxController(0);
+    operatorController = new CommandXboxController(1);
+
     initializeTelemetry();
     configureBindings();
   }
@@ -75,8 +78,6 @@ public class RobotContainer {
 
     operatorController.rightTrigger().whileTrue(auto.shootNote()).whileFalse(auto.stow());
 
-    // TODO When stowing, the wrist encoder drifts by ~30% of the shoulder velocity
-    // TODO This **will** throw off wrist angles for the rest of the match
     operatorController.a().whileTrue(arm.amp()).whileFalse(auto.stow());
   }
 

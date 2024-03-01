@@ -8,8 +8,8 @@ import frc.robot.RobotConstants.Subsystem;
 public class ArmFactory {
 
   public static LimitSwitchIO createLimitSwitch() {
-    // if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
-    //   return new LimitSwitchIOPWM();
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
+      return new LimitSwitchIODigital();
 
     return new LimitSwitchIOSim();
   }

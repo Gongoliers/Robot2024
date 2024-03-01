@@ -2,14 +2,12 @@ package frc.robot.arm;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class LimitSwitchIOPWM implements LimitSwitchIO {
+public class LimitSwitchIODigital implements LimitSwitchIO {
 
   private final DigitalInput digitalInput;
 
-  public LimitSwitchIOPWM() {
-    int port = 0;
-
-    digitalInput = new DigitalInput(port);
+  public LimitSwitchIODigital() {
+    digitalInput = new DigitalInput(4);
   }
 
   @Override
