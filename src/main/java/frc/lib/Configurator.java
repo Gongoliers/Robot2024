@@ -101,9 +101,9 @@ public class Configurator {
    * @param sparkMax
    */
   public static void configureStatusFrames(CANSparkMax sparkMax) {
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 25));
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50));
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 10));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 25));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 25));
     Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 500));
     Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 500));
     Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 500));
