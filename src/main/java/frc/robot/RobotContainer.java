@@ -8,6 +8,7 @@ import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
+import frc.robot.shooter.Shooter;
 import frc.robot.swerve.DriveCommand;
 import frc.robot.swerve.Swerve;
 
@@ -21,6 +22,7 @@ public class RobotContainer {
   private final Auto auto;
   private final Intake intake;
   private final Odometry odometry;
+  private final Shooter shooter;
   private final Swerve swerve;
 
   private final CommandXboxController driverController, operatorController;
@@ -31,6 +33,7 @@ public class RobotContainer {
     auto = Auto.getInstance();
     intake = Intake.getInstance();
     odometry = Odometry.getInstance();
+    shooter = Shooter.getInstance();
     swerve = Swerve.getInstance();
 
     driverController = new CommandXboxController(0);
@@ -76,9 +79,16 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(auto.readyIntake().andThen(auto.intakeNote()))
         .whileFalse((auto.stow()));
-    operatorController.leftBumper().whileTrue(intake.out().andThen(intake.outtake())).whileFalse(auto.stow());
+    operatorController
+        .leftBumper()
+        .whileTrue(intake.out().andThen(intake.outtake()))
+        .whileFalse(auto.stow());
 
-    operatorController.rightTrigger().whileTrue(auto.shootNote()).whileFalse(auto.stow());
+    operatorController
+        .rightTrigger()
+        .whileTrue(auto.readyShoot().andThen(shooter.spin()))
+        .whileFalse(auto.stow());
+    operatorController.rightBumper().whileTrue(shooter.serialize());
 
     operatorController.a().whileTrue(arm.amp()).whileFalse(auto.stow());
   }

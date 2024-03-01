@@ -121,7 +121,7 @@ public class Shooter extends Subsystem {
    *
    * @return a command that shoots a note.
    */
-  public Command shoot() {
+  public Command autoShoot() {
     return Commands.deadline(
         Commands.waitSeconds(ShooterCommandConstants.PRE_SHOOT_DELAY).andThen(serialize()), spin());
   }

@@ -8,10 +8,9 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-
 import java.util.function.Supplier;
 
 /** Applies hardware configurations. */
@@ -97,7 +96,7 @@ public class Configurator {
 
   /**
    * Configures the status frames for a Spark Max.
-   * 
+   *
    * @param sparkMax
    */
   public static void configureStatusFrames(CANSparkMax sparkMax) {
