@@ -185,10 +185,6 @@ public class Arm extends Subsystem {
     wristMotor.setSetpoint(setpoint.wrist().position, setpoint.wrist().velocity);
   }
 
-  public Command home() {
-    return run(() -> shoulderMotor.setVoltage(-1)).until(() -> limitSwitchValues.isPressed);
-  }
-
   private MoveShoulderCommand moveShoulder(ArmState goal) {
     return new MoveShoulderCommand(goal);
   }
@@ -205,11 +201,18 @@ public class Arm extends Subsystem {
     return moveWrist(goal).andThen(moveShoulder(goal));
   }
 
-  public Command stowFromUp() {
-    return moveWristThenShoulder(ArmState.STOW);
-  }
-
   public Command amp() {
     return moveShoulderThenWrist(ArmState.AMP);
+  }
+
+  public Command home() {
+    return moveWrist(ArmState.STOW)
+        .andThen(moveShoulder(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
+        .finallyDo(
+            interrupted -> {
+              if (!interrupted) {
+                setPosition(ArmState.STOW);
+              }
+            });
   }
 }

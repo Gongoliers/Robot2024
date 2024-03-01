@@ -29,7 +29,7 @@ public class ArmConstants {
             1);
 
     /** Minimum angle of the shoulder joint. */
-    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(27.5);
+    public static final Rotation2d MINIMUM_ANGLE = Rotation2d.fromDegrees(29.5);
 
     /** Maximum angle of the shoulder joint. */
     public static final Rotation2d MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
@@ -45,11 +45,11 @@ public class ArmConstants {
     public static final double KP = 36.0;
 
     /** Maximum speed of the shoulder joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 1.0;
+    public static final double MAXIMUM_SPEED = 0.5;
 
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.5);
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
 
     /** Maximum speed and acceleration of the shoulder joint. */
     public static final TrapezoidProfile.Constraints CONSTRAINTS =

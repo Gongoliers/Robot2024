@@ -11,6 +11,9 @@ import java.util.Objects;
 /** State of the arm. */
 public record ArmState(State shoulder, State wrist) {
 
+  public static final ArmState INIT =
+      new ArmState(Rotation2d.fromDegrees(52.5), Rotation2d.fromDegrees(-35));
+
   public static final ArmState STOW =
       new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
   public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(23.265));
