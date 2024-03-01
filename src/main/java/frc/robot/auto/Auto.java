@@ -84,8 +84,8 @@ public class Auto extends Subsystem {
 
     NamedCommands.registerCommand("readyIntake", readyIntake());
     NamedCommands.registerCommand("intakeNote", intakeNote());
-    NamedCommands.registerCommand("readyStow", stow());
-    NamedCommands.registerCommand("shoot", shootNote());
+    NamedCommands.registerCommand("readyShoot", readyShoot());
+    NamedCommands.registerCommand("shootNote", shootNote());
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }
