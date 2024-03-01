@@ -40,6 +40,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
+
+    Configurator.configureStatusFrames(sparkMax);
   }
 
   @Override

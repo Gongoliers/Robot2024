@@ -24,6 +24,8 @@ public class RollerMotorIOSparkMax implements RollerMotorIO {
     Configurator.configureREV(
         () ->
             sparkMax.setSmartCurrentLimit((int) RollerMotorConstants.CURRENT_LIMITS.breakerAmps()));
+
+    Configurator.configureStatusFrames(sparkMax);
   }
 
   @Override

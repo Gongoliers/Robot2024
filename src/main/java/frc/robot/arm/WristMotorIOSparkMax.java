@@ -39,6 +39,8 @@ public class WristMotorIOSparkMax implements WristMotorIO {
     sparkMax.setInverted(WristMotorConstants.MOTOR_INVERT);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
+
+    Configurator.configureStatusFrames(sparkMax);
   }
 
   @Override

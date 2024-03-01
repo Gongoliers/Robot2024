@@ -8,7 +8,10 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+
 import java.util.function.Supplier;
 
 /** Applies hardware configurations. */
@@ -90,5 +93,20 @@ public class Configurator {
         return;
       }
     }
+  }
+
+  /**
+   * Configures the status frames for a Spark Max.
+   * 
+   * @param sparkMax
+   */
+  public static void configureStatusFrames(CANSparkMax sparkMax) {
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 25));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 65535));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 65535));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 65535));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 65535));
   }
 }
