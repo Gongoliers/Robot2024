@@ -104,9 +104,9 @@ public class Configurator {
     // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 25));
     // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50));
     // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50));
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 65535));
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 65535));
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 65535));
-    // Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 65535));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 500));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 500));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 500));
+    Configurator.configureREV(() -> sparkMax.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 500));
   }
 }
