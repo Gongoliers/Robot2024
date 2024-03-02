@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
@@ -93,7 +94,7 @@ public class RobotContainer {
     operatorController.rightBumper().whileTrue(shooter.serialize());
 
     operatorController.povUp().whileTrue(climber.up());
-    operatorController.povDown().whileTrue(climber.down());
+    operatorController.povDown().whileTrue(Commands.parallel(auto.readyIntake().repeatedly(), climber.down()));
 
     operatorController.a().whileTrue(arm.amp()).whileFalse(auto.stow());
   }
