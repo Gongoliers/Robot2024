@@ -97,22 +97,12 @@ public class DriveCommand extends Command {
           headingFeedback.calculate(poseHeading.getRotations(), headingSetpoint.position);
     }
 
-    ChassisSpeeds chassisSpeeds;
-
-    if (request.isRobotCentric()) {
-      chassisSpeeds =
-          new ChassisSpeeds(
-              translationVelocityMetersPerSecond.getX(),
-              translationVelocityMetersPerSecond.getY(),
-              Units.rotationsToRadians(omegaRotationsPerSecond));
-    } else {
-      chassisSpeeds =
-          ChassisSpeeds.fromFieldRelativeSpeeds(
-              translationVelocityMetersPerSecond.getX(),
-              translationVelocityMetersPerSecond.getY(),
-              Units.rotationsToRadians(omegaRotationsPerSecond),
-              poseHeading);
-    }
+    ChassisSpeeds chassisSpeeds =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            translationVelocityMetersPerSecond.getX(),
+            translationVelocityMetersPerSecond.getY(),
+            Units.rotationsToRadians(omegaRotationsPerSecond),
+            poseHeading);
 
     chassisSpeeds.vxMetersPerSecond =
         MathUtil.clamp(

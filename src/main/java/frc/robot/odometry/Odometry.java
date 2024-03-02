@@ -135,7 +135,7 @@ public class Odometry extends Subsystem {
    * @return a command that zeroes the rotation of the robot.
    */
   public Command tare() {
-    return Commands.runOnce(() -> setRotation(Rotation2d.fromDegrees(0)));
+    return Commands.runOnce(() -> gyroscope.setYaw(0.0));
   }
 
   /**

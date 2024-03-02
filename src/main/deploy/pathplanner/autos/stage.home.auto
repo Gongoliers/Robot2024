@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 0.8108477755417065,
+      "y": 4.311854008323402
     },
-    "rotation": 0
+    "rotation": -57.20046872738075
   },
   "command": {
     "type": "sequential",

@@ -30,8 +30,8 @@ public class Climber extends Subsystem {
 
   /** Creates a new instance of the climber subsystem. */
   private Climber() {
-    westElevator = ClimberFactory.createElevator(new CAN(6), false);
-    eastElevator = ClimberFactory.createElevator(new CAN(7), false);
+    westElevator = new ElevatorIOSim(); // TODO
+    eastElevator = new ElevatorIOSim(); // TODO
 
     westElevator.configure();
     eastElevator.configure();
