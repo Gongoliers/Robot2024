@@ -70,30 +70,42 @@ public class Climber extends Subsystem {
     east.addDouble("Position (m)", () -> eastElevatorValues.positionMeters);
   }
 
+  public boolean westAtTop() {
+    return westElevatorValues.positionMeters >= ElevatorConstants.MAX_HEIGHT;
+  }
+
+  public boolean westAtBottom() {
+    return westElevatorValues.positionMeters <= ElevatorConstants.MIN_HEIGHT;
+  }
+
+  public boolean eastAtTop() {
+    return eastElevatorValues.positionMeters >= ElevatorConstants.MAX_HEIGHT;
+  }
+
+  public boolean eastAtBottom() {
+    return eastElevatorValues.positionMeters <= ElevatorConstants.MIN_HEIGHT;
+  }
+
   public void stop() {
     westElevator.setVoltage(0);
     eastElevator.setVoltage(0);
   }
 
   public Command up() {
-    double upVoltage = 1.0;
+    double upVoltage = 4.0;
 
     return Commands.parallel(
-            Commands.run(() -> westElevator.setVoltage(upVoltage))
-                .until(() -> westElevatorValues.positionMeters >= ElevatorConstants.MAX_HEIGHT),
-            Commands.run(() -> eastElevator.setVoltage(upVoltage))
-                .until(() -> eastElevatorValues.positionMeters >= ElevatorConstants.MAX_HEIGHT))
+            Commands.run(() -> westElevator.setVoltage(upVoltage)).until(this::westAtTop),
+            Commands.run(() -> eastElevator.setVoltage(upVoltage)).until(this::eastAtTop))
         .finallyDo(this::stop);
   }
 
   public Command down() {
-    double downVoltage = -1.0;
+    double downVoltage = -4.0;
 
     return Commands.parallel(
-            Commands.run(() -> westElevator.setVoltage(downVoltage))
-                .until(() -> westElevatorValues.positionMeters <= ElevatorConstants.MIN_HEIGHT),
-            Commands.run(() -> eastElevator.setVoltage(downVoltage))
-                .until(() -> eastElevatorValues.positionMeters <= ElevatorConstants.MIN_HEIGHT))
+            Commands.run(() -> westElevator.setVoltage(downVoltage)).until(this::westAtBottom),
+            Commands.run(() -> eastElevator.setVoltage(downVoltage)).until(this::eastAtBottom))
         .finallyDo(this::stop);
   }
 }

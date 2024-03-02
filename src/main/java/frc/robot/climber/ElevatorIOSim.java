@@ -23,7 +23,7 @@ public class ElevatorIOSim implements ElevatorIO {
             ElevatorConstants.DRUM_DIAMETER,
             ElevatorConstants.MIN_HEIGHT,
             ElevatorConstants.MAX_HEIGHT,
-            true,
+            false,
             ElevatorConstants.MIN_HEIGHT);
   }
 

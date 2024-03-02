@@ -23,16 +23,6 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/Arm Mechanism": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/VisionSystemSim-visionSystem/Sim Field": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
@@ -43,36 +33,27 @@
     "transitory": {
       "Shuffleboard": {
         "Arm": {
-          "Derivatives": {
-            "open": true
-          },
           "Feedforward": {
-            "open": true
-          },
-          "Goal": {
-            "open": true
-          },
-          "Position": {
-            "open": true
-          },
-          "Setpoint": {
             "open": true
           },
           "Velocities": {
             "open": true
-          },
-          "Voltages": {
-            "open": true
-          },
-          "open": true
+          }
         },
         "Climber": {
+          "East": {
+            "open": true
+          },
           "Elevator": {
             "open": true
           },
           "Linear Actuator": {
             "open": true
-          }
+          },
+          "West": {
+            "open": true
+          },
+          "open": true
         },
         "Intake": {
           "Roller": {
