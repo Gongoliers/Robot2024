@@ -57,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "stage.toNearest"
+            "pathName": "stage.toSubwoofer"
           }
         },
         {
