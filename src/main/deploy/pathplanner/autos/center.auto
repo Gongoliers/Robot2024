@@ -32,32 +32,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp.toNearest"
+            "pathName": "center.toNearest"
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
+            "name": "intakeNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "amp.toSubwoofer"
+            "pathName": "center.toSubwoofer"
           }
         },
         {
