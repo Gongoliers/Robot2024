@@ -60,7 +60,6 @@ public class RobotContainer {
   private void initializeTelemetry() {
     if (RobotConstants.USE_TELEMETRY) {
       Telemetry.initializeShuffleboards(arm);
-      SmartDashboard.putData("Arm Mechanism", RobotMechanisms.getInstance().getMechanism());
     }
 
     SmartDashboard.putData(auto.getAutonomousChooser());

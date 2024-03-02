@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.RobotMechanisms;
 import frc.robot.arm.LimitSwitchIO.LimitSwitchIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import frc.robot.arm.WristMotorIO.WristMotorIOValues;
@@ -48,7 +47,7 @@ public class Arm extends Subsystem {
     shoulderMotor.configure();
     wristMotor.configure();
 
-    ArmState initialState = ArmState.STOW.withShoulder(Rotation2d.fromDegrees(45));
+    ArmState initialState = ArmState.INIT;
 
     setPosition(initialState);
 
@@ -82,8 +81,6 @@ public class Arm extends Subsystem {
     }
 
     setSetpoint(setpoint.nextSetpoint(goal));
-
-    RobotMechanisms.getInstance().setArmState(getPosition());
   }
 
   @Override
