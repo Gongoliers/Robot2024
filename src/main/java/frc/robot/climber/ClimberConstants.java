@@ -8,7 +8,7 @@ public class ClimberConstants {
   /** Constants for the elevator. */
   public static class ElevatorConstants {
     /** Gearing between the elevator motor and drum. */
-    public static final double GEARING = 1.0;
+    public static final double GEARING = 25.0;
 
     /** Mass of the elevator carriage in kilograms. */
     // TODO Does not include the mass of two WCP-0418 parts

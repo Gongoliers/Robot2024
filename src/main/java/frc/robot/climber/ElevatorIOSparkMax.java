@@ -5,14 +5,13 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.lib.CAN;
 import frc.lib.Configurator;
+import frc.robot.climber.ClimberConstants.ElevatorConstants;
 
 public class ElevatorIOSparkMax implements ElevatorIO {
 
   private final CANSparkMax sparkMax;
 
   private final boolean isInverted;
-
-  private static final double GEARING = 25.0;
 
   private static final double METERS_PER_ROTATION = 1.0;
 
@@ -35,12 +34,12 @@ public class ElevatorIOSparkMax implements ElevatorIO {
   }
 
   /**
-   * Gets the absolute position in meters.
+   * Gets the absolute position in rotations.
    *
-   * @return the absolute position in meters.
+   * @return the absolute position in rotations.
    */
   private double getPositionRotations() {
-    return sparkMax.getEncoder().getPosition() / GEARING;
+    return sparkMax.getEncoder().getPosition() / ElevatorConstants.GEARING;
   }
 
   @Override
