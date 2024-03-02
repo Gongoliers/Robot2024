@@ -26,6 +26,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     sparkMax.setInverted(isInverted);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
+
+    Configurator.configureStatusFrames(sparkMax);
   }
 
   @Override
