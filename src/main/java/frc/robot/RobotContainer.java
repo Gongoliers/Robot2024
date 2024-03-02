@@ -94,7 +94,9 @@ public class RobotContainer {
     operatorController.rightBumper().whileTrue(shooter.serialize());
 
     operatorController.povUp().whileTrue(climber.up());
-    operatorController.povDown().whileTrue(Commands.parallel(auto.readyIntake().repeatedly(), climber.down()));
+    operatorController
+        .povDown()
+        .whileTrue(Commands.parallel(auto.readyIntake().repeatedly(), climber.down()));
 
     operatorController.a().whileTrue(arm.amp()).whileFalse(auto.stow());
   }
