@@ -36,7 +36,7 @@ public abstract class DriveMotorIOTalonFX implements DriveMotorIO {
     talonFXBaseConfig.Feedback.SensorToMechanismRatio = MK4iConstants.DRIVE_GEARING;
 
     talonFXBaseConfig.CurrentLimits =
-        new MotorCurrentLimits(60.0, 30.0, 60.0, 0.1).asCurrentLimitsConfigs();
+        new MotorCurrentLimits(80.0, 30.0, 60.0, 0.1).asCurrentLimitsConfigs();
 
     positionRotations = talonFX.getPosition();
     velocityRotationsPerSecond = talonFX.getVelocity();
