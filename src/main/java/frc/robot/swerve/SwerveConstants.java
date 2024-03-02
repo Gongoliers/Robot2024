@@ -67,21 +67,21 @@ public class SwerveConstants {
       new SwerveModuleConfig(
           new SwerveModuleCAN(11, 10, 12, SWERVE_BUS),
           new Translation2d(X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.312256));
+          Rotation2d.fromRotations(-0.027100));
 
   /** Module configuration for the north east swerve module. */
   public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(2, 1, 3, SWERVE_BUS),
           new Translation2d(X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(-0.435547));
+          Rotation2d.fromRotations(-0.429688));
 
   /** Module configuration for the south east swerve module. */
   public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(5, 4, 6, SWERVE_BUS),
           new Translation2d(-X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(-0.096436));
+          Rotation2d.fromRotations(-0.097168));
 
   /** Module configuration for the south west swerve module. */
   public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
