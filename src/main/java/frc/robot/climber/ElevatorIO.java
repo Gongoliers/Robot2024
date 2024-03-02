@@ -27,9 +27,9 @@ public interface ElevatorIO {
   public void setPosition(double positionMeters);
 
   /**
-   * Sets the elevator's setpoint.
+   * Sets the elevator's voltage.
    *
-   * @param positionMeters the elevator's setpoint.
+   * @param volts the elevator's voltage.
    */
-  public void setSetpoint(double positionMeters);
+  public void setVoltage(double volts);
 }

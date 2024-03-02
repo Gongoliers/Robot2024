@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
+import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
@@ -20,6 +21,7 @@ public class RobotContainer {
 
   private final Arm arm;
   private final Auto auto;
+  private final Climber climber;
   private final Intake intake;
   private final Odometry odometry;
   private final Shooter shooter;
@@ -31,6 +33,7 @@ public class RobotContainer {
   private RobotContainer() {
     arm = Arm.getInstance();
     auto = Auto.getInstance();
+    climber = Climber.getInstance();
     intake = Intake.getInstance();
     odometry = Odometry.getInstance();
     shooter = Shooter.getInstance();
@@ -59,7 +62,7 @@ public class RobotContainer {
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
     if (RobotConstants.USE_TELEMETRY) {
-      Telemetry.initializeShuffleboards(arm);
+      Telemetry.initializeShuffleboards(arm, climber);
     }
 
     SmartDashboard.putData(auto.getAutonomousChooser());
@@ -88,6 +91,9 @@ public class RobotContainer {
         .whileTrue(auto.readyShoot().andThen(shooter.spin()))
         .whileFalse(auto.stow());
     operatorController.rightBumper().whileTrue(shooter.serialize());
+
+    operatorController.povUp().whileTrue(climber.up());
+    operatorController.povDown().whileTrue(climber.down());
 
     operatorController.a().whileTrue(arm.amp()).whileFalse(auto.stow());
   }
