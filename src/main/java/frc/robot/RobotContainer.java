@@ -63,7 +63,7 @@ public class RobotContainer {
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
     if (RobotConstants.USE_TELEMETRY) {
-      Telemetry.initializeShuffleboards(arm, climber);
+      Telemetry.initializeShuffleboards(arm, climber, intake, shooter, swerve);
     }
 
     SmartDashboard.putData(auto.getAutonomousChooser());
