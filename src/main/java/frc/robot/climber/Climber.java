@@ -92,20 +92,20 @@ public class Climber extends Subsystem {
   }
 
   public Command up() {
-    double upVoltage = 4.0;
-
     return Commands.parallel(
-            Commands.run(() -> westElevator.setVoltage(upVoltage)).until(this::westAtTop),
-            Commands.run(() -> eastElevator.setVoltage(upVoltage)).until(this::eastAtTop))
+            Commands.run(() -> westElevator.setVoltage(ElevatorConstants.UP_VOLTAGE))
+                .until(this::westAtTop),
+            Commands.run(() -> eastElevator.setVoltage(ElevatorConstants.UP_VOLTAGE))
+                .until(this::eastAtTop))
         .finallyDo(this::stop);
   }
 
   public Command down() {
-    double downVoltage = -4.0;
-
     return Commands.parallel(
-            Commands.run(() -> westElevator.setVoltage(downVoltage)).until(this::westAtBottom),
-            Commands.run(() -> eastElevator.setVoltage(downVoltage)).until(this::eastAtBottom))
+            Commands.run(() -> westElevator.setVoltage(ElevatorConstants.DOWN_VOLTAGE))
+                .until(this::westAtBottom),
+            Commands.run(() -> eastElevator.setVoltage(ElevatorConstants.DOWN_VOLTAGE))
+                .until(this::eastAtBottom))
         .finallyDo(this::stop);
   }
 }

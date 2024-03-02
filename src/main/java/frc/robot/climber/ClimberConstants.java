@@ -23,5 +23,11 @@ public class ClimberConstants {
 
     /** Maximum height of the elevator in meters. */
     public static final double MAX_HEIGHT = Units.inchesToMeters(28);
+
+    /** Voltage to be applied while going up. */
+    public static final double UP_VOLTAGE = 1;
+
+    /** Voltage to be applied wihle going down. */
+    public static final double DOWN_VOLTAGE = -1;
   }
 }
