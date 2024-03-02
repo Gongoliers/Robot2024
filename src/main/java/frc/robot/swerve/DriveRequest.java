@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.AllianceFlipHelper;
 
 public record DriveRequest(
     DriveRequest.TranslationMode translationMode,
@@ -39,10 +40,19 @@ public record DriveRequest(
     boolean aligningRequested = controller.rightTrigger().getAsBoolean();
 
     double translationX = -controller.getLeftY();
+
+    if (AllianceFlipHelper.shouldFlip()) {
+      translationX *= -1;
+    }
+
     double translationY = -controller.getLeftX();
 
     double translationMagnitude = Math.hypot(translationX, translationY);
     Rotation2d translationDirection = new Rotation2d(translationX, translationY);
+
+    if (AllianceFlipHelper.shouldFlip()) {
+      translationDirection.plus(Rotation2d.fromDegrees(180));
+    }
 
     translationMagnitude = MathUtil.applyDeadband(translationMagnitude, 0.1);
     translationMagnitude =
