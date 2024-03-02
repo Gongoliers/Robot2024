@@ -82,6 +82,7 @@ public class Auto extends Subsystem {
         AllianceFlipHelper::shouldFlip,
         swerve);
 
+    NamedCommands.registerCommand("home", Arm.getInstance().home());
     NamedCommands.registerCommand("readyIntake", readyIntake());
     NamedCommands.registerCommand("intakeNote", intakeNote());
     NamedCommands.registerCommand("readyShoot", readyShoot());
@@ -136,7 +137,7 @@ public class Auto extends Subsystem {
   }
 
   public Command intakeNote() {
-    return Commands.parallel(intake.intake(), shooter.intake());
+    return readyIntake().andThen(Commands.parallel(intake.intake(), shooter.intake()));
   }
 
   public Command stow() {
