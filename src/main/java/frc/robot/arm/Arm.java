@@ -5,6 +5,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.LimitSwitchIO.LimitSwitchIOValues;
@@ -76,15 +77,15 @@ public class Arm extends Subsystem {
     shoulderMotor.update(shoulderMotorValues);
     wristMotor.update(wristMotorValues);
 
-    if (limitSwitchValues.isPressed) {
-      setPosition(getPosition().withShoulder(ArmState.STOW.shoulder()));
-    }
-
     setSetpoint(setpoint.nextSetpoint(goal));
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout commands = Telemetry.addColumn(tab, "Commands");
+
+    commands.addString("Running Command", () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "no running command");
+
     ShuffleboardLayout limitSwitch = Telemetry.addColumn(tab, "Limit Switch");
 
     limitSwitch.addBoolean("Is Pressed?", () -> limitSwitchValues.isPressed);
@@ -186,7 +187,7 @@ public class Arm extends Subsystem {
     return new MoveShoulderCommand(goal);
   }
 
-  private MoveWristCommand moveWrist(ArmState goal) {
+  public MoveWristCommand moveWrist(ArmState goal) {
     return new MoveWristCommand(goal);
   }
 
@@ -203,13 +204,15 @@ public class Arm extends Subsystem {
   }
 
   public Command home() {
-    return moveWrist(ArmState.STOW)
-        .andThen(moveShoulder(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
-        .finallyDo(
-            interrupted -> {
-              if (!interrupted) {
-                setPosition(ArmState.STOW);
-              }
-            });
+    return Commands.race(
+        moveWrist(ArmState.STOW)
+            .andThen(moveShoulder(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
+            .finallyDo(
+                interrupted -> {
+                  if (!interrupted) {
+                    setPosition(ArmState.STOW);
+                  }
+                }),
+        Commands.waitSeconds(2.5));
   }
 }
