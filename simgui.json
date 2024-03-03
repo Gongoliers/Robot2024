@@ -23,6 +23,11 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
@@ -36,9 +41,13 @@
           "Feedforward": {
             "open": true
           },
+          "Position": {
+            "open": true
+          },
           "Velocities": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Climber": {
           "East": {
@@ -52,8 +61,7 @@
           },
           "West": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Intake": {
           "Roller": {

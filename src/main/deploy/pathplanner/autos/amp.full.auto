@@ -20,12 +20,6 @@
         {
           "type": "named",
           "data": {
-            "name": "readyShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shootNote"
           }
         },
@@ -33,25 +27,6 @@
           "type": "path",
           "data": {
             "pathName": "amp.toNearest"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeNote"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
           }
         },
         {
@@ -64,6 +39,12 @@
           "type": "named",
           "data": {
             "name": "shootNote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]
