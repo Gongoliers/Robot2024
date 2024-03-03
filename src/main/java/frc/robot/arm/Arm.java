@@ -5,7 +5,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.LimitSwitchIO.LimitSwitchIOValues;
@@ -84,7 +83,12 @@ public class Arm extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout commands = Telemetry.addColumn(tab, "Commands");
 
-    commands.addString("Running Command", () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "no running command");
+    commands.addString(
+        "Running Command",
+        () ->
+            this.getCurrentCommand() != null
+                ? this.getCurrentCommand().getName()
+                : "no running command");
 
     ShuffleboardLayout limitSwitch = Telemetry.addColumn(tab, "Limit Switch");
 
@@ -204,15 +208,14 @@ public class Arm extends Subsystem {
   }
 
   public Command home() {
-    return Commands.race(
-        moveWrist(ArmState.STOW)
-            .andThen(moveShoulder(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
-            .finallyDo(
-                interrupted -> {
-                  if (!interrupted) {
-                    setPosition(ArmState.STOW);
-                  }
-                }),
-        Commands.waitSeconds(2.5));
+    return moveWrist(ArmState.STOW)
+        .andThen(moveShoulder(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
+        .finallyDo(
+            interrupted -> {
+              if (!interrupted) {
+                setPosition(ArmState.STOW);
+              }
+            })
+        .withTimeout(3.0);
   }
 }
