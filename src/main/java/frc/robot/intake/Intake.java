@@ -94,7 +94,8 @@ public class Intake extends Subsystem {
 
     rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps);
 
-    mechanism.updateIntake(Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
+    mechanism.updateIntake(
+        Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
   }
 
   @Override

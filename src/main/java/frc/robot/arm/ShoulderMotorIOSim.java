@@ -24,7 +24,8 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   public void update(ShoulderMotorIOValues values) {
     values.positionRotations = this.positionRotations;
     values.velocityRotationsPerSecond = this.velocityRotationsPerSecond;
-    values.accelerationRotationsPerSecondPerSecond = accelerationCalculator.calculate(velocityRotationsPerSecond);
+    values.accelerationRotationsPerSecondPerSecond =
+        accelerationCalculator.calculate(velocityRotationsPerSecond);
 
     values.inputVoltage = inputVoltage;
   }

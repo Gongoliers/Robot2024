@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class PivotMotorIOSim implements PivotMotorIO {
 
   private double positionRotations;
+
   // private double velocityRotationsPerSecond;
 
   @Override
