@@ -17,14 +17,14 @@ import java.util.function.Supplier;
 /** Helper class for managing robot telemetry. */
 public class Telemetry {
 
-  private static final HashMap<String, Integer> tabColumnCount = new HashMap<>();
+  private static final HashMap<String, Integer> tabColumn = new HashMap<>();
 
   /**
    * Initializes a subsystem's Shuffleboard tab.
    *
    * @param subsystem the subsystem to initialize.
    */
-  public static void initializeShuffleboard(Subsystem subsystem) {
+  public static void initializeTab(Subsystem subsystem) {
     String name = subsystem.getName();
 
     ShuffleboardTab tab = Shuffleboard.getTab(name);
@@ -37,10 +37,33 @@ public class Telemetry {
    *
    * @param subsystems the subsystems to initialize.
    */
-  public static void initializeShuffleboards(Subsystem... subsystems) {
+  public static void initializeTabs(Subsystem... subsystems) {
     for (Subsystem subsystem : subsystems) {
-      Telemetry.initializeShuffleboard(subsystem);
+      Telemetry.initializeTab(subsystem);
     }
+  }
+
+  /**
+   * Adds a column to a Shuffleboard tab.
+   *
+   * @param tab the Shuffleboard tab to add the column to.
+   * @param columnTitle the title of the column.
+   * @param width the width of the column.
+   * @return the added Shuffleboard column.
+   */
+  public static ShuffleboardLayout addColumn(ShuffleboardTab tab, String columnTitle, int width) {
+    String tabTitle = tab.getTitle();
+
+    int column = tabColumn.containsKey(tabTitle) ? tabColumn.get(tabTitle) + width : 0;
+
+    // Increment the column number for the next call
+    tabColumn.put(tabTitle, column);
+
+    final int kColumnHeight = 4;
+
+    return tab.getLayout(columnTitle, BuiltInLayouts.kList)
+        .withSize(width, kColumnHeight)
+        .withPosition(column, 0);
   }
 
   /**
@@ -51,18 +74,7 @@ public class Telemetry {
    * @return the added Shuffleboard column.
    */
   public static ShuffleboardLayout addColumn(ShuffleboardTab tab, String columnTitle) {
-    String tabTitle = tab.getTitle();
-
-    int currentColumnCount = tabColumnCount.getOrDefault(tabTitle, 0);
-    // Increment the column count for the next call
-    tabColumnCount.put(tabTitle, currentColumnCount + 1);
-
-    final int kColumnWidth = 2;
-    final int kColumnHeight = 4;
-
-    return tab.getLayout(columnTitle, BuiltInLayouts.kList)
-        .withSize(kColumnWidth, kColumnHeight)
-        .withPosition(currentColumnCount * kColumnWidth, 0);
+    return addColumn(tab, columnTitle, 2);
   }
 
   /**
