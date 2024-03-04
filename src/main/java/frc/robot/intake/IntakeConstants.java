@@ -43,7 +43,7 @@ public class IntakeConstants {
     public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(0);
 
     /** Pivot motor's tolerance. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(4.0);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(8.0);
 
     /** Maximum speed of the pivot in rotations per second. */
     public static final double MAXIMUM_SPEED = 1;

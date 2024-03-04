@@ -39,6 +39,7 @@ public record DriveRequest(
     boolean aligningRequested = controller.rightTrigger().getAsBoolean();
 
     double translationX = -controller.getLeftY();
+
     double translationY = -controller.getLeftX();
 
     double translationMagnitude = Math.hypot(translationX, translationY);

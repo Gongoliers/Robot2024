@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.RobotMechanisms;
 import frc.robot.arm.LimitSwitchIO.LimitSwitchIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import frc.robot.arm.WristMotorIO.WristMotorIOValues;
@@ -48,7 +47,7 @@ public class Arm extends Subsystem {
     shoulderMotor.configure();
     wristMotor.configure();
 
-    ArmState initialState = ArmState.STOW.withShoulder(Rotation2d.fromDegrees(45));
+    ArmState initialState = ArmState.INIT;
 
     setPosition(initialState);
 
@@ -77,17 +76,20 @@ public class Arm extends Subsystem {
     shoulderMotor.update(shoulderMotorValues);
     wristMotor.update(wristMotorValues);
 
-    if (limitSwitchValues.isPressed) {
-      setPosition(getPosition().withShoulder(ArmState.STOW.shoulder()));
-    }
-
     setSetpoint(setpoint.nextSetpoint(goal));
-
-    RobotMechanisms.getInstance().setArmState(getPosition());
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout commands = Telemetry.addColumn(tab, "Commands");
+
+    commands.addString(
+        "Running Command",
+        () ->
+            this.getCurrentCommand() != null
+                ? this.getCurrentCommand().getName()
+                : "no running command");
+
     ShuffleboardLayout limitSwitch = Telemetry.addColumn(tab, "Limit Switch");
 
     limitSwitch.addBoolean("Is Pressed?", () -> limitSwitchValues.isPressed);
@@ -189,7 +191,7 @@ public class Arm extends Subsystem {
     return new MoveShoulderCommand(goal);
   }
 
-  private MoveWristCommand moveWrist(ArmState goal) {
+  public MoveWristCommand moveWrist(ArmState goal) {
     return new MoveWristCommand(goal);
   }
 
@@ -213,6 +215,7 @@ public class Arm extends Subsystem {
               if (!interrupted) {
                 setPosition(ArmState.STOW);
               }
-            });
+            })
+        .withTimeout(3.0);
   }
 }

@@ -88,10 +88,10 @@ public class ArmConstants {
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
 
     /** Proportional gain in volts per rotation. */
-    public static final double KP = 48.0;
+    public static final double KP = 36.0;
 
     /** Maximum speed of the wrist joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 2.4;
+    public static final double MAXIMUM_SPEED = 1.2;
 
     /** Maximum acceleration of the wrist joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =

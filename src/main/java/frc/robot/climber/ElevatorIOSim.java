@@ -1,7 +1,5 @@
 package frc.robot.climber;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.RobotConstants;
@@ -14,10 +12,6 @@ public class ElevatorIOSim implements ElevatorIO {
 
   private final ElevatorSim elevatorSim;
 
-  private final PIDController feedback;
-
-  private final ElevatorFeedforward feedforward;
-
   public ElevatorIOSim() {
     motor = DCMotor.getNEO(1);
 
@@ -29,14 +23,8 @@ public class ElevatorIOSim implements ElevatorIO {
             ElevatorConstants.DRUM_DIAMETER,
             ElevatorConstants.MIN_HEIGHT,
             ElevatorConstants.MAX_HEIGHT,
-            true,
+            false,
             ElevatorConstants.MIN_HEIGHT);
-
-    // TODO
-    feedback = new PIDController(1.0, 0.0, 0.0);
-
-    // TODO
-    feedforward = new ElevatorFeedforward(0, 0, 0);
   }
 
   @Override
@@ -55,11 +43,7 @@ public class ElevatorIOSim implements ElevatorIO {
   }
 
   @Override
-  public void setSetpoint(double positionMeters) {
-    double feedbackVolts = feedback.calculate(elevatorSim.getPositionMeters(), positionMeters);
-
-    double feedforwardVolts = feedforward.calculate(elevatorSim.getVelocityMetersPerSecond());
-
-    elevatorSim.setInputVoltage(feedbackVolts + feedforwardVolts);
+  public void setVoltage(double volts) {
+    elevatorSim.setInputVoltage(volts);
   }
 }

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.AllianceFlipHelper;
 import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
 import frc.robot.swerve.Swerve;
 import java.util.function.Supplier;
@@ -135,7 +136,14 @@ public class Odometry extends Subsystem {
    * @return a command that zeroes the rotation of the robot.
    */
   public Command tare() {
-    return Commands.runOnce(() -> setRotation(Rotation2d.fromDegrees(0)));
+    return Commands.runOnce(() -> {
+      // if (AllianceFlipHelper.shouldFlip()) {
+      //   gyroscope.setYaw(0.5);
+      // } else {
+      //   gyroscope.setYaw(0.0);
+      // }
+      gyroscope.setYaw(0.0);
+    });
   }
 
   /**

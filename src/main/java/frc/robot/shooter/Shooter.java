@@ -10,7 +10,6 @@ import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
 import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
-import frc.robot.shooter.ShooterConstants.ShooterCommandConstants;
 
 /** Subsystem class for the shooter subsystem. */
 public class Shooter extends Subsystem {
@@ -122,7 +121,9 @@ public class Shooter extends Subsystem {
    * @return a command that shoots a note.
    */
   public Command autoShoot() {
-    return Commands.deadline(
-        Commands.waitSeconds(ShooterCommandConstants.PRE_SHOOT_DELAY).andThen(serialize()), spin());
+    return Commands.parallel(
+        serialize().beforeStarting(Commands.waitSeconds(1.0)), 
+        spin()
+      ).withTimeout(3.0);
   }
 }

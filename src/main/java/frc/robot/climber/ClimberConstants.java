@@ -8,7 +8,7 @@ public class ClimberConstants {
   /** Constants for the elevator. */
   public static class ElevatorConstants {
     /** Gearing between the elevator motor and drum. */
-    public static final double GEARING = 1.0;
+    public static final double GEARING = 25.0;
 
     /** Mass of the elevator carriage in kilograms. */
     // TODO Does not include the mass of two WCP-0418 parts
@@ -23,5 +23,11 @@ public class ClimberConstants {
 
     /** Maximum height of the elevator in meters. */
     public static final double MAX_HEIGHT = Units.inchesToMeters(28);
+
+    /** Voltage to be applied while going up. */
+    public static final double UP_VOLTAGE = 2;
+
+    /** Voltage to be applied wihle going down. */
+    public static final double DOWN_VOLTAGE = 1;
   }
 }

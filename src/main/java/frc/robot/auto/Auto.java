@@ -82,6 +82,8 @@ public class Auto extends Subsystem {
         AllianceFlipHelper::shouldFlip,
         swerve);
 
+    NamedCommands.registerCommand("home", Arm.getInstance().home());
+    NamedCommands.registerCommand("stow", stow());
     NamedCommands.registerCommand("readyIntake", readyIntake());
     NamedCommands.registerCommand("intakeNote", intakeNote());
     NamedCommands.registerCommand("readyShoot", readyShoot());
@@ -130,25 +132,31 @@ public class Auto extends Subsystem {
   }
 
   public Command readyIntake() {
+    double seconds = 3.0;
+
     return Commands.parallel(
         Commands.waitUntil(intake::isNotStowed).andThen(arm.moveShoulderThenWrist(ArmState.INTAKE)),
-        intake.out());
+        intake.out()).withTimeout(seconds);
   }
 
   public Command intakeNote() {
-    return Commands.parallel(intake.intake(), shooter.intake());
+    return readyIntake().andThen(Commands.parallel(intake.intake(), shooter.intake()));
   }
 
   public Command stow() {
+    double seconds = 2.0;
+
     return Commands.parallel(
         arm.moveWristThenShoulder(ArmState.STOW),
-        Commands.waitUntil(() -> arm.getPosition().at(ArmState.STOW)).andThen(intake.in()));
+        Commands.waitUntil(() -> arm.getPosition().at(ArmState.STOW)).withTimeout(2.0).andThen(intake.in())).withTimeout(seconds);
   }
 
   public Command readyShoot() {
+    double seconds = 3.0;
+
     return Commands.parallel(
-        Commands.waitUntil(intake::isNotStowed).andThen(arm.moveShoulderThenWrist(ArmState.SHOOT)),
-        intake.out());
+        Commands.waitUntil(intake::isNotStowed).andThen(arm.moveWrist(ArmState.SHOOT)),
+        intake.out()).withTimeout(seconds);
   }
 
   public Command shootNote() {
