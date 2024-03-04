@@ -8,10 +8,13 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.lib.InterpolatableColor;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
-import frc.robot.arm.ArmConstants.WristMotorConstants;
 import frc.robot.arm.ArmState;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
+import frc.robot.intake.IntakeConstants.RollerMotorConstants;
+import frc.robot.shooter.ShooterConstants.FlywheelConstants;
+import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
 /** Helper class for rendering robot mechanisms. */
 public class RobotMechanisms {
@@ -20,7 +23,7 @@ public class RobotMechanisms {
 
   private final Mechanism2d mechanism;
 
-  private MechanismLigament2d shoulder, wrist, intake;
+  private MechanismLigament2d shoulder, shooter, serializer, intake;
 
   private final double WIDTH =
       2
@@ -30,6 +33,15 @@ public class RobotMechanisms {
   private final double HEIGHT = RobotConstants.MAX_VERTICAL_EXTENSION_DISTANCE;
 
   private final Translation2d ORIGIN = new Translation2d(WIDTH / 2, 0);
+
+  private final Color8Bit DEFAULT_COLOR = new Color8Bit(Color.kLightGray);
+
+  private final InterpolatableColor shooterColor =
+      new InterpolatableColor(Color.kLightGray, Color.kSalmon);
+  private final InterpolatableColor serializerColor =
+      new InterpolatableColor(Color.kLightGray, Color.kCornflowerBlue);
+  private final InterpolatableColor intakeColor =
+      new InterpolatableColor(Color.kLightGray, Color.kPaleGreen);
 
   private RobotMechanisms() {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
@@ -54,15 +66,16 @@ public class RobotMechanisms {
                 ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
-                new Color8Bit(Color.kOrange)));
-    wrist =
+                DEFAULT_COLOR));
+    shooter =
         shoulder.append(
             new MechanismLigament2d(
-                "wrist",
-                WristMotorConstants.JOINT_CONSTANTS.lengthMeters(),
-                0,
-                armThickness,
-                new Color8Bit(Color.kGreen)));
+                "wrist", Units.inchesToMeters(4.321), 0, armThickness, DEFAULT_COLOR));
+
+    serializer =
+        shoulder.append(
+            new MechanismLigament2d(
+                "serializer", Units.inchesToMeters(8.771), 0, armThickness, DEFAULT_COLOR));
   }
 
   private void initializeFramePerimeterMechanisms() {
@@ -75,11 +88,7 @@ public class RobotMechanisms {
             0)
         .append(
             new MechanismLigament2d(
-                "framePerimeterLeft_",
-                HEIGHT,
-                90,
-                framePerimeterThickness,
-                new Color8Bit(Color.kLightGray)));
+                "framePerimeterLeft_", HEIGHT, 90, framePerimeterThickness, DEFAULT_COLOR));
 
     mechanism
         .getRoot(
@@ -88,11 +97,7 @@ public class RobotMechanisms {
             0)
         .append(
             new MechanismLigament2d(
-                "framePerimeterRight_",
-                HEIGHT,
-                90,
-                framePerimeterThickness,
-                new Color8Bit(Color.kLightGray)));
+                "framePerimeterRight_", HEIGHT, 90, framePerimeterThickness, DEFAULT_COLOR));
   }
 
   private void initializeIntakeMechanism() {
@@ -106,11 +111,7 @@ public class RobotMechanisms {
                 ORIGIN.getY() + Units.inchesToMeters(6.283))
             .append(
                 new MechanismLigament2d(
-                    "intake_",
-                    PivotMotorConstants.DISTANCE,
-                    0.0,
-                    intakeThickness,
-                    new Color8Bit(Color.kPink)));
+                    "intake_", PivotMotorConstants.DISTANCE, 0.0, intakeThickness, DEFAULT_COLOR));
   }
 
   public static RobotMechanisms getInstance() {
@@ -125,15 +126,44 @@ public class RobotMechanisms {
     return mechanism;
   }
 
-  public void setArmState(ArmState state) {
+  public void updateArm(ArmState state) {
     Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulder().position);
     Rotation2d wristRotation = Rotation2d.fromRotations(state.wrist().position);
 
     shoulder.setAngle(shoulderRotation);
-    wrist.setAngle(wristRotation.plus(Rotation2d.fromDegrees(90)));
+
+    // Offset the rendered wrist rotation so that zero degrees is perpendicular to the shoulder,
+    // rather than parallel with the shoulder
+    Rotation2d offsetWristRotation = wristRotation.plus(Rotation2d.fromDegrees(90));
+    Rotation2d shooterRotation = offsetWristRotation;
+    Rotation2d serializerRotation = offsetWristRotation.plus(Rotation2d.fromDegrees(180));
+
+    shooter.setAngle(shooterRotation);
+    serializer.setAngle(serializerRotation);
   }
 
-  public void setIntakeAngle(Rotation2d angle) {
-    intake.setAngle(angle);
+  public void updateIntake(Rotation2d pivotAngle, double rollerVelocityRotationsPerSecond) {
+    Color color =
+        intakeColor.sample(
+            Math.abs(rollerVelocityRotationsPerSecond), 0, RollerMotorConstants.MAXIMUM_SPEED);
+
+    intake.setAngle(pivotAngle);
+    intake.setColor(new Color8Bit(color));
+  }
+
+  public void updateShooter(double velocityMetersPerSecond) {
+    Color color =
+        shooterColor.sample(
+            Math.abs(velocityMetersPerSecond), 0, FlywheelConstants.MAXIMUM_TANGENTIAL_SPEED);
+
+    shooter.setColor(new Color8Bit(color));
+  }
+
+  public void updateSerializer(double velocityMetersPerSecond) {
+    Color color =
+        serializerColor.sample(
+            Math.abs(velocityMetersPerSecond), 0, SerializerConstants.MAXIMUM_TANGENTIAL_SPEED);
+
+    serializer.setColor(new Color8Bit(color));
   }
 }

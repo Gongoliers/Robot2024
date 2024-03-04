@@ -95,6 +95,9 @@ public class IntakeConstants {
 
     /** Duration of the current spike when intaking a note. */
     public static final double STALL_DURATION = 0.35;
+
+    /** Maximum speed of the roller in rotations per second. */
+    public static final double MAXIMUM_SPEED = 0.31;
   }
 
   /** Constants for intake commands. */

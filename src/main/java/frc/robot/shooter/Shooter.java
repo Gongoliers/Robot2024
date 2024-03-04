@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.RobotMechanisms;
 import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
 import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
@@ -52,6 +53,9 @@ public class Shooter extends Subsystem {
   public void periodic() {
     serializerMotor.update(serializerMotorValues);
     flywheelMotor.update(flywheelMotorValues);
+
+    RobotMechanisms.getInstance().updateShooter(getFlywheelTangentialSpeed());
+    RobotMechanisms.getInstance().updateSerializer(getSerializerTangentialSpeed());
   }
 
   @Override
