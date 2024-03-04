@@ -135,8 +135,10 @@ public class Auto extends Subsystem {
     double seconds = 3.0;
 
     return Commands.parallel(
-        Commands.waitUntil(intake::isNotStowed).andThen(arm.moveShoulderThenWrist(ArmState.INTAKE)),
-        intake.out()).withTimeout(seconds);
+            Commands.waitUntil(intake::isNotStowed)
+                .andThen(arm.moveShoulderThenWrist(ArmState.INTAKE)),
+            intake.out())
+        .withTimeout(seconds);
   }
 
   public Command intakeNote() {
@@ -147,16 +149,20 @@ public class Auto extends Subsystem {
     double seconds = 2.0;
 
     return Commands.parallel(
-        arm.moveWristThenShoulder(ArmState.STOW),
-        Commands.waitUntil(() -> arm.getPosition().at(ArmState.STOW)).withTimeout(2.0).andThen(intake.in())).withTimeout(seconds);
+            arm.moveWristThenShoulder(ArmState.STOW),
+            Commands.waitUntil(() -> arm.getPosition().at(ArmState.STOW))
+                .withTimeout(2.0)
+                .andThen(intake.in()))
+        .withTimeout(seconds);
   }
 
   public Command readyShoot() {
     double seconds = 3.0;
 
     return Commands.parallel(
-        Commands.waitUntil(intake::isNotStowed).andThen(arm.moveWrist(ArmState.SHOOT)),
-        intake.out()).withTimeout(seconds);
+            Commands.waitUntil(intake::isNotStowed).andThen(arm.moveWrist(ArmState.SHOOT)),
+            intake.out())
+        .withTimeout(seconds);
   }
 
   public Command shootNote() {

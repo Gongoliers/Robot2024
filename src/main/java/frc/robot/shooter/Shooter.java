@@ -121,9 +121,7 @@ public class Shooter extends Subsystem {
    * @return a command that shoots a note.
    */
   public Command autoShoot() {
-    return Commands.parallel(
-        serialize().beforeStarting(Commands.waitSeconds(1.0)), 
-        spin()
-      ).withTimeout(3.0);
+    return Commands.parallel(serialize().beforeStarting(Commands.waitSeconds(1.0)), spin())
+        .withTimeout(3.0);
   }
 }
