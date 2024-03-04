@@ -25,6 +25,8 @@ public class Intake extends Subsystem {
   /** Instance variable for the intake subsystem singleton. */
   private static Intake instance = null;
 
+  private final RobotMechanisms mechanism;
+
   /** Pivot motor. */
   private final PivotMotorIO pivotMotor;
 
@@ -52,6 +54,8 @@ public class Intake extends Subsystem {
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
+    mechanism = RobotMechanisms.getInstance();
+
     pivotMotor = IntakeFactory.createPivotMotor();
     rollerMotor = IntakeFactory.createRollerMotor();
 
@@ -90,8 +94,7 @@ public class Intake extends Subsystem {
 
     rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps);
 
-    RobotMechanisms.getInstance()
-        .setIntakeAngle(Rotation2d.fromRotations(pivotMotorValues.positionRotations));
+    mechanism.updateIntake(Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
   }
 
   @Override

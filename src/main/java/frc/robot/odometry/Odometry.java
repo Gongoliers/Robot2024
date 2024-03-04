@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
@@ -37,6 +38,8 @@ public class Odometry extends Subsystem {
   /** Pose estimator using the swerve drive. */
   private final SwerveDrivePoseEstimator swervePoseEstimator;
 
+  private final Field2d field;
+
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
     gyroscope = OdometryFactory.createGyroscope(OdometryConstants.GYROSCOPE_CAN, this);
@@ -58,6 +61,8 @@ public class Odometry extends Subsystem {
             initialGyroRotation,
             swerveModulePositionsSupplier.get(),
             initialPose);
+
+    field = new Field2d();
   }
 
   /**
@@ -80,6 +85,8 @@ public class Odometry extends Subsystem {
     swervePoseEstimator.update(
         Rotation2d.fromRotations(gyroscopeValues.yawRotations),
         swerveModulePositionsSupplier.get());
+
+    field.setRobotPose(getPosition());
   }
 
   @Override
@@ -95,6 +102,10 @@ public class Odometry extends Subsystem {
     velocity.addDouble("X Velocity (mps)", () -> getVelocity().dx);
     velocity.addDouble("Y Velocity (mps)", () -> getVelocity().dy);
     velocity.addDouble("Rotation Velocity (dps)", () -> getVelocity().dtheta);
+
+    ShuffleboardLayout field = Telemetry.addColumn(tab, "Field");
+
+    field.add("Field", this.field);
   }
 
   /**

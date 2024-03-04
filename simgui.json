@@ -11,6 +11,7 @@
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Auto/Auto Chooser": "String Chooser",
       "/Shuffleboard/Auto/SendableChooser[0]": "String Chooser",
+      "/Shuffleboard/Odometry/Field/Field": "Field2d",
       "/Shuffleboard/Vision/Field": "Field2d",
       "/SmartDashboard/Arm Mechanism": "Mechanism2d",
       "/SmartDashboard/Mechanism": "Mechanism2d",
@@ -19,7 +20,7 @@
       "/SmartDashboard/arm mech": "Mechanism2d"
     },
     "windows": {
-      "/Shuffleboard/Auto/Auto Chooser": {
+      "/SmartDashboard/Mechanism": {
         "window": {
           "visible": true
         }
@@ -46,8 +47,7 @@
           },
           "Velocities": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Climber": {
           "East": {
@@ -66,13 +66,22 @@
         "Intake": {
           "Roller": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Odometry": {
           "Position": {
             "open": true
           },
           "Velocity": {
+            "open": true
+          }
+        },
+        "Shooter": {
+          "Flywheel": {
+            "open": true
+          },
+          "Serializer": {
             "open": true
           }
         },

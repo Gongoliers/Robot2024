@@ -28,6 +28,9 @@ public class ShooterConstants {
 
     /** Voltage to apply while serializing in volts. */
     public static final double SERIALIZE_VOLTAGE = -6.0;
+
+    /** Maximum tengential speed in meters per second. */
+    public static final double MAXIMUM_TANGENTIAL_SPEED = 4.75;
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
@@ -49,6 +52,9 @@ public class ShooterConstants {
 
     /** Voltage to apply while shooting in volts. */
     public static final double SHOOT_VOLTAGE = -7.2; // TODO invert voltage to CCW+/CW+?
+
+    /** Maximum tangential speed in meters per second. */
+    public static final double MAXIMUM_TANGENTIAL_SPEED = 5.65;
   }
 
   /** Constants for commands used in the shooter subsystem. */

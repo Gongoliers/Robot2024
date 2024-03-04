@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.RobotMechanisms;
 import frc.robot.arm.LimitSwitchIO.LimitSwitchIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
 import frc.robot.arm.WristMotorIO.WristMotorIOValues;
@@ -16,6 +17,8 @@ public class Arm extends Subsystem {
 
   /** Instance variable for the arm subsystem singleton. */
   private static Arm instance = null;
+
+  private final RobotMechanisms mechanism;
 
   /** Limit switch. */
   private final LimitSwitchIO limitSwitch;
@@ -39,6 +42,8 @@ public class Arm extends Subsystem {
 
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
+    mechanism = RobotMechanisms.getInstance();
+
     limitSwitch = ArmFactory.createLimitSwitch();
     shoulderMotor = ArmFactory.createShoulderMotor();
     wristMotor = ArmFactory.createWristMotor();
@@ -75,6 +80,8 @@ public class Arm extends Subsystem {
     limitSwitch.update(limitSwitchValues);
     shoulderMotor.update(shoulderMotorValues);
     wristMotor.update(wristMotorValues);
+
+    mechanism.updateArm(getPosition());
 
     setSetpoint(setpoint.nextSetpoint(goal));
   }
