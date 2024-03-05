@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
+import frc.lib.SingleJointedArmFeedforward.SingleJointedArmFeedforwardConstants;
 import frc.robot.arm.ArmConstants.WristMotorConstants;
 
 public class WristMotorIOSparkMax implements WristMotorIO {
@@ -28,7 +29,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
 
     feedback = new PIDController(WristMotorConstants.KP, 0, 0);
 
-    feedforward = new SingleJointedArmFeedforward(0, 0, 0);
+    feedforward = new SingleJointedArmFeedforward(new SingleJointedArmFeedforwardConstants());
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -71,7 +72,8 @@ public class WristMotorIOSparkMax implements WristMotorIO {
 
     double feedforwardVolts =
         feedforward.calculate(
-            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+            Rotation2d.fromRotations(measuredPositionRotations),
+            Rotation2d.fromRotations(velocityRotationsPerSecond));
 
     sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
+import frc.lib.SingleJointedArmFeedforward.SingleJointedArmFeedforwardConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
 /** Shoulder motor using a Spark Max. */
@@ -30,7 +31,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
     feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 
-    feedforward = new SingleJointedArmFeedforward(0, 0, 0);
+    feedforward = new SingleJointedArmFeedforward(new SingleJointedArmFeedforwardConstants());
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -71,7 +72,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
     double feedforwardVolts =
         feedforward.calculate(
-            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+            Rotation2d.fromRotations(measuredPositionRotations),
+            Rotation2d.fromRotations(velocityRotationsPerSecond));
 
     setVoltage(feedbackVolts + feedforwardVolts);
   }

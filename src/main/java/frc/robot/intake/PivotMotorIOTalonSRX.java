@@ -5,9 +5,9 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.lib.ArmFeedforwardCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
+import frc.lib.SingleJointedArmFeedforward.SingleJointedArmFeedforwardConstants;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 
 /** Pivot motor using a Talon SRX. */
@@ -25,11 +25,10 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
     feedback = new PIDController(PivotMotorConstants.KP, 0, 0);
 
-    // TODO
-    double kg =
-        ArmFeedforwardCalculator.calculateArmGravityCompensation(Rotation2d.fromDegrees(26), 1.8);
+    SingleJointedArmFeedforwardConstants constants =
+        new SingleJointedArmFeedforwardConstants().withKg(Rotation2d.fromDegrees((26)), 1.8);
 
-    feedforward = new SingleJointedArmFeedforward(0, kg, 0);
+    feedforward = new SingleJointedArmFeedforward(constants);
   }
 
   @Override
@@ -82,8 +81,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     double feedforwardVolts =
-        feedforward.calculate(
-            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+        feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations));
 
     double percent = (feedbackVolts + feedforwardVolts) / talonSRX.getBusVoltage();
 
