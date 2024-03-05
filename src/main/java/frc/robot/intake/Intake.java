@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.TrapezoidProfileTelemetry;
 import frc.robot.RobotConstants;
 import frc.robot.RobotMechanisms;
 import frc.robot.intake.IntakeConstants.PivotMotorConstants;
@@ -38,6 +39,8 @@ public class Intake extends Subsystem {
 
   /** Pivot motor setpoint. */
   private TrapezoidProfile.State pivotSetpoint;
+
+  private final TrapezoidProfileTelemetry pivotProfileTelemetry;
 
   /** Roller motor. */
   private final RollerMotorIO rollerMotor;
@@ -69,6 +72,8 @@ public class Intake extends Subsystem {
 
     pivotGoal = new TrapezoidProfile.State(initialAngle.getRotations(), 0);
     pivotSetpoint = new TrapezoidProfile.State(initialAngle.getRotations(), 0);
+
+    pivotProfileTelemetry = new TrapezoidProfileTelemetry("intake/pivotProfile");
   }
 
   /**
@@ -96,6 +101,10 @@ public class Intake extends Subsystem {
 
     mechanism.updateIntake(
         Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
+
+    pivotProfileTelemetry.updateMeasurement(pivotMotorValues.positionRotations, 0.0);
+    pivotProfileTelemetry.updateSetpoint(pivotSetpoint);
+    pivotProfileTelemetry.updateGoal(pivotGoal);
   }
 
   @Override

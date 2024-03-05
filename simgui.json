@@ -23,12 +23,12 @@
       "/SmartDashboard/arm mech": "Mechanism2d"
     },
     "windows": {
-      "/SmartDashboard/Mechanism": {
+      "/Shuffleboard/Auto/Auto Chooser": {
         "window": {
           "visible": true
         }
       },
-      "/SmartDashboard/SendableChooser[0]": {
+      "/SmartDashboard/Mechanism": {
         "window": {
           "visible": true
         }

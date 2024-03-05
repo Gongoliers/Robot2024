@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.TrapezoidProfileTelemetry;
 import frc.robot.RobotMechanisms;
 import frc.robot.arm.LimitSwitchIO.LimitSwitchIOValues;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
@@ -39,6 +40,7 @@ public class Arm extends Subsystem {
   private final WristMotorIOValues wristMotorValues = new WristMotorIOValues();
 
   private ArmState goal, setpoint;
+  private final TrapezoidProfileTelemetry shoulderProfileTelemetry, wristProfileTelemetry;
 
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
@@ -60,6 +62,9 @@ public class Arm extends Subsystem {
     // nullish errors
     goal = initialState;
     setpoint = initialState;
+
+    shoulderProfileTelemetry = new TrapezoidProfileTelemetry("arm/shoulderProfile");
+    wristProfileTelemetry = new TrapezoidProfileTelemetry("arm/wristProfile");
   }
 
   /**
@@ -82,6 +87,16 @@ public class Arm extends Subsystem {
     wristMotor.update(wristMotorValues);
 
     mechanism.updateArm(getPosition());
+
+    shoulderProfileTelemetry.updateMeasurement(
+        shoulderMotorValues.positionRotations, shoulderMotorValues.velocityRotationsPerSecond);
+    shoulderProfileTelemetry.updateSetpoint(getSetpoint().shoulder());
+    shoulderProfileTelemetry.updateGoal(getGoal().shoulder());
+
+    wristProfileTelemetry.updateMeasurement(
+        wristMotorValues.positionRotations, wristMotorValues.velocityRotationsPerSecond);
+    wristProfileTelemetry.updateSetpoint(getSetpoint().wrist());
+    wristProfileTelemetry.updateGoal(getGoal().wrist());
 
     setSetpoint(setpoint.nextSetpoint(goal));
   }
