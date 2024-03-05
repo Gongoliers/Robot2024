@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
-import frc.lib.SingleJointedArmFeedforward.SingleJointedArmFeedforwardConstants;
 import frc.robot.arm.ArmConstants.WristMotorConstants;
 
 public class WristMotorIOSparkMax implements WristMotorIO {
@@ -27,9 +26,9 @@ public class WristMotorIOSparkMax implements WristMotorIO {
     // TODO Temporary fix, using one of the climber Sparks
     sparkMax = new CANSparkMax(6, MotorType.kBrushless);
 
-    feedback = new PIDController(WristMotorConstants.KP, 0, 0);
+    feedback = new PIDController(36.0, 0, 0);
 
-    feedforward = new SingleJointedArmFeedforward(new SingleJointedArmFeedforwardConstants());
+    feedforward = new SingleJointedArmFeedforward();
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -38,7 +37,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
-    sparkMax.setInverted(WristMotorConstants.MOTOR_INVERT);
+    sparkMax.setInverted(true);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
 

@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.AccelerationCalculator;
 import frc.lib.Configurator;
 import frc.lib.SingleJointedArmFeedforward;
-import frc.lib.SingleJointedArmFeedforward.SingleJointedArmFeedforwardConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 
 /** Shoulder motor using a Spark Max. */
@@ -27,11 +26,11 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
+    sparkMax = new CANSparkMax(2, MotorType.kBrushless);
 
-    feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
+    feedback = new PIDController(36.0, 0, 0);
 
-    feedforward = new SingleJointedArmFeedforward(new SingleJointedArmFeedforwardConstants());
+    feedforward = new SingleJointedArmFeedforward();
 
     accelerationCalculator = new AccelerationCalculator();
   }

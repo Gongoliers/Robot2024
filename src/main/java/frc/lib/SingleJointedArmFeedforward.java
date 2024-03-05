@@ -54,6 +54,10 @@ public class SingleJointedArmFeedforward {
 
   private final SingleJointedArmFeedforwardConstants constants;
 
+  public SingleJointedArmFeedforward() {
+    this.constants = new SingleJointedArmFeedforwardConstants();
+  }
+
   public SingleJointedArmFeedforward(SingleJointedArmFeedforwardConstants constants) {
     this.constants = constants;
   }

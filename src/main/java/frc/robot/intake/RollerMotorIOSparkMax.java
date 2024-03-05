@@ -12,14 +12,14 @@ public class RollerMotorIOSparkMax implements RollerMotorIO {
   private final CANSparkMax sparkMax;
 
   public RollerMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(RollerMotorConstants.CAN.id(), MotorType.kBrushless);
+    sparkMax = new CANSparkMax(5, MotorType.kBrushless);
   }
 
   @Override
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
-    sparkMax.setInverted(RollerMotorConstants.IS_INVERTED);
+    sparkMax.setInverted(false);
 
     Configurator.configureREV(
         () ->

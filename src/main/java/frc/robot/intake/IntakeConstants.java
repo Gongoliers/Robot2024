@@ -3,7 +3,6 @@ package frc.robot.intake;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.lib.CAN;
 import frc.lib.MotionProfileCalculator;
 import frc.lib.MotorCurrentLimits;
 
@@ -12,9 +11,6 @@ public class IntakeConstants {
 
   /** Constants for the pivot motor. */
   public static class PivotMotorConstants {
-    /** Pivot motor's CAN identifier. */
-    public static final CAN CAN = new CAN(8);
-
     /** If true, invert the pivot motor. */
     public static final boolean IS_MOTOR_INVERTED = false;
 
@@ -58,19 +54,10 @@ public class IntakeConstants {
 
     /** Motion profile of the pivot using constraints. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
-
-    /** Proportional gain of the arm in volts per rotation. */
-    public static final double KP = 16.0;
   }
 
   /** Constants for the roller motor. */
   public static class RollerMotorConstants {
-    /** Roller motor's CAN identifier. */
-    public static final CAN CAN = new CAN(5);
-
-    /** If true, invert the roller motor. */
-    public static final boolean IS_INVERTED = false;
-
     /** Gearing between the roller motor and the rollers. */
     public static final double GEARING = 4.5;
 
