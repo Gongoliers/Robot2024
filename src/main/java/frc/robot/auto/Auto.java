@@ -84,9 +84,9 @@ public class Auto extends Subsystem {
 
     NamedCommands.registerCommand("home", Arm.getInstance().home());
     NamedCommands.registerCommand("stow", stow());
-    NamedCommands.registerCommand("readyIntake", readyIntake());
+    NamedCommands.registerCommand("readyIntake", intakePosition());
     NamedCommands.registerCommand("intakeNote", intakeNote());
-    NamedCommands.registerCommand("readyShoot", readyShoot());
+    NamedCommands.registerCommand("readyShoot", shootPosition());
     NamedCommands.registerCommand("shootNote", shootNote());
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -131,16 +131,17 @@ public class Auto extends Subsystem {
     return autoChooser;
   }
 
-  public Command readyIntake() {
+  public Command intakePosition() {
     double seconds = 3.0;
 
     return Commands.parallel(
-            Commands.waitUntil(intake::isOut).andThen(arm.wristTo(ArmState.INTAKE)), intake.out())
+            Commands.waitUntil(intake::isOut).andThen(arm.wristTo(ArmState.INTAKE)),
+            intake.unstow())
         .withTimeout(seconds);
   }
 
   public Command intakeNote() {
-    return readyIntake().andThen(Commands.parallel(intake.intake(), shooter.intake()));
+    return intakePosition().andThen(Commands.parallel(intake.intake(), shooter.intake()));
   }
 
   public Command stow() {
@@ -152,16 +153,16 @@ public class Auto extends Subsystem {
         .withTimeout(seconds);
   }
 
-  public Command readyShoot() {
+  public Command shootPosition() {
     double seconds = 3.0;
 
     return Commands.parallel(
-            Commands.waitUntil(intake::isOut).andThen(arm.wristTo(ArmState.SHOOT)), intake.out())
+            Commands.waitUntil(intake::isOut).andThen(arm.wristTo(ArmState.SHOOT)), intake.unstow())
         .withTimeout(seconds);
   }
 
   public Command shootNote() {
-    return readyShoot()
+    return shootPosition()
         .andThen(
             Commands.parallel(
                     shooter.spin(), shooter.serialize().beforeStarting(Commands.waitSeconds(1.0)))

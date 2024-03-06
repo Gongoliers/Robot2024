@@ -28,6 +28,11 @@
           "visible": true
         }
       },
+      "/Shuffleboard/Odometry/Field/Field": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Mechanism": {
         "window": {
           "visible": true

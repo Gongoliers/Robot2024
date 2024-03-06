@@ -220,18 +220,18 @@ public class Intake extends Subsystem {
   }
 
   /**
-   * Returns a command that pivots the intake to the "out" position.
+   * Returns a command that pivots the intake to the unstowed position.
    *
-   * @return a command that pivots the intake to the "out" position.
+   * @return a command that pivots the intake to the unstowed position.
    */
-  public Command out() {
+  public Command unstow() {
     return pivotTo(PivotMotorConstants.MINIMUM_ANGLE);
   }
 
   /**
-   * Returns a command that pivots the intake to the "in" position.
+   * Returns a command that pivots the intake to the stowed position.
    *
-   * @return a command that pivots the intake to the "in" position.
+   * @return a command that pivots the intake to the stowed position.
    */
   public Command stow() {
     return pivotTo(PivotMotorConstants.MAXIMUM_ANGLE);
