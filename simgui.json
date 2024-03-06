@@ -80,7 +80,8 @@
           },
           "Serializer": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Swerve": {
           "Constants": {
@@ -113,7 +114,6 @@
         "limitSwitch": {
           "open": true
         },
-        "open": true,
         "shoulderProfile": {
           "open": true
         },

@@ -24,10 +24,10 @@ public class ShooterConstants {
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
     /** Velocity to apply while intaking in rotations per second. */
-    public static final double INTAKE_VELOCITY = 1.0;
+    public static final double INTAKE_VELOCITY = 4.75;
 
     /** Velocity to apply while serializing in rotations per second. */
-    public static final double SERIALIZE_VELOCITY = 1.0;
+    public static final double SERIALIZE_VELOCITY = 4.75;
 
     /** Maximum tengential speed in meters per second. */
     public static final double MAXIMUM_TANGENTIAL_SPEED = 4.75;
@@ -39,7 +39,7 @@ public class ShooterConstants {
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
     /** Velocity to apply while shooting in rotations per second. */
-    public static final double SHOOT_VELOCITY = 1.0;
+    public static final double SHOOT_VELOCITY = 5.65;
 
     /** Maximum tangential speed in meters per second. */
     public static final double MAXIMUM_TANGENTIAL_SPEED = 5.65;

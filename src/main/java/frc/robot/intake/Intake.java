@@ -92,7 +92,8 @@ public class Intake extends Subsystem {
     rollerMotor.update(rollerMotorValues);
 
     mechanism.updateIntake(
-        Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
+        Rotation2d.fromRotations(pivotMotorValues.positionRotations),
+        rollerMotorValues.velocityRotationsPerSecond);
 
     pivotProfileTelemetry.update(getPivotMeasuredState(), getPivotSetpoint(), getPivotGoal());
   }
@@ -110,8 +111,7 @@ public class Intake extends Subsystem {
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
     roller.addDouble("Current (A)", () -> rollerMotorValues.currentAmps);
-    roller.addDouble("Motor Velocity (rps)", () -> rollerMotorValues.velocityRotationsPerSecond);
-    roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
+    roller.addDouble("Velocity (rps)", () -> rollerMotorValues.velocityRotationsPerSecond);
   }
 
   /**
@@ -235,15 +235,6 @@ public class Intake extends Subsystem {
     return Commands.runEnd(
         () -> rollerMotor.setSetpoint(RollerMotorConstants.INTAKE_VELOCITY),
         () -> rollerMotor.setSetpoint(0.0));
-  }
-
-  /**
-   * Gets the velocity of the rollers in rotations per second.
-   *
-   * @return the velocity of the rollers in rotations per second.
-   */
-  private double getRollerVelocity() {
-    return rollerMotorValues.velocityRotationsPerSecond / RollerMotorConstants.GEARING;
   }
 
   /**

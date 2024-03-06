@@ -54,39 +54,24 @@ public class Shooter extends Subsystem {
     serializerMotor.update(serializerMotorValues);
     flywheelMotor.update(flywheelMotorValues);
 
-    RobotMechanisms.getInstance().updateShooter(getFlywheelTangentialSpeed());
-    RobotMechanisms.getInstance().updateSerializer(getSerializerTangentialSpeed());
+    RobotMechanisms.getInstance().updateShooter(flywheelMotorValues.velocityRotationsPerSecond);
+    RobotMechanisms.getInstance()
+        .updateSerializer(serializerMotorValues.velocityRotationsPerSecond);
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
 
-    serializer.addDouble("Serializer Speed (mps)", this::getSerializerTangentialSpeed);
+    serializer.addDouble(
+        "Serializer Speed (rps)", () -> serializerMotorValues.velocityRotationsPerSecond);
     serializer.addDouble("Serializer Current (A)", () -> serializerMotorValues.currentAmps);
 
     ShuffleboardLayout flywheel = Telemetry.addColumn(tab, "Flywheel");
 
-    flywheel.addDouble("Flywheel Speed (mps)", this::getFlywheelTangentialSpeed);
+    flywheel.addDouble(
+        "Flywheel Speed (rps)", () -> flywheelMotorValues.velocityRotationsPerSecond);
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
-  }
-
-  /**
-   * Calculates the tangential speed of the serializer in meters per second.
-   *
-   * @return the tangential speed of the serializer in meters per second.
-   */
-  private double getSerializerTangentialSpeed() {
-    return serializerMotorValues.velocityRotationsPerSecond * SerializerConstants.RADIUS;
-  }
-
-  /**
-   * Calculates the tangential speed of the flywheel in meters per second.
-   *
-   * @return the tangential speed of the flywheel in meters per second.
-   */
-  private double getFlywheelTangentialSpeed() {
-    return flywheelMotorValues.velocityRotationsPerSecond * FlywheelConstants.RADIUS;
   }
 
   /**
