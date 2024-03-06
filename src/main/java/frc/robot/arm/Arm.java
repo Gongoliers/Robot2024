@@ -39,7 +39,10 @@ public class Arm extends Subsystem {
   /** Wrist motor values. */
   private final WristMotorIOValues wristMotorValues = new WristMotorIOValues();
 
+  /** Arm goal and setpoint states. */
   private ArmState goal, setpoint;
+
+  /** Telemetry for the shoulder and wrist trapezoid profiles. */
   private final TrapezoidProfileTelemetry shoulderProfileTelemetry, wristProfileTelemetry;
 
   /** Creates a new instance of the arm subsystem. */
@@ -54,14 +57,8 @@ public class Arm extends Subsystem {
     shoulderMotor.configure();
     wristMotor.configure();
 
-    ArmState initialState = ArmState.INIT;
-
-    setPosition(initialState);
-
-    // Since setPosition also resets goal and setpoint, this is redundant, but will protect from
-    // nullish errors
-    goal = initialState;
-    setpoint = initialState;
+    setPosition(ArmState.INIT);
+    clearProfile();
 
     shoulderProfileTelemetry = new TrapezoidProfileTelemetry("arm/shoulderProfile");
     wristProfileTelemetry = new TrapezoidProfileTelemetry("arm/wristProfile");
@@ -92,8 +89,6 @@ public class Arm extends Subsystem {
         getMeasuredState().shoulder(), getSetpoint().shoulder(), getGoal().shoulder());
     wristProfileTelemetry.update(
         getMeasuredState().wrist(), getSetpoint().wrist(), getGoal().wrist());
-
-    setSetpoint(setpoint.nextSetpoint(goal));
   }
 
   @Override
@@ -117,7 +112,6 @@ public class Arm extends Subsystem {
         () -> Units.rotationsToDegrees(getSetpoint().shoulder().position));
     setpoint.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().wrist().position));
-    setpoint.addBoolean("At Setpoint?", this::atSetpoint);
 
     ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
 
@@ -125,7 +119,6 @@ public class Arm extends Subsystem {
         "Shoulder Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().shoulder().position));
     goal.addDouble(
         "Wrist Setpoint (deg)", () -> Units.rotationsToDegrees(getGoal().wrist().position));
-    goal.addBoolean("At Goal?", this::atGoal);
 
     ShuffleboardLayout voltages = Telemetry.addColumn(tab, "Voltages");
 
@@ -146,12 +139,25 @@ public class Arm extends Subsystem {
         () -> wristMotorValues.accelerationRotationsPerSecondPerSecond);
   }
 
+  /**
+   * Sets the position of the arm to the supplied state.
+   *
+   * @param state the state containing the position of the arm.
+   */
   public void setPosition(ArmState state) {
     shoulderMotor.setPosition(state.shoulder().position);
     wristMotor.setPosition(state.wrist().position);
+  }
 
-    goal = state;
-    setpoint = state;
+  /**
+   * Resets the goal and setpoints of the arm to the arm's current position. Commands the arm to
+   * hold its current position.
+   */
+  public void clearProfile() {
+    ArmState position = getMeasuredState().position();
+
+    goal = position;
+    setpoint = position;
   }
 
   /**
@@ -173,62 +179,124 @@ public class Arm extends Subsystem {
     return new ArmState(measuredShoulderState, measuredWristState);
   }
 
+  /**
+   * Returns true if the arm is at a given state.
+   *
+   * @param state the state to compare to.
+   * @return true if the arm is at a given state.
+   */
+  public boolean at(ArmState state) {
+    return getMeasuredState().at(state);
+  }
+
+  /**
+   * Returns the arm's goal.
+   *
+   * @return the arm's goal.
+   */
   public ArmState getGoal() {
-    return goal;
+    return this.goal;
   }
 
-  public boolean atGoal() {
-    return atSetpoint() && setpoint.at(goal);
-  }
-
+  /**
+   * Sets the arm's goal.
+   *
+   * <p>Calling this method does not alter the arm's motion; it simply updates a value used for
+   * telemetry.
+   *
+   * @param goal the arm's goal.
+   */
   public void setGoal(ArmState goal) {
     this.goal = goal;
   }
 
+  /**
+   * Returns the arm's setpoint.
+   *
+   * @return the arm's setpoint.
+   */
   public ArmState getSetpoint() {
-    return setpoint;
+    return this.setpoint;
   }
 
-  public boolean atSetpoint() {
-    return getMeasuredState().at(setpoint);
-  }
-
-  private void setSetpoint(ArmState setpoint) {
+  /**
+   * Sets the arm's setpoint.
+   *
+   * <p>Calling this method does not alter the arm's motion; it simply updates a value used for
+   * telemetry.
+   *
+   * @param setpoint the arm's setpoint.
+   */
+  public void setSetpoint(ArmState setpoint) {
     this.setpoint = setpoint;
+  }
 
+  /**
+   * Applies a setpoint to the arm's controllers.
+   *
+   * <p>Calling this method alters the arm's motion.
+   *
+   * @param setpoint the arm's setpoint.
+   */
+  public void applySetpoint(ArmState setpoint) {
     shoulderMotor.setSetpoint(setpoint.shoulder().position, setpoint.shoulder().velocity);
     wristMotor.setSetpoint(setpoint.wrist().position, setpoint.wrist().velocity);
   }
 
-  private MoveShoulderCommand moveShoulder(ArmState goal) {
+  /**
+   * Returns a command that moves the shoulder to a goal's shoulder position.
+   *
+   * @param goal the goal position to move to.
+   * @return a command that moves the shoulder to a goal's shoulder position.
+   */
+  private Command shoulderTo(ArmState goal) {
     return new MoveShoulderCommand(goal);
   }
 
-  public MoveWristCommand moveWrist(ArmState goal) {
+  /**
+   * Returns a command that moves the wrist to a goal's wrist position.
+   *
+   * @param goal the goal position to move to.
+   * @return a command that moves the wrist to a goal's wrist position.
+   */
+  public Command wristTo(ArmState goal) {
     return new MoveWristCommand(goal);
   }
 
-  public Command moveShoulderThenWrist(ArmState goal) {
-    return moveShoulder(goal).andThen(moveWrist(goal));
-  }
-
-  public Command moveWristThenShoulder(ArmState goal) {
-    return moveWrist(goal).andThen(moveShoulder(goal));
-  }
-
+  /**
+   * Returns a command that moves the arm to the amp position.
+   *
+   * @return a comamnd that moves the arm to the amp position.
+   */
   public Command amp() {
-    return moveShoulderThenWrist(ArmState.AMP);
+    return shoulderTo(ArmState.AMP).andThen(wristTo(ArmState.AMP));
   }
 
+  /**
+   * Returns a command that moves the arm to the stow position.
+   *
+   * @return a command that moves the arm to the stow position.
+   */
+  public Command stow() {
+    return wristTo(ArmState.STOW).andThen(shoulderTo(ArmState.STOW));
+  }
+
+  /**
+   * Returns a command that moves the arm to the stow position and resets the position of the arm.
+   *
+   * <p>When the limit switch detects that the arm is in the stow position, the arm position is
+   * reset to be equal to the stow position.
+   *
+   * @return a command that moves the arm to the stow position and resets the position of the arm.
+   */
   public Command home() {
-    return moveWrist(ArmState.STOW)
-        .andThen(moveShoulder(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
+    return wristTo(ArmState.STOW)
+        .andThen(shoulderTo(ArmState.STOW).until(() -> limitSwitchValues.isPressed))
         .finallyDo(
             interrupted -> {
               if (!interrupted) {
                 setPosition(ArmState.STOW);
               }
-            })
-        .withTimeout(3.0);
+            });
   }
 }

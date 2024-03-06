@@ -152,29 +152,4 @@ public record ArmState(State shoulder, State wrist) {
         WristMotorConstants.MOTION_PROFILE.calculate(
             RobotConstants.PERIODIC_DURATION, this.wrist, goal.wrist));
   }
-
-  /**
-   * Returns the next overall setpoint of the arm's movement.
-   *
-   * @param goal the arm's goal state.
-   * @return the next overall setpoint.
-   */
-  public ArmState nextSetpoint(ArmState goal) {
-    boolean shooterOnBottom = Rotation2d.fromRotations(wrist.position).getDegrees() < 0.0;
-    boolean shooterNeedsToBeOnTop =
-        Rotation2d.fromRotations(goal.wrist.position).getDegrees() > 0.0;
-    boolean shooterOnWrongSide = shooterOnBottom && shooterNeedsToBeOnTop;
-
-    if (shooterOnWrongSide && !atWristGoal(goal)) {
-      return nextWristSetpoint(goal);
-    }
-
-    if (!atShoulderGoal(goal)) {
-      return nextShoulderSetpoint(goal);
-    } else if (!atWristGoal(goal)) {
-      return nextWristSetpoint(goal);
-    }
-
-    return this;
-  }
 }

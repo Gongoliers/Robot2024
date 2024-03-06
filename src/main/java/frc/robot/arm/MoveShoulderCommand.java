@@ -24,13 +24,22 @@ public class MoveShoulderCommand extends Command {
     before = arm.getMeasuredState().position();
 
     arm.setGoal(shoulderGoal.withWrist(before.wrist()));
+    arm.setSetpoint(before);
+  }
+
+  @Override
+  public void execute() {
+    ArmState nextSetpoint = arm.getSetpoint().nextShoulderSetpoint(shoulderGoal);
+
+    arm.setSetpoint(nextSetpoint);
+    arm.applySetpoint(nextSetpoint);
   }
 
   @Override
   public void end(boolean interrupted) {
     ArmState after = arm.getMeasuredState().position();
 
-    // Since only the shoulder should have moved, assume that the wrist is in the same position as
+    // Since only the shoulder *should* have moved, assume that the wrist is in the same position as
     // it was at the start of the command
     arm.setPosition(after.withWrist(before.wrist()));
   }
