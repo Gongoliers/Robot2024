@@ -5,8 +5,8 @@ public interface SerializerMotorIO {
 
   /** Values for the serializer motor hardware interface. */
   public static class SerializerMotorIOValues {
-    /** Angular velocity of the serializer in rotations per second. */
-    public double angularVelocityRotationsPerSecond = 0.0;
+    /** Velocity of the serializer in rotations per second. */
+    public double velocityRotationsPerSecond = 0.0;
 
     /** Current drawn by the serializer motor in amps. */
     public double currentAmps = 0.0;
@@ -23,12 +23,9 @@ public interface SerializerMotorIO {
   public void update(SerializerMotorIOValues values);
 
   /**
-   * Run the serializer motor with the specified voltage.
+   * Sets the setpoint of the serializer motor.
    *
-   * @param volts volts to apply to the serializer motor.
+   * @param velocityRotationsPerSecond the velocity setpoint of the serializer motor.
    */
-  public void setVoltage(double volts);
-
-  /** Stop the serializer motor. */
-  public void stop();
+  public void setSetpoint(double velocityRotationsPerSecond);
 }

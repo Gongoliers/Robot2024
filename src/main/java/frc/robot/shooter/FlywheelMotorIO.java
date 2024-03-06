@@ -5,8 +5,8 @@ public interface FlywheelMotorIO {
 
   /** Values for the flywheel motor hardware interface. */
   public static class FlywheelMotorIOValues {
-    /** Angular velocity of the flywheel in rotations per second. */
-    public double angularVelocityRotationsPerSecond = 0.0;
+    /** Velocity of the flywheel in rotations per second. */
+    public double velocityRotationsPerSecond = 0.0;
 
     /** Current drawn by the flywheel motor in amps. */
     public double currentAmps = 0.0;
@@ -23,12 +23,9 @@ public interface FlywheelMotorIO {
   public void update(FlywheelMotorIOValues values);
 
   /**
-   * Run the flywheel motor with the specified voltage.
+   * Sets the setpoint of the flywheel motor.
    *
-   * @param volts volts to apply to the flywheel motor.
+   * @param velocityRotationsPerSecond the velocity setpoint of the flywheel motor.
    */
-  public void setVoltage(double volts);
-
-  /** Stop the flywheel motor. */
-  public void stop();
+  public void setSetpoint(double velocityRotationsPerSecond);
 }

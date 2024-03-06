@@ -25,17 +25,12 @@ public class SerializerMotorIOSparkMax implements SerializerMotorIO {
 
   @Override
   public void update(SerializerMotorIOValues values) {
-    values.angularVelocityRotationsPerSecond = sparkMax.getEncoder().getVelocity();
+    values.velocityRotationsPerSecond = sparkMax.getEncoder().getVelocity();
     values.currentAmps = sparkMax.getOutputCurrent();
   }
 
   @Override
-  public void setVoltage(double volts) {
-    sparkMax.setVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    setVoltage(0.0);
+  public void setSetpoint(double velocityRotationsPerSecond) {
+    // TODO Implement velocity setpoint
   }
 }

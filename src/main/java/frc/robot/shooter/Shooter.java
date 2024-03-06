@@ -77,7 +77,7 @@ public class Shooter extends Subsystem {
    * @return the tangential speed of the serializer in meters per second.
    */
   private double getSerializerTangentialSpeed() {
-    return serializerMotorValues.angularVelocityRotationsPerSecond * SerializerConstants.RADIUS;
+    return serializerMotorValues.velocityRotationsPerSecond * SerializerConstants.RADIUS;
   }
 
   /**
@@ -86,7 +86,7 @@ public class Shooter extends Subsystem {
    * @return the tangential speed of the flywheel in meters per second.
    */
   private double getFlywheelTangentialSpeed() {
-    return flywheelMotorValues.angularVelocityRotationsPerSecond * FlywheelConstants.RADIUS;
+    return flywheelMotorValues.velocityRotationsPerSecond * FlywheelConstants.RADIUS;
   }
 
   /**
@@ -95,8 +95,9 @@ public class Shooter extends Subsystem {
    * @return a command that intakes a note.
    */
   public Command intake() {
-    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.INTAKE_VOLTAGE))
-        .finallyDo(serializerMotor::stop);
+    return Commands.runEnd(
+        () -> serializerMotor.setSetpoint(SerializerConstants.INTAKE_VELOCITY),
+        () -> serializerMotor.setSetpoint(0.0));
   }
 
   /**
@@ -105,8 +106,9 @@ public class Shooter extends Subsystem {
    * @return a command that serializes a note.
    */
   public Command serialize() {
-    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE))
-        .finallyDo(serializerMotor::stop);
+    return Commands.runEnd(
+        () -> serializerMotor.setSetpoint(SerializerConstants.SERIALIZE_VELOCITY),
+        () -> serializerMotor.setSetpoint(0.0));
   }
 
   /**
@@ -115,17 +117,8 @@ public class Shooter extends Subsystem {
    * @return a command that spins the flywheel.
    */
   public Command spin() {
-    return Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE))
-        .finallyDo(flywheelMotor::stop);
-  }
-
-  /**
-   * Shoots a note by spinning the flywheel then serializing a note.
-   *
-   * @return a command that shoots a note.
-   */
-  public Command autoShoot() {
-    return Commands.parallel(serialize().beforeStarting(Commands.waitSeconds(1.0)), spin())
-        .withTimeout(3.0);
+    return Commands.runEnd(
+        () -> flywheelMotor.setSetpoint(FlywheelConstants.SHOOT_VELOCITY),
+        () -> flywheelMotor.setSetpoint(0.0));
   }
 }
