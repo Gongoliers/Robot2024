@@ -87,7 +87,9 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     double feedforwardVolts =
-        feedforward.calculate(Rotation2d.fromRotations(measuredPositionRotations));
+        feedforward.calculate(
+            Rotation2d.fromRotations(measuredPositionRotations)
+                .plus(PivotMotorConstants.MASS_OFFSET));
 
     double percent = (feedbackVolts + feedforwardVolts) / talonSRX.getBusVoltage();
 
