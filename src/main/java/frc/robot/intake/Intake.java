@@ -86,9 +86,6 @@ public class Intake extends Subsystem {
   public void periodic() {
     pivotMotor.update(pivotMotorValues);
 
-    // TODO Move to command
-    applyPivotSetpoint();
-
     rollerMotor.update(rollerMotorValues);
 
     mechanism.updateIntake(
@@ -132,7 +129,16 @@ public class Intake extends Subsystem {
    * @param goal the intake pivot's goal.
    */
   public void setPivotGoal(Rotation2d goal) {
-    pivotGoal = new TrapezoidProfile.State(goal.getRotations(), 0);
+    setPivotGoal(new TrapezoidProfile.State(goal.getRotations(), 0.0));
+  }
+
+  /**
+   * Sets the intake pivot's goal.
+   *
+   * @param goal the intake pivot's goal.
+   */
+  public void setPivotGoal(State goal) {
+    pivotGoal = goal;
   }
 
   /**
@@ -145,6 +151,15 @@ public class Intake extends Subsystem {
   }
 
   /**
+   * Sets the intake pivot's setpoint.
+   *
+   * @param setpoint the intake pivot's setpoint.
+   */
+  public void setPivotSetpoint(State setpoint) {
+    pivotSetpoint = setpoint;
+  }
+
+  /**
    * Returns the intake pivot's setpoint.
    *
    * @return the intake pivot's setpoint.
@@ -154,16 +169,12 @@ public class Intake extends Subsystem {
   }
 
   /**
-   * Applies a setpoint to the intake pivot's controllers.
+   * Applies a pivot setpoint to the pivot motor's controller.
    *
-   * <p>Calling this method alters the intake pivot's motion.
+   * @param setpoint the pivot's setpoint.
    */
-  private void applyPivotSetpoint() {
-    pivotSetpoint =
-        PivotMotorConstants.MOTION_PROFILE.calculate(
-            RobotConstants.PERIODIC_DURATION, pivotSetpoint, pivotGoal);
-
-    pivotMotor.setSetpoint(pivotSetpoint.position, pivotSetpoint.velocity);
+  public void applyPivotSetpoint(State setpoint) {
+    pivotMotor.setSetpoint(setpoint.position, setpoint.velocity);
   }
 
   /**
@@ -193,10 +204,19 @@ public class Intake extends Subsystem {
    * Returns a command that pivots the intake to an angle.
    *
    * @param angle the angle to pivot the intake to.
-   * @return a commadn that pivots the intake to an angle.
+   * @return a command that pivots the intake to an angle.
    */
   private Command pivotTo(Rotation2d angle) {
-    return runOnce(() -> setPivotGoal(angle)).andThen(Commands.waitUntil(this::atPivotGoal));
+    return run(() -> {
+          State nextPivotSetpoint =
+              PivotMotorConstants.MOTION_PROFILE.calculate(
+                  RobotConstants.PERIODIC_DURATION, pivotSetpoint, pivotGoal);
+
+          setPivotSetpoint(nextPivotSetpoint);
+          applyPivotSetpoint(nextPivotSetpoint);
+        })
+        .beforeStarting(() -> setPivotGoal(angle))
+        .until(this::atPivotGoal);
   }
 
   /**
