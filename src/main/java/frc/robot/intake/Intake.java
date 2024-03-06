@@ -5,6 +5,7 @@ import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -102,19 +103,16 @@ public class Intake extends Subsystem {
     mechanism.updateIntake(
         Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
 
-    pivotProfileTelemetry.updateMeasurement(pivotMotorValues.positionRotations, 0.0);
-    pivotProfileTelemetry.updateSetpoint(pivotSetpoint);
-    pivotProfileTelemetry.updateGoal(pivotGoal);
+    pivotProfileTelemetry.update(getMeasuredState(), getSetpoint(), getGoal());
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout pivot = Telemetry.addColumn(tab, "Pivot");
 
-    pivot.addDouble(
-        "Position (deg)", () -> Units.rotationsToDegrees(pivotMotorValues.positionRotations));
-    pivot.addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(pivotSetpoint.position));
-    pivot.addDouble("Goal (deg)", () -> Units.rotationsToDegrees(pivotGoal.position));
+    pivot.addDouble("Position (deg)", () -> Units.rotationsToDegrees(getMeasuredState().position));
+    pivot.addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().position));
+    pivot.addDouble("Goal (deg)", () -> Units.rotationsToDegrees(getGoal().position));
     pivot.addBoolean("Is Not Stowed?", this::isNotStowed);
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
@@ -125,6 +123,21 @@ public class Intake extends Subsystem {
     roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
     roller.addBoolean("Current Spike?", this::rollerCurrentSpike);
     roller.addBoolean("Stalled?", this::rollerStalled);
+  }
+
+  public State getMeasuredState() {
+    pivotMotor.update(pivotMotorValues);
+
+    // TODO Include velocity
+    return new State(pivotMotorValues.positionRotations, 0.0);
+  }
+
+  public State getSetpoint() {
+    return pivotSetpoint;
+  }
+
+  public State getGoal() {
+    return pivotGoal;
   }
 
   public void setPivotGoal(Rotation2d goal) {

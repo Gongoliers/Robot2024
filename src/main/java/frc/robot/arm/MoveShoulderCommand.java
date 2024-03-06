@@ -21,14 +21,14 @@ public class MoveShoulderCommand extends Command {
   @Override
   public void initialize() {
     // Save the position of the arm before the shoulder starts moving
-    before = arm.getPosition();
+    before = arm.getMeasuredState().position();
 
     arm.setGoal(shoulderGoal.withWrist(before.wrist()));
   }
 
   @Override
   public void end(boolean interrupted) {
-    ArmState after = arm.getPosition();
+    ArmState after = arm.getMeasuredState().position();
 
     // Since only the shoulder should have moved, assume that the wrist is in the same position as
     // it was at the start of the command
@@ -37,6 +37,6 @@ public class MoveShoulderCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return arm.getPosition().atShoulderGoal(shoulderGoal);
+    return arm.getMeasuredState().atShoulderGoal(shoulderGoal);
   }
 }

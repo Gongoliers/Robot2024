@@ -1,6 +1,6 @@
 package frc.lib;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.networktables.DoubleEntry;
 
 public class TrapezoidProfileTelemetry {
@@ -23,7 +23,7 @@ public class TrapezoidProfileTelemetry {
     measuredVelocity.set(velocity);
   }
 
-  public void updateMeasurement(TrapezoidProfile.State state) {
+  public void updateMeasurement(State state) {
     updateMeasurement(state.position, state.velocity);
   }
 
@@ -32,7 +32,7 @@ public class TrapezoidProfileTelemetry {
     setpointVelocity.set(velocity);
   }
 
-  public void updateSetpoint(TrapezoidProfile.State state) {
+  public void updateSetpoint(State state) {
     updateSetpoint(state.position, state.velocity);
   }
 
@@ -41,7 +41,13 @@ public class TrapezoidProfileTelemetry {
     goalVelocity.set(velocity);
   }
 
-  public void updateGoal(TrapezoidProfile.State state) {
+  public void updateGoal(State state) {
     updateGoal(state.position, state.velocity);
+  }
+
+  public void update(State measurement, State setpoint, State goal) {
+    updateMeasurement(measurement);
+    updateSetpoint(setpoint);
+    updateGoal(goal);
   }
 }

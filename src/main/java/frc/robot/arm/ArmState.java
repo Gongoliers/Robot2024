@@ -46,6 +46,16 @@ public record ArmState(State shoulder, State wrist) {
   }
 
   /**
+   * Creates an arm state representing the stationary position of the arm.
+   *
+   * @return an arm state representing the stationary position of the arm.
+   */
+  public ArmState position() {
+    return new ArmState(
+        Rotation2d.fromRotations(shoulder.position), Rotation2d.fromRotations(wrist.position));
+  }
+
+  /**
    * Copies this arm state with a new shoulder rotation.
    *
    * @param newShoulder the new shoulder rotation.

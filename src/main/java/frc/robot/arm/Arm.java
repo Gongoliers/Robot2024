@@ -1,6 +1,6 @@
 package frc.robot.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -86,32 +86,18 @@ public class Arm extends Subsystem {
     shoulderMotor.update(shoulderMotorValues);
     wristMotor.update(wristMotorValues);
 
-    mechanism.updateArm(getPosition());
+    mechanism.updateArm(getMeasuredState());
 
-    shoulderProfileTelemetry.updateMeasurement(
-        shoulderMotorValues.positionRotations, shoulderMotorValues.velocityRotationsPerSecond);
-    shoulderProfileTelemetry.updateSetpoint(getSetpoint().shoulder());
-    shoulderProfileTelemetry.updateGoal(getGoal().shoulder());
-
-    wristProfileTelemetry.updateMeasurement(
-        wristMotorValues.positionRotations, wristMotorValues.velocityRotationsPerSecond);
-    wristProfileTelemetry.updateSetpoint(getSetpoint().wrist());
-    wristProfileTelemetry.updateGoal(getGoal().wrist());
+    shoulderProfileTelemetry.update(
+        getMeasuredState().shoulder(), getSetpoint().shoulder(), getGoal().shoulder());
+    wristProfileTelemetry.update(
+        getMeasuredState().wrist(), getSetpoint().wrist(), getGoal().wrist());
 
     setSetpoint(setpoint.nextSetpoint(goal));
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout commands = Telemetry.addColumn(tab, "Commands");
-
-    commands.addString(
-        "Running Command",
-        () ->
-            this.getCurrentCommand() != null
-                ? this.getCurrentCommand().getName()
-                : "no running command");
-
     ShuffleboardLayout limitSwitch = Telemetry.addColumn(tab, "Limit Switch");
 
     limitSwitch.addBoolean("Is Pressed?", () -> limitSwitchValues.isPressed);
@@ -169,17 +155,22 @@ public class Arm extends Subsystem {
   }
 
   /**
-   * Gets the position of the arm.
+   * Gets the measured state of the arm.
    *
-   * @return the position of the arm.
+   * @return the measured state of the arm.
    */
-  public ArmState getPosition() {
+  public ArmState getMeasuredState() {
     shoulderMotor.update(shoulderMotorValues);
     wristMotor.update(wristMotorValues);
 
-    return new ArmState(
-        Rotation2d.fromRotations(shoulderMotorValues.positionRotations),
-        Rotation2d.fromRotations(wristMotorValues.positionRotations));
+    TrapezoidProfile.State measuredShoulderState =
+        new TrapezoidProfile.State(
+            shoulderMotorValues.positionRotations, shoulderMotorValues.velocityRotationsPerSecond);
+    TrapezoidProfile.State measuredWristState =
+        new TrapezoidProfile.State(
+            wristMotorValues.positionRotations, wristMotorValues.velocityRotationsPerSecond);
+
+    return new ArmState(measuredShoulderState, measuredWristState);
   }
 
   public ArmState getGoal() {
@@ -199,7 +190,7 @@ public class Arm extends Subsystem {
   }
 
   public boolean atSetpoint() {
-    return getPosition().at(setpoint);
+    return getMeasuredState().at(setpoint);
   }
 
   private void setSetpoint(ArmState setpoint) {

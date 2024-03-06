@@ -66,12 +66,6 @@
             "open": true
           }
         },
-        "Intake": {
-          "Roller": {
-            "open": true
-          },
-          "open": true
-        },
         "Odometry": {
           "Position": {
             "open": true
@@ -119,7 +113,13 @@
         "limitSwitch": {
           "open": true
         },
-        "open": true
+        "open": true,
+        "shoulderProfile": {
+          "open": true
+        },
+        "wristProfile": {
+          "open": true
+        }
       },
       "shooter": {
         "beamBreakSensorSim": {

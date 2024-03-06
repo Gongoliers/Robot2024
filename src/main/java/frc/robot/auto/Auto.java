@@ -150,7 +150,7 @@ public class Auto extends Subsystem {
 
     return Commands.parallel(
             arm.moveWristThenShoulder(ArmState.STOW),
-            Commands.waitUntil(() -> arm.getPosition().at(ArmState.STOW))
+            Commands.waitUntil(() -> arm.getMeasuredState().at(ArmState.STOW))
                 .withTimeout(2.0)
                 .andThen(intake.in()))
         .withTimeout(seconds);
