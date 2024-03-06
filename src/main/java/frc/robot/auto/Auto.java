@@ -161,6 +161,10 @@ public class Auto extends Subsystem {
   }
 
   public Command shootNote() {
-    return readyShoot().andThen(shooter.autoShoot());
+    return readyShoot()
+        .andThen(
+            Commands.parallel(
+                    shooter.spin(), shooter.serialize().beforeStarting(Commands.waitSeconds(1.0)))
+                .withTimeout(2.0));
   }
 }
