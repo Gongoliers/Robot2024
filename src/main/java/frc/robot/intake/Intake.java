@@ -110,8 +110,7 @@ public class Intake extends Subsystem {
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
     roller.addDouble("Current (A)", () -> rollerMotorValues.currentAmps);
-    roller.addDouble(
-        "Motor Velocity (rps)", () -> rollerMotorValues.angularVelocityRotationsPerSecond);
+    roller.addDouble("Motor Velocity (rps)", () -> rollerMotorValues.velocityRotationsPerSecond);
     roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
   }
 
@@ -233,8 +232,9 @@ public class Intake extends Subsystem {
    * @return a command that intakes using the rollers.
    */
   public Command intake() {
-    return Commands.run(() -> rollerMotor.setVoltage(RollerMotorConstants.INTAKE_VOLTAGE))
-        .finallyDo(rollerMotor::stop);
+    return Commands.runEnd(
+        () -> rollerMotor.setSetpoint(RollerMotorConstants.INTAKE_VELOCITY),
+        () -> rollerMotor.setSetpoint(0.0));
   }
 
   /**
@@ -243,7 +243,7 @@ public class Intake extends Subsystem {
    * @return the velocity of the rollers in rotations per second.
    */
   private double getRollerVelocity() {
-    return rollerMotorValues.angularVelocityRotationsPerSecond / RollerMotorConstants.GEARING;
+    return rollerMotorValues.velocityRotationsPerSecond / RollerMotorConstants.GEARING;
   }
 
   /**
@@ -252,7 +252,8 @@ public class Intake extends Subsystem {
    * @return a command that outtakes using the rollers.
    */
   public Command outtake() {
-    return Commands.run(() -> rollerMotor.setVoltage(RollerMotorConstants.OUTTAKE_VOLTAGE))
-        .finallyDo(rollerMotor::stop);
+    return Commands.runEnd(
+        () -> rollerMotor.setSetpoint(RollerMotorConstants.OUTTAKE_VELOCITY),
+        () -> rollerMotor.setSetpoint(0.0));
   }
 }

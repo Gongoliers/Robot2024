@@ -51,15 +51,11 @@ public class IntakeConstants {
     /** Gearing between the roller motor and the rollers. */
     public static final double GEARING = 4.5;
 
-    /** Moment of inertia of the roller in joules kilograms meters squared. */
-    public static final double MOI = 0.5343;
+    /** Velocity to apply when intaking in rotations per second. */
+    public static final double INTAKE_VELOCITY = 1.0;
 
-    /** Voltage to apply when intaking in volts. */
-    // 12 volts produces enough speed to unscrew the dead axle
-    public static final double INTAKE_VOLTAGE = 11;
-
-    /** Voltage to apply when outtaking in volts. */
-    public static final double OUTTAKE_VOLTAGE = -8;
+    /** Velocity to apply when outtaking in rotations per second. */
+    public static final double OUTTAKE_VELOCITY = -1.0;
 
     /** Radius of the roller in meters. */
     public static final double INTAKE_ROLLER_RADIUS = 0.5 * Units.inchesToMeters(1.375);

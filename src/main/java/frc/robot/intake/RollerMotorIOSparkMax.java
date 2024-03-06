@@ -27,17 +27,16 @@ public class RollerMotorIOSparkMax implements RollerMotorIO {
 
   @Override
   public void update(RollerMotorIOValues values) {
-    values.angularVelocityRotationsPerSecond = sparkMax.getEncoder().getVelocity() / 60.0;
+    values.velocityRotationsPerSecond = getVelocity();
     values.currentAmps = sparkMax.getOutputCurrent();
   }
 
   @Override
-  public void setVoltage(double volts) {
-    sparkMax.setVoltage(volts);
+  public void setSetpoint(double velocityRotationsPerSecond) {
+    // TODO Implement velocity setpoint following
   }
 
-  @Override
-  public void stop() {
-    setVoltage(0);
+  public double getVelocity() {
+    return sparkMax.getEncoder().getVelocity() / 60.0;
   }
 }

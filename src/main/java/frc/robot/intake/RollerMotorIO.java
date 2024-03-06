@@ -5,10 +5,10 @@ public interface RollerMotorIO {
 
   /** Values for the roller motor hardware interface. */
   public static class RollerMotorIOValues {
-    /** Angular velocity of the flywheel in rotations per second. */
-    public double angularVelocityRotationsPerSecond = 0.0;
+    /** Velocity of the roller motor in rotations per second. */
+    public double velocityRotationsPerSecond = 0.0;
 
-    /** Current drawn by the flywheel motor in amps. */
+    /** Current draw of the roller motor in amps. */
     public double currentAmps = 0.0;
   }
 
@@ -23,12 +23,9 @@ public interface RollerMotorIO {
   public void update(RollerMotorIOValues values);
 
   /**
-   * Run the roller motor with the specified voltage.
+   * Sets the setpoint of the roller motor.
    *
-   * @param volts the voltage to apply to the roller motor.
+   * @param velocityRotationsPerSecond the velocity setpoint of the roller motor.
    */
-  public void setVoltage(double volts);
-
-  /** Stops the roller motor. */
-  public void stop();
+  public void setSetpoint(double velocityRotationsPerSecond);
 }
