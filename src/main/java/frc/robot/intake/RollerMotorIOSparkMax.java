@@ -3,7 +3,6 @@ package frc.robot.intake;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.lib.Configurator;
-import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 
 /** Roller motor using a Spark Max. */
 public class RollerMotorIOSparkMax implements RollerMotorIO {
@@ -21,9 +20,7 @@ public class RollerMotorIOSparkMax implements RollerMotorIO {
 
     sparkMax.setInverted(false);
 
-    Configurator.configureREV(
-        () ->
-            sparkMax.setSmartCurrentLimit((int) RollerMotorConstants.CURRENT_LIMITS.breakerAmps()));
+    Configurator.configureREV(() -> sparkMax.setSmartCurrentLimit(40));
 
     Configurator.configureStatusFrames(sparkMax);
   }

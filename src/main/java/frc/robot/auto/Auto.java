@@ -135,8 +135,7 @@ public class Auto extends Subsystem {
     double seconds = 3.0;
 
     return Commands.parallel(
-            Commands.waitUntil(intake::isNotStowed).andThen(arm.wristTo(ArmState.INTAKE)),
-            intake.out())
+            Commands.waitUntil(intake::isOut).andThen(arm.wristTo(ArmState.INTAKE)), intake.out())
         .withTimeout(seconds);
   }
 
@@ -149,7 +148,7 @@ public class Auto extends Subsystem {
 
     return Commands.parallel(
             arm.stow(),
-            Commands.waitUntil(() -> arm.at(ArmState.STOW)).withTimeout(2.0).andThen(intake.in()))
+            Commands.waitUntil(() -> arm.at(ArmState.STOW)).withTimeout(2.0).andThen(intake.stow()))
         .withTimeout(seconds);
   }
 
@@ -157,8 +156,7 @@ public class Auto extends Subsystem {
     double seconds = 3.0;
 
     return Commands.parallel(
-            Commands.waitUntil(intake::isNotStowed).andThen(arm.wristTo(ArmState.SHOOT)),
-            intake.out())
+            Commands.waitUntil(intake::isOut).andThen(arm.wristTo(ArmState.SHOOT)), intake.out())
         .withTimeout(seconds);
   }
 

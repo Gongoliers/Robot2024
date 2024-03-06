@@ -6,8 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class PivotMotorIOSim implements PivotMotorIO {
 
   private double positionRotations;
-
-  // private double velocityRotationsPerSecond;
+  private double velocityRotationsPerSecond;
 
   @Override
   public void configure() {}
@@ -15,8 +14,8 @@ public class PivotMotorIOSim implements PivotMotorIO {
   @Override
   public void update(PivotMotorIOValues values) {
     values.positionRotations = this.positionRotations;
-    // TODO Add velocity values
-    // values.velocityRotationsPerSecond = this.velocityRotationsPerSecond
+    ;
+    values.velocityRotationsPerSecond = this.velocityRotationsPerSecond;
   }
 
   @Override
@@ -28,7 +27,7 @@ public class PivotMotorIOSim implements PivotMotorIO {
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
     if (DriverStation.isEnabled()) {
       this.positionRotations = positionRotations;
-      // this.velocityRotationsPerSecond = velocityRotationsPerSecond;
+      this.velocityRotationsPerSecond = velocityRotationsPerSecond;
     }
   }
 }

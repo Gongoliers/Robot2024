@@ -7,6 +7,9 @@ public interface PivotMotorIO {
   public static class PivotMotorIOValues {
     /** Position of the pivot in rotations. */
     public double positionRotations = 0.0;
+
+    /** Velocity of the pivot in rotations per second. */
+    public double velocityRotationsPerSecond = 0.0;
   }
 
   /** Configures the pivot motor. */

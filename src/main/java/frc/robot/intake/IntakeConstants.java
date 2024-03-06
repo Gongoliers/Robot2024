@@ -4,27 +4,17 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.MotionProfileCalculator;
-import frc.lib.MotorCurrentLimits;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
 
   /** Constants for the pivot motor. */
   public static class PivotMotorConstants {
-    /** If true, invert the pivot motor. */
-    public static final boolean IS_MOTOR_INVERTED = false;
-
-    /** If true, invert the pivot motor sensor. */
-    public static final boolean IS_SENSOR_INVERTED = true;
-
     /** Gearing between the pivot sensor and the pivot. */
     public static final double SENSOR_GEARING = 2.3;
 
     /** Gearing between the motor and the pivot. */
     public static final double MOTOR_GEARING = 49 * SENSOR_GEARING;
-
-    /** Pivot motor's moment of interia in kilograms meters squared. */
-    public static final double MOI = 0.02; // TODO
 
     /** Distance between the pivot and the far edge of the intake. */
     public static final double DISTANCE = Units.inchesToMeters(10.275);
@@ -71,25 +61,10 @@ public class IntakeConstants {
     /** Voltage to apply when outtaking in volts. */
     public static final double OUTTAKE_VOLTAGE = -8;
 
-    /** Current limits for the roller motor. */
-    public static final MotorCurrentLimits CURRENT_LIMITS = new MotorCurrentLimits(40);
-
     /** Radius of the roller in meters. */
     public static final double INTAKE_ROLLER_RADIUS = 0.5 * Units.inchesToMeters(1.375);
 
-    /** Size of the current spike when intaking a note in amps. */
-    public static final double NOTE_CURRENT = 18.0; // TODO
-
-    /** Duration of the current spike when intaking a note. */
-    public static final double STALL_DURATION = 0.35;
-
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 0.31;
-  }
-
-  /** Constants for intake commands. */
-  public static class IntakeCommandConstants {
-    /** Delay between starting intaking and detecting notes in seconds. */
-    public static final double NOTE_DETECTION_DELAY = 0.5;
   }
 }

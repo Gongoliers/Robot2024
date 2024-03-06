@@ -161,9 +161,9 @@ public class Arm extends Subsystem {
   }
 
   /**
-   * Gets the measured state of the arm.
+   * Returns the arm's measured state.
    *
-   * @return the measured state of the arm.
+   * @return the arm's measured state.
    */
   public ArmState getMeasuredState() {
     shoulderMotor.update(shoulderMotorValues);

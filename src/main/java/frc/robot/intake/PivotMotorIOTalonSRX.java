@@ -35,8 +35,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
   public void configure() {
     Configurator.configurePhoenix5(talonSRX::configFactoryDefault);
 
-    talonSRX.setSensorPhase(PivotMotorConstants.IS_SENSOR_INVERTED);
-    talonSRX.setInverted(PivotMotorConstants.IS_MOTOR_INVERTED);
+    talonSRX.setSensorPhase(true);
 
     Configurator.configurePhoenix5(
         () -> talonSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative));
@@ -45,6 +44,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
   @Override
   public void update(PivotMotorIOValues values) {
     values.positionRotations = getPivotPosition();
+    values.velocityRotationsPerSecond = getPivotVelocity();
   }
 
   /**
@@ -67,6 +67,12 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048.0;
 
     Configurator.configurePhoenix5(() -> talonSRX.setSelectedSensorPosition(units));
+  }
+
+  private double getPivotVelocity() {
+    double rotationsPerSecond = talonSRX.getSelectedSensorVelocity() / 2048.0;
+
+    return rotationsPerSecond / PivotMotorConstants.SENSOR_GEARING;
   }
 
   @Override

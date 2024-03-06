@@ -1,8 +1,6 @@
 package frc.robot.intake;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.Debouncer;
-import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
@@ -41,6 +39,7 @@ public class Intake extends Subsystem {
   /** Pivot motor setpoint. */
   private TrapezoidProfile.State pivotSetpoint;
 
+  /** Telemetry for the pivot trapezoid profile. */
   private final TrapezoidProfileTelemetry pivotProfileTelemetry;
 
   /** Roller motor. */
@@ -48,13 +47,6 @@ public class Intake extends Subsystem {
 
   /** Roller motor values. */
   private final RollerMotorIOValues rollerMotorValues = new RollerMotorIOValues();
-
-  /** Roller motor current median filter. */
-  private final MedianFilter rollerMotorCurrentFilter = new MedianFilter(3);
-
-  /** Roller motor current spike debouncer. */
-  private final Debouncer rollerMotorCurrentSpikeDebouncer =
-      new Debouncer(RollerMotorConstants.STALL_DURATION);
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
@@ -94,26 +86,26 @@ public class Intake extends Subsystem {
   public void periodic() {
     pivotMotor.update(pivotMotorValues);
 
-    updatePivotSetpoint();
+    // TODO Move to command
+    applyPivotSetpoint();
 
     rollerMotor.update(rollerMotorValues);
-
-    rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps);
 
     mechanism.updateIntake(
         Rotation2d.fromRotations(pivotMotorValues.positionRotations), getRollerVelocity());
 
-    pivotProfileTelemetry.update(getMeasuredState(), getSetpoint(), getGoal());
+    pivotProfileTelemetry.update(getPivotMeasuredState(), getPivotSetpoint(), getPivotGoal());
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout pivot = Telemetry.addColumn(tab, "Pivot");
 
-    pivot.addDouble("Position (deg)", () -> Units.rotationsToDegrees(getMeasuredState().position));
-    pivot.addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(getSetpoint().position));
-    pivot.addDouble("Goal (deg)", () -> Units.rotationsToDegrees(getGoal().position));
-    pivot.addBoolean("Is Not Stowed?", this::isNotStowed);
+    pivot.addDouble(
+        "Position (deg)", () -> Units.rotationsToDegrees(getPivotMeasuredState().position));
+    pivot.addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(getPivotSetpoint().position));
+    pivot.addDouble("Goal (deg)", () -> Units.rotationsToDegrees(getPivotGoal().position));
+    pivot.addBoolean("Is Not Stowed?", this::isOut);
 
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
@@ -121,30 +113,53 @@ public class Intake extends Subsystem {
     roller.addDouble(
         "Motor Velocity (rps)", () -> rollerMotorValues.angularVelocityRotationsPerSecond);
     roller.addDouble("Roller Velocity (rps)", this::getRollerVelocity);
-    roller.addBoolean("Current Spike?", this::rollerCurrentSpike);
-    roller.addBoolean("Stalled?", this::rollerStalled);
   }
 
-  public State getMeasuredState() {
+  /**
+   * Returns the intake pivot's measured state.
+   *
+   * @return the intake pivot's measured state.
+   */
+  public State getPivotMeasuredState() {
     pivotMotor.update(pivotMotorValues);
 
-    // TODO Include velocity
-    return new State(pivotMotorValues.positionRotations, 0.0);
+    return new State(
+        pivotMotorValues.positionRotations, pivotMotorValues.velocityRotationsPerSecond);
   }
 
-  public State getSetpoint() {
-    return pivotSetpoint;
-  }
-
-  public State getGoal() {
-    return pivotGoal;
-  }
-
+  /**
+   * Sets the intake pivot's goal.
+   *
+   * @param goal the intake pivot's goal.
+   */
   public void setPivotGoal(Rotation2d goal) {
     pivotGoal = new TrapezoidProfile.State(goal.getRotations(), 0);
   }
 
-  private void updatePivotSetpoint() {
+  /**
+   * Returns the intake pivot's goal.
+   *
+   * @return the intake pivot's goal.
+   */
+  public State getPivotGoal() {
+    return pivotGoal;
+  }
+
+  /**
+   * Returns the intake pivot's setpoint.
+   *
+   * @return the intake pivot's setpoint.
+   */
+  public State getPivotSetpoint() {
+    return pivotSetpoint;
+  }
+
+  /**
+   * Applies a setpoint to the intake pivot's controllers.
+   *
+   * <p>Calling this method alters the intake pivot's motion.
+   */
+  private void applyPivotSetpoint() {
     pivotSetpoint =
         PivotMotorConstants.MOTION_PROFILE.calculate(
             RobotConstants.PERIODIC_DURATION, pivotSetpoint, pivotGoal);
@@ -152,10 +167,20 @@ public class Intake extends Subsystem {
     pivotMotor.setSetpoint(pivotSetpoint.position, pivotSetpoint.velocity);
   }
 
+  /**
+   * Returns true if the intake pivot is at its goal.
+   *
+   * @return true if the intake pivot is at its goal.
+   */
   private boolean atPivotGoal() {
     return atPivotSetpoint() && pivotGoal.equals(pivotSetpoint);
   }
 
+  /**
+   * Returns true if the intake pivot is at its setpoint.
+   *
+   * @return true if the intake pivot is at its setpoint.
+   */
   private boolean atPivotSetpoint() {
     pivotMotor.update(pivotMotorValues);
 
@@ -165,44 +190,51 @@ public class Intake extends Subsystem {
         PivotMotorConstants.TOLERANCE.getRotations());
   }
 
-  public Command out() {
-    return pivotTo(PivotMotorConstants.MINIMUM_ANGLE).withTimeout(3.0);
-  }
-
-  public Command in() {
-    return pivotTo(PivotMotorConstants.MAXIMUM_ANGLE).withTimeout(3.0);
-  }
-
+  /**
+   * Returns a command that pivots the intake to an angle.
+   *
+   * @param angle the angle to pivot the intake to.
+   * @return a commadn that pivots the intake to an angle.
+   */
   private Command pivotTo(Rotation2d angle) {
     return runOnce(() -> setPivotGoal(angle)).andThen(Commands.waitUntil(this::atPivotGoal));
   }
 
-  public boolean isNotStowed() {
+  /**
+   * Returns a command that pivots the intake to the "out" position.
+   *
+   * @return a command that pivots the intake to the "out" position.
+   */
+  public Command out() {
+    return pivotTo(PivotMotorConstants.MINIMUM_ANGLE);
+  }
+
+  /**
+   * Returns a command that pivots the intake to the "in" position.
+   *
+   * @return a command that pivots the intake to the "in" position.
+   */
+  public Command stow() {
+    return pivotTo(PivotMotorConstants.MAXIMUM_ANGLE);
+  }
+
+  /**
+   * Returns true if the intake is out (not stowed).
+   *
+   * @return true if the intake is out (not stowed).
+   */
+  public boolean isOut() {
     return pivotMotorValues.positionRotations < PivotMotorConstants.OUT_ANGLE.getRotations();
   }
 
+  /**
+   * Returns a command that intakes using the rollers.
+   *
+   * @return a command that intakes using the rollers.
+   */
   public Command intake() {
     return Commands.run(() -> rollerMotor.setVoltage(RollerMotorConstants.INTAKE_VOLTAGE))
         .finallyDo(rollerMotor::stop);
-  }
-
-  /**
-   * Returns true if the roller motor has a current spike.
-   *
-   * @return true if the roller motor has a current spike.
-   */
-  private boolean rollerCurrentSpike() {
-    return rollerMotorCurrentFilter.calculate(rollerMotorValues.currentAmps)
-        > RollerMotorConstants.NOTE_CURRENT;
-  }
-
-  /**
-   * Returns true if the roller motor is stalled.
-   *
-   * @return true if the roller motor is stalled.
-   */
-  private boolean rollerStalled() {
-    return rollerMotorCurrentSpikeDebouncer.calculate(rollerCurrentSpike());
   }
 
   /**
@@ -214,15 +246,11 @@ public class Intake extends Subsystem {
     return rollerMotorValues.angularVelocityRotationsPerSecond / RollerMotorConstants.GEARING;
   }
 
-  public Command smartIntake() {
-    return Commands.repeatingSequence(
-            run(() -> rollerMotor.setVoltage(RollerMotorConstants.INTAKE_VOLTAGE))
-                .until(this::rollerStalled),
-            run(() -> rollerMotor.setVoltage(RollerMotorConstants.OUTTAKE_VOLTAGE))
-                .until(() -> !rollerStalled()))
-        .finallyDo(rollerMotor::stop);
-  }
-
+  /**
+   * Returns a command that outtakes using the rollers.
+   *
+   * @return a command that outtakes using the rollers.
+   */
   public Command outtake() {
     return Commands.run(() -> rollerMotor.setVoltage(RollerMotorConstants.OUTTAKE_VOLTAGE))
         .finallyDo(rollerMotor::stop);
