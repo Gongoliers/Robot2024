@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.lib.CAN;
 import frc.lib.JointConstants;
 import frc.lib.MotionProfileCalculator;
 
@@ -14,9 +13,6 @@ public class ArmConstants {
 
   /** Constants for the shoulder motor. */
   public static class ShoulderMotorConstants {
-    /** Shoulder motor CAN. */
-    public static final CAN CAN = new CAN(2);
-
     /** Joint constants for the shoulder joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
@@ -41,9 +37,6 @@ public class ArmConstants {
     public static final Translation2d SHOULDER_TO_ORIGIN =
         new Translation2d(Units.inchesToMeters(-11.361), Units.inchesToMeters(7.721));
 
-    /** Proportional gain in volts per rotation. */
-    public static final double KP = 36.0;
-
     /** Maximum speed of the shoulder joint in rotations per second. */
     public static final double MAXIMUM_SPEED = 0.5;
 
@@ -61,12 +54,6 @@ public class ArmConstants {
 
   /** Constants for the wrist motor. */
   public static class WristMotorConstants {
-    /** Wrist motor CAN. */
-    public static final CAN CAN = new CAN(1);
-
-    /** If true, invert the motor. */
-    public static final boolean MOTOR_INVERT = true;
-
     /** Joint constants for the wrist joint. */
     public static final JointConstants JOINT_CONSTANTS =
         new JointConstants(
@@ -86,9 +73,6 @@ public class ArmConstants {
 
     /** Tolerance of the wrist joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
-
-    /** Proportional gain in volts per rotation. */
-    public static final double KP = 36.0;
 
     /** Maximum speed of the wrist joint in rotations per second. */
     public static final double MAXIMUM_SPEED = 1.2;

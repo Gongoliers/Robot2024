@@ -3,7 +3,6 @@ package frc.robot.intake;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import frc.lib.Configurator;
-import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 
 /** Roller motor using a Spark Max. */
 public class RollerMotorIOSparkMax implements RollerMotorIO {
@@ -12,35 +11,32 @@ public class RollerMotorIOSparkMax implements RollerMotorIO {
   private final CANSparkMax sparkMax;
 
   public RollerMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(RollerMotorConstants.CAN.id(), MotorType.kBrushless);
+    sparkMax = new CANSparkMax(5, MotorType.kBrushless);
   }
 
   @Override
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
-    sparkMax.setInverted(RollerMotorConstants.IS_INVERTED);
+    sparkMax.setInverted(false);
 
-    Configurator.configureREV(
-        () ->
-            sparkMax.setSmartCurrentLimit((int) RollerMotorConstants.CURRENT_LIMITS.breakerAmps()));
+    Configurator.configureREV(() -> sparkMax.setSmartCurrentLimit(40));
 
     Configurator.configureStatusFrames(sparkMax);
   }
 
   @Override
   public void update(RollerMotorIOValues values) {
-    values.angularVelocityRotationsPerSecond = sparkMax.getEncoder().getVelocity() / 60.0;
+    values.velocityRotationsPerSecond = getVelocity();
     values.currentAmps = sparkMax.getOutputCurrent();
   }
 
   @Override
-  public void setVoltage(double volts) {
-    sparkMax.setVoltage(volts);
+  public void setSetpoint(double velocityRotationsPerSecond) {
+    // TODO Implement velocity setpoint following
   }
 
-  @Override
-  public void stop() {
-    setVoltage(0);
+  public double getVelocity() {
+    return sparkMax.getEncoder().getVelocity() / 60.0;
   }
 }

@@ -26,11 +26,11 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
+    sparkMax = new CANSparkMax(2, MotorType.kBrushless);
 
-    feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
+    feedback = new PIDController(36.0, 0, 0);
 
-    feedforward = new SingleJointedArmFeedforward(0, 0, 0);
+    feedforward = new SingleJointedArmFeedforward();
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -71,7 +71,8 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
     double feedforwardVolts =
         feedforward.calculate(
-            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+            Rotation2d.fromRotations(measuredPositionRotations),
+            Rotation2d.fromRotations(velocityRotationsPerSecond));
 
     setVoltage(feedbackVolts + feedforwardVolts);
   }

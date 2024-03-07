@@ -54,39 +54,24 @@ public class Shooter extends Subsystem {
     serializerMotor.update(serializerMotorValues);
     flywheelMotor.update(flywheelMotorValues);
 
-    RobotMechanisms.getInstance().updateShooter(getFlywheelTangentialSpeed());
-    RobotMechanisms.getInstance().updateSerializer(getSerializerTangentialSpeed());
+    RobotMechanisms.getInstance().updateShooter(flywheelMotorValues.velocityRotationsPerSecond);
+    RobotMechanisms.getInstance()
+        .updateSerializer(serializerMotorValues.velocityRotationsPerSecond);
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
 
-    serializer.addDouble("Serializer Speed (mps)", this::getSerializerTangentialSpeed);
+    serializer.addDouble(
+        "Serializer Speed (rps)", () -> serializerMotorValues.velocityRotationsPerSecond);
     serializer.addDouble("Serializer Current (A)", () -> serializerMotorValues.currentAmps);
 
     ShuffleboardLayout flywheel = Telemetry.addColumn(tab, "Flywheel");
 
-    flywheel.addDouble("Flywheel Speed (mps)", this::getFlywheelTangentialSpeed);
+    flywheel.addDouble(
+        "Flywheel Speed (rps)", () -> flywheelMotorValues.velocityRotationsPerSecond);
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
-  }
-
-  /**
-   * Calculates the tangential speed of the serializer in meters per second.
-   *
-   * @return the tangential speed of the serializer in meters per second.
-   */
-  private double getSerializerTangentialSpeed() {
-    return serializerMotorValues.angularVelocityRotationsPerSecond * SerializerConstants.RADIUS;
-  }
-
-  /**
-   * Calculates the tangential speed of the flywheel in meters per second.
-   *
-   * @return the tangential speed of the flywheel in meters per second.
-   */
-  private double getFlywheelTangentialSpeed() {
-    return flywheelMotorValues.angularVelocityRotationsPerSecond * FlywheelConstants.RADIUS;
   }
 
   /**
@@ -95,8 +80,9 @@ public class Shooter extends Subsystem {
    * @return a command that intakes a note.
    */
   public Command intake() {
-    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.INTAKE_VOLTAGE))
-        .finallyDo(serializerMotor::stop);
+    return Commands.runEnd(
+        () -> serializerMotor.setSetpoint(SerializerConstants.INTAKE_VELOCITY),
+        () -> serializerMotor.setSetpoint(0.0));
   }
 
   /**
@@ -105,8 +91,9 @@ public class Shooter extends Subsystem {
    * @return a command that serializes a note.
    */
   public Command serialize() {
-    return Commands.run(() -> serializerMotor.setVoltage(SerializerConstants.SERIALIZE_VOLTAGE))
-        .finallyDo(serializerMotor::stop);
+    return Commands.runEnd(
+        () -> serializerMotor.setSetpoint(SerializerConstants.SERIALIZE_VELOCITY),
+        () -> serializerMotor.setSetpoint(0.0));
   }
 
   /**
@@ -115,17 +102,8 @@ public class Shooter extends Subsystem {
    * @return a command that spins the flywheel.
    */
   public Command spin() {
-    return Commands.run(() -> flywheelMotor.setVoltage(FlywheelConstants.SHOOT_VOLTAGE))
-        .finallyDo(flywheelMotor::stop);
-  }
-
-  /**
-   * Shoots a note by spinning the flywheel then serializing a note.
-   *
-   * @return a command that shoots a note.
-   */
-  public Command autoShoot() {
-    return Commands.parallel(serialize().beforeStarting(Commands.waitSeconds(1.0)), spin())
-        .withTimeout(3.0);
+    return Commands.runEnd(
+        () -> flywheelMotor.setSetpoint(FlywheelConstants.SHOOT_VELOCITY),
+        () -> flywheelMotor.setSetpoint(0.0));
   }
 }

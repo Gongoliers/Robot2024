@@ -23,11 +23,11 @@ public class ShooterConstants {
     /** Radius of the serializer wheel in meters. */
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
-    /** Voltage to apply while intaking in volts. */
-    public static final double INTAKE_VOLTAGE = -8.0;
+    /** Velocity to apply while intaking in rotations per second. */
+    public static final double INTAKE_VELOCITY = 4.75;
 
-    /** Voltage to apply while serializing in volts. */
-    public static final double SERIALIZE_VOLTAGE = -6.0;
+    /** Velocity to apply while serializing in rotations per second. */
+    public static final double SERIALIZE_VELOCITY = 4.75;
 
     /** Maximum tengential speed in meters per second. */
     public static final double MAXIMUM_TANGENTIAL_SPEED = 4.75;
@@ -35,34 +35,13 @@ public class ShooterConstants {
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
   public static class FlywheelConstants {
-    /** Leading flywheel motor controller's CAN identifier. */
-    public static final CAN ID = new CAN(0); // TODO
-
-    /** If true, invert the flywheel motor controller's direction. */
-    public static final boolean IS_INVERTED = false; // TODO
-
-    /** Gearing between the flywheel motor and the flywheel wheel. */
-    public static final double GEARING = 1.0; // TODO
-
-    /** Moment of interia of the flywheel wheel in joules kilograms meters squared. */
-    public static final double MOI = 0.000125; // TODO
-
     /** Radius of the flywheel wheel in meters. */
     public static final double RADIUS = 0.5 * Units.inchesToMeters(4.0);
 
-    /** Voltage to apply while shooting in volts. */
-    public static final double SHOOT_VOLTAGE = -7.2; // TODO invert voltage to CCW+/CW+?
+    /** Velocity to apply while shooting in rotations per second. */
+    public static final double SHOOT_VELOCITY = 5.65;
 
     /** Maximum tangential speed in meters per second. */
     public static final double MAXIMUM_TANGENTIAL_SPEED = 5.65;
-  }
-
-  /** Constants for commands used in the shooter subsystem. */
-  public static class ShooterCommandConstants {
-    /** Delay between starting flywheel and starting serialization while shooting in seconds. */
-    public static final double PRE_SHOOT_DELAY = 1.0; // TODO
-
-    /** Delay between stopping serialization and stopping flywheel while shooting in seconds. */
-    public static final double POST_SHOOT_DELAY = 1.0; // TODO
   }
 }

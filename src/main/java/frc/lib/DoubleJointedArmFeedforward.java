@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import org.ejml.data.MatrixType;
 import org.ejml.simple.SimpleMatrix;
 
-public class TwoJointedArmFeedforward {
+public class DoubleJointedArmFeedforward {
 
   private final double m1;
   private final double m2;
@@ -22,7 +22,7 @@ public class TwoJointedArmFeedforward {
   private final SimpleMatrix Kb_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
   private final SimpleMatrix B_MATRIX = new SimpleMatrix(2, 2, MatrixType.DDRM);
 
-  public TwoJointedArmFeedforward(JointConstants shoulder, JointConstants elbow) {
+  public DoubleJointedArmFeedforward(JointConstants shoulder, JointConstants elbow) {
     this.m1 = shoulder.massKg();
     this.m2 = elbow.massKg();
     this.l1 = shoulder.lengthMeters();

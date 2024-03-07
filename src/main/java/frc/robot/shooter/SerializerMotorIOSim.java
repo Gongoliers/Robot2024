@@ -1,38 +1,21 @@
 package frc.robot.shooter;
 
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.RobotConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
-
 /** Simulated serializer motor. */
 public class SerializerMotorIOSim implements SerializerMotorIO {
 
-  /** Represents the motor used the drive the serializer. */
-  private final DCMotor motorSim = DCMotor.getNeo550(1);
-
-  /** Represents the serializer driven by the motor. */
-  private final FlywheelSim serializerSim =
-      new FlywheelSim(motorSim, SerializerConstants.GEARING, SerializerConstants.MOI);
+  private double velocityRotationsPerSecond;
 
   @Override
   public void configure() {}
 
   @Override
   public void update(SerializerMotorIOValues values) {
-    serializerSim.update(RobotConstants.PERIODIC_DURATION);
-
-    values.angularVelocityRotationsPerSecond = serializerSim.getAngularVelocityRPM() / 60.0;
-    values.currentAmps = serializerSim.getCurrentDrawAmps();
+    values.velocityRotationsPerSecond = this.velocityRotationsPerSecond;
+    values.currentAmps = 0.0;
   }
 
   @Override
-  public void setVoltage(double volts) {
-    serializerSim.setInputVoltage(volts);
-  }
-
-  @Override
-  public void stop() {
-    serializerSim.setInputVoltage(0);
+  public void setSetpoint(double velocityRotationsPerSecond) {
+    this.velocityRotationsPerSecond = velocityRotationsPerSecond;
   }
 }

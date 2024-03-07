@@ -26,9 +26,9 @@ public class WristMotorIOSparkMax implements WristMotorIO {
     // TODO Temporary fix, using one of the climber Sparks
     sparkMax = new CANSparkMax(6, MotorType.kBrushless);
 
-    feedback = new PIDController(WristMotorConstants.KP, 0, 0);
+    feedback = new PIDController(36.0, 0, 0);
 
-    feedforward = new SingleJointedArmFeedforward(0, 0, 0);
+    feedforward = new SingleJointedArmFeedforward();
 
     accelerationCalculator = new AccelerationCalculator();
   }
@@ -37,7 +37,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
   public void configure() {
     Configurator.configureREV(sparkMax::restoreFactoryDefaults);
 
-    sparkMax.setInverted(WristMotorConstants.MOTOR_INVERT);
+    sparkMax.setInverted(true);
 
     Configurator.configureREV(() -> sparkMax.setIdleMode(IdleMode.kBrake));
 
@@ -71,7 +71,8 @@ public class WristMotorIOSparkMax implements WristMotorIO {
 
     double feedforwardVolts =
         feedforward.calculate(
-            Rotation2d.fromRotations(measuredPositionRotations), velocityRotationsPerSecond);
+            Rotation2d.fromRotations(measuredPositionRotations),
+            Rotation2d.fromRotations(velocityRotationsPerSecond));
 
     sparkMax.setVoltage(feedbackVolts + feedforwardVolts);
   }
