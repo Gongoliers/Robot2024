@@ -26,7 +26,8 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
     feedback = new PIDController(16.0, 0, 0);
 
     SingleJointedArmFeedforwardConstants constants =
-        new SingleJointedArmFeedforwardConstants().withKg(Rotation2d.fromDegrees((26)).plus(PivotMotorConstants.MASS_OFFSET), 1.8);
+        new SingleJointedArmFeedforwardConstants()
+            .withKg(Rotation2d.fromDegrees((26)).plus(PivotMotorConstants.MASS_OFFSET), 1.8);
 
     feedforward = new SingleJointedArmFeedforward(constants);
   }
