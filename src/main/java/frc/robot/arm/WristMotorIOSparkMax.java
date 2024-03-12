@@ -23,8 +23,7 @@ public class WristMotorIOSparkMax implements WristMotorIO {
   private final AccelerationCalculator accelerationCalculator;
 
   public WristMotorIOSparkMax() {
-    // TODO Temporary fix, using one of the climber Sparks
-    sparkMax = new CANSparkMax(6, MotorType.kBrushless);
+    sparkMax = new CANSparkMax(1, MotorType.kBrushless);
 
     feedback = new PIDController(36.0, 0, 0);
 
