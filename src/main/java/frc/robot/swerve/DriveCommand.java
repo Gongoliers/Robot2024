@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
+import frc.lib.AllianceFlipHelper;
 
 /** Drives the swerve using driver input. */
 public class DriveCommand extends Command {
@@ -69,6 +70,11 @@ public class DriveCommand extends Command {
         request.translation().times(SwerveConstants.MAXIMUM_SPEED);
 
     Rotation2d poseHeading = odometry.getPosition().getRotation();
+
+    // TODO test
+    // if (AllianceFlipHelper.shouldFlip()) {
+    //   poseHeading = poseHeading.plus(Rotation2d.fromDegrees(180));
+    // }
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
       headingGoal = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());

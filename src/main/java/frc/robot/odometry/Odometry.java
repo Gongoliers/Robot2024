@@ -149,11 +149,14 @@ public class Odometry extends Subsystem {
   public Command tare() {
     return Commands.runOnce(
         () -> {
-          if (AllianceFlipHelper.shouldFlip()) {
-            setRotation(Rotation2d.fromDegrees(180));
-          } else {
-            setRotation(Rotation2d.fromDegrees(0));
-          }
+          // TODO needs testing!
+          // if (AllianceFlipHelper.shouldFlip()) {
+          //   setRotation(Rotation2d.fromDegrees(180));
+          // } else {
+          //   setRotation(Rotation2d.fromDegrees(0));
+          // }
+
+          gyroscope.setYaw(0.0);
         });
   }
 
