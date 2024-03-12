@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
@@ -148,12 +149,11 @@ public class Odometry extends Subsystem {
   public Command tare() {
     return Commands.runOnce(
         () -> {
-          // if (AllianceFlipHelper.shouldFlip()) {
-          //   gyroscope.setYaw(0.5);
-          // } else {
-          //   gyroscope.setYaw(0.0);
-          // }
-          gyroscope.setYaw(0.0);
+          if (AllianceFlipHelper.shouldFlip()) {
+            setRotation(Rotation2d.fromDegrees(180));
+          } else {
+            setRotation(Rotation2d.fromDegrees(0));
+          }
         });
   }
 
