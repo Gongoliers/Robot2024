@@ -20,37 +20,13 @@
         {
           "type": "named",
           "data": {
-            "name": "readyShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shootNote"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "center.toNearest"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "intakeNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "center.toSubwoofer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootNote"
+            "name": "stow"
           }
         }
       ]
