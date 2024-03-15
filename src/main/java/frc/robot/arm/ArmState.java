@@ -17,9 +17,9 @@ public record ArmState(State shoulder, State wrist) {
   public static final ArmState STOW =
       new ArmState(ShoulderMotorConstants.MINIMUM_ANGLE, WristMotorConstants.MAXIMUM_ANGLE);
 
-  public static final ArmState SHOOT = STOW.withWrist(Rotation2d.fromDegrees(18));
+  public static final ArmState SHOOT = STOW.withWrist(WristMotorConstants.MAXIMUM_ANGLE.plus(Rotation2d.fromDegrees(-65)));
 
-  public static final ArmState INTAKE = STOW.withWrist(Rotation2d.fromDegrees(4));
+  public static final ArmState INTAKE = STOW.withWrist(WristMotorConstants.MAXIMUM_ANGLE.plus(Rotation2d.fromDegrees(-79)));
 
   public static final ArmState AMP =
       new ArmState(ShoulderMotorConstants.MAXIMUM_ANGLE, Rotation2d.fromDegrees(0));

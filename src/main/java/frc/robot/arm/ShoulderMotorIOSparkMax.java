@@ -26,7 +26,7 @@ public class ShoulderMotorIOSparkMax implements ShoulderMotorIO {
 
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOSparkMax() {
-    sparkMax = new CANSparkMax(ShoulderMotorConstants.CAN.id(), MotorType.kBrushless);
+    sparkMax = new CANSparkMax(1, MotorType.kBrushless);
 
     feedback = new PIDController(ShoulderMotorConstants.KP, 0, 0);
 

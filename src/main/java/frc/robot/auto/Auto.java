@@ -140,7 +140,7 @@ public class Auto extends Subsystem {
   }
 
   public Command intakeNote() {
-    return readyIntake().andThen(Commands.parallel(intake.intake(), shooter.intake()));
+    return readyIntake().andThen(intake.intake());
   }
 
   public Command stow() {
