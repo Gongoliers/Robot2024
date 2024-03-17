@@ -53,7 +53,7 @@ public class DriveCommand extends Command {
 
     this.driverController = driverController;
     previousRequest = DriveRequest.fromController(driverController);
-    
+
     headingSnapper = SnapRotation.to(Rotation2d.fromDegrees(90));
   }
 
@@ -89,12 +89,13 @@ public class DriveCommand extends Command {
       omega = calculateHeadingProfileOmega();
     }
 
-    ChassisSpeeds chassisSpeeds = clampChassisSpeeds(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            translationVelocityMetersPerSecond.getX(),
-            translationVelocityMetersPerSecond.getY(),
-            omega.getRadians(),
-            driverRelativeHeading));
+    ChassisSpeeds chassisSpeeds =
+        clampChassisSpeeds(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                translationVelocityMetersPerSecond.getX(),
+                translationVelocityMetersPerSecond.getY(),
+                omega.getRadians(),
+                driverRelativeHeading));
 
     swerve.setChassisSpeeds(chassisSpeeds);
 
@@ -113,7 +114,7 @@ public class DriveCommand extends Command {
 
   /**
    * Clamps desired chassis speeds to be within velocity and acceleration constraints.
-   * 
+   *
    * @param desiredChassisSpeeds the desired chassis speeds.
    * @return the clamped chassis speeds.
    */
@@ -149,7 +150,7 @@ public class DriveCommand extends Command {
 
   /**
    * Returns the reference heading to use with the heading motion profile.
-   * 
+   *
    * @return the reference heading to use with the heading motion profile.
    */
   private Rotation2d getReferenceHeading() {
@@ -157,11 +158,11 @@ public class DriveCommand extends Command {
     return odometry.getFieldRelativeHeading();
   }
 
-
   /**
    * Resets the heading goal.
-   * 
-   * The robot's orientation becomes the new goal and the motion profile is reset by setting the setpoint to the goal.
+   *
+   * <p>The robot's orientation becomes the new goal and the motion profile is reset by setting the
+   * setpoint to the goal.
    */
   private void resetHeadingGoal() {
     setPositionHeadingGoal(getReferenceHeading());
@@ -171,7 +172,7 @@ public class DriveCommand extends Command {
 
   /**
    * Sets the position goal.
-   * 
+   *
    * @param goal the position goal.
    */
   private void setPositionHeadingGoal(Rotation2d goal) {
@@ -179,10 +180,10 @@ public class DriveCommand extends Command {
 
     headingGoal = wrapState(state, getReferenceHeading().getRotations());
   }
-  
+
   /**
    * Updates the motion profile with the robot's rotational velocity.
-   * 
+   *
    * @param omega the robot's rotational velocity.
    */
   private void updateVelocity(Rotation2d omega) {
@@ -195,7 +196,7 @@ public class DriveCommand extends Command {
 
   /**
    * Calculates the robot's rotational velocity.
-   * 
+   *
    * @return the robot's calculated rotational velocity.
    */
   private Rotation2d calculateHeadingProfileOmega() {
@@ -204,7 +205,7 @@ public class DriveCommand extends Command {
             RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
 
     double omegaRotationsPerSecond =
-          headingFeedback.calculate(getReferenceHeading().getRotations(), headingSetpoint.position);
+        headingFeedback.calculate(getReferenceHeading().getRotations(), headingSetpoint.position);
 
     return Rotation2d.fromRotations(omegaRotationsPerSecond);
   }

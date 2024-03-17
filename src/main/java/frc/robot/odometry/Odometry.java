@@ -128,10 +128,11 @@ public class Odometry extends Subsystem {
   }
 
   /**
-   * Returns the rotation of the robot on the field where zero is away from the driver regardless of alliance.
-   * 
-   * 
-   * @return the rotation of the robot on the field where zero is away from the driver regardless of alliance.
+   * Returns the rotation of the robot on the field where zero is away from the driver regardless of
+   * alliance.
+   *
+   * @return the rotation of the robot on the field where zero is away from the driver regardless of
+   *     alliance.
    */
   public Rotation2d getDriverRelativeHeading() {
     Rotation2d fieldRelativeHeading = getFieldRelativeHeading();
