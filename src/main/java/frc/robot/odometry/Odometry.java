@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -16,6 +17,9 @@ import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
 import frc.robot.swerve.Swerve;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /** Subsystem class for the odometry subsystem. */
@@ -39,7 +43,11 @@ public class Odometry extends Subsystem {
   /** Pose estimator using the swerve drive. */
   private final SwerveDrivePoseEstimator swervePoseEstimator;
 
+  /** Field. */
   private final Field2d field;
+
+  /** List of functions to be called when pose is manually updated. */
+  private final List<Consumer<Pose2d>> poseUpdateConsumers;
 
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
@@ -64,6 +72,8 @@ public class Odometry extends Subsystem {
             initialPose);
 
     field = new Field2d();
+
+    poseUpdateConsumers = new ArrayList<Consumer<Pose2d>>();
   }
 
   /**
@@ -102,7 +112,8 @@ public class Odometry extends Subsystem {
 
     velocity.addDouble("X Velocity (mps)", () -> getVelocity().dx);
     velocity.addDouble("Y Velocity (mps)", () -> getVelocity().dy);
-    velocity.addDouble("Rotation Velocity (dps)", () -> getVelocity().dtheta);
+    velocity.addDouble(
+        "Rotation Velocity (dps)", () -> Units.radiansToDegrees((getVelocity().dtheta)));
 
     ShuffleboardLayout field = Telemetry.addColumn(tab, "Field");
 
@@ -168,6 +179,15 @@ public class Odometry extends Subsystem {
   }
 
   /**
+   * Adds a consumer for when pose is manually updated.
+   *
+   * @param consumer consumer for when pose is manually updated.
+   */
+  public void onPoseUpdate(Consumer<Pose2d> consumer) {
+    poseUpdateConsumers.add(consumer);
+  }
+
+  /**
    * Tares the rotation of the robot.
    *
    * @return a command that zeroes the rotation of the robot.
@@ -175,14 +195,13 @@ public class Odometry extends Subsystem {
   public Command tare() {
     return Commands.runOnce(
         () -> {
-          // TODO needs testing!
-          // if (AllianceFlipHelper.shouldFlip()) {
-          //   setRotation(Rotation2d.fromDegrees(180));
-          // } else {
-          //   setRotation(Rotation2d.fromDegrees(0));
-          // }
+          if (AllianceFlipHelper.shouldFlip()) {
+            setRotation(Rotation2d.fromDegrees(180));
+          } else {
+            setRotation(Rotation2d.fromDegrees(0));
+          }
 
-          gyroscope.setYaw(0.0);
+          poseUpdateConsumers.forEach(consumer -> consumer.accept(getPosition()));
         });
   }
 

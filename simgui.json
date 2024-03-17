@@ -77,7 +77,8 @@
           },
           "Velocity": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Shooter": {
           "Flywheel": {
@@ -85,8 +86,7 @@
           },
           "Serializer": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Swerve": {
           "Constants": {

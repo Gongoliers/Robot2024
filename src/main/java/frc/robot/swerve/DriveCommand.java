@@ -55,6 +55,8 @@ public class DriveCommand extends Command {
     previousRequest = DriveRequest.fromController(driverController);
 
     headingSnapper = SnapRotation.to(Rotation2d.fromDegrees(90));
+
+    odometry.onPoseUpdate(newPose -> resetHeadingGoal());
   }
 
   @Override
