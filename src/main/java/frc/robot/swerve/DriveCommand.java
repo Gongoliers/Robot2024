@@ -6,12 +6,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.lib.SnapRotation;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
-import frc.lib.AllianceFlipHelper;
 
 /** Drives the swerve using driver input. */
 public class DriveCommand extends Command {
@@ -32,6 +31,9 @@ public class DriveCommand extends Command {
   /* Heading feedback controller. */
   private final PIDController headingFeedback;
 
+  /** Heading snapper. */
+  private final SnapRotation headingSnapper;
+
   /** Heading goal. */
   private State headingGoal, headingSetpoint;
 
@@ -51,15 +53,13 @@ public class DriveCommand extends Command {
 
     this.driverController = driverController;
     previousRequest = DriveRequest.fromController(driverController);
+    
+    headingSnapper = SnapRotation.to(Rotation2d.fromDegrees(90));
   }
 
   @Override
   public void initialize() {
-    Rotation2d poseHeading = odometry.getPosition().getRotation();
-
-    // TODO Determine which of these, if not both, need to be set to prevent immediate spinning
-    headingGoal = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());
-    headingSetpoint = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());
+    resetHeadingGoal();
   }
 
   @Override
@@ -69,68 +69,32 @@ public class DriveCommand extends Command {
     Translation2d translationVelocityMetersPerSecond =
         request.translation().times(SwerveConstants.MAXIMUM_SPEED);
 
-    Rotation2d poseHeading = odometry.getPosition().getRotation();
-
-    // TODO test
-    // if (AllianceFlipHelper.shouldFlip()) {
-    //   poseHeading = poseHeading.plus(Rotation2d.fromDegrees(180));
-    // }
+    Rotation2d driverRelativeHeading = odometry.getDriverRelativeHeading();
 
     if (DriveRequest.startedDrifting(previousRequest, request)) {
-      headingGoal = wrap(new State(poseHeading.getRotations(), 0.0), poseHeading.getRotations());
+      resetHeadingGoal();
     }
 
     if (request.isSnapping()) {
-      headingGoal =
-          wrap(new State(request.heading().getRotations(), 0.0), poseHeading.getRotations());
+      setPositionHeadingGoal(headingSnapper.snap(request.fieldHeading()));
     }
 
-    double omegaRotationsPerSecond = 0.0;
+    Rotation2d omega;
 
     if (request.isSpinning()) {
-      headingSetpoint =
-          wrap(
-              new State(poseHeading.getRotations(), request.omega().getRotations()),
-              poseHeading.getRotations());
+      updateVelocity(request.omega());
 
-      omegaRotationsPerSecond = headingSetpoint.velocity;
+      omega = request.omega();
     } else {
-      headingSetpoint =
-          SwerveConstants.ROTATION_MOTION_PROFILE.calculate(
-              RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
-
-      omegaRotationsPerSecond =
-          headingFeedback.calculate(poseHeading.getRotations(), headingSetpoint.position);
+      omega = calculateHeadingProfileOmega();
     }
 
-    ChassisSpeeds chassisSpeeds =
+    ChassisSpeeds chassisSpeeds = clampChassisSpeeds(
         ChassisSpeeds.fromFieldRelativeSpeeds(
             translationVelocityMetersPerSecond.getX(),
             translationVelocityMetersPerSecond.getY(),
-            Units.rotationsToRadians(omegaRotationsPerSecond),
-            poseHeading);
-
-    chassisSpeeds.vxMetersPerSecond =
-        MathUtil.clamp(
-            chassisSpeeds.vxMetersPerSecond,
-            previousChassisSpeeds.vxMetersPerSecond
-                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
-            previousChassisSpeeds.vxMetersPerSecond
-                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
-
-    chassisSpeeds.vyMetersPerSecond =
-        MathUtil.clamp(
-            chassisSpeeds.vyMetersPerSecond,
-            previousChassisSpeeds.vyMetersPerSecond
-                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
-            previousChassisSpeeds.vyMetersPerSecond
-                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
-
-    chassisSpeeds.omegaRadiansPerSecond =
-        MathUtil.clamp(
-            chassisSpeeds.omegaRadiansPerSecond,
-            -SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians(),
-            SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians());
+            omega.getRadians(),
+            driverRelativeHeading));
 
     swerve.setChassisSpeeds(chassisSpeeds);
 
@@ -148,13 +112,111 @@ public class DriveCommand extends Command {
   }
 
   /**
+   * Clamps desired chassis speeds to be within velocity and acceleration constraints.
+   * 
+   * @param desiredChassisSpeeds the desired chassis speeds.
+   * @return the clamped chassis speeds.
+   */
+  private ChassisSpeeds clampChassisSpeeds(ChassisSpeeds desiredChassisSpeeds) {
+    // TODO Clamp translation velocity?
+
+    double vxMetersPerSecond =
+        MathUtil.clamp(
+            desiredChassisSpeeds.vxMetersPerSecond,
+            previousChassisSpeeds.vxMetersPerSecond
+                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
+            previousChassisSpeeds.vxMetersPerSecond
+                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
+
+    double vyMetersPerSecond =
+        MathUtil.clamp(
+            desiredChassisSpeeds.vyMetersPerSecond,
+            previousChassisSpeeds.vyMetersPerSecond
+                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
+            previousChassisSpeeds.vyMetersPerSecond
+                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
+
+    // TODO Clamp rotation acceleration?
+
+    double omegaRadiansPerSecond =
+        MathUtil.clamp(
+            desiredChassisSpeeds.omegaRadiansPerSecond,
+            -SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians(),
+            SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians());
+
+    return new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
+  }
+
+  /**
+   * Returns the reference heading to use with the heading motion profile.
+   * 
+   * @return the reference heading to use with the heading motion profile.
+   */
+  private Rotation2d getReferenceHeading() {
+    // TODO getDriverRelativeHeading may be correct here
+    return odometry.getFieldRelativeHeading();
+  }
+
+
+  /**
+   * Resets the heading goal.
+   * 
+   * The robot's orientation becomes the new goal and the motion profile is reset by setting the setpoint to the goal.
+   */
+  private void resetHeadingGoal() {
+    setPositionHeadingGoal(getReferenceHeading());
+
+    headingSetpoint = headingGoal;
+  }
+
+  /**
+   * Sets the position goal.
+   * 
+   * @param goal the position goal.
+   */
+  private void setPositionHeadingGoal(Rotation2d goal) {
+    State state = new State(goal.getRotations(), 0.0);
+
+    headingGoal = wrapState(state, getReferenceHeading().getRotations());
+  }
+  
+  /**
+   * Updates the motion profile with the robot's rotational velocity.
+   * 
+   * @param omega the robot's rotational velocity.
+   */
+  private void updateVelocity(Rotation2d omega) {
+    Rotation2d heading = getReferenceHeading();
+
+    State state = new State(heading.getRotations(), omega.getRotations());
+
+    headingGoal = wrapState(state, heading.getRotations());
+  }
+
+  /**
+   * Calculates the robot's rotational velocity.
+   * 
+   * @return the robot's calculated rotational velocity.
+   */
+  private Rotation2d calculateHeadingProfileOmega() {
+    headingSetpoint =
+        SwerveConstants.ROTATION_MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION, headingSetpoint, headingGoal);
+
+    double omegaRotationsPerSecond =
+          headingFeedback.calculate(getReferenceHeading().getRotations(), headingSetpoint.position);
+
+    return Rotation2d.fromRotations(omegaRotationsPerSecond);
+  }
+
+  /**
    * Wraps an input state to be within the range of a measured position.
    *
    * @param state the input state.
    * @param measurement the measured position.
    * @return a new state within the range of the measured position.
    */
-  private State wrap(State state, double measurement) {
+  private State wrapState(State state, double measurement) {
     double minError = MathUtil.inputModulus(state.position - measurement, -0.5, 0.5);
     return new State(minError + measurement, state.velocity);
   }

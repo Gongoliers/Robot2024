@@ -110,12 +110,37 @@ public class Odometry extends Subsystem {
   }
 
   /**
-   * Gets the position of the robot on the field.
+   * Returns the position of the robot on the field.
    *
    * @return the position of the robot on the field.
    */
   public Pose2d getPosition() {
     return swervePoseEstimator.getEstimatedPosition();
+  }
+
+  /**
+   * Returns the rotation of the robot on the field where zero is away from the blue alliance wall.
+   *
+   * @return the rotation of the robot on the field where zero is away from the blue alliance wall.
+   */
+  public Rotation2d getFieldRelativeHeading() {
+    return getPosition().getRotation();
+  }
+
+  /**
+   * Returns the rotation of the robot on the field where zero is away from the driver regardless of alliance.
+   * 
+   * 
+   * @return the rotation of the robot on the field where zero is away from the driver regardless of alliance.
+   */
+  public Rotation2d getDriverRelativeHeading() {
+    Rotation2d fieldRelativeHeading = getFieldRelativeHeading();
+
+    if (AllianceFlipHelper.shouldFlip()) {
+      return fieldRelativeHeading.plus(Rotation2d.fromDegrees(180));
+    }
+
+    return fieldRelativeHeading;
   }
 
   /**
