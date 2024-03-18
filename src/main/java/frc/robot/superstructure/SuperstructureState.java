@@ -130,6 +130,10 @@ public record SuperstructureState(
         SuperstructureConstants.PivotAngleConstants.TOLERANCE.getRotations());
   }
 
+  public boolean at(SuperstructureState other) {
+    return atShoulderAngleGoal(other) && atWristAngleGoal(other) && atPivotAngleGoal(other);
+  }
+
   /**
    * Calculates the next setpoint.
    *

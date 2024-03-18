@@ -57,16 +57,7 @@ public class Superstructure extends Subsystem {
   @Override
   public void periodic() {
     updateMeasurement();
-
-    setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
-
-    arm.setShoulderSetpoint(
-        setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
-    arm.setWristSetpoint(
-        setpoint.wristAngleRotations().position, setpoint.wristAngleRotations().velocity);
-
-    intake.setPivotSetpoint(
-        setpoint.pivotAngleRotations().position, setpoint.pivotAngleRotations().velocity);
+    updateSetpoint();
   }
 
   @Override
@@ -102,6 +93,36 @@ public class Superstructure extends Subsystem {
 
     measurement.addDouble(
         "Serializer Velocity (rps)", () -> this.measurement.serializerVelocityRotationsPerSecond());
+
+    ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
+
+    goal.addDouble(
+        "Shoulder Position (deg)",
+        () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().position));
+    goal.addDouble(
+        "Shoulder Velocity (dps)",
+        () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().velocity));
+
+    goal.addDouble(
+        "Wrist Position (deg)",
+        () -> Units.rotationsToDegrees(this.goal.wristAngleRotations().position));
+    goal.addDouble(
+        "Wrist Velocity (dps)",
+        () -> Units.rotationsToDegrees(this.goal.wristAngleRotations().velocity));
+
+    goal.addDouble(
+        "Pivot Position (deg)",
+        () -> Units.rotationsToDegrees(this.goal.pivotAngleRotations().position));
+    goal.addDouble(
+        "Pivot Velocity (dps)",
+        () -> Units.rotationsToDegrees(this.goal.pivotAngleRotations().velocity));
+
+    goal.addDouble("Roller Velocity (rps)", () -> this.goal.rollerVelocityRotationsPerSecond());
+
+    goal.addDouble("Flywheel Velocity (rps)", () -> this.goal.flywheelVelocityRotationsPerSecond());
+
+    goal.addDouble(
+        "Serializer Velocity (rps)", () -> this.goal.serializerVelocityRotationsPerSecond());
   }
 
   private void updateMeasurement() {
@@ -126,13 +147,25 @@ public class Superstructure extends Subsystem {
     RobotMechanisms.getInstance().updateSuperstructure(measurement);
   }
 
+  private void updateSetpoint() {
+    setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
+
+    arm.setShoulderSetpoint(
+        setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
+    arm.setWristSetpoint(
+        setpoint.wristAngleRotations().position, setpoint.wristAngleRotations().velocity);
+
+    intake.setPivotSetpoint(
+        setpoint.pivotAngleRotations().position, setpoint.pivotAngleRotations().velocity);
+  }
+
   public void setPosition(SuperstructureState state) {
     arm.setShoulderPosition(state.shoulderAngleRotations().position);
     arm.setWristPosition(state.wristAngleRotations().position);
     intake.setPivotPosition(state.pivotAngleRotations().position);
   }
 
-  private void setGoal(SuperstructureState goal) {
+  public void setGoal(SuperstructureState goal) {
     this.goal = goal;
 
     resetMotionProfile();
@@ -142,8 +175,14 @@ public class Superstructure extends Subsystem {
     setpoint = measurement;
   }
 
+  public boolean at(SuperstructureState goal) {
+    updateMeasurement();
+
+    return measurement.at(goal);
+  }
+
   public Command to(SuperstructureState goal) {
-    return this.runOnce(() -> setGoal(goal));
+    return new ToGoal(goal);
   }
 
   public Command stow() {

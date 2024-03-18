@@ -88,6 +88,9 @@
           }
         },
         "Superstructure": {
+          "Goal": {
+            "open": true
+          },
           "Measurement": {
             "open": true
           },
