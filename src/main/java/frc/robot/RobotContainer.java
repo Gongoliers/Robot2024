@@ -26,7 +26,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Swerve swerve;
 
-  private final CommandXboxController driverController, operatorController;
+  private final CommandXboxController driverController;
 
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
@@ -39,7 +39,6 @@ public class RobotContainer {
     swerve = Swerve.getInstance();
 
     driverController = new CommandXboxController(0);
-    operatorController = new CommandXboxController(1);
 
     initializeTelemetry();
     configureDefaultCommands();
@@ -67,25 +66,12 @@ public class RobotContainer {
 
   /** Configures subsystem default commands. */
   private void configureDefaultCommands() {
-    arm.setDefaultCommand(arm.stow());
-    intake.setDefaultCommand(intake.stow());
     swerve.setDefaultCommand(swerve.driveWithController(driverController));
   }
 
   /** Configures controller bindings. */
   private void configureBindings() {
-    driverController.a().whileTrue(swerve.forwards());
-    driverController.b().whileTrue(swerve.sideways());
-    driverController.x().whileTrue(swerve.cross());
     driverController.y().onTrue(odometry.tare());
-
-    operatorController.leftTrigger().whileTrue(auto.intakePosition().andThen(auto.intakeNote()));
-    operatorController.leftBumper().whileTrue(intake.unstow().andThen(intake.outtake()));
-
-    operatorController.rightTrigger().whileTrue(auto.shootPosition().andThen(shooter.spin()));
-    operatorController.rightBumper().whileTrue(shooter.serialize());
-
-    operatorController.a().whileTrue(arm.amp());
   }
 
   /**
