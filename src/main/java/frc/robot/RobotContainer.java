@@ -10,6 +10,7 @@ import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
+import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 
 /** Initializes subsystems and commands. */
@@ -24,9 +25,10 @@ public class RobotContainer {
   private final Intake intake;
   private final Odometry odometry;
   private final Shooter shooter;
+  private final Superstructure superstructure;
   private final Swerve swerve;
 
-  private final CommandXboxController driverController;
+  private final CommandXboxController driverController, operatorController;
 
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
@@ -36,9 +38,11 @@ public class RobotContainer {
     intake = Intake.getInstance();
     odometry = Odometry.getInstance();
     shooter = Shooter.getInstance();
+    superstructure = Superstructure.getInstance();
     swerve = Swerve.getInstance();
 
     driverController = new CommandXboxController(0);
+    operatorController = new CommandXboxController(1);
 
     initializeTelemetry();
     configureDefaultCommands();
@@ -60,7 +64,7 @@ public class RobotContainer {
 
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
-    Telemetry.initializeTabs(arm, auto, climber, intake, odometry, shooter, swerve);
+    Telemetry.initializeTabs(arm, auto, climber, intake, odometry, shooter, superstructure, swerve);
     SmartDashboard.putData("Mechanism", RobotMechanisms.getInstance().getMechanism());
   }
 
@@ -72,6 +76,9 @@ public class RobotContainer {
   /** Configures controller bindings. */
   private void configureBindings() {
     driverController.y().onTrue(odometry.tare());
+
+    operatorController.a().onTrue(superstructure.intake()).onFalse(superstructure.stow());
+    operatorController.b().onTrue(superstructure.shoot()).onFalse(superstructure.stow());
   }
 
   /**

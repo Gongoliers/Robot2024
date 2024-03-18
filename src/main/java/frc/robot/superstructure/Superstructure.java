@@ -4,6 +4,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.RobotMechanisms;
@@ -26,13 +27,18 @@ public class Superstructure extends Subsystem {
   /** Reference to the shooter subsystem. */
   private final Shooter shooter;
 
-  private SuperstructureState measurement;
+  private SuperstructureState measurement, setpoint, goal;
 
   /** Creates a new instance of the superstructure subsystem. */
   private Superstructure() {
     arm = Arm.getInstance();
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
+
+    setPosition(SuperstructureState.INITIAL);
+
+    setpoint = SuperstructureState.INITIAL;
+    goal = SuperstructureState.INITIAL;
   }
 
   /**
@@ -50,25 +56,17 @@ public class Superstructure extends Subsystem {
 
   @Override
   public void periodic() {
-    State measuredShoulderState = arm.getMeasuredShoulderState();
-    State measuredWristState = arm.getMeasuredWristState();
+    updateMeasurement();
 
-    State measuredIntakePivotState = intake.getMeasuredPivotState();
-    double measuredIntakeRollerVelocity = intake.getRollerVelocity();
+    setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
 
-    double measuredShooterFlywheelVelocity = shooter.getFlywheelVelocity();
-    double measuredShooterSerializerVelocity = shooter.getSerializerVelocity();
+    arm.setShoulderSetpoint(
+        setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
+    arm.setWristSetpoint(
+        setpoint.wristAngleRotations().position, setpoint.wristAngleRotations().velocity);
 
-    measurement =
-        new SuperstructureState(
-            measuredShoulderState,
-            measuredWristState,
-            measuredIntakePivotState,
-            measuredIntakeRollerVelocity,
-            measuredShooterFlywheelVelocity,
-            measuredShooterSerializerVelocity);
-
-    RobotMechanisms.getInstance().updateSuperstructure(measurement);
+    intake.setPivotSetpoint(
+        setpoint.pivotAngleRotations().position, setpoint.pivotAngleRotations().velocity);
   }
 
   @Override
@@ -104,5 +102,59 @@ public class Superstructure extends Subsystem {
 
     measurement.addDouble(
         "Serializer Velocity (rps)", () -> this.measurement.serializerVelocityRotationsPerSecond());
+  }
+
+  private void updateMeasurement() {
+    State measuredShoulderState = arm.getMeasuredShoulderState();
+    State measuredWristState = arm.getMeasuredWristState();
+
+    State measuredIntakePivotState = intake.getMeasuredPivotState();
+    double measuredIntakeRollerVelocity = intake.getRollerVelocity();
+
+    double measuredShooterFlywheelVelocity = shooter.getFlywheelVelocity();
+    double measuredShooterSerializerVelocity = shooter.getSerializerVelocity();
+
+    measurement =
+        new SuperstructureState(
+            measuredShoulderState,
+            measuredWristState,
+            measuredIntakePivotState,
+            measuredIntakeRollerVelocity,
+            measuredShooterFlywheelVelocity,
+            measuredShooterSerializerVelocity);
+
+    RobotMechanisms.getInstance().updateSuperstructure(measurement);
+  }
+
+  public void setPosition(SuperstructureState state) {
+    arm.setShoulderPosition(state.shoulderAngleRotations().position);
+    arm.setWristPosition(state.wristAngleRotations().position);
+    intake.setPivotPosition(state.pivotAngleRotations().position);
+  }
+
+  private void setGoal(SuperstructureState goal) {
+    this.goal = goal;
+
+    resetMotionProfile();
+  }
+
+  private void resetMotionProfile() {
+    setpoint = measurement;
+  }
+
+  public Command to(SuperstructureState goal) {
+    return this.runOnce(() -> setGoal(goal));
+  }
+
+  public Command stow() {
+    return to(SuperstructureState.STOW);
+  }
+
+  public Command intake() {
+    return to(SuperstructureState.INTAKE);
+  }
+
+  public Command shoot() {
+    return to(SuperstructureState.SHOOT);
   }
 }

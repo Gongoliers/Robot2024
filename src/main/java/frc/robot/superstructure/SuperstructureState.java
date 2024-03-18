@@ -3,6 +3,10 @@ package frc.robot.superstructure;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import frc.robot.RobotConstants;
+import frc.robot.superstructure.SuperstructureConstants.PivotAngleConstants;
+import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
+import frc.robot.superstructure.SuperstructureConstants.WristAngleConstants;
 import java.util.Objects;
 
 /** Represents the state of the superstructure. */
@@ -13,6 +17,22 @@ public record SuperstructureState(
     double rollerVelocityRotationsPerSecond,
     double flywheelVelocityRotationsPerSecond,
     double serializerVelocityRotationsPerSecond) {
+
+  public static final SuperstructureState INITIAL =
+      new SuperstructureState(
+          Rotation2d.fromDegrees(52.5), Rotation2d.fromDegrees(-35), Rotation2d.fromDegrees(86));
+
+  public static final SuperstructureState STOW =
+      new SuperstructureState(
+          Rotation2d.fromDegrees(29.5), Rotation2d.fromDegrees(85.98), Rotation2d.fromDegrees(86));
+
+  public static final SuperstructureState INTAKE =
+      new SuperstructureState(
+          Rotation2d.fromDegrees(29.5), Rotation2d.fromDegrees(4), Rotation2d.fromDegrees(-48));
+
+  public static final SuperstructureState SHOOT =
+      new SuperstructureState(
+          Rotation2d.fromDegrees(29.5), Rotation2d.fromDegrees(18), Rotation2d.fromDegrees(-48));
 
   /**
    * Creates a new superstructure state.
@@ -107,6 +127,42 @@ public record SuperstructureState(
     return MathUtil.isNear(
         this.pivotAngleRotations().position,
         goal.pivotAngleRotations().position,
-        SuperstructureConstants.IntakePivotAngleConstants.TOLERANCE.getRotations());
+        SuperstructureConstants.PivotAngleConstants.TOLERANCE.getRotations());
+  }
+
+  /**
+   * Calculates the next setpoint.
+   *
+   * @param setpoint the previous setpoint.
+   * @param goal the goal.
+   * @return the next setpoint.
+   */
+  public static SuperstructureState nextSetpoint(
+      SuperstructureState setpoint, SuperstructureState goal) {
+    State nextShoulderSetpoint =
+        ShoulderAngleConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION,
+            setpoint.shoulderAngleRotations(),
+            goal.shoulderAngleRotations());
+
+    State nextWristSetpoint =
+        WristAngleConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION,
+            setpoint.wristAngleRotations(),
+            goal.wristAngleRotations());
+
+    State nextPivotSetpoint =
+        PivotAngleConstants.MOTION_PROFILE.calculate(
+            RobotConstants.PERIODIC_DURATION,
+            setpoint.pivotAngleRotations(),
+            goal.pivotAngleRotations());
+
+    return new SuperstructureState(
+        nextShoulderSetpoint,
+        nextWristSetpoint,
+        nextPivotSetpoint,
+        goal.rollerVelocityRotationsPerSecond(),
+        goal.flywheelVelocityRotationsPerSecond(),
+        goal.serializerVelocityRotationsPerSecond());
   }
 }

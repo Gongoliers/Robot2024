@@ -132,7 +132,7 @@ public class RobotMechanisms {
 
   public void updateSuperstructure(SuperstructureState state) {
     Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulderAngleRotations().position);
-    Rotation2d wristRotation = Rotation2d.fromRotations(state.shoulderAngleRotations().position);
+    Rotation2d wristRotation = Rotation2d.fromRotations(state.wristAngleRotations().position);
 
     shoulder.setAngle(shoulderRotation);
 

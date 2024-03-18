@@ -1,6 +1,5 @@
 package frc.robot.intake;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -12,7 +11,6 @@ import frc.lib.Telemetry;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
-import frc.robot.superstructure.SuperstructureConstants;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -39,11 +37,6 @@ public class Intake extends Subsystem {
 
     pivotMotor.configure();
     rollerMotor.configure();
-
-    Rotation2d initialAngle = SuperstructureConstants.IntakePivotAngleConstants.MAXIMUM_ANGLE;
-
-    pivotMotor.setPosition(initialAngle.getRotations());
-    pivotMotor.update(pivotMotorValues);
   }
 
   /**
@@ -88,6 +81,14 @@ public class Intake extends Subsystem {
 
     return new State(
         pivotMotorValues.positionRotations, pivotMotorValues.velocityRotationsPerSecond);
+  }
+
+  public void setPivotPosition(double positionRotations) {
+    pivotMotor.setPosition(positionRotations);
+  }
+
+  public void setPivotSetpoint(double positionRotations, double velocityRotationsPerSecond) {
+    pivotMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
   }
 
   public double getRollerVelocity() {

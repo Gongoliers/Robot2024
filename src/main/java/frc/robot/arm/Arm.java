@@ -110,4 +110,20 @@ public class Arm extends Subsystem {
     return new TrapezoidProfile.State(
         wristMotorValues.positionRotations, wristMotorValues.velocityRotationsPerSecond);
   }
+
+  public void setShoulderPosition(double positionRotations) {
+    shoulderMotor.setPosition(positionRotations);
+  }
+
+  public void setWristPosition(double positionRotations) {
+    wristMotor.setPosition(positionRotations);
+  }
+
+  public void setShoulderSetpoint(double positionRotations, double velocityRotationsPerSecond) {
+    shoulderMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
+  }
+
+  public void setWristSetpoint(double positionRotations, double velocityRotationsPerSecond) {
+    wristMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
+  }
 }
