@@ -13,6 +13,8 @@ import frc.robot.intake.IntakeConstants.PivotMotorConstants;
 /** Pivot motor using a Talon SRX. */
 public class PivotMotorIOTalonSRX implements PivotMotorIO {
 
+  private final double SENSOR_GEARING = 2.3;
+
   /** Hardware Talon SRX. */
   private final TalonSRX talonSRX;
 
@@ -56,7 +58,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
   private double getPivotPosition() {
     double rotations = talonSRX.getSelectedSensorPosition() / 2048.0;
 
-    return rotations / PivotMotorConstants.SENSOR_GEARING;
+    return rotations / SENSOR_GEARING;
   }
 
   /**
@@ -65,7 +67,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
    * @param positionRotations the position of the pivot in rotations.
    */
   private void setPivotPosition(double positionRotations) {
-    double units = positionRotations * PivotMotorConstants.SENSOR_GEARING * 2048.0;
+    double units = positionRotations * SENSOR_GEARING * 2048.0;
 
     Configurator.configurePhoenix5(() -> talonSRX.setSelectedSensorPosition(units));
   }
@@ -73,7 +75,7 @@ public class PivotMotorIOTalonSRX implements PivotMotorIO {
   private double getPivotVelocity() {
     double rotationsPerSecond = talonSRX.getSelectedSensorVelocity() / 2048.0;
 
-    return rotationsPerSecond / PivotMotorConstants.SENSOR_GEARING;
+    return rotationsPerSecond / SENSOR_GEARING;
   }
 
   @Override

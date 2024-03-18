@@ -51,7 +51,7 @@ public class Odometry extends Subsystem {
 
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
-    gyroscope = OdometryFactory.createGyroscope(OdometryConstants.GYROSCOPE_CAN, this);
+    gyroscope = OdometryFactory.createGyroscope(this);
     gyroscope.configure();
 
     swerveModulePositionsSupplier = () -> Swerve.getInstance().getModulePositions();
@@ -211,7 +211,7 @@ public class Odometry extends Subsystem {
    * @return the velocity of the robot on the field.
    */
   public Twist2d getVelocity() {
-    // TODO Guards against simulated odometry hardware calling before the swerve pose estimator is
+    // Guards against calling before the swerve pose estimator is
     // intialized
     if (swervePoseEstimator == null) return new Twist2d();
 

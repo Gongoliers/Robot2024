@@ -4,7 +4,6 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.util.Units;
-import frc.lib.CAN;
 import frc.lib.Configurator;
 
 /** Pigeon 2 gyroscope. */
@@ -16,13 +15,9 @@ public class GyroscopeIOPigeon2 implements GyroscopeIO {
   /** Pigeon 2's roll, pitch, and yaw status signals. */
   private final StatusSignal<Double> roll, pitch, yaw;
 
-  /**
-   * Creates a new Pigeon 2 gyroscope.
-   *
-   * @param gyroscopeCAN the Pigeon 2's CAN.
-   */
-  public GyroscopeIOPigeon2(CAN gyroscopeCAN) {
-    pigeon2 = new Pigeon2(gyroscopeCAN.id(), gyroscopeCAN.bus());
+  /** Creates a new Pigeon 2 gyroscope. */
+  public GyroscopeIOPigeon2() {
+    pigeon2 = new Pigeon2(0, "swerve");
 
     roll = pigeon2.getRoll();
     pitch = pigeon2.getRoll();

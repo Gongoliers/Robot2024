@@ -10,12 +10,6 @@ public class IntakeConstants {
 
   /** Constants for the pivot motor. */
   public static class PivotMotorConstants {
-    /** Gearing between the pivot sensor and the pivot. */
-    public static final double SENSOR_GEARING = 2.3;
-
-    /** Gearing between the motor and the pivot. */
-    public static final double MOTOR_GEARING = 49 * SENSOR_GEARING;
-
     /** Distance between the pivot and the far edge of the intake. */
     public static final double DISTANCE = Units.inchesToMeters(10.275);
 
@@ -51,9 +45,6 @@ public class IntakeConstants {
 
   /** Constants for the roller motor. */
   public static class RollerMotorConstants {
-    /** Gearing between the roller motor and the rollers. */
-    public static final double GEARING = 4.5;
-
     /** Velocity to apply when intaking in rotations per second. */
     public static final double INTAKE_VELOCITY = 1.0;
 

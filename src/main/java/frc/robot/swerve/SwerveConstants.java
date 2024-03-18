@@ -16,7 +16,7 @@ public class SwerveConstants {
     public static final double STEER_GEARING = 150.0 / 7.0;
 
     /** Moment of inertia of the wheel when steering in joules kilograms meters squared. */
-    public static final double STEER_MOI = 0.004; // TODO
+    public static final double STEER_MOI = 0.004;
 
     /** Gearing between the drive motor and the wheel for the L1 gear ratio. */
     public static final double L1 = 8.14;
@@ -93,20 +93,19 @@ public class SwerveConstants {
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
    *
-   * @param rotorVelocityRotationsPerSecondAt12Volts the rotor velocity of the drive motor in
+   * @param driveRotorVelocityRotationsPerSecondAt12Volts the rotor velocity of the drive motor in
    *     rotations per second when the motor is supplied 12 volts.
    * @return the maximum attainable open loop speed in meters per second.
    */
   private static double calculateMaximumAttainableSpeed(
-      double rotorVelocityRotationsPerSecondAt12Volts) {
-    return rotorVelocityRotationsPerSecondAt12Volts
+      double driveRotorVelocityRotationsPerSecondAt12Volts) {
+    return driveRotorVelocityRotationsPerSecondAt12Volts
         / MK4iConstants.DRIVE_GEARING
         * MK4iConstants.WHEEL_CIRCUMFERENCE;
   }
 
   /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_ATTAINABLE_SPEED =
-      calculateMaximumAttainableSpeed(100); // TODO estimated
+  public static final double MAXIMUM_ATTAINABLE_SPEED = calculateMaximumAttainableSpeed(100);
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
@@ -154,7 +153,7 @@ public class SwerveConstants {
   }
 
   static {
-    DRIVE_PIDF_CONSTANTS.kS = 0.0; // TODO volts
+    DRIVE_PIDF_CONSTANTS.kS = 0.14;
     DRIVE_PIDF_CONSTANTS.kV = calculateKv(0.12); // volts per meter per second
   }
 
@@ -167,7 +166,7 @@ public class SwerveConstants {
     STEER_PIDF_CONSTANTS.kPositionTolerance = Units.degreesToRotations(3);
     // STEER_PIDF_CONSTANTS.kVelocityConstraint = 10.0; // rotations per second
     // STEER_PIDF_CONSTANTS.kAccelerationConstraint = 64.0; // rotations per second per second
-    STEER_PIDF_CONSTANTS.kS = 0.32; // TODO volts
+    STEER_PIDF_CONSTANTS.kS = 0.32;
     // STEER_PIDF_CONSTANTS.kV = 0.407363; // volts per rotation per second
   }
 }

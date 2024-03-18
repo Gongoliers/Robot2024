@@ -45,7 +45,6 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
 
   @Override
   public void setVoltage(double volts) {
-    // TODO
     this.inputVoltage = volts;
   }
 }

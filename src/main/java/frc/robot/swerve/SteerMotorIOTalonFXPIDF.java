@@ -52,13 +52,6 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
 
   @Override
   public void setSetpoint(double positionRotations) {
-    if (pidf.atSetpoint()) {
-      // TODO Doesn't work for some reason...
-      // TODO Test
-      // talonFX.setControl(new CoastOut());
-      // return;
-    }
-
     Rotation2d measuredPosition =
         Rotation2d.fromRotations(
             BaseStatusSignal.getLatencyCompensatedValue(

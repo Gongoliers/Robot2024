@@ -83,7 +83,6 @@ public class Telemetry {
    * @param component the component to make fullscreen.
    * @return the fullscreen component.
    */
-  // TODO
   public static ShuffleboardComponent makeFullscreen(ShuffleboardComponent component) {
     return component.withPosition(0, 0).withSize(10, 4);
   }

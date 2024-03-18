@@ -121,8 +121,6 @@ public class DriveCommand extends Command {
    * @return the clamped chassis speeds.
    */
   private ChassisSpeeds clampChassisSpeeds(ChassisSpeeds desiredChassisSpeeds) {
-    // TODO Clamp translation velocity?
-
     double vxMetersPerSecond =
         MathUtil.clamp(
             desiredChassisSpeeds.vxMetersPerSecond,
@@ -139,8 +137,6 @@ public class DriveCommand extends Command {
             previousChassisSpeeds.vyMetersPerSecond
                 + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
 
-    // TODO Clamp rotation acceleration?
-
     double omegaRadiansPerSecond =
         MathUtil.clamp(
             desiredChassisSpeeds.omegaRadiansPerSecond,
@@ -156,7 +152,6 @@ public class DriveCommand extends Command {
    * @return the reference heading to use with the heading motion profile.
    */
   private Rotation2d getReferenceHeading() {
-    // TODO getDriverRelativeHeading may be correct here
     return odometry.getFieldRelativeHeading();
   }
 

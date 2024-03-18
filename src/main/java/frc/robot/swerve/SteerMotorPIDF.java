@@ -43,7 +43,6 @@ public class SteerMotorPIDF {
   public double calculate(Rotation2d measurement, Rotation2d setpoint) {
     double feedbackVolts = feedback.calculate(measurement.getRotations(), setpoint.getRotations());
 
-    // TODO Determine if/how velocity feedforward could be used
     double feedforwardVolts = feedforward.calculate(0.0);
 
     return feedbackVolts + feedforwardVolts;

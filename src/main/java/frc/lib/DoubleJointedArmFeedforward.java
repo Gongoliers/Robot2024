@@ -33,13 +33,13 @@ public class DoubleJointedArmFeedforward {
     this.g1 = shoulder.gearing();
     this.g2 = elbow.gearing();
 
-    B_MATRIX.set(0, 0, shoulder.torque());
-    B_MATRIX.set(1, 1, elbow.torque());
+    B_MATRIX.set(0, 0, shoulder.torqueNm());
+    B_MATRIX.set(1, 1, elbow.torqueNm());
     B_MATRIX.set(1, 0, 0);
     B_MATRIX.set(0, 1, 0);
 
-    Kb_MATRIX.set(0, 0, shoulder.torqueLoss());
-    Kb_MATRIX.set(1, 1, elbow.torqueLoss());
+    Kb_MATRIX.set(0, 0, shoulder.torqueLossNm());
+    Kb_MATRIX.set(1, 1, elbow.torqueLossNm());
     Kb_MATRIX.set(1, 0, 0);
     Kb_MATRIX.set(0, 1, 0);
   }
