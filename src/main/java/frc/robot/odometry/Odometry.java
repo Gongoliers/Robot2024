@@ -102,6 +102,10 @@ public class Odometry extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout shouldFlip = Telemetry.addColumn(tab, "Should Flip?");
+
+    shouldFlip.addBoolean("Should Flip?", () -> AllianceFlipHelper.shouldFlip());
+
     ShuffleboardLayout position = Telemetry.addColumn(tab, "Position");
 
     position.addDouble("X (m)", () -> getPosition().getX());
