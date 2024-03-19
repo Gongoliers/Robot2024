@@ -13,9 +13,6 @@ public class IntakeConstants {
 
     /** Angle between the measured intake position and the mass's position. */
     public static final Rotation2d MASS_OFFSET = Rotation2d.fromDegrees(-34.34);
-
-    /** Pivot motor's "out" angle. */
-    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(0);
   }
 
   /** Constants for the roller motor. */

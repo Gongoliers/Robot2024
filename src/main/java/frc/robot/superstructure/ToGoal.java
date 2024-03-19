@@ -1,8 +1,6 @@
 package frc.robot.superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class ToGoal extends Command {
 
@@ -10,34 +8,32 @@ public class ToGoal extends Command {
 
   private final SuperstructureState goal;
 
-  private final Queue<SuperstructureState> intermediateGoals;
+  private SuperstructureGoals goals;
 
   public ToGoal(SuperstructureState goal) {
     this.superstructure = Superstructure.getInstance();
 
     this.goal = goal;
 
-    this.intermediateGoals = new LinkedList<SuperstructureState>();
+    goals = new SuperstructureGoals(superstructure.getState(), this.goal);
+
+    addRequirements(this.superstructure);
   }
 
   @Override
   public void initialize() {
-    intermediateGoals.clear();
-
-    // TODO Add more intermediate goals
-
-    intermediateGoals.add(goal);
+    goals = new SuperstructureGoals(superstructure.getState(), this.goal);
   }
 
   @Override
   public void execute() {
-    if (superstructure.at(intermediateGoals.element())) {
-      if (intermediateGoals.size() > 1) {
-        intermediateGoals.remove();
-      }
+    SuperstructureState goal = goals.get();
+
+    if (superstructure.at(goal)) {
+      goal = goals.next();
     }
 
-    superstructure.setGoal(intermediateGoals.element());
+    superstructure.setGoal(goal);
   }
 
   @Override

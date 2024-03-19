@@ -94,6 +94,38 @@ public class Superstructure extends Subsystem {
     measurement.addDouble(
         "Serializer Velocity (rps)", () -> this.measurement.serializerVelocityRotationsPerSecond());
 
+    ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
+
+    setpoint.addDouble(
+        "Shoulder Position (deg)",
+        () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().position));
+    setpoint.addDouble(
+        "Shoulder Velocity (dps)",
+        () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().velocity));
+
+    setpoint.addDouble(
+        "Wrist Position (deg)",
+        () -> Units.rotationsToDegrees(this.setpoint.wristAngleRotations().position));
+    setpoint.addDouble(
+        "Wrist Velocity (dps)",
+        () -> Units.rotationsToDegrees(this.setpoint.wristAngleRotations().velocity));
+
+    setpoint.addDouble(
+        "Pivot Position (deg)",
+        () -> Units.rotationsToDegrees(this.setpoint.pivotAngleRotations().position));
+    setpoint.addDouble(
+        "Pivot Velocity (dps)",
+        () -> Units.rotationsToDegrees(this.setpoint.pivotAngleRotations().velocity));
+
+    setpoint.addDouble(
+        "Roller Velocity (rps)", () -> this.setpoint.rollerVelocityRotationsPerSecond());
+
+    setpoint.addDouble(
+        "Flywheel Velocity (rps)", () -> this.setpoint.flywheelVelocityRotationsPerSecond());
+
+    setpoint.addDouble(
+        "Serializer Velocity (rps)", () -> this.setpoint.serializerVelocityRotationsPerSecond());
+
     ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
 
     goal.addDouble(
@@ -147,6 +179,12 @@ public class Superstructure extends Subsystem {
     RobotMechanisms.getInstance().updateSuperstructure(measurement);
   }
 
+  public SuperstructureState getState() {
+    updateMeasurement();
+
+    return measurement;
+  }
+
   private void updateSetpoint() {
     setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
 
@@ -168,12 +206,12 @@ public class Superstructure extends Subsystem {
   public void setGoal(SuperstructureState goal) {
     this.goal = goal;
 
-    resetMotionProfile();
+    // resetMotionProfile();
   }
 
-  private void resetMotionProfile() {
-    setpoint = measurement;
-  }
+  // private void resetMotionProfile() {
+  //   setpoint = measurement;
+  // }
 
   public boolean at(SuperstructureState goal) {
     updateMeasurement();

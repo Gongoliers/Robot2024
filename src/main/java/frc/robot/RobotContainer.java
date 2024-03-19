@@ -77,8 +77,10 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.y().onTrue(odometry.tare());
 
-    operatorController.a().onTrue(superstructure.intake()).onFalse(superstructure.stow());
-    operatorController.b().onTrue(superstructure.shoot()).onFalse(superstructure.stow());
+    operatorController.leftTrigger().onTrue(superstructure.intake());
+    operatorController.rightTrigger().onTrue(superstructure.shoot());
+
+    operatorController.x().onTrue(superstructure.stow());
   }
 
   /**

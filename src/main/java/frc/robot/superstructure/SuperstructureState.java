@@ -91,6 +91,127 @@ public record SuperstructureState(
     this(shoulderAngle, wristAngle, pivotAngle, 0.0, 0.0, 0.0);
   }
 
+  public SuperstructureState withShoulderAngle(Rotation2d newShoulderAngle) {
+    return new SuperstructureState(
+        new State(newShoulderAngle.getRotations(), 0.0),
+        wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withShoulderAngleOf(SuperstructureState other) {
+    return new SuperstructureState(
+        other.shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withWristAngle(Rotation2d newWristAngle) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        new State(newWristAngle.getRotations(), 0.0),
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withWristAngleOf(SuperstructureState other) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        other.wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withPivotAngle(Rotation2d newPivotAngle) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        new State(newPivotAngle.getRotations(), 0.0),
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withPivotAngleOf(SuperstructureState other) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        other.pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withRollerVelocity(double newRollerVelocityRotationsPerSecond) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        newRollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withRollerVelocityOf(SuperstructureState other) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        other.rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withFlywheelVelocity(double newFlywheelVelocityRotationsPerSecond) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        newFlywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withFlywheelVelocityOf(SuperstructureState other) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        other.flywheelVelocityRotationsPerSecond,
+        serializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withSerializerVelocity(
+      double newSerializerVelocityRotationsPerSecond) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        newSerializerVelocityRotationsPerSecond);
+  }
+
+  public SuperstructureState withSerializerVelocityOf(SuperstructureState other) {
+    return new SuperstructureState(
+        shoulderAngleRotations,
+        wristAngleRotations,
+        pivotAngleRotations,
+        rollerVelocityRotationsPerSecond,
+        flywheelVelocityRotationsPerSecond,
+        other.serializerVelocityRotationsPerSecond);
+  }
+
   /**
    * Returns true if at the shoulder angle goal.
    *
@@ -132,6 +253,18 @@ public record SuperstructureState(
 
   public boolean at(SuperstructureState other) {
     return atShoulderAngleGoal(other) && atWristAngleGoal(other) && atPivotAngleGoal(other);
+  }
+
+  public boolean wristStowed() {
+    return wristAngleRotations.position > 0;
+  }
+
+  public boolean pivotOut() {
+    return pivotAngleRotations.position < PivotAngleConstants.OUT_ANGLE.getRotations();
+  }
+
+  public boolean pivotIn() {
+    return !pivotOut();
   }
 
   /**

@@ -45,6 +45,9 @@ public class SuperstructureConstants {
   }
 
   public static class PivotAngleConstants {
+    /** Pivot motor's "out" angle. */
+    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(0);
+
     /** Pivot motor's tolerance. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(8.0);
 
