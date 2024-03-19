@@ -230,6 +230,19 @@ public record SuperstructureState(
   }
 
   /**
+   * Returns true if at the shoulder angle.
+   *
+   * @param other
+   * @return true if at the shoulder angle.
+   */
+  public boolean atShoulderAngle(Rotation2d other) {
+    return MathUtil.isNear(
+        this.shoulderAngleRotations().position,
+        other.getRotations(),
+        SuperstructureConstants.ShoulderAngleConstants.TOLERANCE.getRotations());
+  }
+
+  /**
    * Returns true if at the wrist angle goal.
    *
    * @param goal

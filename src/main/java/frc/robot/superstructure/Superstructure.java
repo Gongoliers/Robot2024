@@ -223,6 +223,10 @@ public class Superstructure extends Subsystem {
     return new ToGoal(goal);
   }
 
+  public Command initial() {
+    return to(SuperstructureState.INITIAL);
+  }
+
   public Command stow() {
     return to(SuperstructureState.STOW);
   }
