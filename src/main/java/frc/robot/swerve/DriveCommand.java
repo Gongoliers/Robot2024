@@ -56,7 +56,7 @@ public class DriveCommand extends Command {
 
     headingSnapper = SnapRotation.to(Rotation2d.fromDegrees(90));
 
-    odometry.onPoseUpdate(newPose -> resetHeadingGoal());
+    odometry.onYawUpdate(newPose -> resetHeadingGoal());
   }
 
   @Override
@@ -78,7 +78,7 @@ public class DriveCommand extends Command {
     }
 
     if (request.isSnapping()) {
-      setPositionHeadingGoal(headingSnapper.snap(request.fieldHeading()));
+      setPositionHeadingGoal(headingSnapper.snap(request.driverHeading()));
     }
 
     Rotation2d omega;
@@ -152,7 +152,7 @@ public class DriveCommand extends Command {
    * @return the reference heading to use with the heading motion profile.
    */
   private Rotation2d getReferenceHeading() {
-    return odometry.getFieldRelativeHeading();
+    return odometry.getDriverRelativeHeading();
   }
 
   /**
