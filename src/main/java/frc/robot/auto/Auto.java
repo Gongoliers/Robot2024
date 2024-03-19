@@ -1,6 +1,7 @@
 package frc.robot.auto;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -13,6 +14,7 @@ import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.Odometry;
+import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
 import java.util.function.Consumer;
@@ -27,6 +29,9 @@ public class Auto extends Subsystem {
   /** Reference to the odometry subsystem. */
   private final Odometry odometry;
 
+  /** Reference to the superstructure subsystem. */
+  private final Superstructure superstructure;
+
   /** Reference to the swerve subsystem. */
   private final Swerve swerve;
 
@@ -36,6 +41,7 @@ public class Auto extends Subsystem {
   /** Creates a new instance of the auto subsystem. */
   private Auto() {
     odometry = Odometry.getInstance();
+    superstructure = Superstructure.getInstance();
     swerve = Swerve.getInstance();
 
     Supplier<Pose2d> robotPositionSupplier = () -> odometry.getPosition();
@@ -63,6 +69,13 @@ public class Auto extends Subsystem {
         holonomicPathFollowerConfig,
         AllianceFlipHelper::shouldFlip,
         swerve);
+
+    NamedCommands.registerCommand("home", superstructure.stow());
+    NamedCommands.registerCommand("stow", superstructure.stow());
+    NamedCommands.registerCommand("readyIntake", superstructure.intake());
+    NamedCommands.registerCommand("intakeNote", superstructure.intake());
+    NamedCommands.registerCommand("readyShoot", superstructure.shoot());
+    NamedCommands.registerCommand("shootNote", superstructure.shoot());
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }
