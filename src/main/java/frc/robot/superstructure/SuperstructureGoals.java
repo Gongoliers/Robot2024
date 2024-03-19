@@ -1,5 +1,6 @@
 package frc.robot.superstructure;
 
+import frc.robot.superstructure.SuperstructureConstants.WristAngleConstants;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -10,8 +11,13 @@ public class SuperstructureGoals {
   public SuperstructureGoals(SuperstructureState start, SuperstructureState end) {
     goals = new LinkedList<SuperstructureState>();
 
-    if (start.pivotIn() && end.pivotOut()) {
-      goals.add(start.withPivotAngleOf(end));
+    if (!start.atShoulderAngleGoal(end)) {
+      goals.add(start.withWristAngle(WristAngleConstants.STOW));
+      goals.add(
+          start
+              .withShoulderAngleOf(end)
+              .withWristAngle(WristAngleConstants.STOW)
+              .withPivotAngleOf(end));
     }
 
     goals.add(end);

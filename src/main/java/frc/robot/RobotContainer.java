@@ -80,6 +80,7 @@ public class RobotContainer {
     operatorController.leftTrigger().onTrue(superstructure.intake());
     operatorController.rightTrigger().onTrue(superstructure.shoot());
 
+    operatorController.a().onTrue(superstructure.amp());
     operatorController.x().onTrue(superstructure.stow());
   }
 

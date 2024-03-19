@@ -234,4 +234,8 @@ public class Superstructure extends Subsystem {
   public Command shoot() {
     return to(SuperstructureState.SHOOT);
   }
+
+  public Command amp() {
+    return to(SuperstructureState.AMP);
+  }
 }

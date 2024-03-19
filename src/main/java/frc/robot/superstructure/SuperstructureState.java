@@ -20,19 +20,23 @@ public record SuperstructureState(
 
   public static final SuperstructureState INITIAL =
       new SuperstructureState(
-          Rotation2d.fromDegrees(52.5), Rotation2d.fromDegrees(-35), Rotation2d.fromDegrees(86));
+          ShoulderAngleConstants.INITIAL, WristAngleConstants.INITIAL, PivotAngleConstants.UP);
 
   public static final SuperstructureState STOW =
       new SuperstructureState(
-          Rotation2d.fromDegrees(29.5), Rotation2d.fromDegrees(85.98), Rotation2d.fromDegrees(86));
+          ShoulderAngleConstants.STOW, WristAngleConstants.STOW, PivotAngleConstants.UP);
 
   public static final SuperstructureState INTAKE =
       new SuperstructureState(
-          Rotation2d.fromDegrees(29.5), Rotation2d.fromDegrees(4), Rotation2d.fromDegrees(-48));
+          ShoulderAngleConstants.STOW, WristAngleConstants.INTAKE, PivotAngleConstants.DOWN);
 
   public static final SuperstructureState SHOOT =
       new SuperstructureState(
-          Rotation2d.fromDegrees(29.5), Rotation2d.fromDegrees(18), Rotation2d.fromDegrees(-48));
+          ShoulderAngleConstants.STOW, WristAngleConstants.SHOOT, PivotAngleConstants.DOWN);
+
+  public static final SuperstructureState AMP =
+      new SuperstructureState(
+          ShoulderAngleConstants.AMP, WristAngleConstants.AMP, PivotAngleConstants.UP);
 
   /**
    * Creates a new superstructure state.
@@ -257,14 +261,6 @@ public record SuperstructureState(
 
   public boolean wristStowed() {
     return wristAngleRotations.position > 0;
-  }
-
-  public boolean pivotOut() {
-    return pivotAngleRotations.position < PivotAngleConstants.OUT_ANGLE.getRotations();
-  }
-
-  public boolean pivotIn() {
-    return !pivotOut();
   }
 
   /**

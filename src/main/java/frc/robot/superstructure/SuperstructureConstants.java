@@ -7,6 +7,12 @@ import frc.lib.MotionProfileCalculator;
 public class SuperstructureConstants {
 
   public static class ShoulderAngleConstants {
+    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(52.5);
+
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(29.5);
+
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(90);
+
     /** Tolerance of the shoulder joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
 
@@ -26,6 +32,16 @@ public class SuperstructureConstants {
   }
 
   public static class WristAngleConstants {
+    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(-35);
+
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(85.98);
+
+    public static final Rotation2d INTAKE = Rotation2d.fromDegrees(4);
+
+    public static final Rotation2d SHOOT = Rotation2d.fromDegrees(18);
+
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(0);
+
     /** Tolerance of the wrist joint. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
 
@@ -45,8 +61,9 @@ public class SuperstructureConstants {
   }
 
   public static class PivotAngleConstants {
-    /** Pivot motor's "out" angle. */
-    public static final Rotation2d OUT_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d UP = Rotation2d.fromDegrees(86);
+
+    public static final Rotation2d DOWN = Rotation2d.fromDegrees(-48);
 
     /** Pivot motor's tolerance. */
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(8.0);
