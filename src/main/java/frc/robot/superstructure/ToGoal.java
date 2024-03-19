@@ -1,6 +1,8 @@
 package frc.robot.superstructure;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ToGoal extends Command {
 
@@ -15,7 +17,8 @@ public class ToGoal extends Command {
 
     this.goal = goal;
 
-    goals = new SuperstructureGoals(superstructure.getState(), this.goal);
+    Queue<SuperstructureState> empty = new LinkedList<SuperstructureState>();
+    goals = new SuperstructureGoals(empty);
 
     addRequirements(this.superstructure);
   }

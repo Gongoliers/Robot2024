@@ -10,30 +10,18 @@ public class SuperstructureGoals {
 
   private final Queue<SuperstructureState> goals;
 
-  public static Queue<SuperstructureState> merge(
-      Queue<SuperstructureState> first, Queue<SuperstructureState> second) {
-    Queue<SuperstructureState> mergedGoals = new LinkedList<SuperstructureState>();
-
-    while (!first.isEmpty()) {
-      mergedGoals.add(first.poll());
-    }
-
-    while (!second.isEmpty()) {
-      mergedGoals.add(second.poll());
-    }
-
-    return mergedGoals;
-  }
-
   public static Queue<SuperstructureState> generate(
       SuperstructureState start, SuperstructureState end) {
     Queue<SuperstructureState> goals = new LinkedList<SuperstructureState>();
+
+    // TOOD Bug where the shoulder "bounces" while the intake is pivoting down
 
     boolean shoulderMove = !start.atShoulderAngleGoal(end);
 
     // Shoulder move: HOME -> STOW; ANY -> AMP
     // Move wrist to STOW first, then move shoulder
     if (shoulderMove) {
+      System.out.println("*** GENERATING SHOULDER MOVE ***");
       goals.add(start.withWristAngle(WristAngleConstants.STOW));
       goals.add(end.withWristAngle(WristAngleConstants.STOW));
       goals.add(end);
@@ -46,13 +34,19 @@ public class SuperstructureGoals {
     boolean pivotUp = start.pivotAngleRotations().position > PivotAngleConstants.DOWN.getRotations();
 
     // Stow position movement & wrist-intake collision avoidance
-    if (shoulderStowed && wristMove && pivotMove) {
+    if (shoulderStowed && !shoulderMove && wristMove && pivotMove) {
       if (pivotUp) {
         // Pivot is up and needs to go down; move it first
+        System.out.println("*** GENERATING PIVOT DOWN ***");
         goals.add(start.withPivotAngleOf(end));
+        goals.add(end);
+        return goals;
       } else {
+        System.out.println("*** GENERATING WRIST UP ***");
         // Pivot is down and needs to go up; move wrist out of way first
         goals.add(start.withWristAngleOf(end));
+        goals.add(end);
+        return goals;
       }
     }
 
