@@ -151,6 +151,8 @@ public class Odometry extends Subsystem {
    *     alliance.
    */
   public Rotation2d getDriverRelativeHeading() {
+    gyroscope.update(gyroscopeValues);
+
     return Rotation2d.fromRotations(gyroscopeValues.yawRotations);
   }
 
