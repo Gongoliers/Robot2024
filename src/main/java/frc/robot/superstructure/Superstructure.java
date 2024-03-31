@@ -72,13 +72,6 @@ public class Superstructure extends Subsystem {
         () -> Units.rotationsToDegrees(this.measurement.shoulderAngleRotations().velocity));
 
     measurement.addDouble(
-        "Wrist Position (deg)",
-        () -> Units.rotationsToDegrees(this.measurement.wristAngleRotations().position));
-    measurement.addDouble(
-        "Wrist Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.measurement.wristAngleRotations().velocity));
-
-    measurement.addDouble(
         "Roller Velocity (rps)", () -> this.measurement.rollerVelocityRotationsPerSecond());
 
     measurement.addDouble(
@@ -95,13 +88,6 @@ public class Superstructure extends Subsystem {
     setpoint.addDouble(
         "Shoulder Velocity (dps)",
         () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().velocity));
-
-    setpoint.addDouble(
-        "Wrist Position (deg)",
-        () -> Units.rotationsToDegrees(this.setpoint.wristAngleRotations().position));
-    setpoint.addDouble(
-        "Wrist Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.setpoint.wristAngleRotations().velocity));
 
     setpoint.addDouble(
         "Roller Velocity (rps)", () -> this.setpoint.rollerVelocityRotationsPerSecond());
@@ -121,13 +107,6 @@ public class Superstructure extends Subsystem {
         "Shoulder Velocity (dps)",
         () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().velocity));
 
-    goal.addDouble(
-        "Wrist Position (deg)",
-        () -> Units.rotationsToDegrees(this.goal.wristAngleRotations().position));
-    goal.addDouble(
-        "Wrist Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.goal.wristAngleRotations().velocity));
-
     goal.addDouble("Roller Velocity (rps)", () -> this.goal.rollerVelocityRotationsPerSecond());
 
     goal.addDouble("Flywheel Velocity (rps)", () -> this.goal.flywheelVelocityRotationsPerSecond());
@@ -138,7 +117,6 @@ public class Superstructure extends Subsystem {
 
   private void updateMeasurement() {
     State measuredShoulderState = arm.getMeasuredShoulderState();
-    State measuredWristState = arm.getMeasuredWristState();
 
     double measuredIntakeRollerVelocity = intake.getRollerVelocity();
 
@@ -148,7 +126,6 @@ public class Superstructure extends Subsystem {
     measurement =
         new SuperstructureState(
             measuredShoulderState,
-            measuredWristState,
             measuredIntakeRollerVelocity,
             measuredShooterFlywheelVelocity,
             measuredShooterSerializerVelocity);
@@ -167,13 +144,10 @@ public class Superstructure extends Subsystem {
 
     arm.setShoulderSetpoint(
         setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
-    arm.setWristSetpoint(
-        setpoint.wristAngleRotations().position, setpoint.wristAngleRotations().velocity);
   }
 
   public void setPosition(SuperstructureState state) {
     arm.setShoulderPosition(state.shoulderAngleRotations().position);
-    arm.setWristPosition(state.wristAngleRotations().position);
   }
 
   public void setGoal(SuperstructureState goal) {

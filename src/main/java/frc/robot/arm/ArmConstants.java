@@ -20,18 +20,4 @@ public class ArmConstants {
             DCMotor.getNEO(1), // motor
             1);
   }
-
-  /** Constants for the wrist motor. */
-  public static class WristMotorConstants {
-    /** Joint constants for the wrist joint. */
-    public static final JointConstants JOINT_CONSTANTS =
-        new JointConstants(
-            Units.lbsToKilograms(8.016), // massKg
-            Units.inchesToMeters(5.135), // lengthMeters
-            Units.inchesToMeters(3.47629), // radiusMeters
-            0.02835,
-            20.454545,
-            DCMotor.getNEO(1), // motor
-            1);
-  }
 }

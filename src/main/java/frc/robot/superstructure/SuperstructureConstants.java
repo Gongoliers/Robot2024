@@ -30,33 +30,4 @@ public class SuperstructureConstants {
     /** Motion profile of the shoulder joint using constraints. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
-
-  public static class WristAngleConstants {
-    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(-35);
-
-    public static final Rotation2d STOW = Rotation2d.fromDegrees(85.98);
-
-    public static final Rotation2d INTAKE = Rotation2d.fromDegrees(4);
-
-    public static final Rotation2d SHOOT = Rotation2d.fromDegrees(18);
-
-    public static final Rotation2d AMP = Rotation2d.fromDegrees(0);
-
-    /** Tolerance of the wrist joint. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
-
-    /** Maximum speed of the wrist joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 1.2;
-
-    /** Maximum acceleration of the wrist joint in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
-
-    /** Maximum speed and acceleration of the wrist joint. */
-    public static final TrapezoidProfile.Constraints CONSTRAINTS =
-        new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
-
-    /** Motion profile of the wrist joint using constraints. */
-    public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
-  }
 }

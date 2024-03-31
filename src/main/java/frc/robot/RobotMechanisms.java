@@ -113,17 +113,9 @@ public class RobotMechanisms {
 
   public void updateSuperstructure(SuperstructureState state) {
     Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulderAngleRotations().position);
-    Rotation2d wristRotation = Rotation2d.fromRotations(state.wristAngleRotations().position);
 
     shoulder.setAngle(shoulderRotation);
 
-    // Offset the rendered wrist rotation so that zero degrees is perpendicular to the shoulder,
-    // rather than parallel with the shoulder
-    Rotation2d offsetWristRotation = wristRotation.plus(Rotation2d.fromDegrees(90));
-    Rotation2d shooterRotation = offsetWristRotation;
-    Rotation2d serializerRotation = offsetWristRotation.plus(Rotation2d.fromDegrees(180));
-
-    flywheel.setAngle(shooterRotation);
     flywheel.setColor(
         new Color8Bit(
             flywheelColor.sample(
@@ -131,7 +123,6 @@ public class RobotMechanisms {
                 0,
                 FlywheelConstants.MAXIMUM_TANGENTIAL_SPEED)));
 
-    serializer.setAngle(serializerRotation);
     serializer.setColor(
         new Color8Bit(
             serializerColor.sample(
