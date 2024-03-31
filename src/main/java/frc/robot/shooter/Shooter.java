@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.RobotMechanisms;
 import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
 import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
@@ -53,10 +52,6 @@ public class Shooter extends Subsystem {
   public void periodic() {
     serializerMotor.update(serializerMotorValues);
     flywheelMotor.update(flywheelMotorValues);
-
-    RobotMechanisms.getInstance().updateShooter(flywheelMotorValues.velocityRotationsPerSecond);
-    RobotMechanisms.getInstance()
-        .updateSerializer(serializerMotorValues.velocityRotationsPerSecond);
   }
 
   @Override
@@ -72,6 +67,18 @@ public class Shooter extends Subsystem {
     flywheel.addDouble(
         "Flywheel Speed (rps)", () -> flywheelMotorValues.velocityRotationsPerSecond);
     flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
+  }
+
+  public double getFlywheelVelocity() {
+    flywheelMotor.update(flywheelMotorValues);
+
+    return flywheelMotorValues.velocityRotationsPerSecond;
+  }
+
+  public double getSerializerVelocity() {
+    serializerMotor.update(serializerMotorValues);
+
+    return serializerMotorValues.velocityRotationsPerSecond;
   }
 
   /**

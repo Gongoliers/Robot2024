@@ -10,6 +10,7 @@ import frc.robot.climber.Climber;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
+import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 
 /** Initializes subsystems and commands. */
@@ -24,6 +25,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Odometry odometry;
   private final Shooter shooter;
+  private final Superstructure superstructure;
   private final Swerve swerve;
 
   private final CommandXboxController driverController, operatorController;
@@ -36,6 +38,7 @@ public class RobotContainer {
     intake = Intake.getInstance();
     odometry = Odometry.getInstance();
     shooter = Shooter.getInstance();
+    superstructure = Superstructure.getInstance();
     swerve = Swerve.getInstance();
 
     driverController = new CommandXboxController(0);
@@ -61,31 +64,26 @@ public class RobotContainer {
 
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
-    Telemetry.initializeTabs(arm, auto, climber, intake, odometry, shooter, swerve);
+    Telemetry.initializeTabs(arm, auto, climber, intake, odometry, shooter, superstructure, swerve);
     SmartDashboard.putData("Mechanism", RobotMechanisms.getInstance().getMechanism());
   }
 
   /** Configures subsystem default commands. */
   private void configureDefaultCommands() {
-    arm.setDefaultCommand(arm.stow());
-    intake.setDefaultCommand(intake.stow());
     swerve.setDefaultCommand(swerve.driveWithController(driverController));
   }
 
   /** Configures controller bindings. */
   private void configureBindings() {
-    driverController.a().whileTrue(swerve.forwards());
-    driverController.b().whileTrue(swerve.sideways());
-    driverController.x().whileTrue(swerve.cross());
     driverController.y().onTrue(odometry.tare());
 
-    operatorController.leftTrigger().whileTrue(auto.intakePosition().andThen(auto.intakeNote()));
-    operatorController.leftBumper().whileTrue(intake.unstow().andThen(intake.outtake()));
+    operatorController.leftTrigger().onTrue(superstructure.intake());
+    operatorController.rightTrigger().onTrue(superstructure.shoot());
 
-    operatorController.rightTrigger().whileTrue(auto.shootPosition().andThen(shooter.spin()));
-    operatorController.rightBumper().whileTrue(shooter.serialize());
-
-    operatorController.a().whileTrue(arm.amp());
+    operatorController.a().onTrue(superstructure.amp());
+    operatorController.b().onTrue(superstructure.intake());
+    operatorController.x().onTrue(superstructure.stow());
+    operatorController.y().onTrue(superstructure.shoot());
   }
 
   /**
