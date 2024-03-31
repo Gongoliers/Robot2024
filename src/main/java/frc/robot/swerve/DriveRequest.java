@@ -4,7 +4,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.lib.AllianceFlipHelper;
 
 public record DriveRequest(
     DriveRequest.TranslationMode translationMode,
@@ -102,15 +101,5 @@ public record DriveRequest(
 
   public Rotation2d driverHeading() {
     return rotation().getAngle();
-  }
-
-  public Rotation2d fieldHeading() {
-    Rotation2d heading = driverHeading();
-
-    if (AllianceFlipHelper.shouldFlip()) {
-      heading = heading.plus(Rotation2d.fromDegrees(180));
-    }
-
-    return heading;
   }
 }

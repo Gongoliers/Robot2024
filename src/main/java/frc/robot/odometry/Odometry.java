@@ -47,7 +47,7 @@ public class Odometry extends Subsystem {
   private final Field2d field;
 
   /** List of functions to be called when pose is manually updated. */
-  private final List<Consumer<Pose2d>> poseUpdateConsumers;
+  private final List<Consumer<Rotation2d>> yawUpdateConsumers;
 
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
@@ -73,7 +73,7 @@ public class Odometry extends Subsystem {
 
     field = new Field2d();
 
-    poseUpdateConsumers = new ArrayList<Consumer<Pose2d>>();
+    yawUpdateConsumers= new ArrayList<Consumer<Rotation2d>>();
   }
 
   /**
@@ -102,11 +102,16 @@ public class Odometry extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
+    ShuffleboardLayout shouldFlip = Telemetry.addColumn(tab, "Should Flip?");
+
+    shouldFlip.addBoolean("Should Flip?", () -> AllianceFlipHelper.shouldFlip());
+
     ShuffleboardLayout position = Telemetry.addColumn(tab, "Position");
 
     position.addDouble("X (m)", () -> getPosition().getX());
     position.addDouble("Y (m)", () -> getPosition().getY());
-    position.addDouble("Rotation (deg)", () -> getPosition().getRotation().getDegrees());
+    position.addDouble("Field Rotation (deg)", () -> getFieldRelativeHeading().getDegrees());
+    position.addDouble("Driver Rotation (deg)", () -> getDriverRelativeHeading().getDegrees());
 
     ShuffleboardLayout velocity = Telemetry.addColumn(tab, "Velocity");
 
@@ -146,13 +151,9 @@ public class Odometry extends Subsystem {
    *     alliance.
    */
   public Rotation2d getDriverRelativeHeading() {
-    Rotation2d fieldRelativeHeading = getFieldRelativeHeading();
+    gyroscope.update(gyroscopeValues);
 
-    if (AllianceFlipHelper.shouldFlip()) {
-      return fieldRelativeHeading.plus(Rotation2d.fromDegrees(180));
-    }
-
-    return fieldRelativeHeading;
+    return Rotation2d.fromRotations(gyroscopeValues.yawRotations);
   }
 
   /**
@@ -183,25 +184,21 @@ public class Odometry extends Subsystem {
    *
    * @param consumer consumer for when pose is manually updated.
    */
-  public void onPoseUpdate(Consumer<Pose2d> consumer) {
-    poseUpdateConsumers.add(consumer);
+  public void onYawUpdate(Consumer<Rotation2d> consumer) {
+    yawUpdateConsumers.add(consumer);
   }
 
   /**
-   * Tares the rotation of the robot.
+   * Zeroes the driver-relative rotation of the robot.
    *
-   * @return a command that zeroes the rotation of the robot.
+   * @return a command that zeroes the driver-relative rotation of the robot.
    */
   public Command tare() {
     return Commands.runOnce(
         () -> {
-          if (AllianceFlipHelper.shouldFlip()) {
-            setRotation(Rotation2d.fromDegrees(180));
-          } else {
-            setRotation(Rotation2d.fromDegrees(0));
-          }
+          gyroscope.setYaw(0.0);
 
-          poseUpdateConsumers.forEach(consumer -> consumer.accept(getPosition()));
+          yawUpdateConsumers.forEach(consumer -> consumer.accept(Rotation2d.fromDegrees(0)));
         });
   }
 

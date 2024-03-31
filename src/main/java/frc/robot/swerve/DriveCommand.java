@@ -56,7 +56,7 @@ public class DriveCommand extends Command {
 
     headingSnapper = SnapRotation.to(Rotation2d.fromDegrees(90));
 
-    odometry.onPoseUpdate(newPose -> resetHeadingGoal());
+    odometry.onYawUpdate(newPose -> resetHeadingGoal());
   }
 
   @Override
@@ -73,22 +73,22 @@ public class DriveCommand extends Command {
 
     Rotation2d driverRelativeHeading = odometry.getDriverRelativeHeading();
 
-    if (DriveRequest.startedDrifting(previousRequest, request)) {
-      resetHeadingGoal();
-    }
+    // if (DriveRequest.startedDrifting(previousRequest, request)) {
+    //   resetHeadingGoal();
+    // }
 
-    if (request.isSnapping()) {
-      setPositionHeadingGoal(headingSnapper.snap(request.fieldHeading()));
-    }
+    // if (request.isSnapping()) {
+    //   setPositionHeadingGoal(headingSnapper.snap(request.driverHeading()));
+    // }
 
-    Rotation2d omega;
+    Rotation2d omega = new Rotation2d();
 
     if (request.isSpinning()) {
       updateVelocity(request.omega());
 
       omega = request.omega();
     } else {
-      omega = calculateHeadingProfileOmega();
+      // omega = calculateHeadingProfileOmega();
     }
 
     ChassisSpeeds chassisSpeeds =
@@ -152,7 +152,7 @@ public class DriveCommand extends Command {
    * @return the reference heading to use with the heading motion profile.
    */
   private Rotation2d getReferenceHeading() {
-    return odometry.getFieldRelativeHeading();
+    return odometry.getDriverRelativeHeading();
   }
 
   /**
