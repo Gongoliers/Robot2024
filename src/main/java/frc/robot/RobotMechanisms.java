@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.lib.InterpolatableColor;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 import frc.robot.superstructure.SuperstructureState;
 
 /** Helper class for rendering robot mechanisms. */
@@ -21,7 +18,7 @@ public class RobotMechanisms {
 
   private final Mechanism2d mechanism;
 
-  private MechanismLigament2d shoulder, flywheel, serializer;
+  private MechanismLigament2d shoulder;
 
   private final double WIDTH =
       2
@@ -32,15 +29,15 @@ public class RobotMechanisms {
 
   private final Translation2d ORIGIN = new Translation2d(WIDTH / 2, 0);
 
-  public static final Translation2d SHOULDER_TO_ORIGIN =
-      new Translation2d(Units.inchesToMeters(-11.361), Units.inchesToMeters(7.721));
+  private final Translation2d ORIGIN_TO_SHOULDER_BASE = new Translation2d(Units.inchesToMeters(-7.5), Units.inchesToMeters(3.75));
+
+  private final double SHOULDER_BASE_HEIGHT = Units.inchesToMeters(18);
+
+  private final double SHOULDER_BASE_TOP_TO_SHOULDER = Units.inchesToMeters(1.5);
+
+  private final Translation2d SHOULDER_BASE_TO_SHOULDER = new Translation2d(0, SHOULDER_BASE_HEIGHT - SHOULDER_BASE_TOP_TO_SHOULDER);
 
   private final Color8Bit DEFAULT_COLOR = new Color8Bit(Color.kLightGray);
-
-  private final InterpolatableColor flywheelColor =
-      new InterpolatableColor(Color.kLightGray, Color.kSalmon);
-  private final InterpolatableColor serializerColor =
-      new InterpolatableColor(Color.kLightGray, Color.kCornflowerBlue);
 
   private RobotMechanisms() {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
@@ -51,30 +48,23 @@ public class RobotMechanisms {
   }
 
   private void initializeArmMechanism() {
-    Translation2d armRootTranslation = ORIGIN.plus(SHOULDER_TO_ORIGIN);
+    Translation2d armRootTranslation = ORIGIN.plus(ORIGIN_TO_SHOULDER_BASE);
 
     double armThickness = Units.inchesToMeters(2) * 100;
 
     MechanismRoot2d armRoot =
         mechanism.getRoot("arm", armRootTranslation.getX(), armRootTranslation.getY());
 
+    MechanismLigament2d shoulderBase = armRoot.append(new MechanismLigament2d("base", SHOULDER_BASE_TO_SHOULDER.getY(), 90, armThickness, DEFAULT_COLOR));
+
     shoulder =
-        armRoot.append(
+        shoulderBase.append(
             new MechanismLigament2d(
                 "shoulder",
                 ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
                 0,
                 armThickness,
                 DEFAULT_COLOR));
-    flywheel =
-        shoulder.append(
-            new MechanismLigament2d(
-                "wrist", Units.inchesToMeters(4.321), 0, armThickness, DEFAULT_COLOR));
-
-    serializer =
-        shoulder.append(
-            new MechanismLigament2d(
-                "serializer", Units.inchesToMeters(8.771), 0, armThickness, DEFAULT_COLOR));
   }
 
   private void initializeFramePerimeterMechanisms() {
@@ -114,20 +104,8 @@ public class RobotMechanisms {
   public void updateSuperstructure(SuperstructureState state) {
     Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulderAngleRotations().position);
 
-    shoulder.setAngle(shoulderRotation);
+    Rotation2d offsetShoulderRotation = shoulderRotation.minus(Rotation2d.fromDegrees(90));
 
-    flywheel.setColor(
-        new Color8Bit(
-            flywheelColor.sample(
-                Math.abs(state.flywheelVelocityRotationsPerSecond()),
-                0,
-                FlywheelConstants.MAXIMUM_TANGENTIAL_SPEED)));
-
-    serializer.setColor(
-        new Color8Bit(
-            serializerColor.sample(
-                Math.abs(state.serializerVelocityRotationsPerSecond()),
-                0,
-                SerializerConstants.MAXIMUM_TANGENTIAL_SPEED)));
+    shoulder.setAngle(offsetShoulderRotation);
   }
 }

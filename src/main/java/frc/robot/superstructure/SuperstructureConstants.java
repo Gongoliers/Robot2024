@@ -7,9 +7,9 @@ import frc.lib.MotionProfileCalculator;
 public class SuperstructureConstants {
 
   public static class ShoulderAngleConstants {
-    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(52.5);
+    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(0);
 
-    public static final Rotation2d STOW = Rotation2d.fromDegrees(29.5);
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(-19.379);
 
     public static final Rotation2d AMP = Rotation2d.fromDegrees(90);
 
