@@ -11,6 +11,7 @@ import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
 import frc.robot.superstructure.Superstructure;
+import frc.robot.superstructure.SuperstructureMechanism;
 import frc.robot.swerve.Swerve;
 
 /** Initializes subsystems and commands. */
@@ -65,7 +66,7 @@ public class RobotContainer {
   /** Initializes subsystem telemetry. */
   private void initializeTelemetry() {
     Telemetry.initializeTabs(arm, auto, climber, intake, odometry, shooter, superstructure, swerve);
-    SmartDashboard.putData("Mechanism", RobotMechanisms.getInstance().getMechanism());
+    SmartDashboard.putData("Superstructure", SuperstructureMechanism.getInstance().getMechanism());
   }
 
   /** Configures subsystem default commands. */

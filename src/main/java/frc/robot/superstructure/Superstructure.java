@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.RobotMechanisms;
 import frc.robot.arm.Arm;
 import frc.robot.intake.Intake;
 import frc.robot.shooter.Shooter;
@@ -130,7 +129,7 @@ public class Superstructure extends Subsystem {
             measuredShooterFlywheelVelocity,
             measuredShooterSerializerVelocity);
 
-    RobotMechanisms.getInstance().updateSuperstructure(measurement);
+    SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
   }
 
   public SuperstructureState getState() {
