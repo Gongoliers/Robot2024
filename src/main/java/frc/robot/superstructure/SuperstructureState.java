@@ -4,7 +4,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
-import frc.robot.superstructure.SuperstructureConstants.PivotAngleConstants;
 import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
 import frc.robot.superstructure.SuperstructureConstants.WristAngleConstants;
 import java.util.Objects;
@@ -13,30 +12,29 @@ import java.util.Objects;
 public record SuperstructureState(
     State shoulderAngleRotations,
     State wristAngleRotations,
-    State pivotAngleRotations,
     double rollerVelocityRotationsPerSecond,
     double flywheelVelocityRotationsPerSecond,
     double serializerVelocityRotationsPerSecond) {
 
   public static final SuperstructureState INITIAL =
       new SuperstructureState(
-          ShoulderAngleConstants.INITIAL, WristAngleConstants.INITIAL, PivotAngleConstants.UP);
+          ShoulderAngleConstants.INITIAL, WristAngleConstants.INITIAL);
 
   public static final SuperstructureState STOW =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW, WristAngleConstants.STOW, PivotAngleConstants.UP);
+          ShoulderAngleConstants.STOW, WristAngleConstants.STOW);
 
   public static final SuperstructureState INTAKE =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW, WristAngleConstants.INTAKE, PivotAngleConstants.DOWN);
+          ShoulderAngleConstants.STOW, WristAngleConstants.INTAKE);
 
   public static final SuperstructureState SHOOT =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW, WristAngleConstants.SHOOT, PivotAngleConstants.DOWN);
+          ShoulderAngleConstants.STOW, WristAngleConstants.SHOOT);
 
   public static final SuperstructureState AMP =
       new SuperstructureState(
-          ShoulderAngleConstants.AMP, WristAngleConstants.AMP, PivotAngleConstants.UP);
+          ShoulderAngleConstants.AMP, WristAngleConstants.AMP);
 
   /**
    * Creates a new superstructure state.
@@ -51,7 +49,6 @@ public record SuperstructureState(
   public SuperstructureState {
     Objects.requireNonNull(shoulderAngleRotations);
     Objects.requireNonNull(wristAngleRotations);
-    Objects.requireNonNull(pivotAngleRotations);
     Objects.requireNonNull(rollerVelocityRotationsPerSecond);
     Objects.requireNonNull(flywheelVelocityRotationsPerSecond);
     Objects.requireNonNull(serializerVelocityRotationsPerSecond);
@@ -62,7 +59,6 @@ public record SuperstructureState(
    *
    * @param shoulderAngle
    * @param wristAngle
-   * @param pivotAngle
    * @param rollerVelocityRotationsPerSecond
    * @param flywheelVelocityRotationsPerSecond
    * @param serializerVelocityRotationsPerSecond
@@ -70,14 +66,12 @@ public record SuperstructureState(
   public SuperstructureState(
       Rotation2d shoulderAngle,
       Rotation2d wristAngle,
-      Rotation2d pivotAngle,
       double rollerVelocityRotationsPerSecond,
       double flywheelVelocityRotationsPerSecond,
       double serializerVelocityRotationsPerSecond) {
     this(
         new State(shoulderAngle.getRotations(), 0.0),
         new State(wristAngle.getRotations(), 0.0),
-        new State(pivotAngle.getRotations(), 0.0),
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -88,18 +82,16 @@ public record SuperstructureState(
    *
    * @param shoulderAngle
    * @param wristAngle
-   * @param pivotAngle
    */
   public SuperstructureState(
-      Rotation2d shoulderAngle, Rotation2d wristAngle, Rotation2d pivotAngle) {
-    this(shoulderAngle, wristAngle, pivotAngle, 0.0, 0.0, 0.0);
+      Rotation2d shoulderAngle, Rotation2d wristAngle) {
+    this(shoulderAngle, wristAngle, 0.0, 0.0, 0.0);
   }
 
   public SuperstructureState withShoulderAngle(Rotation2d newShoulderAngle) {
     return new SuperstructureState(
         new State(newShoulderAngle.getRotations(), 0.0),
         wristAngleRotations,
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -109,7 +101,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         other.shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -119,7 +110,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         new State(newWristAngle.getRotations(), 0.0),
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -129,27 +119,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         other.wristAngleRotations,
-        pivotAngleRotations,
-        rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withPivotAngle(Rotation2d newPivotAngle) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        wristAngleRotations,
-        new State(newPivotAngle.getRotations(), 0.0),
-        rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withPivotAngleOf(SuperstructureState other) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        wristAngleRotations,
-        other.pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -159,7 +128,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         newRollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -169,7 +137,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         other.rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -179,7 +146,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         newFlywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -189,7 +155,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         other.flywheelVelocityRotationsPerSecond,
         serializerVelocityRotationsPerSecond);
@@ -200,7 +165,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         newSerializerVelocityRotationsPerSecond);
@@ -210,7 +174,6 @@ public record SuperstructureState(
     return new SuperstructureState(
         shoulderAngleRotations,
         wristAngleRotations,
-        pivotAngleRotations,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         other.serializerVelocityRotationsPerSecond);
@@ -255,21 +218,8 @@ public record SuperstructureState(
         SuperstructureConstants.WristAngleConstants.TOLERANCE.getRotations());
   }
 
-  /**
-   * Returns true if at the intake pivot angle goal.
-   *
-   * @param goal
-   * @return true if at the intake pivot angle goal.
-   */
-  public boolean atPivotAngleGoal(SuperstructureState goal) {
-    return MathUtil.isNear(
-        this.pivotAngleRotations().position,
-        goal.pivotAngleRotations().position,
-        SuperstructureConstants.PivotAngleConstants.TOLERANCE.getRotations());
-  }
-
   public boolean at(SuperstructureState other) {
-    return atShoulderAngleGoal(other) && atWristAngleGoal(other) && atPivotAngleGoal(other);
+    return atShoulderAngleGoal(other) && atWristAngleGoal(other);
   }
 
   public boolean wristStowed() {
@@ -297,16 +247,9 @@ public record SuperstructureState(
             setpoint.wristAngleRotations(),
             goal.wristAngleRotations());
 
-    State nextPivotSetpoint =
-        PivotAngleConstants.MOTION_PROFILE.calculate(
-            RobotConstants.PERIODIC_DURATION,
-            setpoint.pivotAngleRotations(),
-            goal.pivotAngleRotations());
-
     return new SuperstructureState(
         nextShoulderSetpoint,
         nextWristSetpoint,
-        nextPivotSetpoint,
         goal.rollerVelocityRotationsPerSecond(),
         goal.flywheelVelocityRotationsPerSecond(),
         goal.serializerVelocityRotationsPerSecond());

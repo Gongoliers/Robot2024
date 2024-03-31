@@ -1,7 +1,5 @@
 package frc.robot.intake;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.intake.IntakeConstants.RollerMotorConstants;
-import frc.robot.intake.PivotMotorIO.PivotMotorIOValues;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
 
 /** Subsystem class for the intake subsystem. */
@@ -17,12 +14,6 @@ public class Intake extends Subsystem {
 
   /** Instance variable for the intake subsystem singleton. */
   private static Intake instance = null;
-
-  /** Pivot motor. */
-  private final PivotMotorIO pivotMotor;
-
-  /** Pivot motor values. */
-  private final PivotMotorIOValues pivotMotorValues = new PivotMotorIOValues();
 
   /** Roller motor. */
   private final RollerMotorIO rollerMotor;
@@ -32,10 +23,8 @@ public class Intake extends Subsystem {
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
-    pivotMotor = IntakeFactory.createPivotMotor();
     rollerMotor = IntakeFactory.createRollerMotor();
 
-    pivotMotor.configure();
     rollerMotor.configure();
   }
 
@@ -54,42 +43,17 @@ public class Intake extends Subsystem {
 
   @Override
   public void periodic() {
-    pivotMotor.update(pivotMotorValues);
     rollerMotor.update(rollerMotorValues);
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout pivot = Telemetry.addColumn(tab, "Pivot");
-
-    pivot.addDouble(
-        "Position (deg)", () -> Units.rotationsToDegrees(getMeasuredPivotState().position));
-
     ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
 
     roller.addDouble("Current (A)", () -> rollerMotorValues.currentAmps);
     roller.addDouble("Velocity (rps)", () -> rollerMotorValues.velocityRotationsPerSecond);
   }
 
-  /**
-   * Returns the intake pivot's measured state.
-   *
-   * @return the intake pivot's measured state.
-   */
-  public State getMeasuredPivotState() {
-    pivotMotor.update(pivotMotorValues);
-
-    return new State(
-        pivotMotorValues.positionRotations, pivotMotorValues.velocityRotationsPerSecond);
-  }
-
-  public void setPivotPosition(double positionRotations) {
-    pivotMotor.setPosition(positionRotations);
-  }
-
-  public void setPivotSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    pivotMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
-  }
 
   public double getRollerVelocity() {
     rollerMotor.update(rollerMotorValues);

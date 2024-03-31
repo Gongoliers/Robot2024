@@ -1,7 +1,5 @@
 package frc.robot.superstructure;
 
-import frc.robot.superstructure.SuperstructureConstants.PivotAngleConstants;
-import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
 import frc.robot.superstructure.SuperstructureConstants.WristAngleConstants;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -26,28 +24,6 @@ public class SuperstructureGoals {
       goals.add(end.withWristAngle(WristAngleConstants.STOW));
       goals.add(end);
       return goals;
-    }
-
-    boolean shoulderStowed = start.atShoulderAngle(ShoulderAngleConstants.STOW);
-    boolean wristMove = !start.atWristAngleGoal(end);
-    boolean pivotMove = !start.atPivotAngleGoal(end);
-    boolean pivotUp = start.pivotAngleRotations().position > PivotAngleConstants.DOWN.getRotations();
-
-    // Stow position movement & wrist-intake collision avoidance
-    if (shoulderStowed && !shoulderMove && wristMove && pivotMove) {
-      if (pivotUp) {
-        // Pivot is up and needs to go down; move it first
-        System.out.println("*** GENERATING PIVOT DOWN ***");
-        goals.add(start.withPivotAngleOf(end));
-        goals.add(end);
-        return goals;
-      } else {
-        System.out.println("*** GENERATING WRIST UP ***");
-        // Pivot is down and needs to go up; move wrist out of way first
-        goals.add(start.withWristAngleOf(end));
-        goals.add(end);
-        return goals;
-      }
     }
 
     goals.add(end);

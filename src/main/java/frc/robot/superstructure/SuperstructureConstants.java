@@ -59,27 +59,4 @@ public class SuperstructureConstants {
     /** Motion profile of the wrist joint using constraints. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
   }
-
-  public static class PivotAngleConstants {
-    public static final Rotation2d UP = Rotation2d.fromDegrees(86);
-
-    public static final Rotation2d DOWN = Rotation2d.fromDegrees(-48);
-
-    /** Pivot motor's tolerance. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(8.0);
-
-    /** Maximum speed of the pivot in rotations per second. */
-    public static final double MAXIMUM_SPEED = 1;
-
-    /** Maximum acceleration of the pivot in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
-
-    /** Maximum speed and acceleration of the pivot. */
-    public static final TrapezoidProfile.Constraints CONSTRAINTS =
-        new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
-
-    /** Motion profile of the pivot using constraints. */
-    public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
-  }
 }
