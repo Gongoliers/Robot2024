@@ -14,8 +14,11 @@ public class ShooterConstants {
     /** Velocity to apply while serializing for an amp shot in rotations per second. */
     public static final double AMP_SERIALIZE_VELOCITY = 2.5;
 
-    /** Maximum tengential speed in rotations per second. */
+    /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 4.75;
+    
+    /** Speed tolerance in rotations per second. */
+    public static final double SPEED_TOLERANCE = 0.25;
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
@@ -26,7 +29,10 @@ public class ShooterConstants {
     /** Velocity to apply while shooting into the amp in rotations per second. */
     public static final double AMP_VELOCITY = 2.5;
 
-    /** Maximum tangential speed in rotations per second. */
+    /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 5.65;
+    
+    /** Speed tolerance in rotations per second. */
+    public static final double SPEED_TOLERANCE = 0.25;
   }
 }

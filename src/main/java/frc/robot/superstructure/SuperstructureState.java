@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
+import frc.robot.intake.IntakeConstants.RollerConstants;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
 import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
@@ -161,20 +162,46 @@ public record SuperstructureState(
   }
 
   /**
-   * Returns true if at the shoulder angle.
+   * Returns true if at the roller velocity goal.
    *
-   * @param other
-   * @return true if at the shoulder angle.
+   * @param goal
+   * @return true if at the roller velocity goal.
    */
-  public boolean atShoulderAngle(Rotation2d other) {
+  public boolean atRollerVelocityGoal(SuperstructureState goal) {
     return MathUtil.isNear(
-        this.shoulderAngleRotations().position,
-        other.getRotations(),
-        SuperstructureConstants.ShoulderAngleConstants.TOLERANCE.getRotations());
+        this.rollerVelocityRotationsPerSecond(),
+        goal.rollerVelocityRotationsPerSecond(),
+        RollerConstants.SPEED_TOLERANCE);
+  }
+
+  /**
+   * Returns true if at the flywheel velocity goal.
+   *
+   * @param goal
+   * @return true if at the flywheel velocity goal.
+   */
+  public boolean atFlywheelVelocityGoal(SuperstructureState goal) {
+    return MathUtil.isNear(
+        this.flywheelVelocityRotationsPerSecond(),
+        goal.flywheelVelocityRotationsPerSecond(),
+        FlywheelConstants.SPEED_TOLERANCE);
+  }
+
+  /**
+   * Returns true if at the serializer velocity goal.
+   *
+   * @param goal
+   * @return true if at the serializer velocity goal.
+   */
+  public boolean atSerializerVelocityGoal(SuperstructureState goal) {
+    return MathUtil.isNear(
+        this.serializerVelocityRotationsPerSecond(),
+        goal.serializerVelocityRotationsPerSecond(),
+        SerializerConstants.SPEED_TOLERANCE);
   }
 
   public boolean at(SuperstructureState other) {
-    return atShoulderAngleGoal(other);
+    return atShoulderAngleGoal(other) && atRollerVelocityGoal(other) && atFlywheelVelocityGoal(other) && atSerializerVelocityGoal(other);
   }
 
   /**
