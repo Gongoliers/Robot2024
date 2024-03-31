@@ -16,7 +16,7 @@ public class ShooterConstants {
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 4.75;
-    
+
     /** Speed tolerance in rotations per second. */
     public static final double SPEED_TOLERANCE = 0.25;
   }
@@ -31,7 +31,7 @@ public class ShooterConstants {
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 5.65;
-    
+
     /** Speed tolerance in rotations per second. */
     public static final double SPEED_TOLERANCE = 0.25;
   }

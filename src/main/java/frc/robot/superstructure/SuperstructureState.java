@@ -201,7 +201,10 @@ public record SuperstructureState(
   }
 
   public boolean at(SuperstructureState other) {
-    return atShoulderAngleGoal(other) && atRollerVelocityGoal(other) && atFlywheelVelocityGoal(other) && atSerializerVelocityGoal(other);
+    return atShoulderAngleGoal(other)
+        && atRollerVelocityGoal(other)
+        && atFlywheelVelocityGoal(other)
+        && atSerializerVelocityGoal(other);
   }
 
   /**
