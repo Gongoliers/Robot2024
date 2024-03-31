@@ -76,7 +76,7 @@ public class Arm extends Subsystem {
     shoulderMotor.setPosition(positionRotations);
   }
 
-  public void setShoulderSetpoint(double positionRotations, double velocityRotationsPerSecond) {
+  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
     shoulderMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
   }
 }

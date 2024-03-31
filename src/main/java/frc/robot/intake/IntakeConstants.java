@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
   /** Constants for the roller motor. */
-  public static class RollerMotorConstants {
+  public static class RollerConstants {
     /** Velocity to apply when intaking in rotations per second. */
     public static final double INTAKE_VELOCITY = 1.0;
 

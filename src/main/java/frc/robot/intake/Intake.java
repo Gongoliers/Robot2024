@@ -2,11 +2,8 @@ package frc.robot.intake;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.intake.IntakeConstants.RollerMotorConstants;
 import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
 
 /** Subsystem class for the intake subsystem. */
@@ -60,25 +57,7 @@ public class Intake extends Subsystem {
     return rollerMotorValues.velocityRotationsPerSecond;
   }
 
-  /**
-   * Returns a command that intakes using the rollers.
-   *
-   * @return a command that intakes using the rollers.
-   */
-  public Command intake() {
-    return Commands.runEnd(
-        () -> rollerMotor.setSetpoint(RollerMotorConstants.INTAKE_VELOCITY),
-        () -> rollerMotor.setSetpoint(0.0));
-  }
-
-  /**
-   * Returns a command that outtakes using the rollers.
-   *
-   * @return a command that outtakes using the rollers.
-   */
-  public Command outtake() {
-    return Commands.runEnd(
-        () -> rollerMotor.setSetpoint(RollerMotorConstants.OUTTAKE_VELOCITY),
-        () -> rollerMotor.setSetpoint(0.0));
+  public void setSetpoint(double rollerVelocityRotationsPerSecond) {
+    rollerMotor.setSetpoint(rollerVelocityRotationsPerSecond);
   }
 }

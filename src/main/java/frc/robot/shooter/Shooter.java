@@ -2,14 +2,10 @@ package frc.robot.shooter;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
 import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
 /** Subsystem class for the shooter subsystem. */
 public class Shooter extends Subsystem {
@@ -81,36 +77,9 @@ public class Shooter extends Subsystem {
     return serializerMotorValues.velocityRotationsPerSecond;
   }
 
-  /**
-   * Intakes a note.
-   *
-   * @return a command that intakes a note.
-   */
-  public Command intake() {
-    return Commands.runEnd(
-        () -> serializerMotor.setSetpoint(SerializerConstants.INTAKE_VELOCITY),
-        () -> serializerMotor.setSetpoint(0.0));
-  }
-
-  /**
-   * Serializes a note.
-   *
-   * @return a command that serializes a note.
-   */
-  public Command serialize() {
-    return Commands.runEnd(
-        () -> serializerMotor.setSetpoint(SerializerConstants.SERIALIZE_VELOCITY),
-        () -> serializerMotor.setSetpoint(0.0));
-  }
-
-  /**
-   * Spins the flywheel.
-   *
-   * @return a command that spins the flywheel.
-   */
-  public Command spin() {
-    return Commands.runEnd(
-        () -> flywheelMotor.setSetpoint(FlywheelConstants.SHOOT_VELOCITY),
-        () -> flywheelMotor.setSetpoint(0.0));
+  public void setSetpoint(
+      double flywheelVelocityRotationsPerSecond, double serializerVelocityRotationsPerSecond) {
+    flywheelMotor.setSetpoint(flywheelVelocityRotationsPerSecond);
+    serializerMotor.setSetpoint(serializerVelocityRotationsPerSecond);
   }
 }

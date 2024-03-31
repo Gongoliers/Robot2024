@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.InterpolatableColor;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
+import frc.robot.intake.IntakeConstants.RollerConstants;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
@@ -21,7 +22,7 @@ public class SuperstructureMechanism {
 
   private final Mechanism2d mechanism;
 
-  private MechanismLigament2d shoulder, flywheel, serializer;
+  private MechanismLigament2d shoulder, flywheel, serializer, rollers;
 
   private final double WIDTH =
       2
@@ -46,22 +47,23 @@ public class SuperstructureMechanism {
 
   private final double SERIALIZER_LENGTH = Units.inchesToMeters(7.5);
 
+  private final Translation2d ORIGIN_TO_ROLLERS =
+      new Translation2d(Units.inchesToMeters(5.75), Units.inchesToMeters(2.5));
+
   private final Color8Bit DEFAULT_COLOR = new Color8Bit(Color.kLightGray);
 
-  private final InterpolatableColor flywheelColor =
+  private final InterpolatableColor FLYWHEEL_COLOR =
       new InterpolatableColor(Color.kLightGray, Color.kSalmon);
-  private final InterpolatableColor serializerColor =
+
+  private final InterpolatableColor SERIALIZER_COLOR =
       new InterpolatableColor(Color.kLightGray, Color.kCornflowerBlue);
+
+  private final InterpolatableColor ROLLERS_COLOR =
+      new InterpolatableColor(Color.kLightGray, Color.kSpringGreen);
 
   private SuperstructureMechanism() {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
 
-    initializeArmMechanism();
-
-    initializeFramePerimeterMechanisms();
-  }
-
-  private void initializeArmMechanism() {
     Translation2d armRootTranslation = ORIGIN.plus(ORIGIN_TO_SHOULDER_BASE);
 
     double armThickness = Units.inchesToMeters(2) * 100;
@@ -91,9 +93,16 @@ public class SuperstructureMechanism {
         shoulder.append(
             new MechanismLigament2d(
                 "serializer", SERIALIZER_LENGTH, -35, armThickness, DEFAULT_COLOR));
-  }
 
-  private void initializeFramePerimeterMechanisms() {
+    Translation2d rollersRootTranslation = ORIGIN.plus(ORIGIN_TO_ROLLERS);
+
+    rollers =
+        mechanism
+            .getRoot("intake", rollersRootTranslation.getX(), rollersRootTranslation.getY())
+            .append(
+                new MechanismLigament2d(
+                    "rollers", Units.inchesToMeters(12), 0, armThickness, DEFAULT_COLOR));
+
     double framePerimeterThickness = Units.inchesToMeters(1) * 10;
 
     mechanism
@@ -136,16 +145,23 @@ public class SuperstructureMechanism {
 
     flywheel.setColor(
         new Color8Bit(
-            flywheelColor.sample(
+            FLYWHEEL_COLOR.sample(
                 Math.abs(state.flywheelVelocityRotationsPerSecond()),
                 0,
-                FlywheelConstants.MAXIMUM_TANGENTIAL_SPEED)));
+                FlywheelConstants.MAXIMUM_SPEED)));
 
     serializer.setColor(
         new Color8Bit(
-            serializerColor.sample(
+            SERIALIZER_COLOR.sample(
                 Math.abs(state.serializerVelocityRotationsPerSecond()),
                 0,
-                SerializerConstants.MAXIMUM_TANGENTIAL_SPEED)));
+                SerializerConstants.MAXIMUM_SPEED)));
+
+    rollers.setColor(
+        new Color8Bit(
+            ROLLERS_COLOR.sample(
+                Math.abs(state.rollerVelocityRotationsPerSecond()),
+                0,
+                RollerConstants.MAXIMUM_SPEED)));
   }
 }

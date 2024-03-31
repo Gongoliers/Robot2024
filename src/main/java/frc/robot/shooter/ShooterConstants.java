@@ -8,19 +8,25 @@ public class ShooterConstants {
     /** Velocity to apply while intaking in rotations per second. */
     public static final double INTAKE_VELOCITY = 4.75;
 
-    /** Velocity to apply while serializing in rotations per second. */
-    public static final double SERIALIZE_VELOCITY = 4.75;
+    /** Velocity to apply while serializing for a speaker shot in rotations per second. */
+    public static final double SPEAKER_SERIALIZER_VELOCITY = 4.75;
 
-    /** Maximum tengential speed in meters per second. */
-    public static final double MAXIMUM_TANGENTIAL_SPEED = 4.75;
+    /** Velocity to apply while serializing for an amp shot in rotations per second. */
+    public static final double AMP_SERIALIZE_VELOCITY = 2.5;
+
+    /** Maximum tengential speed in rotations per second. */
+    public static final double MAXIMUM_SPEED = 4.75;
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
   public static class FlywheelConstants {
-    /** Velocity to apply while shooting in rotations per second. */
-    public static final double SHOOT_VELOCITY = 5.65;
+    /** Velocity to apply while shooting into the speaker in rotations per second. */
+    public static final double SPEAKER_VELOCITY = 5.65;
 
-    /** Maximum tangential speed in meters per second. */
-    public static final double MAXIMUM_TANGENTIAL_SPEED = 5.65;
+    /** Velocity to apply while shooting into the amp in rotations per second. */
+    public static final double AMP_VELOCITY = 2.5;
+
+    /** Maximum tangential speed in rotations per second. */
+    public static final double MAXIMUM_SPEED = 5.65;
   }
 }

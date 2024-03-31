@@ -4,6 +4,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.RobotConstants;
+import frc.robot.shooter.ShooterConstants.FlywheelConstants;
+import frc.robot.shooter.ShooterConstants.SerializerConstants;
 import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
 import java.util.Objects;
 
@@ -27,6 +29,12 @@ public record SuperstructureState(
       new SuperstructureState(ShoulderAngleConstants.STOW);
 
   public static final SuperstructureState AMP = new SuperstructureState(ShoulderAngleConstants.AMP);
+
+  public static final SuperstructureState AMP_SHOOT =
+      AMP.withFlywheelVelocity(FlywheelConstants.AMP_VELOCITY);
+
+  public static final SuperstructureState AMP_SERIALIZE =
+      AMP_SHOOT.withSerializerVelocity(SerializerConstants.AMP_SERIALIZE_VELOCITY);
 
   /**
    * Creates a new superstructure state.
