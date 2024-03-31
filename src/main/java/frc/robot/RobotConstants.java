@@ -53,5 +53,6 @@ public class RobotConstants {
           Subsystem.SHOOTER,
           Subsystem.SWERVE);
 
-  public static final Set<Subsystem> REAL_SUBSYSTEMS = EnumSet.of(Subsystem.ODOMETRY, Subsystem.SWERVE);
+  public static final Set<Subsystem> REAL_SUBSYSTEMS =
+      EnumSet.of(Subsystem.ODOMETRY, Subsystem.SWERVE);
 }

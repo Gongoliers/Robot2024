@@ -73,7 +73,7 @@ public class Odometry extends Subsystem {
 
     field = new Field2d();
 
-    yawUpdateConsumers= new ArrayList<Consumer<Rotation2d>>();
+    yawUpdateConsumers = new ArrayList<Consumer<Rotation2d>>();
   }
 
   /**

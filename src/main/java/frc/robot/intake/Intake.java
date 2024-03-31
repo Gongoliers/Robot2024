@@ -54,7 +54,6 @@ public class Intake extends Subsystem {
     roller.addDouble("Velocity (rps)", () -> rollerMotorValues.velocityRotationsPerSecond);
   }
 
-
   public double getRollerVelocity() {
     rollerMotor.update(rollerMotorValues);
 

@@ -15,24 +15,18 @@ public record SuperstructureState(
     double serializerVelocityRotationsPerSecond) {
 
   public static final SuperstructureState INITIAL =
-      new SuperstructureState(
-          ShoulderAngleConstants.INITIAL);
+      new SuperstructureState(ShoulderAngleConstants.INITIAL);
 
   public static final SuperstructureState STOW =
-      new SuperstructureState(
-          ShoulderAngleConstants.STOW);
+      new SuperstructureState(ShoulderAngleConstants.STOW);
 
   public static final SuperstructureState INTAKE =
-      new SuperstructureState(
-          ShoulderAngleConstants.STOW);
+      new SuperstructureState(ShoulderAngleConstants.STOW);
 
   public static final SuperstructureState SHOOT =
-      new SuperstructureState(
-          ShoulderAngleConstants.STOW);
+      new SuperstructureState(ShoulderAngleConstants.STOW);
 
-  public static final SuperstructureState AMP =
-      new SuperstructureState(
-          ShoulderAngleConstants.AMP);
+  public static final SuperstructureState AMP = new SuperstructureState(ShoulderAngleConstants.AMP);
 
   /**
    * Creates a new superstructure state.
@@ -76,8 +70,7 @@ public record SuperstructureState(
    * @param shoulderAngle
    * @param wristAngle
    */
-  public SuperstructureState(
-      Rotation2d shoulderAngle) {
+  public SuperstructureState(Rotation2d shoulderAngle) {
     this(shoulderAngle, 0.0, 0.0, 0.0);
   }
 
