@@ -78,13 +78,14 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.y().onTrue(odometry.tare());
 
+    operatorController.leftBumper().onTrue(superstructure.stow());
     operatorController.leftTrigger().onTrue(superstructure.intake());
     
-    operatorController.rightBumper().onTrue(superstructure.spin());
+    operatorController.rightBumper().onTrue(superstructure.idle());
     operatorController.rightTrigger().onTrue(superstructure.shoot());
 
-    operatorController.a().onTrue(superstructure.amp());
-    operatorController.x().onTrue(superstructure.stow());
+    operatorController.a().onTrue(superstructure.ampPosition());
+    operatorController.b().onTrue(superstructure.ampShoot());
   }
 
   /**

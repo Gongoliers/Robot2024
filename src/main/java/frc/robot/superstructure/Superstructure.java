@@ -9,10 +9,7 @@ import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.intake.Intake;
-import frc.robot.intake.IntakeConstants.RollerConstants;
 import frc.robot.shooter.Shooter;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
 /** Subsystem class for the superstructure subsystem. */
 public class Superstructure extends Subsystem {
@@ -37,10 +34,10 @@ public class Superstructure extends Subsystem {
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
 
-    setPosition(SuperstructureState.INITIAL);
+    setPosition(SuperstructureState.STOW);
 
-    setpoint = SuperstructureState.INITIAL;
-    goal = SuperstructureState.INITIAL;
+    setpoint = SuperstructureState.STOW;
+    goal = SuperstructureState.STOW;
   }
 
   /**
@@ -130,6 +127,7 @@ public class Superstructure extends Subsystem {
             measuredShoulderState,
             measuredIntakeRollerVelocity,
             measuredShooterFlywheelVelocity,
+            false,
             measuredShooterSerializerVelocity);
 
     SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
@@ -165,7 +163,7 @@ public class Superstructure extends Subsystem {
   public boolean at(SuperstructureState goal) {
     updateMeasurement();
 
-    return measurement.at(goal);
+    return measurement.atGoal(goal);
   }
 
   private Command to(SuperstructureState goal) {
@@ -177,30 +175,26 @@ public class Superstructure extends Subsystem {
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE)
+    return to(SuperstructureState.INTAKE_POSITION)
         .andThen(
-            to(
-                SuperstructureState.INTAKE
-                    .withSerializerVelocity(SerializerConstants.INTAKE_VELOCITY)
-                    .withRollerVelocity(RollerConstants.INTAKE_VELOCITY)));
+            to(SuperstructureState.INTAKE));
   }
 
-  public Command spin() {
-    return to(SuperstructureState.SHOOT.withFlywheelVelocity(FlywheelConstants.SPEAKER_VELOCITY));
+  public Command idle() {
+    return to(SuperstructureState.IDLE);
   }
 
   public Command shoot() {
-    return to(SuperstructureState.SHOOT.withFlywheelVelocity(FlywheelConstants.SPEAKER_VELOCITY))
+    return to(SuperstructureState.SPEAKER_SPIN)
         .andThen(
-            to(
-                SuperstructureState.SHOOT
-                    .withFlywheelVelocity(FlywheelConstants.SPEAKER_VELOCITY)
-                    .withSerializerVelocity(SerializerConstants.SPEAKER_SERIALIZER_VELOCITY)));
+            to(SuperstructureState.SPEAKER_SHOOT));
   }
 
-  public Command amp() {
-    return to(SuperstructureState.AMP)
-        .andThen(to(SuperstructureState.AMP_SHOOT).withTimeout(1.0))
-        .andThen(to(SuperstructureState.AMP_SERIALIZE));
+  public Command ampPosition() {
+    return to(SuperstructureState.AMP_POSITION);
+  }
+
+  public Command ampShoot() {
+    return ampPosition().andThen(to(SuperstructureState.AMP_SHOOT));
   }
 }

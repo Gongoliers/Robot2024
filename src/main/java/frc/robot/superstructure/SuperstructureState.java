@@ -15,40 +15,44 @@ public record SuperstructureState(
     State shoulderAngleRotations,
     double rollerVelocityRotationsPerSecond,
     double flywheelVelocityRotationsPerSecond,
+    boolean rampFlywheelVelocity,
     double serializerVelocityRotationsPerSecond) {
 
-  public static final SuperstructureState INITIAL =
-      new SuperstructureState(ShoulderAngleConstants.INITIAL);
-
   public static final SuperstructureState STOW =
-      new SuperstructureState(ShoulderAngleConstants.STOW);
+      new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
+
+  public static final SuperstructureState INTAKE_POSITION = new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
 
   public static final SuperstructureState INTAKE =
-      new SuperstructureState(ShoulderAngleConstants.STOW);
+      new SuperstructureState(ShoulderAngleConstants.STOW, RollerConstants.INTAKE_VELOCITY, 0, false, SerializerConstants.INTAKE_VELOCITY);
 
-  public static final SuperstructureState SHOOT =
-      new SuperstructureState(ShoulderAngleConstants.STOW);
+  public static final SuperstructureState IDLE =
+      new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.IDLE_VELOCITY, true, 0);
 
-  public static final SuperstructureState AMP = new SuperstructureState(ShoulderAngleConstants.AMP);
+  public static final SuperstructureState SPEAKER_SPIN = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, false, 0);
 
-  public static final SuperstructureState AMP_SHOOT =
-      AMP.withFlywheelVelocity(FlywheelConstants.AMP_VELOCITY);
+  public static final SuperstructureState SPEAKER_SHOOT = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, false, SerializerConstants.SERIALIZE_VELOCITY);
 
-  public static final SuperstructureState AMP_SERIALIZE =
-      AMP_SHOOT.withSerializerVelocity(SerializerConstants.AMP_SERIALIZE_VELOCITY);
+  public static final SuperstructureState AMP_POSITION = new SuperstructureState(ShoulderAngleConstants.AMP, 0, 0, false, 0);
+
+  public static final SuperstructureState AMP_SPIN = new SuperstructureState(ShoulderAngleConstants.AMP, 0, FlywheelConstants.AMP_VELOCITY, false, 0);
+
+  public static final SuperstructureState AMP_SHOOT = new SuperstructureState(ShoulderAngleConstants.AMP, 0, FlywheelConstants.AMP_VELOCITY, false, SerializerConstants.SERIALIZE_VELOCITY);
 
   /**
    * Creates a new superstructure state.
    *
    * @param shoulderAngleRotations
-   * @param intakeRollerVelocityRotationsPerSecond
+   * @param rollerVelocityRotationsPerSecond
    * @param flywheelVelocityRotationsPerSecond
+   * @param rampFlywheelVelocity
    * @param serializerVelocityRotationsPerSecond
    */
   public SuperstructureState {
     Objects.requireNonNull(shoulderAngleRotations);
     Objects.requireNonNull(rollerVelocityRotationsPerSecond);
     Objects.requireNonNull(flywheelVelocityRotationsPerSecond);
+    Objects.requireNonNull(rampFlywheelVelocity);
     Objects.requireNonNull(serializerVelocityRotationsPerSecond);
   }
 
@@ -56,96 +60,23 @@ public record SuperstructureState(
    * Creates a new superstructure state.
    *
    * @param shoulderAngle
-   * @param wristAngle
    * @param rollerVelocityRotationsPerSecond
    * @param flywheelVelocityRotationsPerSecond
+   * @param rampFlywheelVelocity
    * @param serializerVelocityRotationsPerSecond
    */
   public SuperstructureState(
       Rotation2d shoulderAngle,
       double rollerVelocityRotationsPerSecond,
       double flywheelVelocityRotationsPerSecond,
+      boolean rampFlywheelVelocity,
       double serializerVelocityRotationsPerSecond) {
     this(
-        new State(shoulderAngle.getRotations(), 0.0),
+        new State(shoulderAngle.getRotations(), 0),
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
+        rampFlywheelVelocity,
         serializerVelocityRotationsPerSecond);
-  }
-
-  /**
-   * Creates a new superstructure state.
-   *
-   * @param shoulderAngle
-   * @param wristAngle
-   */
-  public SuperstructureState(Rotation2d shoulderAngle) {
-    this(shoulderAngle, 0.0, 0.0, 0.0);
-  }
-
-  public SuperstructureState withShoulderAngle(Rotation2d newShoulderAngle) {
-    return new SuperstructureState(
-        new State(newShoulderAngle.getRotations(), 0.0),
-        rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withShoulderAngleOf(SuperstructureState other) {
-    return new SuperstructureState(
-        other.shoulderAngleRotations,
-        rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withRollerVelocity(double newRollerVelocityRotationsPerSecond) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        newRollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withRollerVelocityOf(SuperstructureState other) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        other.rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withFlywheelVelocity(double newFlywheelVelocityRotationsPerSecond) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        rollerVelocityRotationsPerSecond,
-        newFlywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withFlywheelVelocityOf(SuperstructureState other) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        rollerVelocityRotationsPerSecond,
-        other.flywheelVelocityRotationsPerSecond,
-        serializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withSerializerVelocity(
-      double newSerializerVelocityRotationsPerSecond) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        newSerializerVelocityRotationsPerSecond);
-  }
-
-  public SuperstructureState withSerializerVelocityOf(SuperstructureState other) {
-    return new SuperstructureState(
-        shoulderAngleRotations,
-        rollerVelocityRotationsPerSecond,
-        flywheelVelocityRotationsPerSecond,
-        other.serializerVelocityRotationsPerSecond);
   }
 
   /**
@@ -200,11 +131,17 @@ public record SuperstructureState(
         SerializerConstants.SPEED_TOLERANCE);
   }
 
-  public boolean at(SuperstructureState other) {
-    return atShoulderAngleGoal(other)
-        && atRollerVelocityGoal(other)
-        && atFlywheelVelocityGoal(other)
-        && atSerializerVelocityGoal(other);
+  /**
+   * Returns true if at the superstructure goal.
+   * 
+   * @param goal
+   * @return true if at the superstructure goal.
+   */
+  public boolean atGoal(SuperstructureState goal) {
+    return atShoulderAngleGoal(goal)
+        && atRollerVelocityGoal(goal)
+        && atFlywheelVelocityGoal(goal)
+        && atSerializerVelocityGoal(goal);
   }
 
   /**
@@ -222,10 +159,15 @@ public record SuperstructureState(
             setpoint.shoulderAngleRotations(),
             goal.shoulderAngleRotations());
 
+    double accelerationLimitedFlywheelVelocity = FlywheelConstants.ACCELERATION_LIMITER.calculate(goal.flywheelVelocityRotationsPerSecond());
+
+    double nextFlywheelVelocitySetpoint = goal.rampFlywheelVelocity() ? accelerationLimitedFlywheelVelocity : goal.flywheelVelocityRotationsPerSecond();
+
     return new SuperstructureState(
         nextShoulderSetpoint,
         goal.rollerVelocityRotationsPerSecond(),
-        goal.flywheelVelocityRotationsPerSecond(),
+        nextFlywheelVelocitySetpoint,
+        goal.rampFlywheelVelocity(),
         goal.serializerVelocityRotationsPerSecond());
   }
 }
