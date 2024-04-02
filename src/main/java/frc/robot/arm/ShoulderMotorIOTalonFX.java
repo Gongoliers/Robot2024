@@ -28,13 +28,10 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
   /** Creates a new shoulder motor using a Spark Max. */
   public ShoulderMotorIOTalonFX() {
-    eastTalonFX = new TalonFX(0); // TODO
-    westTalonFX = new TalonFX(0); // TODO
+    eastTalonFX = new TalonFX(46);
+    westTalonFX = new TalonFX(48);
 
-    cancoder = new CANcoder(0); // TODO
-
-    feedback = new PIDController(0, 0, 0);
-
+    cancoder = new CANcoder(52); feedback = new PIDController(0, 0, 0);
     feedforward = new ArmFeedforward(0, 0, 0);
   }
 
@@ -56,7 +53,7 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
-    cancoderConfig.MagnetSensor.MagnetOffset = -0.0; // TODO
+    cancoderConfig.MagnetSensor.MagnetOffset = Units.degreesToRotations(-114.12509);
 
     Configurator.configureCANcoder(cancoder.getConfigurator(), cancoderConfig);
   }
@@ -97,7 +94,7 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
    * @return the absolute position of the shoulder in rotations.
    */
   private double getAbsolutePositionRotations() {
-    return eastTalonFX.getPosition().refresh().getValue();
+    return cancoder.getAbsolutePosition().refresh().getValue();
   }
 
   @Override

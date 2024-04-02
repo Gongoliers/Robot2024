@@ -10,12 +10,12 @@ import frc.lib.Configurator;
 /** Roller motor using a TalonFX. */
 public class RollerMotorIOTalonFX implements RollerMotorIO {
 
-  private final TalonFX topTalonFX, bottomTalonFX;
+  private final TalonFX frontTalonFX, backTalonFX;
   private final SimpleMotorFeedforward topFeedforward, bottomFeedforward;
 
   public RollerMotorIOTalonFX() {
-    topTalonFX = new TalonFX(0); // TODO
-    bottomTalonFX = new TalonFX(0); // TODO
+    frontTalonFX = new TalonFX(50);
+    backTalonFX = new TalonFX(40);
 
     topFeedforward = new SimpleMotorFeedforward(0, 0); // TODO
     bottomFeedforward = new SimpleMotorFeedforward(0, 0); // TODO
@@ -31,31 +31,31 @@ public class RollerMotorIOTalonFX implements RollerMotorIO {
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    Configurator.configureTalonFX(topTalonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(frontTalonFX.getConfigurator(), config);
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-    Configurator.configureTalonFX(bottomTalonFX.getConfigurator(), config);
+    Configurator.configureTalonFX(backTalonFX.getConfigurator(), config);
   }
 
   @Override
   public void update(RollerMotorIOValues values) {
     values.velocityRotationsPerSecond = getVelocity();
-    values.currentAmps = topTalonFX.getStatorCurrent().refresh().getValue();
+    values.currentAmps = frontTalonFX.getStatorCurrent().refresh().getValue();
   }
 
   @Override
   public void setSetpoint(double velocityRotationsPerSecond) {
     double topVolts = topFeedforward.calculate(velocityRotationsPerSecond);
 
-    topTalonFX.setVoltage(topVolts);
+    frontTalonFX.setVoltage(topVolts);
 
     double bottomVolts = bottomFeedforward.calculate(velocityRotationsPerSecond);
 
-    bottomTalonFX.setVoltage(bottomVolts);
+    backTalonFX.setVoltage(bottomVolts);
   }
 
   public double getVelocity() {
-    return topTalonFX.getVelocity().refresh().getValue();
+    return frontTalonFX.getVelocity().refresh().getValue();
   }
 }
