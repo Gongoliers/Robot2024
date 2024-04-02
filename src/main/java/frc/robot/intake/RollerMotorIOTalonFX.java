@@ -1,16 +1,15 @@
 package frc.robot.intake;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.Configurator;
 
 /** Roller motor using a TalonFX. */
 public class RollerMotorIOTalonFX implements RollerMotorIO {
 
   private final TalonFX topTalonFX, bottomTalonFX;
-
   private final SimpleMotorFeedforward topFeedforward, bottomFeedforward;
 
   public RollerMotorIOTalonFX() {

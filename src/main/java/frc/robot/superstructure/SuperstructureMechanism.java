@@ -78,11 +78,7 @@ public class SuperstructureMechanism {
     shoulder =
         shoulderBase.append(
             new MechanismLigament2d(
-                "shoulder",
-                Units.inchesToMeters(16.775),
-                0,
-                armThickness,
-                DEFAULT_COLOR));
+                "shoulder", Units.inchesToMeters(16.775), 0, armThickness, DEFAULT_COLOR));
 
     flywheel =
         shoulder.append(

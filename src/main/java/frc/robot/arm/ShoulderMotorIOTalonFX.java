@@ -4,7 +4,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -50,7 +49,8 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
   public void update(ShoulderMotorIOValues values) {
     values.positionRotations = getAbsolutePositionRotations();
     values.velocityRotationsPerSecond = westTalonFX.getVelocity().refresh().getValue();
-    values.accelerationRotationsPerSecondPerSecond = westTalonFX.getAcceleration().refresh().getValue();
+    values.accelerationRotationsPerSecondPerSecond =
+        westTalonFX.getAcceleration().refresh().getValue();
 
     values.currentAmps = westTalonFX.getStatorCurrent().refresh().getValue();
     values.inputVoltage = westTalonFX.getMotorVoltage().refresh().getValue();
@@ -69,7 +69,8 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
     double feedforwardVolts =
-        feedforward.calculate(Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
+        feedforward.calculate(
+            Units.rotationsToRadians(measuredPositionRotations), velocityRotationsPerSecond);
 
     setVoltage(feedbackVolts + feedforwardVolts);
   }
