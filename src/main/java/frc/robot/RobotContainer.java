@@ -79,6 +79,8 @@ public class RobotContainer {
     driverController.y().onTrue(odometry.tare());
 
     operatorController.leftTrigger().onTrue(superstructure.intake());
+    
+    operatorController.rightBumper().onTrue(superstructure.spin());
     operatorController.rightTrigger().onTrue(superstructure.shoot());
 
     operatorController.a().onTrue(superstructure.amp());

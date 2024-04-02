@@ -185,11 +185,12 @@ public class Superstructure extends Subsystem {
                     .withRollerVelocity(RollerConstants.INTAKE_VELOCITY)));
   }
 
+  public Command spin() {
+    return to(SuperstructureState.SHOOT.withFlywheelVelocity(FlywheelConstants.SPEAKER_VELOCITY));
+  }
+
   public Command shoot() {
-    return to(SuperstructureState.SHOOT)
-        .andThen(
-            to(SuperstructureState.SHOOT.withFlywheelVelocity(FlywheelConstants.SPEAKER_VELOCITY))
-                .withTimeout(1.0))
+    return to(SuperstructureState.SHOOT.withFlywheelVelocity(FlywheelConstants.SPEAKER_VELOCITY))
         .andThen(
             to(
                 SuperstructureState.SHOOT
