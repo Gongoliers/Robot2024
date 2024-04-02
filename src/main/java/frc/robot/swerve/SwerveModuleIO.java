@@ -8,6 +8,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public interface SwerveModuleIO {
 
   /**
+   * Sets the steer motor's position to the azimuth encoder's position.
+   */
+  public void syncSteerPosition();
+
+  /**
    * Gets the state of the swerve module.
    *
    * @return the state of the swerve module.

@@ -52,6 +52,11 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
 
     setpoint = new SwerveModuleState();
 
+    syncSteerPosition();
+  }
+
+  @Override
+  public void syncSteerPosition() {
     azimuthEncoder.update(azimuthEncoderValues);
     steerMotor.setPosition(azimuthEncoderValues.positionRotations);
   }
