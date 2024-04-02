@@ -21,20 +21,43 @@ public record SuperstructureState(
   public static final SuperstructureState STOW =
       new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
 
-  public static final SuperstructureState INTAKE_POSITION = new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
+  public static final SuperstructureState INTAKE_POSITION =
+      new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
 
   public static final SuperstructureState INTAKE =
-      new SuperstructureState(ShoulderAngleConstants.STOW, RollerConstants.INTAKE_VELOCITY, 0, false, SerializerConstants.INTAKE_VELOCITY);
+      new SuperstructureState(
+          ShoulderAngleConstants.STOW,
+          RollerConstants.INTAKE_VELOCITY,
+          0,
+          false,
+          SerializerConstants.INTAKE_VELOCITY);
 
-  public static final SuperstructureState SPEAKER_SPIN = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
+  public static final SuperstructureState SPEAKER_SPIN =
+      new SuperstructureState(
+          ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
 
-  public static final SuperstructureState SPEAKER_SHOOT = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, false, SerializerConstants.SERIALIZE_VELOCITY);
+  public static final SuperstructureState SPEAKER_SHOOT =
+      new SuperstructureState(
+          ShoulderAngleConstants.STOW,
+          0,
+          FlywheelConstants.SPEAKER_VELOCITY,
+          false,
+          SerializerConstants.SERIALIZE_VELOCITY);
 
-  public static final SuperstructureState AMP_POSITION = new SuperstructureState(ShoulderAngleConstants.AMP, 0, 0, false, 0);
+  public static final SuperstructureState AMP_POSITION =
+      new SuperstructureState(ShoulderAngleConstants.AMP, 0, 0, false, 0);
 
-  public static final SuperstructureState AMP_SPIN = new SuperstructureState(ShoulderAngleConstants.AMP, 0, FlywheelConstants.AMP_VELOCITY, false, 0);
+  public static final SuperstructureState AMP_SPIN =
+      new SuperstructureState(
+          ShoulderAngleConstants.AMP, 0, FlywheelConstants.AMP_VELOCITY, false, 0);
 
-  public static final SuperstructureState AMP_SHOOT = new SuperstructureState(ShoulderAngleConstants.AMP, 0, FlywheelConstants.AMP_VELOCITY, false, SerializerConstants.SERIALIZE_VELOCITY);
+  public static final SuperstructureState AMP_SHOOT =
+      new SuperstructureState(
+          ShoulderAngleConstants.AMP,
+          0,
+          FlywheelConstants.AMP_VELOCITY,
+          false,
+          SerializerConstants.SERIALIZE_VELOCITY);
 
   /**
    * Creates a new superstructure state.
@@ -130,7 +153,7 @@ public record SuperstructureState(
 
   /**
    * Returns true if at the superstructure goal.
-   * 
+   *
    * @param goal
    * @return true if at the superstructure goal.
    */
@@ -156,9 +179,13 @@ public record SuperstructureState(
             setpoint.shoulderAngleRotations(),
             goal.shoulderAngleRotations());
 
-    double accelerationLimitedFlywheelVelocity = FlywheelConstants.ACCELERATION_LIMITER.calculate(goal.flywheelVelocityRotationsPerSecond());
+    double accelerationLimitedFlywheelVelocity =
+        FlywheelConstants.ACCELERATION_LIMITER.calculate(goal.flywheelVelocityRotationsPerSecond());
 
-    double nextFlywheelVelocitySetpoint = goal.rampFlywheelVelocity() ? accelerationLimitedFlywheelVelocity : goal.flywheelVelocityRotationsPerSecond();
+    double nextFlywheelVelocitySetpoint =
+        goal.rampFlywheelVelocity()
+            ? accelerationLimitedFlywheelVelocity
+            : goal.flywheelVelocityRotationsPerSecond();
 
     return new SuperstructureState(
         nextShoulderSetpoint,

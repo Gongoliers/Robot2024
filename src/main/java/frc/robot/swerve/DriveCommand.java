@@ -37,8 +37,7 @@ public class DriveCommand extends Command {
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -105,5 +104,4 @@ public class DriveCommand extends Command {
 
     return new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
   }
-
 }

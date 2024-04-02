@@ -80,7 +80,7 @@ public class RobotContainer {
 
     operatorController.leftBumper().onTrue(superstructure.stow());
     operatorController.leftTrigger().onTrue(superstructure.intake());
-    
+
     operatorController.rightBumper().onTrue(superstructure.idle());
     operatorController.rightTrigger().onTrue(superstructure.shoot());
 

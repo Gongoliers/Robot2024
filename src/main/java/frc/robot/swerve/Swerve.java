@@ -96,7 +96,8 @@ public class Swerve extends Subsystem {
       swerveModuleColumn.addDouble(
           "Setpoint Velocity (mps)", () -> swerveModule.getSetpoint().speedMetersPerSecond);
 
-      swerveModuleColumn.add(Commands.runOnce(swerveModule::syncSteerPosition).withName("Sync Steer"));
+      swerveModuleColumn.add(
+          Commands.runOnce(swerveModule::syncSteerPosition).withName("Sync Steer"));
     }
   }
 

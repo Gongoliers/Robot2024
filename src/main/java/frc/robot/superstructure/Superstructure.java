@@ -175,9 +175,7 @@ public class Superstructure extends Subsystem {
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE_POSITION)
-        .andThen(
-            to(SuperstructureState.INTAKE));
+    return to(SuperstructureState.INTAKE_POSITION).andThen(to(SuperstructureState.INTAKE));
   }
 
   public Command idle() {
@@ -185,9 +183,7 @@ public class Superstructure extends Subsystem {
   }
 
   public Command shoot() {
-    return to(SuperstructureState.SPEAKER_SPIN)
-        .andThen(
-            to(SuperstructureState.SPEAKER_SHOOT));
+    return to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT));
   }
 
   public Command ampPosition() {
