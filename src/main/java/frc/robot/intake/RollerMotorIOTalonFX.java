@@ -2,6 +2,7 @@ package frc.robot.intake;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.Configurator;
@@ -24,11 +25,16 @@ public class RollerMotorIOTalonFX implements RollerMotorIO {
   public void configure() {
     final TalonFXConfiguration config = new TalonFXConfiguration();
 
-    config.Feedback.SensorToMechanismRatio = 1.0; // TODO
+    config.Feedback.SensorToMechanismRatio = 24.0 / 16.0;
 
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
+    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
     Configurator.configureTalonFX(topTalonFX.getConfigurator(), config);
+
+    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
     Configurator.configureTalonFX(bottomTalonFX.getConfigurator(), config);
   }
 

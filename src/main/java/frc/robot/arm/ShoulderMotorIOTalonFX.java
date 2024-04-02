@@ -1,9 +1,13 @@
 package frc.robot.arm;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -13,6 +17,8 @@ import frc.lib.Configurator;
 public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
   private final TalonFX eastTalonFX, westTalonFX;
+
+  private final CANcoder cancoder;
 
   /** Feedback controller for shoulder position. */
   private final PIDController feedback;
@@ -25,6 +31,8 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
     eastTalonFX = new TalonFX(0); // TODO
     westTalonFX = new TalonFX(0); // TODO
 
+    cancoder = new CANcoder(0); // TODO
+
     feedback = new PIDController(0, 0, 0);
 
     feedforward = new ArmFeedforward(0, 0, 0);
@@ -32,17 +40,25 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
   @Override
   public void configure() {
-    final TalonFXConfiguration config = new TalonFXConfiguration();
+    final TalonFXConfiguration talonFXConfig = new TalonFXConfiguration();
 
-    config.Feedback.SensorToMechanismRatio = 1.0; // TODO
+    // talonFXConfig.Feedback.SensorToMechanismRatio = 39.771428571;
 
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    talonFXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-    Configurator.configureTalonFX(eastTalonFX.getConfigurator(), config);
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    Configurator.configureTalonFX(eastTalonFX.getConfigurator(), talonFXConfig);
 
-    config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    Configurator.configureTalonFX(westTalonFX.getConfigurator(), config);
+    talonFXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+    Configurator.configureTalonFX(westTalonFX.getConfigurator(), talonFXConfig);
+
+    final CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
+
+    cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+
+    cancoderConfig.MagnetSensor.MagnetOffset = -0.0; // TODO
+
+    Configurator.configureCANcoder(cancoder.getConfigurator(), cancoderConfig);
   }
 
   @Override

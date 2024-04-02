@@ -3,6 +3,7 @@ package frc.robot.shooter;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.Configurator;
@@ -29,7 +30,11 @@ public class FlywheelMotorIOTalonFX implements FlywheelMotorIO {
   public void configure() {
     final TalonFXConfiguration config = new TalonFXConfiguration();
 
+    config.Feedback.SensorToMechanismRatio = 36.0 / 16.0;
+
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+    config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     Configurator.configureTalonFX(talonFX.getConfigurator(), config);
   }
