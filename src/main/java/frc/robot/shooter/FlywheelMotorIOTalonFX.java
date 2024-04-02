@@ -4,6 +4,8 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.Configurator;
 
 /** Flywheel motor using TalonFX. */
@@ -13,11 +15,15 @@ public class FlywheelMotorIOTalonFX implements FlywheelMotorIO {
 
   private final StatusSignal<Double> velocityRotationsPerSecond, statorCurrentAmps;
 
+  private final SimpleMotorFeedforward velocityFeedforward;
+
   public FlywheelMotorIOTalonFX() {
     talonFX = new TalonFX(30);
 
     velocityRotationsPerSecond = talonFX.getVelocity();
     statorCurrentAmps = talonFX.getStatorCurrent();
+
+    velocityFeedforward = new SimpleMotorFeedforward(0, 0);
   }
 
   @Override
@@ -40,6 +46,8 @@ public class FlywheelMotorIOTalonFX implements FlywheelMotorIO {
 
   @Override
   public void setSetpoint(double velocityRotationsPerSecond) {
-    // TODO Implement velocity setpoint
+    double volts = velocityFeedforward.calculate(velocityRotationsPerSecond);
+
+    talonFX.setVoltage(volts);
   }
 }
