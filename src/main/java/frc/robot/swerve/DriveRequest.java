@@ -96,6 +96,8 @@ public record DriveRequest(
   }
 
   public Rotation2d omega() {
+    if (Math.abs(this.rotation().getY()) < 0.1) return new Rotation2d();
+
     return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotation().getY() * 0.75);
   }
 
