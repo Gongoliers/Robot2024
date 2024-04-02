@@ -14,7 +14,7 @@ public class IntakeFactory {
    */
   public static RollerMotorIO createRollerMotor() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE))
-      return new RollerMotorIOSparkMax();
+      return new RollerMotorIOTalonFX();
 
     return new RollerMotorIOSim();
   }
