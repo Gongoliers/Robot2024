@@ -22,9 +22,6 @@ public class ShooterConstants {
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
   public static class FlywheelConstants {
-    /** Velocity to apply while idly spinning up in rotations per second. */
-    public static final double IDLE_VELOCITY = 2.5;
-
     /** Velocity to apply while shooting into the speaker in rotations per second. */
     public static final double SPEAKER_VELOCITY = 5.65;
 

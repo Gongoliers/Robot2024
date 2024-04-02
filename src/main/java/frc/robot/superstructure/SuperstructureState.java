@@ -26,10 +26,7 @@ public record SuperstructureState(
   public static final SuperstructureState INTAKE =
       new SuperstructureState(ShoulderAngleConstants.STOW, RollerConstants.INTAKE_VELOCITY, 0, false, SerializerConstants.INTAKE_VELOCITY);
 
-  public static final SuperstructureState IDLE =
-      new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.IDLE_VELOCITY, true, 0);
-
-  public static final SuperstructureState SPEAKER_SPIN = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, false, 0);
+  public static final SuperstructureState SPEAKER_SPIN = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
 
   public static final SuperstructureState SPEAKER_SHOOT = new SuperstructureState(ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, false, SerializerConstants.SERIALIZE_VELOCITY);
 

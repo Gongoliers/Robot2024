@@ -181,7 +181,7 @@ public class Superstructure extends Subsystem {
   }
 
   public Command idle() {
-    return to(SuperstructureState.IDLE);
+    return to(SuperstructureState.SPEAKER_SPIN);
   }
 
   public Command shoot() {
