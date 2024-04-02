@@ -1,10 +1,14 @@
 package frc.robot.arm;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
@@ -78,5 +82,9 @@ public class Arm extends Subsystem {
 
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
     shoulderMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
+  }
+
+  public Command setVoltage(DoubleSupplier volts) {
+    return Commands.run(() -> shoulderMotor.setVoltage(volts.getAsDouble()));
   }
 }

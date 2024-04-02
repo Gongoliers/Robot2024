@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.InterpolatableColor;
 import frc.robot.RobotConstants;
-import frc.robot.arm.ArmConstants.ShoulderMotorConstants;
 import frc.robot.intake.IntakeConstants.RollerConstants;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
@@ -80,7 +79,7 @@ public class SuperstructureMechanism {
         shoulderBase.append(
             new MechanismLigament2d(
                 "shoulder",
-                ShoulderMotorConstants.JOINT_CONSTANTS.lengthMeters(),
+                Units.inchesToMeters(16.775),
                 0,
                 armThickness,
                 DEFAULT_COLOR));

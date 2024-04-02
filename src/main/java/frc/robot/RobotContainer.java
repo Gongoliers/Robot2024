@@ -87,6 +87,7 @@ public class RobotContainer {
     operatorController.a().onTrue(superstructure.ampPosition());
     operatorController.b().onTrue(superstructure.ampShoot());
     operatorController.x().onTrue(superstructure.stow());
+    operatorController.y().whileTrue(arm.setVoltage(() -> operatorController.getLeftY()));
   }
 
   /**

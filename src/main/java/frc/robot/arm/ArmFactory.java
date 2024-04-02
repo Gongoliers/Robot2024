@@ -14,7 +14,7 @@ public class ArmFactory {
    */
   public static ShoulderMotorIO createShoulderMotor() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM))
-      return new ShoulderMotorIOSparkMax();
+      return new ShoulderMotorIOTalonFX();
 
     return new ShoulderMotorIOSim();
   }
