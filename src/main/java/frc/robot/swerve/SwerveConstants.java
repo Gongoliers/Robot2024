@@ -54,10 +54,10 @@ public class SwerveConstants {
   public static final boolean USE_PHOENIX_PRO_FOC = false;
 
   /** Module X offset in meters. */
-  public static final double X_OFFSET = Units.inchesToMeters(11.375);
+  public static final double X_OFFSET = Units.inchesToMeters(10.375);
 
   /** Module Y offset in meters. */
-  public static final double Y_OFFSET = Units.inchesToMeters(11.375);
+  public static final double Y_OFFSET = Units.inchesToMeters(10.375);
 
   /** Swerve's CAN bus. */
   public static final String SWERVE_BUS = "swerve";
