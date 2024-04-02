@@ -14,7 +14,7 @@ public class ShooterFactory {
    */
   public static SerializerMotorIO createSerializerMotor() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER))
-      return new SerializerMotorIOSparkMax();
+      return new SerializerMotorIOTalonFX();
 
     return new SerializerMotorIOSim();
   }
