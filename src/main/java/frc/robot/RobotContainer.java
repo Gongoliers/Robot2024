@@ -86,6 +86,8 @@ public class RobotContainer {
     operatorController.b().onTrue(superstructure.ampShoot());
     operatorController.x().onTrue(superstructure.stow());
     operatorController.y().whileTrue(arm.setVoltage(() -> 3 * MathUtil.applyDeadband(-operatorController.getLeftY(), 0.1)));
+
+    operatorController.povUp().onTrue(superstructure.eject());
   }
 
   /**

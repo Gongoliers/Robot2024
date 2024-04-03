@@ -9,6 +9,8 @@ public class SuperstructureConstants {
   public static class ShoulderAngleConstants {
     public static final Rotation2d STOW = Rotation2d.fromDegrees(-19.379);
 
+    public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
+
     public static final Rotation2d AMP = Rotation2d.fromDegrees(90);
 
     /** Tolerance of the shoulder joint. */

@@ -183,8 +183,12 @@ public class Superstructure extends Subsystem {
     return to(SuperstructureState.SPEAKER_SPIN);
   }
 
+  public Command pull() {
+    return Commands.deadline(Commands.waitSeconds(0.15), to(SuperstructureState.PULL));
+  }
+
   public Command shoot() {
-    return Commands.deadline(Commands.waitSeconds(0.15), to(SuperstructureState.PULL)).andThen(to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT)));
+    return pull().andThen(to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT)));
   }
 
   public Command ampPosition() {
@@ -193,5 +197,9 @@ public class Superstructure extends Subsystem {
 
   public Command ampShoot() {
     return ampPosition().andThen(to(SuperstructureState.AMP_SHOOT));
+  }
+  
+  public Command eject() {
+    return to(SuperstructureState.EJECT);
   }
 }
