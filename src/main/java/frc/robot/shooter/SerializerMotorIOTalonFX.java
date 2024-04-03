@@ -36,6 +36,9 @@ public class SerializerMotorIOTalonFX implements SerializerMotorIO {
 
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
+    config.CurrentLimits.StatorCurrentLimit = 40;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+
     Configurator.configureTalonFX(talonFX.getConfigurator(), config);
   }
 

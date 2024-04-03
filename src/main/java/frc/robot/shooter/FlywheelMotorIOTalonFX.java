@@ -36,6 +36,9 @@ public class FlywheelMotorIOTalonFX implements FlywheelMotorIO {
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+    config.CurrentLimits.StatorCurrentLimit = 40;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+
     Configurator.configureTalonFX(talonFX.getConfigurator(), config);
   }
 

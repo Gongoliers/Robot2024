@@ -31,6 +31,9 @@ public class RollerMotorIOTalonFX implements RollerMotorIO {
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+    config.CurrentLimits.StatorCurrentLimit = 40;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+
     Configurator.configureTalonFX(frontTalonFX.getConfigurator(), config);
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
