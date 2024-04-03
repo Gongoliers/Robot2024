@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 6.63
+      "x": 0.7636103146671326,
+      "y": 4.403274541213847
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp.leave"
+            "pathName": "stage.leave"
           }
         }
       ]

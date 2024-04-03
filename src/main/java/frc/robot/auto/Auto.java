@@ -70,12 +70,8 @@ public class Auto extends Subsystem {
         AllianceFlipHelper::shouldFlip,
         swerve);
 
-    NamedCommands.registerCommand("home", superstructure.stow());
     NamedCommands.registerCommand("stow", superstructure.stow());
-    NamedCommands.registerCommand("readyIntake", superstructure.intake());
-    NamedCommands.registerCommand("intakeNote", superstructure.intake());
-    NamedCommands.registerCommand("readyShoot", superstructure.shoot());
-    NamedCommands.registerCommand("shootNote", superstructure.shoot());
+    NamedCommands.registerCommand("shoot", superstructure.shoot());
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }
