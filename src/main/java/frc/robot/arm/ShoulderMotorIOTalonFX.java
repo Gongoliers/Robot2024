@@ -32,7 +32,7 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
     westTalonFX = new TalonFX(48);
 
     cancoder = new CANcoder(52); feedback = new PIDController(0, 0, 0);
-    feedforward = new ArmFeedforward(0, 0, 0);
+    feedforward = new ArmFeedforward(0.14, 1.44168, 0);
   }
 
   @Override
@@ -42,6 +42,9 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
     // talonFXConfig.Feedback.SensorToMechanismRatio = 39.771428571;
 
     talonFXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+    talonFXConfig.CurrentLimits.StatorCurrentLimit = 40;
+    talonFXConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
     talonFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     Configurator.configureTalonFX(eastTalonFX.getConfigurator(), talonFXConfig);

@@ -37,7 +37,6 @@ public class RobotConstants {
   /** Robot subsystems. */
   public enum Subsystem {
     ARM,
-    CLIMBER,
     INTAKE,
     ODOMETRY,
     SHOOTER,
@@ -47,11 +46,10 @@ public class RobotConstants {
   public static final Set<Subsystem> ALL_SUBSYSTEMS =
       EnumSet.of(
           Subsystem.ARM,
-          Subsystem.CLIMBER,
           Subsystem.INTAKE,
           Subsystem.ODOMETRY,
           Subsystem.SHOOTER,
           Subsystem.SWERVE);
 
-  public static final Set<Subsystem> REAL_SUBSYSTEMS = EnumSet.of(Subsystem.INTAKE, Subsystem.SHOOTER);
+  public static final Set<Subsystem> REAL_SUBSYSTEMS = EnumSet.of(Subsystem.ARM, Subsystem.INTAKE, Subsystem.SHOOTER);
 }
