@@ -23,7 +23,7 @@ public class SerializerMotorIOTalonFX implements SerializerMotorIO {
     velocityRotationsPerSecond = talonFX.getVelocity();
     statorCurrentAmps = talonFX.getStatorCurrent();
 
-    velocityFeedforward = new SimpleMotorFeedforward(0, 0);
+    velocityFeedforward = new SimpleMotorFeedforward(0.14, 0.2617);
   }
 
   @Override

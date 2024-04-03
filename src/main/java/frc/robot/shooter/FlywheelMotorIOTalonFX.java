@@ -23,7 +23,7 @@ public class FlywheelMotorIOTalonFX implements FlywheelMotorIO {
     velocityRotationsPerSecond = talonFX.getVelocity();
     statorCurrentAmps = talonFX.getStatorCurrent();
 
-    velocityFeedforward = new SimpleMotorFeedforward(0, 0);
+    velocityFeedforward = new SimpleMotorFeedforward(0.14, 0.2539);
   }
 
   @Override

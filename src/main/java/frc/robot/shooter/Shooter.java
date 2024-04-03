@@ -29,6 +29,9 @@ public class Shooter extends Subsystem {
   private Shooter() {
     serializerMotor = ShooterFactory.createSerializerMotor();
     flywheelMotor = ShooterFactory.createFlywheelMotor();
+
+    serializerMotor.configure();
+    flywheelMotor.configure();
   }
 
   /**
