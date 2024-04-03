@@ -11,14 +11,14 @@ import frc.lib.Configurator;
 public class RollerMotorIOTalonFX implements RollerMotorIO {
 
   private final TalonFX frontTalonFX, backTalonFX;
-  private final SimpleMotorFeedforward topFeedforward, bottomFeedforward;
+  private final SimpleMotorFeedforward frontFeedforward, backFeedforward;
 
   public RollerMotorIOTalonFX() {
     frontTalonFX = new TalonFX(50);
     backTalonFX = new TalonFX(40);
 
-    topFeedforward = new SimpleMotorFeedforward(0, 0); // TODO
-    bottomFeedforward = new SimpleMotorFeedforward(0, 0); // TODO
+    frontFeedforward = new SimpleMotorFeedforward(0.13, 0.1683);
+    backFeedforward = new SimpleMotorFeedforward(0.13, 0.1759);
   }
 
   @Override
@@ -46,13 +46,13 @@ public class RollerMotorIOTalonFX implements RollerMotorIO {
 
   @Override
   public void setSetpoint(double velocityRotationsPerSecond) {
-    double topVolts = topFeedforward.calculate(velocityRotationsPerSecond);
+    double frontVolts = frontFeedforward.calculate(velocityRotationsPerSecond);
 
-    frontTalonFX.setVoltage(topVolts);
+    frontTalonFX.setVoltage(frontVolts);
 
-    double bottomVolts = bottomFeedforward.calculate(velocityRotationsPerSecond);
+    double backVolts = backFeedforward.calculate(velocityRotationsPerSecond);
 
-    backTalonFX.setVoltage(bottomVolts);
+    backTalonFX.setVoltage(backVolts);
   }
 
   public double getVelocity() {
