@@ -35,10 +35,10 @@ public class Superstructure extends Subsystem {
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
 
-    setPosition(SuperstructureState.STOW);
+    setPosition(SuperstructureState.INITIAL);
 
-    setpoint = SuperstructureState.STOW;
-    goal = SuperstructureState.STOW;
+    setpoint = SuperstructureState.INITIAL;
+    goal = SuperstructureState.INITIAL;
   }
 
   /**

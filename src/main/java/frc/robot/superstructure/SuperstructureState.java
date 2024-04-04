@@ -18,6 +18,9 @@ public record SuperstructureState(
     boolean rampFlywheelVelocity,
     double serializerVelocityRotationsPerSecond) {
 
+  public static final SuperstructureState INITIAL =
+      new SuperstructureState(ShoulderAngleConstants.INITIAL, 0, 0, false, 0);
+
   public static final SuperstructureState STOW =
       new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
 
