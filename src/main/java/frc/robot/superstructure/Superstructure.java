@@ -191,6 +191,10 @@ public class Superstructure extends Subsystem {
     return pull().andThen(to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT)));
   }
 
+  public Command pass() {
+    return pull().andThen(to(SuperstructureState.PASS_SPIN).andThen(to(SuperstructureState.PASS_SHOOT)));
+  }
+
   public Command ampPosition() {
     return to(SuperstructureState.AMP_POSITION);
   }

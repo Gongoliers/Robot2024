@@ -48,6 +48,18 @@ public record SuperstructureState(
           false,
           SerializerConstants.SERIALIZE_VELOCITY);
 
+  public static final SuperstructureState PASS_SPIN =
+      new SuperstructureState(
+          ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
+
+  public static final SuperstructureState PASS_SHOOT =
+      new SuperstructureState(
+          ShoulderAngleConstants.STOW,
+          0,
+          FlywheelConstants.PASS_VELOCTY,
+          false,
+          SerializerConstants.SERIALIZE_VELOCITY);
+
   public static final SuperstructureState AMP_POSITION =
       new SuperstructureState(ShoulderAngleConstants.AMP, 0, 0, false, 0);
 
