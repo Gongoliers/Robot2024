@@ -26,7 +26,7 @@ public class ShooterConstants {
   /** Constants for the flywheel motor used in the shooter subsystem. */
   public static class FlywheelConstants {
     /** Velocity to apply while shooting into the speaker in rotations per second. */
-    public static final double SPEAKER_VELOCITY = 24;
+    public static final double SPEAKER_VELOCITY = 28;
 
     /** Velocity to apply while passing in rotations per second. */
     public static final double PASS_VELOCTY = 44;
