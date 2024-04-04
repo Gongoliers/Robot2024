@@ -41,6 +41,6 @@ public class ShooterConstants {
     public static final double SPEED_TOLERANCE = 1.0;
 
     /** Acceleration limiter. */
-    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(22);
+    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(46.711);
   }
 }
