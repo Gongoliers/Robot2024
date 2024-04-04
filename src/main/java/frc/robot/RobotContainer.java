@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -85,7 +84,6 @@ public class RobotContainer {
     operatorController.a().onTrue(superstructure.ampPosition());
     operatorController.b().onTrue(superstructure.ampShoot());
     operatorController.x().onTrue(superstructure.stow());
-    operatorController.y().whileTrue(arm.setVoltage(() -> 3 * MathUtil.applyDeadband(-operatorController.getLeftY(), 0.1)));
 
     operatorController.povUp().onTrue(superstructure.eject());
   }
