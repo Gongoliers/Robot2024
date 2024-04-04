@@ -43,7 +43,7 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
     talonFXPIDFConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
     talonFXPIDFConfig.CurrentLimits =
-        new MotorCurrentLimits(40.0, 20.0, 30.0, 0.1).asCurrentLimitsConfigs();
+        new MotorCurrentLimits(35.0, 15.0, 25.0, 0.1).asCurrentLimitsConfigs();
 
     talonFXPIDFConfig.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
 
