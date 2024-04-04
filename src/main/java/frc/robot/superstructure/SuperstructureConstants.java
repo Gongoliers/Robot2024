@@ -2,6 +2,7 @@ package frc.robot.superstructure;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.lib.MotionProfileCalculator;
 
 public class SuperstructureConstants {
@@ -16,10 +17,10 @@ public class SuperstructureConstants {
     public static final Rotation2d AMP = Rotation2d.fromDegrees(90);
 
     /** Tolerance of the shoulder joint. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5.0);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(3.0);
 
     /** Maximum speed of the shoulder joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = 0.5;
+    public static final double MAXIMUM_SPEED = Units.degreesToRotations(30.0);
 
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
