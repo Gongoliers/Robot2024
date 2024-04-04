@@ -1,6 +1,7 @@
 package frc.robot.shooter;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import frc.lib.MotionProfileCalculator;
 
 /** Constants for the shooter subsystem. */
 public class ShooterConstants {
@@ -37,10 +38,13 @@ public class ShooterConstants {
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 46.711;
 
-    /** Speed tolerance in rotations per second. */
-    public static final double SPEED_TOLERANCE = 1.0;
+    /** Maximum acceleration in rotations per second per second. */
+    public static final double MAXIMUM_ACCELERATION = MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 1.0);
 
     /** Acceleration limiter. */
-    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(46.711);
+    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MAXIMUM_ACCELERATION);
+
+    /** Speed tolerance in rotations per second. */
+    public static final double SPEED_TOLERANCE = 2.5;
   }
 }
