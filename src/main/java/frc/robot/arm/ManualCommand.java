@@ -22,9 +22,11 @@ public class ManualCommand extends Command {
 
     @Override
     public void execute() {
-        double voltageScalar = 6.0;
+        double voltageScalar = 12.0;
 
-        double volts = -joystick.getAsDouble() * voltageScalar;
+        double percent = -joystick.getAsDouble();
+
+        double volts = percent * voltageScalar;
 
         double positionRotations = arm.getMeasuredShoulderState().position;
 
@@ -36,7 +38,7 @@ public class ManualCommand extends Command {
             volts = 0;
         }
 
-        volts = MathUtil.clamp(volts, -12.0, voltageScalar);
+        volts = MathUtil.clamp(volts, -12.0, 6.0);
 
         arm.setVoltage(volts);
     }
