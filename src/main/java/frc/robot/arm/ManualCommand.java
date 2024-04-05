@@ -2,6 +2,7 @@ package frc.robot.arm;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
 
@@ -34,6 +35,8 @@ public class ManualCommand extends Command {
         if (positionRotations < ShoulderAngleConstants.STOW.getRotations() && volts < 0) {
             volts = 0;
         }
+
+        volts = MathUtil.clamp(volts, -12.0, voltageScalar);
 
         arm.setVoltage(volts);
     }
