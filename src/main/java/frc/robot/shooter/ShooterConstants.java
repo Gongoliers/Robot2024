@@ -30,7 +30,7 @@ public class ShooterConstants {
     public static final double SPEAKER_VELOCITY = 44;
 
     /** Velocity to apply while passing in rotations per second. */
-    public static final double PASS_VELOCTY = 44;
+    public static final double PASS_VELOCITY = 12;
 
     /** Velocity to apply while shooting into the amp in rotations per second. */
     public static final double AMP_VELOCITY = 20;
