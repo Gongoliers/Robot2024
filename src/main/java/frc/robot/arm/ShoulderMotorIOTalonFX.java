@@ -7,8 +7,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -35,9 +33,9 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoder = new CANcoder(52);
 
-    feedback = new PIDController(1, 0, 0);
+    feedback = new PIDController(0.1, 0, 0);
 
-    feedforward = new ArmFeedforward(0.14, 0.4, 4);
+    feedforward = new ArmFeedforward(0.14, 0.5, 3.75);
     // feedforward = new ArmFeedforward(0.14, 0, 0);
   }
 
@@ -108,10 +106,6 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
   @Override
   public void setVoltage(double volts) {
-    double maxVoltage = 4.0;
-
-    volts = MathUtil.clamp(volts, -maxVoltage, maxVoltage);
-
     eastTalonFX.setVoltage(volts);
     westTalonFX.setVoltage(volts);
   }
