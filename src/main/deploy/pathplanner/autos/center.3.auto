@@ -18,21 +18,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "center.toNearest"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "center.toSubwoofer"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "center.toNearest"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "center.toSubwoofer"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -42,21 +56,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "center.toStage"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "center.stageToSub"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "center.toStage"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "center.stageToSub"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
