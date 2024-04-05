@@ -126,6 +126,7 @@ public class Superstructure extends Subsystem {
     measurement =
         new SuperstructureState(
             measuredShoulderState,
+            false,
             measuredIntakeRollerVelocity,
             measuredShooterFlywheelVelocity,
             false,
@@ -140,11 +141,17 @@ public class Superstructure extends Subsystem {
     return measurement;
   }
 
+  public void setSetpoint(SuperstructureState setpoint) {
+    this.setpoint = setpoint;
+  }
+
   private void updateSetpoint() {
     setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
 
-    arm.setSetpoint(
-        setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
+    if (setpoint.shoulderManual() == false) {
+      arm.setSetpoint(
+          setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
+    }
 
     shooter.setSetpoint(
         setpoint.flywheelVelocityRotationsPerSecond(),
@@ -205,5 +212,9 @@ public class Superstructure extends Subsystem {
   
   public Command eject() {
     return to(SuperstructureState.EJECT);
+  }
+
+  public Command manualControl() {
+    return to(SuperstructureState.MANUAL);
   }
 }

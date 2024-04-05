@@ -46,5 +46,6 @@ public class ShoulderMotorIOSim implements ShoulderMotorIO {
   @Override
   public void setVoltage(double volts) {
     this.inputVoltage = volts;
+    this.positionRotations += volts / 1000;
   }
 }

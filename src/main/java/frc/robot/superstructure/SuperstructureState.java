@@ -13,39 +13,42 @@ import java.util.Objects;
 /** Represents the state of the superstructure. */
 public record SuperstructureState(
     State shoulderAngleRotations,
+    boolean shoulderManual,
     double rollerVelocityRotationsPerSecond,
     double flywheelVelocityRotationsPerSecond,
     boolean rampFlywheelVelocity,
     double serializerVelocityRotationsPerSecond) {
 
   public static final SuperstructureState INITIAL =
-      new SuperstructureState(ShoulderAngleConstants.INITIAL, 0, 0, false, 0);
+      new SuperstructureState(ShoulderAngleConstants.INITIAL, false, 0, 0, false, 0);
 
   public static final SuperstructureState STOW =
-      new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
+      new SuperstructureState(ShoulderAngleConstants.STOW, false, 0, 0, false, 0);
 
   public static final SuperstructureState INTAKE_POSITION =
-      new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, 0);
+      new SuperstructureState(ShoulderAngleConstants.STOW, false, 0, 0, false, 0);
 
   public static final SuperstructureState INTAKE =
       new SuperstructureState(
           ShoulderAngleConstants.STOW,
+          false,
           RollerConstants.INTAKE_VELOCITY,
           0,
           false,
           SerializerConstants.INTAKE_VELOCITY);
 
-  public static final SuperstructureState PULL = new SuperstructureState(ShoulderAngleConstants.STOW, 0, 0, false, SerializerConstants.PULL_VELOCITY);
+  public static final SuperstructureState PULL = new SuperstructureState(ShoulderAngleConstants.STOW, false, 0, 0, false, SerializerConstants.PULL_VELOCITY);
 
-  public static final SuperstructureState EJECT = new SuperstructureState(ShoulderAngleConstants.EJECT, 0, 0, false, SerializerConstants.PULL_VELOCITY);
+  public static final SuperstructureState EJECT = new SuperstructureState(ShoulderAngleConstants.EJECT, false, 0, 0, false, SerializerConstants.PULL_VELOCITY);
 
   public static final SuperstructureState SPEAKER_SPIN =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
+          ShoulderAngleConstants.STOW, false, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
 
   public static final SuperstructureState SPEAKER_SHOOT =
       new SuperstructureState(
           ShoulderAngleConstants.STOW,
+          false,
           0,
           FlywheelConstants.SPEAKER_VELOCITY,
           false,
@@ -53,35 +56,40 @@ public record SuperstructureState(
 
   public static final SuperstructureState PASS_SPIN =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
+          ShoulderAngleConstants.STOW, false, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
 
   public static final SuperstructureState PASS_SHOOT =
       new SuperstructureState(
           ShoulderAngleConstants.STOW,
+          false,
           0,
           FlywheelConstants.PASS_VELOCTY,
           false,
           SerializerConstants.SERIALIZE_VELOCITY);
 
   public static final SuperstructureState AMP_POSITION =
-      new SuperstructureState(ShoulderAngleConstants.AMP, 0, 0, false, 0);
+      new SuperstructureState(ShoulderAngleConstants.AMP, false, 0, 0, false, 0);
 
   public static final SuperstructureState AMP_SPIN =
       new SuperstructureState(
-          ShoulderAngleConstants.AMP, 0, FlywheelConstants.AMP_VELOCITY, false, 0);
+          ShoulderAngleConstants.AMP, false, 0, FlywheelConstants.AMP_VELOCITY, false, 0);
 
   public static final SuperstructureState AMP_SHOOT =
       new SuperstructureState(
           ShoulderAngleConstants.AMP,
+          false,
           0,
           FlywheelConstants.AMP_VELOCITY,
           false,
           SerializerConstants.SERIALIZE_VELOCITY);
 
+  public static final SuperstructureState MANUAL = new SuperstructureState(ShoulderAngleConstants.STOW, true, 0, 0, false, 0);
+
   /**
    * Creates a new superstructure state.
    *
    * @param shoulderAngleRotations
+   * @param shoulderManual
    * @param rollerVelocityRotationsPerSecond
    * @param flywheelVelocityRotationsPerSecond
    * @param rampFlywheelVelocity
@@ -89,6 +97,7 @@ public record SuperstructureState(
    */
   public SuperstructureState {
     Objects.requireNonNull(shoulderAngleRotations);
+    Objects.requireNonNull(shoulderManual);
     Objects.requireNonNull(rollerVelocityRotationsPerSecond);
     Objects.requireNonNull(flywheelVelocityRotationsPerSecond);
     Objects.requireNonNull(rampFlywheelVelocity);
@@ -99,6 +108,7 @@ public record SuperstructureState(
    * Creates a new superstructure state.
    *
    * @param shoulderAngle
+   * @param shoulderManual
    * @param rollerVelocityRotationsPerSecond
    * @param flywheelVelocityRotationsPerSecond
    * @param rampFlywheelVelocity
@@ -106,12 +116,14 @@ public record SuperstructureState(
    */
   public SuperstructureState(
       Rotation2d shoulderAngle,
+      boolean shoulderManual,
       double rollerVelocityRotationsPerSecond,
       double flywheelVelocityRotationsPerSecond,
       boolean rampFlywheelVelocity,
       double serializerVelocityRotationsPerSecond) {
     this(
         new State(shoulderAngle.getRotations(), 0),
+        shoulderManual,
         rollerVelocityRotationsPerSecond,
         flywheelVelocityRotationsPerSecond,
         rampFlywheelVelocity,
@@ -208,6 +220,7 @@ public record SuperstructureState(
 
     return new SuperstructureState(
         nextShoulderSetpoint,
+        goal.shoulderManual(),
         goal.rollerVelocityRotationsPerSecond(),
         nextFlywheelVelocitySetpoint,
         goal.rampFlywheelVelocity(),

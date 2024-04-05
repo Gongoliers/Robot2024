@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
@@ -86,6 +87,8 @@ public class RobotContainer {
     operatorController.x().onTrue(superstructure.stow());
 
     operatorController.povUp().onTrue(superstructure.eject());
+
+    operatorController.y().whileTrue(superstructure.manualControl().andThen(arm.setVoltage(() -> 3 * -operatorController.getLeftY()))).onFalse(Commands.runOnce(() -> superstructure.setSetpoint(superstructure.getState())));
   }
 
   /**
