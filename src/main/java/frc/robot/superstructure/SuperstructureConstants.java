@@ -20,7 +20,7 @@ public class SuperstructureConstants {
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(3.0);
 
     /** Maximum speed of the shoulder joint in rotations per second. */
-    public static final double MAXIMUM_SPEED = Units.degreesToRotations(30.0);
+    public static final double MAXIMUM_SPEED = Units.degreesToRotations(60.0);
 
     /** Maximum acceleration of the shoulder joint in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
