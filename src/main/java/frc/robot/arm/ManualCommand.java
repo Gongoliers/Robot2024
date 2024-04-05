@@ -21,7 +21,7 @@ public class ManualCommand extends Command {
 
     @Override
     public void execute() {
-        double voltageScalar = 4.0;
+        double voltageScalar = 6.0;
 
         double volts = -joystick.getAsDouble() * voltageScalar;
 
