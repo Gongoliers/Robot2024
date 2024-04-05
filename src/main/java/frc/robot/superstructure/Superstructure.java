@@ -176,7 +176,7 @@ public class Superstructure extends Subsystem {
 
   private Command to(SuperstructureState goal) {
     // return new ToGoal(goal);
-    return runOnce(() -> setGoal(goal));
+    return run(() -> setGoal(goal)).until(() -> at(goal));
   }
 
   public Command stow() {
