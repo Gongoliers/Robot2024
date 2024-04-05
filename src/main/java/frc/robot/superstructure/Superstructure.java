@@ -175,8 +175,7 @@ public class Superstructure extends Subsystem {
   }
 
   private Command to(SuperstructureState goal) {
-    // return new ToGoal(goal);
-    return run(() -> setGoal(goal)).until(() -> at(goal));
+    return run(() -> setGoal(goal)).until(() -> at(goal)).raceWith(Commands.waitSeconds(2.0));
   }
 
   public Command stow() {
@@ -184,7 +183,7 @@ public class Superstructure extends Subsystem {
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE_POSITION).andThen(to(SuperstructureState.INTAKE));
+    return to(SuperstructureState.INTAKE);
   }
 
   public Command idle() {
