@@ -77,7 +77,7 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.y().onTrue(odometry.tare());
 
-    operatorController.leftBumper().onTrue(superstructure.stow());
+    operatorController.leftBumper().onTrue(superstructure.eject());
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
     operatorController.rightBumper().onTrue(superstructure.pass());
@@ -86,8 +86,6 @@ public class RobotContainer {
     // operatorController.a().onTrue(superstructure.ampPosition());
     // operatorController.b().onTrue(superstructure.ampShoot());
     operatorController.x().onTrue(superstructure.stow());
-
-    operatorController.povUp().onTrue(superstructure.eject());
 
     operatorController.y().whileTrue(superstructure.manualControl().andThen(new ManualCommand(operatorController::getLeftY))).onFalse(Commands.runOnce(() -> superstructure.setSetpoint(superstructure.getState())));
   }

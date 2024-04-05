@@ -39,6 +39,8 @@ public record SuperstructureState(
 
   public static final SuperstructureState PULL = new SuperstructureState(ShoulderAngleConstants.STOW, false, 0, 0, false, SerializerConstants.PULL_VELOCITY);
 
+  public static final SuperstructureState EJECT_POSITION = new SuperstructureState(ShoulderAngleConstants.EJECT, false, 0, 0, false, 0);
+
   public static final SuperstructureState EJECT = new SuperstructureState(ShoulderAngleConstants.EJECT, false, 0, 0, false, SerializerConstants.PULL_VELOCITY);
 
   public static final SuperstructureState SPEAKER_SPIN =

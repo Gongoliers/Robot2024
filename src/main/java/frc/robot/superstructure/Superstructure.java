@@ -211,7 +211,7 @@ public class Superstructure extends Subsystem {
   }
   
   public Command eject() {
-    return to(SuperstructureState.EJECT);
+    return to(SuperstructureState.EJECT_POSITION).andThen(to(SuperstructureState.EJECT));
   }
 
   public Command manualControl() {
