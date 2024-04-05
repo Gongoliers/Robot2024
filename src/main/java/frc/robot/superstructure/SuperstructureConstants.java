@@ -8,16 +8,18 @@ import frc.lib.MotionProfileCalculator;
 public class SuperstructureConstants {
 
   public static class ShoulderAngleConstants {
-    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(-27.07);
+    public static final Rotation2d INITIAL = Rotation2d.fromDegrees(-26.45);
 
-    public static final Rotation2d STOW = Rotation2d.fromDegrees(-27.07);
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(-26.45);
+
+    public static final Rotation2d SHOOT = Rotation2d.fromDegrees(-15);
 
     public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
 
     public static final Rotation2d AMP = Rotation2d.fromDegrees(90);
 
     /** Tolerance of the shoulder joint. */
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(1.0);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(2.0);
 
     /** Maximum speed of the shoulder joint in rotations per second. */
     public static final double MAXIMUM_SPEED = Units.degreesToRotations(60.0);

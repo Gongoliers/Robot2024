@@ -43,11 +43,11 @@ public record SuperstructureState(
 
   public static final SuperstructureState SPEAKER_SPIN =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW, false, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
+          ShoulderAngleConstants.SHOOT, false, 0, FlywheelConstants.SPEAKER_VELOCITY, true, 0);
 
   public static final SuperstructureState SPEAKER_SHOOT =
       new SuperstructureState(
-          ShoulderAngleConstants.STOW,
+          ShoulderAngleConstants.SHOOT,
           false,
           0,
           FlywheelConstants.SPEAKER_VELOCITY,

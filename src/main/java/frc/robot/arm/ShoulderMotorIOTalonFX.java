@@ -11,7 +11,6 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.lib.Configurator;
-import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
 
 /** Shoulder motor using a TalonFX. */
 public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
@@ -33,9 +32,9 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoder = new CANcoder(52);
 
-    feedback = new PIDController(0.5, 0, 0);
+    feedback = new PIDController(20, 0, 0);
 
-    feedforward = new ArmFeedforward(0.14, 0.3, 3.75);
+    feedforward = new ArmFeedforward(0.14, 0.45, 4.0);
     // feedforward = new ArmFeedforward(0.14, 0, 0);
   }
 
@@ -60,7 +59,7 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
-    cancoderConfig.MagnetSensor.MagnetOffset = Units.degreesToRotations(-146.77) + ShoulderAngleConstants.STOW.getRotations();
+    cancoderConfig.MagnetSensor.MagnetOffset = Units.degreesToRotations(-146.77) + Units.degreesToRotations(-27.07);
 
     Configurator.configureCANcoder(cancoder.getConfigurator(), cancoderConfig);
   }
