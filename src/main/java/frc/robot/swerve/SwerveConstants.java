@@ -67,28 +67,28 @@ public class SwerveConstants {
       new SwerveModuleConfig(
           new SwerveModuleCAN(16, 8, 24, SWERVE_BUS),
           new Translation2d(X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.079834));
+          Rotation2d.fromRotations(-0.083252));
 
   /** Module configuration for the north east swerve module. */
   public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(18, 16, 30, SWERVE_BUS),
           new Translation2d(X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.184082));
+          Rotation2d.fromRotations(0.184326));
 
   /** Module configuration for the south east swerve module. */
   public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(22,12, 26, SWERVE_BUS),
           new Translation2d(-X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.273438));
+          Rotation2d.fromRotations(0.264893));
 
   /** Module configuration for the south west swerve module. */
   public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(20, 10, 28, SWERVE_BUS),
           new Translation2d(-X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(0.207275));
+          Rotation2d.fromRotations(0.216797));
 
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
