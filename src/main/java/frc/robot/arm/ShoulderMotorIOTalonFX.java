@@ -33,7 +33,7 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoder = new CANcoder(52);
 
-    feedback = new PIDController(0.3, 0, 0);
+    feedback = new PIDController(0.5, 0, 0);
 
     feedforward = new ArmFeedforward(0.14, 0.3, 3.75);
     // feedforward = new ArmFeedforward(0.14, 0, 0);
