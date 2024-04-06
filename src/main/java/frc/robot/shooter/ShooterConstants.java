@@ -12,7 +12,7 @@ public class ShooterConstants {
     public static final double INTAKE_VELOCITY = 34;
 
     /** Velocity to apply while pulling in rotations per second. */
-    public static final double PULL_VELOCITY = -5;
+    public static final double PULL_VELOCITY = -20;
 
     /** Velocity to apply while serializing in rotations per second. */
     public static final double SERIALIZE_VELOCITY = 20;
