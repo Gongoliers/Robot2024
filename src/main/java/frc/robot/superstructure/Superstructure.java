@@ -175,7 +175,7 @@ public class Superstructure extends Subsystem {
   }
 
   private Command to(SuperstructureState goal) {
-    return run(() -> setGoal(goal)).until(() -> at(goal)).raceWith(Commands.waitSeconds(2.0));
+    return run(() -> setGoal(goal)).until(() -> at(goal)).raceWith(Commands.waitSeconds(1.0));
   }
 
   public Command stow() {

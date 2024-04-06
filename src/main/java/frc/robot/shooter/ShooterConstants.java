@@ -39,7 +39,7 @@ public class ShooterConstants {
     public static final double MAXIMUM_SPEED = 46.711;
 
     /** Maximum acceleration in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION = MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.5);
+    public static final double MAXIMUM_ACCELERATION = MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
 
     /** Acceleration limiter. */
     public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MAXIMUM_ACCELERATION);
