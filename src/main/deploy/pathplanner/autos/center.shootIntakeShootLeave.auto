@@ -2,19 +2,37 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 6.63
+      "x": 1.3633965729469937,
+      "y": 5.555088802485298
     },
-    "rotation": 60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center.toNearest"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center.toSubwoofer"
           }
         },
         {
@@ -32,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp.leave"
+            "pathName": "center.leave"
           }
         }
       ]

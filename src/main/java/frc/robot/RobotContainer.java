@@ -1,11 +1,12 @@
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
+import frc.robot.arm.ManualCommand;
 import frc.robot.auto.Auto;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
@@ -76,18 +77,17 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.y().onTrue(odometry.tare());
 
-    operatorController.leftBumper().onTrue(superstructure.stow());
+    operatorController.leftBumper().onTrue(superstructure.eject());
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
-    operatorController.rightBumper().onTrue(superstructure.idle());
+    operatorController.rightBumper().onTrue(superstructure.pass());
     operatorController.rightTrigger().onTrue(superstructure.shoot());
 
-    operatorController.a().onTrue(superstructure.ampPosition());
-    operatorController.b().onTrue(superstructure.ampShoot());
+    // operatorController.a().onTrue(superstructure.ampPosition());
+    // operatorController.b().onTrue(superstructure.ampShoot());
     operatorController.x().onTrue(superstructure.stow());
-    operatorController.y().whileTrue(arm.setVoltage(() -> 3 * MathUtil.applyDeadband(-operatorController.getLeftY(), 0.1)));
 
-    operatorController.povUp().onTrue(superstructure.eject());
+    operatorController.y().whileTrue(superstructure.manualControl().andThen(new ManualCommand(operatorController::getLeftY))).onFalse(Commands.runOnce(() -> superstructure.setSetpoint(superstructure.getState())));
   }
 
   /**

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 4.39
+      "x": 0.8,
+      "y": 6.63
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,56 +14,50 @@
         {
           "type": "named",
           "data": {
-            "name": "home"
+            "name": "shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "readyShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootNote"
+            "name": "intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "stage.toNearest"
+            "pathName": "amp.toNearest"
           }
         },
         {
-          "type": "race",
+          "type": "path",
+          "data": {
+            "pathName": "amp.toSubwoofer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "intakeNote"
+                  "name": "intake"
                 }
               },
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 2.0
+                  "pathName": "amp.race"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "stage.toSubwoofer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootNote"
           }
         }
       ]

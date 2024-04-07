@@ -7,7 +7,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -33,9 +32,10 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoder = new CANcoder(52);
 
-    feedback = new PIDController(0, 0, 0);
+    feedback = new PIDController(20, 0, 0);
 
-    feedforward = new ArmFeedforward(0.14, 1.29327, 0);
+    feedforward = new ArmFeedforward(0.14, 0.45, 4.0);
+    // feedforward = new ArmFeedforward(0.14, 0, 0);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class ShoulderMotorIOTalonFX implements ShoulderMotorIO {
 
     cancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
-    cancoderConfig.MagnetSensor.MagnetOffset = Units.degreesToRotations(-114.12509);
+    cancoderConfig.MagnetSensor.MagnetOffset = Units.degreesToRotations(-146.77) + Units.degreesToRotations(-27.07);
 
     Configurator.configureCANcoder(cancoder.getConfigurator(), cancoderConfig);
   }

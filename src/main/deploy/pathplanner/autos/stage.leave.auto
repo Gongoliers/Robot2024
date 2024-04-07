@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8108477755417065,
-      "y": 4.311854008323402
+      "x": 0.62,
+      "y": 2.27
     },
-    "rotation": -57.20046872738075
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "home"
+            "name": "stow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source.backout"
           }
         }
       ]

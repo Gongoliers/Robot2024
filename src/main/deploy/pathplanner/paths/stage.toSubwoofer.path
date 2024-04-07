@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.290889197163011,
-        "y": 4.124382094918037
+        "x": 2.6263652527305066,
+        "y": 4.272386237080167
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7356097479669974,
-        "y": 3.8879977331994615
+        "x": 2.071085803534493,
+        "y": 4.036001875361592
       },
       "isLocked": false,
       "linkedName": "stage.nearestNote"
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "readyShoot"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

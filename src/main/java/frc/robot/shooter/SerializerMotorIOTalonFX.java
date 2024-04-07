@@ -32,7 +32,7 @@ public class SerializerMotorIOTalonFX implements SerializerMotorIO {
 
     config.Feedback.SensorToMechanismRatio = 36.0 / 16.0;
 
-    config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 

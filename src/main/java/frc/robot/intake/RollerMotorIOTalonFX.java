@@ -27,9 +27,14 @@ public class RollerMotorIOTalonFX implements RollerMotorIO {
 
     config.Feedback.SensorToMechanismRatio = 24.0 / 16.0;
 
-    config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    config.CurrentLimits.SupplyCurrentLimit = 30;
+    config.CurrentLimits.SupplyCurrentThreshold = 30;
+    config.CurrentLimits.SupplyTimeThreshold = 0.1;
+    config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     config.CurrentLimits.StatorCurrentLimit = 40;
     config.CurrentLimits.StatorCurrentLimitEnable = true;

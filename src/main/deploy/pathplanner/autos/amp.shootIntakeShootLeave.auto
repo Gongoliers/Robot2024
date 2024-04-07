@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.56
+      "x": 0.8,
+      "y": 6.63
     },
-    "rotation": 0.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,43 +14,43 @@
         {
           "type": "named",
           "data": {
-            "name": "home"
+            "name": "shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "readyShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootNote"
+            "name": "intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "center.toNearest"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeNote"
+            "pathName": "amp.toNearest"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "center.toSubwoofer"
+            "pathName": "amp.toSubwoofer"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootNote"
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp.leave"
           }
         }
       ]

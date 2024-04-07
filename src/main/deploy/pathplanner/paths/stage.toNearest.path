@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.290889197163011,
-        "y": 4.124382094918037
+        "x": 2.6263652527305066,
+        "y": 4.272386237080167
       },
       "prevControl": {
-        "x": 1.2908891971630112,
-        "y": 4.124382094918037
+        "x": 1.6263652527305066,
+        "y": 4.272386237080167
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,48 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "readyIntake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.6,
-      "command": {
-        "type": "race",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intakeNote"
-              }
-            },
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 2.0
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

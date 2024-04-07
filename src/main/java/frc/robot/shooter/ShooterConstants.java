@@ -1,6 +1,7 @@
 package frc.robot.shooter;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import frc.lib.MotionProfileCalculator;
 
 /** Constants for the shooter subsystem. */
 public class ShooterConstants {
@@ -11,7 +12,7 @@ public class ShooterConstants {
     public static final double INTAKE_VELOCITY = 34;
 
     /** Velocity to apply while pulling in rotations per second. */
-    public static final double PULL_VELOCITY = -5;
+    public static final double PULL_VELOCITY = -20;
 
     /** Velocity to apply while serializing in rotations per second. */
     public static final double SERIALIZE_VELOCITY = 20;
@@ -28,16 +29,22 @@ public class ShooterConstants {
     /** Velocity to apply while shooting into the speaker in rotations per second. */
     public static final double SPEAKER_VELOCITY = 44;
 
+    /** Velocity to apply while passing in rotations per second. */
+    public static final double PASS_VELOCITY = 12;
+
     /** Velocity to apply while shooting into the amp in rotations per second. */
     public static final double AMP_VELOCITY = 20;
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 46.711;
 
-    /** Speed tolerance in rotations per second. */
-    public static final double SPEED_TOLERANCE = 1.0;
+    /** Maximum acceleration in rotations per second per second. */
+    public static final double MAXIMUM_ACCELERATION = MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
 
     /** Acceleration limiter. */
-    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(22);
+    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MAXIMUM_ACCELERATION);
+
+    /** Speed tolerance in rotations per second. */
+    public static final double SPEED_TOLERANCE = 2.5;
   }
 }

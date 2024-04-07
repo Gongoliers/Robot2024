@@ -35,10 +35,10 @@ public class Superstructure extends Subsystem {
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
 
-    setPosition(SuperstructureState.STOW);
+    setPosition(SuperstructureState.INITIAL);
 
-    setpoint = SuperstructureState.STOW;
-    goal = SuperstructureState.STOW;
+    setpoint = SuperstructureState.INITIAL;
+    goal = SuperstructureState.INITIAL;
   }
 
   /**
@@ -126,6 +126,7 @@ public class Superstructure extends Subsystem {
     measurement =
         new SuperstructureState(
             measuredShoulderState,
+            false,
             measuredIntakeRollerVelocity,
             measuredShooterFlywheelVelocity,
             false,
@@ -140,11 +141,17 @@ public class Superstructure extends Subsystem {
     return measurement;
   }
 
+  public void setSetpoint(SuperstructureState setpoint) {
+    this.setpoint = setpoint;
+  }
+
   private void updateSetpoint() {
     setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
 
-    arm.setSetpoint(
-        setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
+    if (setpoint.shoulderManual() == false) {
+      arm.setSetpoint(
+          setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
+    }
 
     shooter.setSetpoint(
         setpoint.flywheelVelocityRotationsPerSecond(),
@@ -168,7 +175,7 @@ public class Superstructure extends Subsystem {
   }
 
   private Command to(SuperstructureState goal) {
-    return new ToGoal(goal);
+    return run(() -> setGoal(goal)).until(() -> at(goal)).raceWith(Commands.waitSeconds(1.0));
   }
 
   public Command stow() {
@@ -176,7 +183,7 @@ public class Superstructure extends Subsystem {
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE_POSITION).andThen(to(SuperstructureState.INTAKE));
+    return to(SuperstructureState.INTAKE);
   }
 
   public Command idle() {
@@ -191,6 +198,10 @@ public class Superstructure extends Subsystem {
     return pull().andThen(to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT)));
   }
 
+  public Command pass() {
+    return pull().andThen(to(SuperstructureState.PASS_SPIN).andThen(to(SuperstructureState.PASS_SHOOT)));
+  }
+
   public Command ampPosition() {
     return to(SuperstructureState.AMP_POSITION);
   }
@@ -200,6 +211,10 @@ public class Superstructure extends Subsystem {
   }
   
   public Command eject() {
-    return to(SuperstructureState.EJECT);
+    return to(SuperstructureState.EJECT_POSITION).andThen(to(SuperstructureState.EJECT));
+  }
+
+  public Command manualControl() {
+    return to(SuperstructureState.MANUAL);
   }
 }

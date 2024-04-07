@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.188780992946603,
-        "y": 7.025263281295794
+        "x": 2.672476671629519,
+        "y": 7.003080254377342
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6665891639475623,
-        "y": 7.139329047888865
+        "x": 2.1502848426304784,
+        "y": 7.117146020970414
       },
       "isLocked": false,
       "linkedName": "amp.nearestNote"
@@ -36,25 +36,7 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.2,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "readyShoot"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
