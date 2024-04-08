@@ -1,21 +1,28 @@
 package frc.robot.intake;
 
-import frc.robot.Robot;
-import frc.robot.RobotConstants;
-import frc.robot.RobotConstants.Subsystem;
+import frc.lib.CAN;
+import frc.lib.PIDFConstants;
+import frc.lib.controller.VelocityControllerIO;
+import frc.lib.controller.VelocityControllerIOTalonFXPIDF;
 
 /** Helper class for creating hardware for the intake subsystem. */
 public class IntakeFactory {
 
-  /**
-   * Creates a roller motor.
-   *
-   * @return a roller motor.
-   */
-  public static RollerMotorIO createRollerMotor() {
-    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE))
-      return new RollerMotorIOTalonFX();
+  public static VelocityControllerIO createFrontRoller() {
+    PIDFConstants pidf = new PIDFConstants();
 
-    return new RollerMotorIOSim();
+    pidf.kS = 0.13;
+    pidf.kV = 0.1683;
+
+    return new VelocityControllerIOTalonFXPIDF(new CAN(50), pidf);
+  }
+
+  public static VelocityControllerIO createBackRoller() {
+    PIDFConstants pidf = new PIDFConstants();
+
+    pidf.kS = 0.13;
+    pidf.kV = 0.1759;
+
+    return new VelocityControllerIOTalonFXPIDF(new CAN(40), pidf);
   }
 }

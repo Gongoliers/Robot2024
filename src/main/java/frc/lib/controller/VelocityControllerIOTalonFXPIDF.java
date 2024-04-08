@@ -33,6 +33,16 @@ public class VelocityControllerIOTalonFXPIDF extends VelocityControllerIOTalonFX
         voltage = new VoltageOut(0.0).withEnableFOC(enableFOC);
     }
 
+    /**
+     * Creates a new velocity controller using TalonFX and external PIDF.
+     * 
+     * @param can
+     * @param pidf
+     */
+    public VelocityControllerIOTalonFXPIDF(CAN can, PIDFConstants pidf) {
+        this(can, pidf, false);
+    }
+
     @Override
     public void setSetpoint(double velocityRotationsPerSecond) {
         double feedforwardVolts = feedforward.calculate(velocityRotationsPerSecond);
