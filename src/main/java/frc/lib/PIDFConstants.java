@@ -17,17 +17,17 @@ public class PIDFConstants {
   /** Feedback controller position tolerance. */
   public double kPositionTolerance = 0.0;
 
-  /** Feedback controller velocity constraint. */
-  public double kVelocityConstraint = 0.0;
-
-  /** Feedback controller acceleration constraint. */
-  public double kAccelerationConstraint = 0.0;
+  /** Feedback controller velocity tolerance. */
+  public double kVelocityTolerance = 0.0;
 
   /** Feedforward controller static gain. */
   public double kS = 0.0;
 
   /** Feedforward controller velocity gain. */
   public double kV = 0.0;
+
+  /** Feedforward controller acceleration gain. */
+  public double kA = 0.0;
 
   /**
    * Creates a Phoenix PIDF configuration using the PIDF constants.
