@@ -1,11 +1,11 @@
 package frc.robot.shooter;
 
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
-import frc.lib.Telemetry;
-import frc.robot.shooter.FlywheelMotorIO.FlywheelMotorIOValues;
-import frc.robot.shooter.SerializerMotorIO.SerializerMotorIOValues;
+import frc.lib.controller.VelocityControllerIO;
+import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
+import frc.robot.shooter.ShooterConstants.FlywheelConstants;
+import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
 /** Subsystem class for the shooter subsystem. */
 public class Shooter extends Subsystem {
@@ -13,25 +13,27 @@ public class Shooter extends Subsystem {
   /** Instance variable for the shooter subsystem singleton. */
   private static Shooter instance = null;
 
-  /** Serializer motor. */
-  private final SerializerMotorIO serializerMotor;
+  /** Serializer. */
+  private final VelocityControllerIO serializer;
 
-  /** Serializer motor values. */
-  private final SerializerMotorIOValues serializerMotorValues = new SerializerMotorIOValues();
+  /** Serializer values. */
+  private final VelocityControllerIOValues serializerValues;
 
-  /** Flywheel motor. */
-  private final FlywheelMotorIO flywheelMotor;
+  /** Flywheel. */
+  private final VelocityControllerIO flywheel;
 
-  /** Flywheel motor values. */
-  private final FlywheelMotorIOValues flywheelMotorValues = new FlywheelMotorIOValues();
+  /** Flywheel values. */
+  private final VelocityControllerIOValues flywheelValues;
 
   /** Creates a new instance of the shooter subsystem. */
   private Shooter() {
-    serializerMotor = ShooterFactory.createSerializerMotor();
-    flywheelMotor = ShooterFactory.createFlywheelMotor();
+    serializer = ShooterFactory.createSerializerMotor();
+    serializerValues = new VelocityControllerIOValues();
+    serializer.configure(SerializerConstants.CONTROLLER_CONSTANTS);
 
-    serializerMotor.configure();
-    flywheelMotor.configure();
+    flywheel = ShooterFactory.createFlywheelMotor();
+    flywheelValues = new VelocityControllerIOValues();
+    flywheel.configure(FlywheelConstants.CONTROLLER_CONSTANTS);
   }
 
   /**
@@ -49,40 +51,27 @@ public class Shooter extends Subsystem {
 
   @Override
   public void periodic() {
-    serializerMotor.update(serializerMotorValues);
-    flywheelMotor.update(flywheelMotorValues);
+    serializer.update(serializerValues);
+    flywheel.update(flywheelValues);
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout serializer = Telemetry.addColumn(tab, "Serializer");
-
-    serializer.addDouble(
-        "Serializer Speed (rps)", () -> serializerMotorValues.velocityRotationsPerSecond);
-    serializer.addDouble("Serializer Current (A)", () -> serializerMotorValues.currentAmps);
-
-    ShuffleboardLayout flywheel = Telemetry.addColumn(tab, "Flywheel");
-
-    flywheel.addDouble(
-        "Flywheel Speed (rps)", () -> flywheelMotorValues.velocityRotationsPerSecond);
-    flywheel.addDouble("Flywheel Current (A)", () -> flywheelMotorValues.currentAmps);
+    VelocityControllerIO.addToShuffleboard(tab, "Serializer", serializerValues);
+    VelocityControllerIO.addToShuffleboard(tab, "Flywheel", flywheelValues);
   }
 
   public double getFlywheelVelocity() {
-    flywheelMotor.update(flywheelMotorValues);
-
-    return flywheelMotorValues.velocityRotationsPerSecond;
+    return flywheelValues.velocityRotationsPerSecond;
   }
 
   public double getSerializerVelocity() {
-    serializerMotor.update(serializerMotorValues);
-
-    return serializerMotorValues.velocityRotationsPerSecond;
+    return serializerValues.velocityRotationsPerSecond;
   }
 
   public void setSetpoint(
       double flywheelVelocityRotationsPerSecond, double serializerVelocityRotationsPerSecond) {
-    flywheelMotor.setSetpoint(flywheelVelocityRotationsPerSecond);
-    serializerMotor.setSetpoint(serializerVelocityRotationsPerSecond);
+    flywheel.setSetpoint(flywheelVelocityRotationsPerSecond);
+    serializer.setSetpoint(serializerVelocityRotationsPerSecond);
   }
 }

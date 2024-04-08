@@ -1,9 +1,7 @@
 package frc.robot.intake;
 
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
-import frc.lib.Telemetry;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 import frc.robot.intake.IntakeConstants.BackRollerConstants;
@@ -53,16 +51,8 @@ public class Intake extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    initializeRollerShuffleboard(tab, "Front Roller", frontRollerValues);
-    initializeRollerShuffleboard(tab, "Back Roller", backRollerValues);
-  }
-
-  public void initializeRollerShuffleboard(ShuffleboardTab tab, String name, VelocityControllerIOValues values) {
-    ShuffleboardLayout roller = Telemetry.addColumn(tab, name);
-
-    roller.addDouble("Velocity (rps)", () -> values.velocityRotationsPerSecond);
-    roller.addDouble("Voltage (V)", () -> values.motorVolts);
-    roller.addDouble("Current (A)", () -> values.motorAmps);
+    VelocityControllerIO.addToShuffleboard(tab, "Front Roller", frontRollerValues);
+    VelocityControllerIO.addToShuffleboard(tab, "Back Roller", backRollerValues);
   }
 
   public double getRollerVelocity() {
