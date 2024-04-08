@@ -57,7 +57,7 @@ public class Intake extends Subsystem {
   }
 
   public void initializeRollerShuffleboard(ShuffleboardTab tab, String name, VelocityControllerIOValues values) {
-    ShuffleboardLayout roller = Telemetry.addColumn(tab, "Front Roller");
+    ShuffleboardLayout roller = Telemetry.addColumn(tab, name);
 
     roller.addDouble("Velocity (rps)", () -> values.velocityRotationsPerSecond);
     roller.addDouble("Voltage (V)", () -> values.motorVolts);

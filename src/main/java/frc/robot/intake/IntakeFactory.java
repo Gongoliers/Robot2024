@@ -1,28 +1,30 @@
 package frc.robot.intake;
 
-import frc.lib.CAN;
-import frc.lib.PIDFConstants;
 import frc.lib.controller.VelocityControllerIO;
+import frc.lib.controller.VelocityControllerIOSim;
 import frc.lib.controller.VelocityControllerIOTalonFXPIDF;
+import frc.robot.Robot;
+import frc.robot.RobotConstants;
+import frc.robot.RobotConstants.Subsystem;
+import frc.robot.intake.IntakeConstants.BackRollerConstants;
+import frc.robot.intake.IntakeConstants.FrontRollerConstants;
 
 /** Helper class for creating hardware for the intake subsystem. */
 public class IntakeFactory {
 
   public static VelocityControllerIO createFrontRoller() {
-    PIDFConstants pidf = new PIDFConstants();
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE)) {
+      return new VelocityControllerIOTalonFXPIDF(FrontRollerConstants.CAN, FrontRollerConstants.PIDF);
+    }
 
-    pidf.kS = 0.13;
-    pidf.kV = 0.1683;
-
-    return new VelocityControllerIOTalonFXPIDF(new CAN(50), pidf);
+    return new VelocityControllerIOSim();
   }
 
   public static VelocityControllerIO createBackRoller() {
-    PIDFConstants pidf = new PIDFConstants();
+    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE)) {
+      return new VelocityControllerIOTalonFXPIDF(BackRollerConstants.CAN, BackRollerConstants.PIDF);
+    }
 
-    pidf.kS = 0.13;
-    pidf.kV = 0.1759;
-
-    return new VelocityControllerIOTalonFXPIDF(new CAN(40), pidf);
+    return new VelocityControllerIOSim();
   }
 }
