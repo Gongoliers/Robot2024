@@ -2,6 +2,7 @@ package frc.robot.intake;
 
 import frc.lib.CAN;
 import frc.lib.PIDFConstants;
+import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
@@ -16,6 +17,14 @@ public class IntakeConstants {
       PIDF.kS = 0.13;
       PIDF.kV = 0.1683;
     }
+
+    /** Front roller's controller constants. */
+    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS = new VelocityControllerIOConstants();
+    static {
+      CONTROLLER_CONSTANTS.ccwPositive = false;
+      CONTROLLER_CONSTANTS.neutralBrake = true;
+      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
+    }
   }
 
   /** Constants for the back roller. */
@@ -28,6 +37,14 @@ public class IntakeConstants {
     static {
       PIDF.kS = 0.13;
       PIDF.kV = 0.1759;
+    }
+
+    /** Back roller's controller constants. */
+    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS = new VelocityControllerIOConstants();
+    static {
+      CONTROLLER_CONSTANTS.ccwPositive = false;
+      CONTROLLER_CONSTANTS.neutralBrake = true;
+      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
     }
   }
 

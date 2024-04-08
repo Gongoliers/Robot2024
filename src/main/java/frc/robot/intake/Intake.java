@@ -5,8 +5,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.lib.controller.VelocityControllerIO;
-import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
+import frc.robot.intake.IntakeConstants.BackRollerConstants;
+import frc.robot.intake.IntakeConstants.FrontRollerConstants;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -24,11 +25,11 @@ public class Intake extends Subsystem {
   private Intake() {
     frontRoller = IntakeFactory.createFrontRoller();
     frontRollerValues = new VelocityControllerIOValues();
-    frontRoller.configure(new VelocityControllerIOConstants());
+    frontRoller.configure(FrontRollerConstants.CONTROLLER_CONSTANTS);
 
     backRoller = IntakeFactory.createBackRoller();
     backRollerValues = new VelocityControllerIOValues();
-    backRoller.configure(new VelocityControllerIOConstants());
+    backRoller.configure(BackRollerConstants.CONTROLLER_CONSTANTS);
   }
 
   /**
