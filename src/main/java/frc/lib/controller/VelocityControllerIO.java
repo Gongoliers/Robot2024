@@ -37,6 +37,13 @@ public interface VelocityControllerIO {
         public double motorAmps = 0.0;
     }
 
+    /**
+     * Adds velocity controller values to Shuffleboard.
+     * 
+     * @param tab
+     * @param name
+     * @param values
+     */
     public static void addToShuffleboard(ShuffleboardTab tab, String name, VelocityControllerIOValues values) {
         ShuffleboardLayout velocityController = Telemetry.addColumn(tab, name);
 
