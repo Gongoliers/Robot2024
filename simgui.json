@@ -63,8 +63,7 @@
           },
           "Velocities": {
             "open": true
-          },
-          "open": true
+          }
         },
         "Climber": {
           "East": {

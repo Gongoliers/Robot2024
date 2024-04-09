@@ -1,16 +1,12 @@
 package frc.robot.arm;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderConstants;
-import frc.robot.superstructure.SuperstructureConstants;
-import frc.robot.superstructure.SuperstructureConstants.ShoulderAngleConstants;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -25,7 +21,7 @@ public class Arm extends Subsystem {
   private final PositionControllerIOValues shoulderValues;
 
   /** Arm goal. */
-  private State setpoint, goal;
+  private ArmState setpoint, goal;
 
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
@@ -33,9 +29,9 @@ public class Arm extends Subsystem {
     shoulderValues = new PositionControllerIOValues();
     shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
 
-    setPosition(ShoulderAngleConstants.INITIAL.getRotations());
-    setpoint = new State(ShoulderAngleConstants.INITIAL.getRotations(), 0);
-    goal = new State(ShoulderAngleConstants.INITIAL.getRotations(), 0);
+    setPosition(new ArmState(ShoulderConstants.INITIAL_ANGLE));
+    setpoint = new ArmState(ShoulderConstants.INITIAL_ANGLE);
+    goal = new ArmState(ShoulderConstants.INITIAL_ANGLE);
   }
 
   /**
@@ -55,12 +51,12 @@ public class Arm extends Subsystem {
   public void periodic() {
     shoulder.update(shoulderValues);
 
-    setpoint = ShoulderAngleConstants.MOTION_PROFILE.calculate(
+    setpoint = new ArmState(ShoulderConstants.MOTION_PROFILE.calculate(
         RobotConstants.PERIODIC_DURATION,
-        setpoint,
-        goal);
+        setpoint.shoulderRotations(),
+        goal.shoulderRotations()));
 
-    shoulder.setSetpoint(setpoint.position, setpoint.velocity);
+    shoulder.setSetpoint(setpoint.shoulderRotations().position, setpoint.shoulderRotations().velocity);
   }
 
   @Override
@@ -68,23 +64,20 @@ public class Arm extends Subsystem {
     PositionControllerIO.addToShuffleboard(tab, "Shoulder", shoulderValues);
   }
 
-  public State getState() {
-    return new TrapezoidProfile.State(
-        shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond);
+  public ArmState getState() {
+    return new ArmState(new TrapezoidProfile.State(
+        shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond));
   }
 
-  public void setGoal(State goal) {
+  public void setGoal(ArmState goal) {
     this.goal = goal;
   }
 
   public boolean atGoal() {
-    return MathUtil.isNear(
-        getState().position,
-        goal.position,
-        SuperstructureConstants.ShoulderAngleConstants.TOLERANCE.getRotations());
+    return getState().at(goal);
   }
 
-  public void setPosition(double positionRotations) {
-    shoulder.setPosition(positionRotations);
+  public void setPosition(ArmState armState) {
+    shoulder.setPosition(armState.shoulderRotations().position);
   }
 }

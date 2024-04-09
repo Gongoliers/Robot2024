@@ -1,13 +1,11 @@
 package frc.robot.intake;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 import frc.robot.intake.IntakeConstants.BackRollerConstants;
 import frc.robot.intake.IntakeConstants.FrontRollerConstants;
-import frc.robot.intake.IntakeConstants.RollerConstants;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -21,7 +19,7 @@ public class Intake extends Subsystem {
   /** Roller values. */
   private final VelocityControllerIOValues frontRollerValues, backRollerValues;
 
-  private double rollerGoal;
+  private IntakeState setpoint, goal;
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
@@ -32,6 +30,9 @@ public class Intake extends Subsystem {
     backRoller = IntakeFactory.createBackRoller();
     backRollerValues = new VelocityControllerIOValues();
     backRoller.configure(BackRollerConstants.CONTROLLER_CONSTANTS);
+
+    setpoint = new IntakeState(0, 0);
+    goal = new IntakeState(0, 0);
   }
 
   /**
@@ -52,8 +53,10 @@ public class Intake extends Subsystem {
     frontRoller.update(frontRollerValues);
     backRoller.update(backRollerValues);
 
-    frontRoller.setSetpoint(rollerGoal);
-    backRoller.setSetpoint(rollerGoal);
+    setpoint = goal;
+
+    frontRoller.setSetpoint(setpoint.frontRollerVelocityRotationsPerSecond());
+    backRoller.setSetpoint(setpoint.backRollerVelocityRotationsPerSecond());
   }
 
   @Override
@@ -62,22 +65,15 @@ public class Intake extends Subsystem {
     VelocityControllerIO.addToShuffleboard(tab, "Back Roller", backRollerValues);
   }
 
-  public double getRollerVelocity() {
-    return (frontRollerValues.velocityRotationsPerSecond + backRollerValues.velocityRotationsPerSecond) / 2;
+  public IntakeState getState() {
+    return new IntakeState(frontRollerValues.velocityRotationsPerSecond, backRollerValues.velocityRotationsPerSecond);
   }
 
-  public void setGoal(double rollerVelocityRotationsPerSecond) {
-    this.rollerGoal = rollerVelocityRotationsPerSecond;
+  public void setGoal(IntakeState goal) {
+    this.goal = goal;
   }
 
   public boolean atGoal() {
-    return MathUtil.isNear(
-        frontRollerValues.velocityRotationsPerSecond,
-        rollerGoal,
-        RollerConstants.SPEED_TOLERANCE)
-    && MathUtil.isNear(
-        backRollerValues.velocityRotationsPerSecond,
-        rollerGoal,
-        RollerConstants.SPEED_TOLERANCE);
+    return getState().at(goal);
   }
 }

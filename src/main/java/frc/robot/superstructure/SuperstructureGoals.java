@@ -7,21 +7,17 @@ public class SuperstructureGoals {
 
   private final Queue<SuperstructureState> goals;
 
-  public static Queue<SuperstructureState> generate(
+  public static SuperstructureGoals generate(
       SuperstructureState start, SuperstructureState end) {
     Queue<SuperstructureState> goals = new LinkedList<SuperstructureState>();
 
     goals.add(end);
 
-    return goals;
+    return new SuperstructureGoals(goals);
   }
 
   public SuperstructureGoals(Queue<SuperstructureState> goals) {
     this.goals = goals;
-  }
-
-  public SuperstructureGoals(SuperstructureState start, SuperstructureState end) {
-    this(generate(start, end));
   }
 
   public SuperstructureState get() {

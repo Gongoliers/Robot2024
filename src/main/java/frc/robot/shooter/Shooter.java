@@ -1,6 +1,5 @@
 package frc.robot.shooter;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.controller.VelocityControllerIO;
@@ -26,7 +25,7 @@ public class Shooter extends Subsystem {
   /** Flywheel values. */
   private final VelocityControllerIOValues flywheelValues;
 
-  private double serializerGoal, flywheelGoal;
+  private ShooterState setpoint, goal;
 
   /** Creates a new instance of the shooter subsystem. */
   private Shooter() {
@@ -37,6 +36,9 @@ public class Shooter extends Subsystem {
     flywheel = ShooterFactory.createFlywheel();
     flywheelValues = new VelocityControllerIOValues();
     flywheel.configure(FlywheelConstants.CONTROLLER_CONSTANTS);
+
+    setpoint = new ShooterState(0, 0);
+    goal = new ShooterState(0, 0);
   }
 
   /**
@@ -57,8 +59,10 @@ public class Shooter extends Subsystem {
     serializer.update(serializerValues);
     flywheel.update(flywheelValues);
 
-    flywheel.setSetpoint(flywheelGoal);
-    serializer.setSetpoint(serializerGoal);
+    setpoint = goal;
+
+    flywheel.setSetpoint(setpoint.flywheelVelocityRotationsPerSecond());
+    serializer.setSetpoint(setpoint.serializerVelocityRotationsPerSecond());
   }
 
   @Override
@@ -67,28 +71,16 @@ public class Shooter extends Subsystem {
     VelocityControllerIO.addToShuffleboard(tab, "Flywheel", flywheelValues);
   }
 
-  public double getFlywheelVelocity() {
-    return flywheelValues.velocityRotationsPerSecond;
+  public ShooterState getState() {
+    return new ShooterState(flywheelValues.velocityRotationsPerSecond, serializerValues.velocityRotationsPerSecond);
   }
 
-  public double getSerializerVelocity() {
-    return serializerValues.velocityRotationsPerSecond;
-  }
-
-  public void setGoal(
-      double flywheelVelocityRotationsPerSecond, double serializerVelocityRotationsPerSecond) {
-        this.flywheelGoal = flywheelVelocityRotationsPerSecond;
-        this.serializerGoal = serializerVelocityRotationsPerSecond;
+  public void setGoal(ShooterState goal)  {
+    this.goal = goal;
   }
 
   public boolean atGoal() {
-    return MathUtil.isNear(
-        getFlywheelVelocity(),
-        flywheelGoal,
-        FlywheelConstants.SPEED_TOLERANCE) && 
-    MathUtil.isNear(
-        getSerializerVelocity(),
-        serializerGoal,
-        FlywheelConstants.SPEED_TOLERANCE);
+    return getState().at(goal);
   }
+
 }

@@ -132,7 +132,7 @@ public class SuperstructureMechanism {
   }
 
   public void updateSuperstructure(SuperstructureState state) {
-    Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulderRotations().position);
+    Rotation2d shoulderRotation = Rotation2d.fromRotations(state.armState().shoulderRotations().position);
 
     Rotation2d offsetShoulderRotation = shoulderRotation.minus(Rotation2d.fromDegrees(90));
 
@@ -141,21 +141,23 @@ public class SuperstructureMechanism {
     flywheel.setColor(
         new Color8Bit(
             FLYWHEEL_COLOR.sample(
-                Math.abs(state.flywheelVelocityRotationsPerSecond()),
+                Math.abs(state.shooterState().flywheelVelocityRotationsPerSecond()),
                 0,
                 FlywheelConstants.MAXIMUM_SPEED)));
 
     serializer.setColor(
         new Color8Bit(
             SERIALIZER_COLOR.sample(
-                Math.abs(state.serializerVelocityRotationsPerSecond()),
+                Math.abs(state.shooterState().serializerVelocityRotationsPerSecond()),
                 0,
                 SerializerConstants.MAXIMUM_SPEED)));
+
+    double averageRollerVelocity = (state.intakeState().frontRollerVelocityRotationsPerSecond() + state.intakeState().backRollerVelocityRotationsPerSecond()) / 2;
 
     rollers.setColor(
         new Color8Bit(
             ROLLERS_COLOR.sample(
-                Math.abs(state.rollerVelocityRotationsPerSecond()),
+                Math.abs(averageRollerVelocity),
                 0,
                 RollerConstants.MAXIMUM_SPEED)));
   }

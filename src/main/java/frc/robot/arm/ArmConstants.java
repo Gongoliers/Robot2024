@@ -1,13 +1,15 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
+import frc.lib.MotionProfileCalculator;
 import frc.lib.PIDFConstants;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOConstants;
 
 /** Constants for the arm subsystem. */
 public class ArmConstants {
-
     /** Constants for the shoulder. */
     public static class ShoulderConstants {
         /** Shoulder's leader CAN. */
@@ -36,6 +38,32 @@ public class ArmConstants {
             CONTROLLER_CONSTANTS.sensorToMechanismRatio = 39.771428571;
             CONTROLLER_CONSTANTS.absoluteEncoderOffsetRotations = Units.degreesToRotations(-146.77) + Units.degreesToRotations(-27.07);
         }
-    }
 
+        public static final Rotation2d INITIAL_ANGLE = Rotation2d.fromDegrees(-26.45);
+
+        public static final Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-26.45);
+
+        public static final Rotation2d SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
+
+        public static final Rotation2d EJECT_ANGLE = Rotation2d.fromDegrees(0);
+
+        public static final Rotation2d AMP_ANGLE = Rotation2d.fromDegrees(90);
+
+        /** Tolerance of the shoulder. */
+        public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(2.0);
+
+        /** Maximum speed of the shoulder in rotations per second. */
+        public static final double MAXIMUM_SPEED = Units.degreesToRotations(60.0);
+
+        /** Maximum acceleration of the shoulder in rotations per second per second. */
+        public static final double MAXIMUM_ACCELERATION =
+            MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
+
+        /** Maximum speed and acceleration of the shoulder . */
+        public static final TrapezoidProfile.Constraints CONSTRAINTS =
+            new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
+
+        /** Motion profile of the shoulder. */
+        public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
+    }
 }
