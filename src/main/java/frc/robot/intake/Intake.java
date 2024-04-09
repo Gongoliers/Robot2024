@@ -1,11 +1,13 @@
 package frc.robot.intake;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 import frc.robot.intake.IntakeConstants.BackRollerConstants;
 import frc.robot.intake.IntakeConstants.FrontRollerConstants;
+import frc.robot.intake.IntakeConstants.RollerConstants;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -18,6 +20,8 @@ public class Intake extends Subsystem {
 
   /** Roller values. */
   private final VelocityControllerIOValues frontRollerValues, backRollerValues;
+
+  private double rollerGoal;
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
@@ -47,6 +51,9 @@ public class Intake extends Subsystem {
   public void periodic() {
     frontRoller.update(frontRollerValues);
     backRoller.update(backRollerValues);
+
+    frontRoller.setSetpoint(rollerGoal);
+    backRoller.setSetpoint(rollerGoal);
   }
 
   @Override
@@ -59,8 +66,18 @@ public class Intake extends Subsystem {
     return (frontRollerValues.velocityRotationsPerSecond + backRollerValues.velocityRotationsPerSecond) / 2;
   }
 
-  public void setSetpoint(double rollerVelocityRotationsPerSecond) {
-    frontRoller.setSetpoint(rollerVelocityRotationsPerSecond);
-    backRoller.setSetpoint(rollerVelocityRotationsPerSecond);
+  public void setGoal(double rollerVelocityRotationsPerSecond) {
+    this.rollerGoal = rollerVelocityRotationsPerSecond;
+  }
+
+  public boolean atGoal() {
+    return MathUtil.isNear(
+        frontRollerValues.velocityRotationsPerSecond,
+        rollerGoal,
+        RollerConstants.SPEED_TOLERANCE)
+    && MathUtil.isNear(
+        backRollerValues.velocityRotationsPerSecond,
+        rollerGoal,
+        RollerConstants.SPEED_TOLERANCE);
   }
 }

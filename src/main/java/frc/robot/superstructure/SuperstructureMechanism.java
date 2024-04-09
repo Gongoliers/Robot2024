@@ -132,7 +132,7 @@ public class SuperstructureMechanism {
   }
 
   public void updateSuperstructure(SuperstructureState state) {
-    Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulderAngleRotations().position);
+    Rotation2d shoulderRotation = Rotation2d.fromRotations(state.shoulderRotations().position);
 
     Rotation2d offsetShoulderRotation = shoulderRotation.minus(Rotation2d.fromDegrees(90));
 

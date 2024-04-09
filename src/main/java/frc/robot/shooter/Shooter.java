@@ -1,5 +1,6 @@
 package frc.robot.shooter;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.controller.VelocityControllerIO;
@@ -24,6 +25,8 @@ public class Shooter extends Subsystem {
 
   /** Flywheel values. */
   private final VelocityControllerIOValues flywheelValues;
+
+  private double serializerGoal, flywheelGoal;
 
   /** Creates a new instance of the shooter subsystem. */
   private Shooter() {
@@ -53,6 +56,9 @@ public class Shooter extends Subsystem {
   public void periodic() {
     serializer.update(serializerValues);
     flywheel.update(flywheelValues);
+
+    flywheel.setSetpoint(flywheelGoal);
+    serializer.setSetpoint(serializerGoal);
   }
 
   @Override
@@ -69,9 +75,20 @@ public class Shooter extends Subsystem {
     return serializerValues.velocityRotationsPerSecond;
   }
 
-  public void setSetpoint(
+  public void setGoal(
       double flywheelVelocityRotationsPerSecond, double serializerVelocityRotationsPerSecond) {
-    flywheel.setSetpoint(flywheelVelocityRotationsPerSecond);
-    serializer.setSetpoint(serializerVelocityRotationsPerSecond);
+        this.flywheelGoal = flywheelVelocityRotationsPerSecond;
+        this.serializerGoal = serializerVelocityRotationsPerSecond;
+  }
+
+  public boolean atGoal() {
+    return MathUtil.isNear(
+        getFlywheelVelocity(),
+        flywheelGoal,
+        FlywheelConstants.SPEED_TOLERANCE) && 
+    MathUtil.isNear(
+        getSerializerVelocity(),
+        serializerGoal,
+        FlywheelConstants.SPEED_TOLERANCE);
   }
 }

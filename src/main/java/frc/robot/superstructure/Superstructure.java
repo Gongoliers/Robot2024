@@ -27,7 +27,7 @@ public class Superstructure extends Subsystem {
   /** Reference to the shooter subsystem. */
   private final Shooter shooter;
 
-  private SuperstructureState measurement, setpoint, goal;
+  private SuperstructureState measurement, goal;
 
   /** Creates a new instance of the superstructure subsystem. */
   private Superstructure() {
@@ -37,7 +37,6 @@ public class Superstructure extends Subsystem {
 
     setPosition(SuperstructureState.INITIAL);
 
-    setpoint = SuperstructureState.INITIAL;
     goal = SuperstructureState.INITIAL;
   }
 
@@ -57,7 +56,6 @@ public class Superstructure extends Subsystem {
   @Override
   public void periodic() {
     updateMeasurement();
-    updateSetpoint();
   }
 
   @Override
@@ -66,10 +64,10 @@ public class Superstructure extends Subsystem {
 
     measurement.addDouble(
         "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(this.measurement.shoulderAngleRotations().position));
+        () -> Units.rotationsToDegrees(this.measurement.shoulderRotations().position));
     measurement.addDouble(
         "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.measurement.shoulderAngleRotations().velocity));
+        () -> Units.rotationsToDegrees(this.measurement.shoulderRotations().velocity));
 
     measurement.addDouble(
         "Roller Velocity (rps)", () -> this.measurement.rollerVelocityRotationsPerSecond());
@@ -80,32 +78,14 @@ public class Superstructure extends Subsystem {
     measurement.addDouble(
         "Serializer Velocity (rps)", () -> this.measurement.serializerVelocityRotationsPerSecond());
 
-    ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
-
-    setpoint.addDouble(
-        "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().position));
-    setpoint.addDouble(
-        "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().velocity));
-
-    setpoint.addDouble(
-        "Roller Velocity (rps)", () -> this.setpoint.rollerVelocityRotationsPerSecond());
-
-    setpoint.addDouble(
-        "Flywheel Velocity (rps)", () -> this.setpoint.flywheelVelocityRotationsPerSecond());
-
-    setpoint.addDouble(
-        "Serializer Velocity (rps)", () -> this.setpoint.serializerVelocityRotationsPerSecond());
-
     ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
 
     goal.addDouble(
         "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().position));
+        () -> Units.rotationsToDegrees(this.goal.shoulderRotations().position));
     goal.addDouble(
         "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().velocity));
+        () -> Units.rotationsToDegrees(this.goal.shoulderRotations().velocity));
 
     goal.addDouble("Roller Velocity (rps)", () -> this.goal.rollerVelocityRotationsPerSecond());
 
@@ -116,7 +96,7 @@ public class Superstructure extends Subsystem {
   }
 
   private void updateMeasurement() {
-    State measuredShoulderState = arm.getMeasuredShoulderState();
+    State measuredShoulderState = arm.getState();
 
     double measuredIntakeRollerVelocity = intake.getRollerVelocity();
 
@@ -126,10 +106,8 @@ public class Superstructure extends Subsystem {
     measurement =
         new SuperstructureState(
             measuredShoulderState,
-            false,
             measuredIntakeRollerVelocity,
             measuredShooterFlywheelVelocity,
-            false,
             measuredShooterSerializerVelocity);
 
     SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
@@ -141,31 +119,20 @@ public class Superstructure extends Subsystem {
     return measurement;
   }
 
-  public void setSetpoint(SuperstructureState setpoint) {
-    this.setpoint = setpoint;
-  }
-
-  private void updateSetpoint() {
-    setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
-
-    if (setpoint.shoulderManual() == false) {
-      arm.setSetpoint(
-          setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
-    }
-
-    shooter.setSetpoint(
-        setpoint.flywheelVelocityRotationsPerSecond(),
-        setpoint.serializerVelocityRotationsPerSecond());
-
-    intake.setSetpoint(setpoint.rollerVelocityRotationsPerSecond());
-  }
-
   public void setPosition(SuperstructureState state) {
-    arm.setShoulderPosition(state.shoulderAngleRotations().position);
+    arm.setPosition(state.shoulderRotations().position);
   }
 
   public void setGoal(SuperstructureState goal) {
     this.goal = goal;
+
+    arm.setGoal(goal.shoulderRotations());
+
+    shooter.setGoal(
+        goal.flywheelVelocityRotationsPerSecond(),
+        goal.serializerVelocityRotationsPerSecond());
+
+    intake.setGoal(goal.rollerVelocityRotationsPerSecond());
   }
 
   public boolean at(SuperstructureState goal) {
@@ -186,16 +153,12 @@ public class Superstructure extends Subsystem {
     return to(SuperstructureState.INTAKE);
   }
 
-  public Command idle() {
-    return to(SuperstructureState.SPEAKER_SPIN);
-  }
-
   public Command pull() {
     return Commands.deadline(Commands.waitSeconds(0.15), to(SuperstructureState.PULL));
   }
 
   public Command shoot() {
-    return pull().andThen(to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT)));
+    return pull().andThen(to(SuperstructureState.SPEAKER_SHOOT));
   }
 
   public Command pass() {
@@ -212,9 +175,5 @@ public class Superstructure extends Subsystem {
   
   public Command eject() {
     return to(SuperstructureState.EJECT_POSITION).andThen(to(SuperstructureState.EJECT));
-  }
-
-  public Command manualControl() {
-    return to(SuperstructureState.MANUAL);
   }
 }

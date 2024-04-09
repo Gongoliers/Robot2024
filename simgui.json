@@ -103,6 +103,7 @@
           "Measurement": {
             "open": true
           },
+          "open": true,
           "setpoint": {
             "open": true
           }
