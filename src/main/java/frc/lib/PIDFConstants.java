@@ -23,6 +23,9 @@ public class PIDFConstants {
   /** Feedforward controller static gain. */
   public double kS = 0.0;
 
+  /** Feedforward controller gravity gain. */
+  public double kG = 0.0;
+
   /** Feedforward controller velocity gain. */
   public double kV = 0.0;
 
@@ -41,7 +44,9 @@ public class PIDFConstants {
     slot0Configs.kI = kI;
     slot0Configs.kD = kD;
     slot0Configs.kS = kS;
+    slot0Configs.kG = kG;
     slot0Configs.kV = kV;
+    slot0Configs.kA = kA;
 
     return slot0Configs;
   }

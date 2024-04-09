@@ -18,8 +18,11 @@ public interface PositionControllerIO {
         /** Maximum amount of current, in amps, to provide to the motor. */
         public double currentLimitAmps = 40.0;
 
-        /** Ratio between the velocity sensor and the controlled mechanism. */
+        /** Ratio between the position sensor and the controlled mechanism. */
         public double sensorToMechanismRatio = 1.0;
+
+        /** Offset between absolute encoder reading and controlled mechanism position in rotations. */
+        public double absoluteEncoderOffsetRotations = 0.0;
     }
 
     /** Position controller values. */
@@ -70,6 +73,13 @@ public interface PositionControllerIO {
      * @param values
      */
     public void update(PositionControllerIOValues values);
+
+    /**
+     * Sets the mechanism position.
+     * 
+     * @param positionRotations
+     */
+    public void setPosition(double positionRotations);
 
     /**
      * Sets the position setpoint.

@@ -3,6 +3,7 @@ package frc.lib.controller;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -35,7 +36,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
     public void configure(VelocityControllerIOConstants constants) {
         BaseStatusSignal.setUpdateFrequencyForAll(100.0, velocity, acceleration, volts, amps);
 
-        motor.optimizeBusUtilization();
+        ParentDevice.optimizeBusUtilizationForAll(motor);
 
         TalonFXConfiguration config = new TalonFXConfiguration();
 
@@ -65,7 +66,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
         values.velocityRotationsPerSecond = velocity.getValue();
         values.accelerationRotationsPerSecondPerSecond = acceleration.getValue();
         values.motorVolts = volts.getValue();
-        values.motorAmps = volts.getValue();
+        values.motorAmps = amps.getValue();
     }
 
     @Override

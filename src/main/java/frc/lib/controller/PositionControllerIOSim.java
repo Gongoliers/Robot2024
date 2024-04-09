@@ -17,6 +17,11 @@ public class PositionControllerIOSim implements PositionControllerIO {
     }
 
     @Override
+    public void setPosition(double positionRotations) {
+        this.positionRotations = positionRotations;
+    }
+
+    @Override
     public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
         this.positionRotations = positionRotations;
         this.velocityRotationsPerSecond = velocityRotationsPerSecond;

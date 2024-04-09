@@ -2,12 +2,11 @@ package frc.robot.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
-import frc.lib.Telemetry;
-import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
+import frc.lib.controller.PositionControllerIO;
+import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
+import frc.robot.arm.ArmConstants.ShoulderConstants;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -15,17 +14,17 @@ public class Arm extends Subsystem {
   /** Instance variable for the arm subsystem singleton. */
   private static Arm instance = null;
 
-  /** Shoulder motor. */
-  private final ShoulderMotorIO shoulderMotor;
+  /** Shoulder. */
+  private final PositionControllerIO shoulder;
 
-  /** Shoulder motor values. */
-  private final ShoulderMotorIOValues shoulderMotorValues = new ShoulderMotorIOValues();
+  /** Shoulder values. */
+  private final PositionControllerIOValues shoulderValues;
 
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
-    shoulderMotor = ArmFactory.createShoulderMotor();
-
-    shoulderMotor.configure();
+    shoulder = ArmFactory.createShoulder();
+    shoulderValues = new PositionControllerIOValues();
+    shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
   }
 
   /**
@@ -43,44 +42,28 @@ public class Arm extends Subsystem {
 
   @Override
   public void periodic() {
-    shoulderMotor.update(shoulderMotorValues);
+    shoulder.update(shoulderValues);
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout position = Telemetry.addColumn(tab, "Position");
-
-    position.addDouble(
-        "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(shoulderMotorValues.positionRotations));
-
-    ShuffleboardLayout voltages = Telemetry.addColumn(tab, "Voltages");
-
-    voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.inputVoltage);
-
-    ShuffleboardLayout derivatives = Telemetry.addColumn(tab, "Derivatives");
-
-    derivatives.addDouble(
-        "Shoulder Velocity (rps)", () -> shoulderMotorValues.velocityRotationsPerSecond);
-    derivatives.addDouble(
-        "Shoulder Acceleration (rpsps)",
-        () -> shoulderMotorValues.accelerationRotationsPerSecondPerSecond);
+    PositionControllerIO.addToShuffleboard(tab, "Shoulder", shoulderValues);
   }
 
   public State getMeasuredShoulderState() {
     return new TrapezoidProfile.State(
-        shoulderMotorValues.positionRotations, shoulderMotorValues.velocityRotationsPerSecond);
+        shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond);
   }
 
   public void setShoulderPosition(double positionRotations) {
-    shoulderMotor.setPosition(positionRotations);
+    shoulder.setPosition(positionRotations);
   }
 
   public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    shoulderMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
+    shoulder.setSetpoint(positionRotations, velocityRotationsPerSecond);
   }
 
   public void setVoltage(double volts) {
-    shoulderMotor.setVoltage(volts);
+    // TODO
   }
 }
