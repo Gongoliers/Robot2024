@@ -13,10 +13,10 @@ public class Intake extends Subsystem {
   /** Instance variable for the intake subsystem singleton. */
   private static Intake instance = null;
 
-  /** Roller motors. */
+  /** Rollers. */
   private final VelocityControllerIO frontRoller, backRoller;
 
-  /** Roller motor values. */
+  /** Roller values. */
   private final VelocityControllerIOValues frontRollerValues, backRollerValues;
 
   /** Creates a new instance of the intake subsystem. */

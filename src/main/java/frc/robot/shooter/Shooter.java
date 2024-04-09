@@ -27,11 +27,11 @@ public class Shooter extends Subsystem {
 
   /** Creates a new instance of the shooter subsystem. */
   private Shooter() {
-    serializer = ShooterFactory.createSerializerMotor();
+    serializer = ShooterFactory.createSerializer();
     serializerValues = new VelocityControllerIOValues();
     serializer.configure(SerializerConstants.CONTROLLER_CONSTANTS);
 
-    flywheel = ShooterFactory.createFlywheelMotor();
+    flywheel = ShooterFactory.createFlywheel();
     flywheelValues = new VelocityControllerIOValues();
     flywheel.configure(FlywheelConstants.CONTROLLER_CONSTANTS);
   }

@@ -58,9 +58,13 @@
           "Position": {
             "open": true
           },
+          "Shoulder": {
+            "open": true
+          },
           "Velocities": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Climber": {
           "East": {
@@ -99,7 +103,6 @@
           "Measurement": {
             "open": true
           },
-          "open": true,
           "setpoint": {
             "open": true
           }
