@@ -51,6 +51,9 @@
     },
     "transitory": {
       "Shuffleboard": {
+        ".recording": {
+          "open": true
+        },
         "Arm": {
           "Feedforward": {
             "open": true
@@ -96,6 +99,9 @@
           }
         },
         "Superstructure": {
+          "Goal": {
+            "open": true
+          },
           "State": {
             "open": true
           },
@@ -189,7 +195,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 338,
+          "height": 0,
           "series": [
             {
               "color": [

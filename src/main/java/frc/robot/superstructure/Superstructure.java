@@ -9,11 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
-import frc.robot.arm.ArmState;
 import frc.robot.intake.Intake;
-import frc.robot.intake.IntakeState;
 import frc.robot.shooter.Shooter;
-import frc.robot.shooter.ShooterState;
 
 /** Subsystem class for the superstructure subsystem. */
 public class Superstructure extends Subsystem {
@@ -95,24 +92,16 @@ public class Superstructure extends Subsystem {
   }
 
   private void updateMeasurement() {
-    ArmState measuredShoulderState = arm.getState();
-
-    IntakeState measuredIntakeState = intake.getState();
-
-    ShooterState measuredShooterState = shooter.getState();
-
     measurement =
         new SuperstructureState(
-            measuredShoulderState,
-            measuredIntakeState,
-            measuredShooterState);
+            arm.getState(),
+            intake.getState(),
+            shooter.getState());
 
     SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
   }
 
   public SuperstructureState getState() {
-    updateMeasurement();
-
     return measurement;
   }
 
@@ -134,39 +123,39 @@ public class Superstructure extends Subsystem {
     return measurement.atGoal(goal);
   }
 
+  private Command hold(SuperstructureState goal) {
+    return run(() -> setGoal(goal));
+  }
+
   private Command to(SuperstructureState goal) {
-    return new ToGoal(goal);
+    return run(() -> setGoal(goal)).until(() -> at(goal));
   }
 
   public Command stow() {
-    return to(SuperstructureState.STOW).withName("STOW");
+    return hold(SuperstructureState.STOW).withName("STOW");
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE).withName("INTAKE");
-  }
-
-  public Command pull() {
-    return to(SuperstructureState.PULL).withTimeout(0.15).withName("PULL");
+    return to(SuperstructureState.STOW).andThen(hold(SuperstructureState.INTAKE)).withName("INTAKE");
   }
 
   public Command speaker() {
-    return pull().andThen(to(SuperstructureState.SPEAKER)).withName("SPEAKER");
+    return hold(SuperstructureState.SPEAKER_PULL).withTimeout(0.15).andThen(to(SuperstructureState.SPEAKER_READY)).andThen(hold(SuperstructureState.SPEAKER_SHOOT)).withName("SPEAKER");
   }
 
   public Command pass() {
-    return pull().andThen(to(SuperstructureState.PASS)).withName("PASS");
+    return hold(SuperstructureState.PASS_PULL).withTimeout(0.15).andThen(to(SuperstructureState.PASS_READY)).andThen(hold(SuperstructureState.PASS_SHOOT)).withName("PASS");
   }
 
   public Command climb() {
-    return to(SuperstructureState.CLIMB).withName("CLIMB");
+    return hold(SuperstructureState.CLIMB).withName("CLIMB");
   }
 
   public Command amp() {
-    return to(SuperstructureState.AMP).withName("AMP");
+    return to(SuperstructureState.AMP_POSITION).andThen(hold(SuperstructureState.AMP_SHOOT)).withName("AMP");
   }
   
   public Command eject() {
-    return to(SuperstructureState.EJECT).withName("EJECT");
+    return to(SuperstructureState.EJECT_POSITION).andThen(hold(SuperstructureState.EJECT)).withName("EJECT");
   }
 }

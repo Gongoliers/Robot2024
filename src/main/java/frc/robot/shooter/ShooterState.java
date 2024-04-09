@@ -14,11 +14,15 @@ public record ShooterState(double flywheelVelocityRotationsPerSecond, double ser
 
     public static final ShooterState EJECT = new ShooterState(0, -44);
 
-    public static final ShooterState SPEAKER = new ShooterState(44, 20);
+    public static final ShooterState SPEAKER_READY = new ShooterState(44, 0);
 
-    public static final ShooterState PASS = new ShooterState(44, 20);
+    public static final ShooterState SPEAKER_SHOOT = new ShooterState(44, 20);
 
-    public static final ShooterState AMP = new ShooterState(20, 20);
+    public static final ShooterState PASS_READY = new ShooterState(44, 0);
+
+    public static final ShooterState PASS_SHOOT = new ShooterState(44, 20);
+
+    public static final ShooterState AMP_SHOOT = new ShooterState(20, 20);
 
     public ShooterState {
         Objects.requireNonNull(flywheelVelocityRotationsPerSecond);

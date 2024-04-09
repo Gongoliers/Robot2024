@@ -26,28 +26,49 @@ public record SuperstructureState(
           IntakeState.INTAKE,
           ShooterState.INTAKE);
 
-  public static final SuperstructureState PULL = new SuperstructureState(ArmState.STOW, IntakeState.IDLE, ShooterState.PULL);
+
+  public static final SuperstructureState EJECT_POSITION = new SuperstructureState(ArmState.EJECT, IntakeState.IDLE, ShooterState.IDLE);
 
   public static final SuperstructureState EJECT = new SuperstructureState(ArmState.EJECT, IntakeState.IDLE, ShooterState.EJECT);
 
-  public static final SuperstructureState SPEAKER =
-      new SuperstructureState(
-          ArmState.SHOOT,
-          IntakeState.IDLE,
-          ShooterState.SPEAKER);
+  public static final SuperstructureState SPEAKER_PULL = new SuperstructureState(ArmState.SPEAKER, IntakeState.IDLE, ShooterState.PULL);
 
-  public static final SuperstructureState PASS =
+  public static final SuperstructureState SPEAKER_READY =
       new SuperstructureState(
-          ArmState.SHOOT,
+          ArmState.SPEAKER,
           IntakeState.IDLE,
-          ShooterState.PASS);
+          ShooterState.SPEAKER_READY);
+
+  public static final SuperstructureState SPEAKER_SHOOT =
+      new SuperstructureState(
+          ArmState.SPEAKER,
+          IntakeState.IDLE,
+          ShooterState.SPEAKER_SHOOT);
+
+  public static final SuperstructureState PASS_PULL = new SuperstructureState(ArmState.PASS, IntakeState.IDLE, ShooterState.PULL);
+
+  public static final SuperstructureState PASS_READY =
+      new SuperstructureState(
+          ArmState.PASS,
+          IntakeState.IDLE,
+          ShooterState.PASS_READY);
+
+  public static final SuperstructureState PASS_SHOOT =
+      new SuperstructureState(
+          ArmState.PASS,
+          IntakeState.IDLE,
+          ShooterState.PASS_SHOOT);
 
   public static final SuperstructureState CLIMB =
       new SuperstructureState(ArmState.CLIMB, IntakeState.IDLE, ShooterState.IDLE);
 
-  public static final SuperstructureState AMP =
+  public static final SuperstructureState AMP_POSITION =
       new SuperstructureState(
-          ArmState.AMP, IntakeState.IDLE, ShooterState.AMP);
+          ArmState.AMP, IntakeState.IDLE, ShooterState.IDLE);
+
+  public static final SuperstructureState AMP_SHOOT =
+      new SuperstructureState(
+          ArmState.AMP, IntakeState.IDLE, ShooterState.AMP_SHOOT);
 
   /**
    * Creates a new superstructure state.

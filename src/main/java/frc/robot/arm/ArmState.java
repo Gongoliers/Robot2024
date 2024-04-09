@@ -13,7 +13,9 @@ public record ArmState(State shoulderRotations) {
 
   public static final ArmState STOW = new ArmState(Rotation2d.fromDegrees(-26.45));
 
-  public static final ArmState SHOOT = new ArmState(Rotation2d.fromDegrees(-15));
+  public static final ArmState SPEAKER = new ArmState(Rotation2d.fromDegrees(-15));
+
+  public static final ArmState PASS = new ArmState(Rotation2d.fromDegrees(0));
 
   public static final ArmState EJECT = new ArmState(Rotation2d.fromDegrees(0));
 
