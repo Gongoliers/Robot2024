@@ -14,7 +14,8 @@ public class IntakeFactory {
 
   public static VelocityControllerIO createFrontRoller() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.INTAKE)) {
-      return new VelocityControllerIOTalonFXPIDF(FrontRollerConstants.CAN, FrontRollerConstants.PIDF);
+      return new VelocityControllerIOTalonFXPIDF(
+          FrontRollerConstants.CAN, FrontRollerConstants.PIDF);
     }
 
     return new VelocityControllerIOSim();

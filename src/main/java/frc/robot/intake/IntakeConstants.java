@@ -13,13 +13,16 @@ public class IntakeConstants {
 
     /** Front roller's PIDF constants. */
     public static final PIDFConstants PIDF = new PIDFConstants();
+
     static {
       PIDF.kS = 0.13;
       PIDF.kV = 0.1683;
     }
 
     /** Front roller's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS = new VelocityControllerIOConstants();
+    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
+        new VelocityControllerIOConstants();
+
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
       CONTROLLER_CONSTANTS.neutralBrake = true;
@@ -34,13 +37,16 @@ public class IntakeConstants {
 
     /** Back roller's PIDF constants. */
     public static final PIDFConstants PIDF = new PIDFConstants();
+
     static {
       PIDF.kS = 0.13;
       PIDF.kV = 0.1759;
     }
 
     /** Back roller's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS = new VelocityControllerIOConstants();
+    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
+        new VelocityControllerIOConstants();
+
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
       CONTROLLER_CONSTANTS.neutralBrake = true;

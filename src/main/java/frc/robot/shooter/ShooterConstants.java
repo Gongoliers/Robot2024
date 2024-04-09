@@ -14,13 +14,16 @@ public class ShooterConstants {
 
     /** Serializer's PIDF constants. */
     public static final PIDFConstants PIDF = new PIDFConstants();
+
     static {
       PIDF.kS = 0.14;
       PIDF.kV = 0.2617;
     }
 
     /** Serializer's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS = new VelocityControllerIOConstants();
+    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
+        new VelocityControllerIOConstants();
+
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
       CONTROLLER_CONSTANTS.neutralBrake = true;
@@ -38,13 +41,16 @@ public class ShooterConstants {
 
     /** Flywheel's PIDF constants. */
     public static final PIDFConstants PIDF = new PIDFConstants();
+
     static {
       PIDF.kS = 0.14;
       PIDF.kV = 0.2539;
     }
 
     /** Flywheel's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS = new VelocityControllerIOConstants();
+    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
+        new VelocityControllerIOConstants();
+
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
       CONTROLLER_CONSTANTS.neutralBrake = true;

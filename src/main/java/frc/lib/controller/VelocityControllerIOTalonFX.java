@@ -7,69 +7,72 @@ import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import frc.lib.CAN;
 import frc.lib.Configurator;
 
 /** Velocity controller using TalonFX. */
 public abstract class VelocityControllerIOTalonFX implements VelocityControllerIO {
 
-    protected final TalonFX motor; 
+  protected final TalonFX motor;
 
-    protected final StatusSignal<Double> velocity, acceleration, volts, amps;
+  protected final StatusSignal<Double> velocity, acceleration, volts, amps;
 
-    /**
-     * Creates a new velocity controller using TalonFX.
-     * 
-     * @param can
-     */
-    protected VelocityControllerIOTalonFX(CAN can) {
-        motor = new TalonFX(can.id(), can.bus());
-        
-        velocity = motor.getVelocity();
-        acceleration = motor.getAcceleration();
-        volts = motor.getMotorVoltage();
-        amps = motor.getStatorCurrent();
-    }
+  /**
+   * Creates a new velocity controller using TalonFX.
+   *
+   * @param can
+   */
+  protected VelocityControllerIOTalonFX(CAN can) {
+    motor = new TalonFX(can.id(), can.bus());
 
-    @Override
-    public void configure(VelocityControllerIOConstants constants) {
-        BaseStatusSignal.setUpdateFrequencyForAll(100.0, velocity, acceleration, volts, amps);
+    velocity = motor.getVelocity();
+    acceleration = motor.getAcceleration();
+    volts = motor.getMotorVoltage();
+    amps = motor.getStatorCurrent();
+  }
 
-        ParentDevice.optimizeBusUtilizationForAll(motor);
+  @Override
+  public void configure(VelocityControllerIOConstants constants) {
+    BaseStatusSignal.setUpdateFrequencyForAll(100.0, velocity, acceleration, volts, amps);
 
-        TalonFXConfiguration config = new TalonFXConfiguration();
+    ParentDevice.optimizeBusUtilizationForAll(motor);
 
-        config.MotorOutput.Inverted = constants.ccwPositive ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
-        config.MotorOutput.NeutralMode = constants.neutralBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    TalonFXConfiguration config = new TalonFXConfiguration();
 
-        // Stator current is a measure of the current inside of the motor and is typically higher than supply (breaker) current
-        config.CurrentLimits.StatorCurrentLimit = constants.currentLimitAmps * 2.0;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
+    config.MotorOutput.Inverted =
+        constants.ccwPositive
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive;
+    config.MotorOutput.NeutralMode =
+        constants.neutralBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
 
-        config.CurrentLimits.SupplyCurrentLimit = constants.currentLimitAmps;
-        // Allow higher current spikes (150%) for a brief duration (one second)
-        // REV 40A auto-resetting breakers typically trip when current exceeds 300% for one second
-        config.CurrentLimits.SupplyCurrentThreshold = constants.currentLimitAmps * 1.5;
-        config.CurrentLimits.SupplyTimeThreshold = 1;
-        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+    // Stator current is a measure of the current inside of the motor and is typically higher than
+    // supply (breaker) current
+    config.CurrentLimits.StatorCurrentLimit = constants.currentLimitAmps * 2.0;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        config.Feedback.SensorToMechanismRatio = constants.sensorToMechanismRatio;
+    config.CurrentLimits.SupplyCurrentLimit = constants.currentLimitAmps;
+    // Allow higher current spikes (150%) for a brief duration (one second)
+    // REV 40A auto-resetting breakers typically trip when current exceeds 300% for one second
+    config.CurrentLimits.SupplyCurrentThreshold = constants.currentLimitAmps * 1.5;
+    config.CurrentLimits.SupplyTimeThreshold = 1;
+    config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        Configurator.configureTalonFX(motor.getConfigurator(), config);
-    }
+    config.Feedback.SensorToMechanismRatio = constants.sensorToMechanismRatio;
 
-    @Override
-    public void update(VelocityControllerIOValues values) {
-        BaseStatusSignal.refreshAll(velocity, acceleration, volts, amps);
+    Configurator.configureTalonFX(motor.getConfigurator(), config);
+  }
 
-        values.velocityRotationsPerSecond = velocity.getValue();
-        values.accelerationRotationsPerSecondPerSecond = acceleration.getValue();
-        values.motorVolts = volts.getValue();
-        values.motorAmps = amps.getValue();
-    }
+  @Override
+  public void update(VelocityControllerIOValues values) {
+    BaseStatusSignal.refreshAll(velocity, acceleration, volts, amps);
 
-    @Override
-    public abstract void setSetpoint(double velocityRotationsPerSecond);
-    
+    values.velocityRotationsPerSecond = velocity.getValue();
+    values.accelerationRotationsPerSecondPerSecond = acceleration.getValue();
+    values.motorVolts = volts.getValue();
+    values.motorAmps = amps.getValue();
+  }
+
+  @Override
+  public abstract void setSetpoint(double velocityRotationsPerSecond);
 }

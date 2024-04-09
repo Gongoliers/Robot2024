@@ -51,12 +51,15 @@ public class Arm extends Subsystem {
   public void periodic() {
     shoulder.update(shoulderValues);
 
-    setpoint = new ArmState(ShoulderConstants.MOTION_PROFILE.calculate(
-        RobotConstants.PERIODIC_DURATION,
-        setpoint.shoulderRotations(),
-        goal.shoulderRotations()));
+    setpoint =
+        new ArmState(
+            ShoulderConstants.MOTION_PROFILE.calculate(
+                RobotConstants.PERIODIC_DURATION,
+                setpoint.shoulderRotations(),
+                goal.shoulderRotations()));
 
-    shoulder.setSetpoint(setpoint.shoulderRotations().position, setpoint.shoulderRotations().velocity);
+    shoulder.setSetpoint(
+        setpoint.shoulderRotations().position, setpoint.shoulderRotations().velocity);
   }
 
   @Override
@@ -65,8 +68,9 @@ public class Arm extends Subsystem {
   }
 
   public ArmState getState() {
-    return new ArmState(new TrapezoidProfile.State(
-        shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond));
+    return new ArmState(
+        new TrapezoidProfile.State(
+            shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond));
   }
 
   public void setGoal(ArmState goal) {

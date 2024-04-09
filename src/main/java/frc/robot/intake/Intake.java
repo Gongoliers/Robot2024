@@ -66,7 +66,8 @@ public class Intake extends Subsystem {
   }
 
   public IntakeState getState() {
-    return new IntakeState(frontRollerValues.velocityRotationsPerSecond, backRollerValues.velocityRotationsPerSecond);
+    return new IntakeState(
+        frontRollerValues.velocityRotationsPerSecond, backRollerValues.velocityRotationsPerSecond);
   }
 
   public void setGoal(IntakeState goal) {

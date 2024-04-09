@@ -18,7 +18,13 @@ public class ArmFactory {
    */
   public static PositionControllerIO createShoulder() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM)) {
-      return new PositionControllerIOTalonFX2(ShoulderConstants.LEADER_CAN, ShoulderConstants.FOLLOWER_CAN, ShoulderConstants.ENCODER_CAN, ShoulderConstants.PIDF, false, true);
+      return new PositionControllerIOTalonFX2(
+          ShoulderConstants.LEADER_CAN,
+          ShoulderConstants.FOLLOWER_CAN,
+          ShoulderConstants.ENCODER_CAN,
+          ShoulderConstants.PIDF,
+          false,
+          true);
     }
 
     return new PositionControllerIOSim();

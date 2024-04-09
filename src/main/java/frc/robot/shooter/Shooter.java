@@ -72,15 +72,15 @@ public class Shooter extends Subsystem {
   }
 
   public ShooterState getState() {
-    return new ShooterState(flywheelValues.velocityRotationsPerSecond, serializerValues.velocityRotationsPerSecond);
+    return new ShooterState(
+        flywheelValues.velocityRotationsPerSecond, serializerValues.velocityRotationsPerSecond);
   }
 
-  public void setGoal(ShooterState goal)  {
+  public void setGoal(ShooterState goal) {
     this.goal = goal;
   }
 
   public boolean atGoal() {
     return getState().at(goal);
   }
-
 }

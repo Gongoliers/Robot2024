@@ -1,7 +1,5 @@
 package frc.robot.superstructure;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -11,6 +9,7 @@ import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.intake.Intake;
 import frc.robot.shooter.Shooter;
+import java.util.function.Supplier;
 
 /** Subsystem class for the superstructure subsystem. */
 public class Superstructure extends Subsystem {
@@ -65,10 +64,13 @@ public class Superstructure extends Subsystem {
 
     ShuffleboardLayout state = Telemetry.addColumn(tab, "State");
 
-    state.addString("Running Command", () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
+    state.addString(
+        "Running Command",
+        () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
   }
 
-  private void addStateToShuffleboard(ShuffleboardTab tab, String name, Supplier<SuperstructureState> state) {
+  private void addStateToShuffleboard(
+      ShuffleboardTab tab, String name, Supplier<SuperstructureState> state) {
     ShuffleboardLayout layout = Telemetry.addColumn(tab, name);
 
     layout.addDouble(
@@ -79,24 +81,24 @@ public class Superstructure extends Subsystem {
         () -> Units.rotationsToDegrees(state.get().armState().shoulderRotations().velocity));
 
     layout.addDouble(
-        "Front Roller Velocity (rps)", () -> state.get().intakeState().frontRollerVelocityRotationsPerSecond());
+        "Front Roller Velocity (rps)",
+        () -> state.get().intakeState().frontRollerVelocityRotationsPerSecond());
 
     layout.addDouble(
-        "Back Roller Velocity (rps)", () -> state.get().intakeState().backRollerVelocityRotationsPerSecond());
+        "Back Roller Velocity (rps)",
+        () -> state.get().intakeState().backRollerVelocityRotationsPerSecond());
 
     layout.addDouble(
-        "Flywheel Velocity (rps)", () -> state.get().shooterState().flywheelVelocityRotationsPerSecond());
+        "Flywheel Velocity (rps)",
+        () -> state.get().shooterState().flywheelVelocityRotationsPerSecond());
 
     layout.addDouble(
-        "Serializer Velocity (rps)", () -> state.get().shooterState().serializerVelocityRotationsPerSecond());
+        "Serializer Velocity (rps)",
+        () -> state.get().shooterState().serializerVelocityRotationsPerSecond());
   }
 
   private void updateMeasurement() {
-    measurement =
-        new SuperstructureState(
-            arm.getState(),
-            intake.getState(),
-            shooter.getState());
+    measurement = new SuperstructureState(arm.getState(), intake.getState(), shooter.getState());
 
     SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
   }
@@ -136,15 +138,25 @@ public class Superstructure extends Subsystem {
   }
 
   public Command intake() {
-    return to(SuperstructureState.STOW).andThen(hold(SuperstructureState.INTAKE)).withName("INTAKE");
+    return to(SuperstructureState.STOW)
+        .andThen(hold(SuperstructureState.INTAKE))
+        .withName("INTAKE");
   }
 
   public Command speaker() {
-    return hold(SuperstructureState.SPEAKER_PULL).withTimeout(0.15).andThen(to(SuperstructureState.SPEAKER_READY)).andThen(hold(SuperstructureState.SPEAKER_SHOOT)).withName("SPEAKER");
+    return hold(SuperstructureState.SPEAKER_PULL)
+        .withTimeout(0.15)
+        .andThen(to(SuperstructureState.SPEAKER_READY))
+        .andThen(hold(SuperstructureState.SPEAKER_SHOOT))
+        .withName("SPEAKER");
   }
 
   public Command pass() {
-    return hold(SuperstructureState.PASS_PULL).withTimeout(0.15).andThen(to(SuperstructureState.PASS_READY)).andThen(hold(SuperstructureState.PASS_SHOOT)).withName("PASS");
+    return hold(SuperstructureState.PASS_PULL)
+        .withTimeout(0.15)
+        .andThen(to(SuperstructureState.PASS_READY))
+        .andThen(hold(SuperstructureState.PASS_SHOOT))
+        .withName("PASS");
   }
 
   public Command climb() {
@@ -152,10 +164,14 @@ public class Superstructure extends Subsystem {
   }
 
   public Command amp() {
-    return to(SuperstructureState.AMP_POSITION).andThen(hold(SuperstructureState.AMP_SHOOT)).withName("AMP");
+    return to(SuperstructureState.AMP_POSITION)
+        .andThen(hold(SuperstructureState.AMP_SHOOT))
+        .withName("AMP");
   }
-  
+
   public Command eject() {
-    return to(SuperstructureState.EJECT_POSITION).andThen(hold(SuperstructureState.EJECT)).withName("EJECT");
+    return to(SuperstructureState.EJECT_POSITION)
+        .andThen(hold(SuperstructureState.EJECT))
+        .withName("EJECT");
   }
 }
