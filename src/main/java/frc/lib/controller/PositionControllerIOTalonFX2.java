@@ -83,7 +83,7 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     motorConfig.MotorOutput.Inverted =
-        constants.ccwPositive
+        constants.ccwPositiveMotor
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
     motorConfig.MotorOutput.NeutralMode =
@@ -110,7 +110,7 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
 
     encoderConfig.MagnetSensor.MagnetOffset = constants.absoluteEncoderOffsetRotations;
     encoderConfig.MagnetSensor.SensorDirection =
-        constants.ccwPositive
+        constants.ccwPositiveAbsoluteEncoder
             ? SensorDirectionValue.CounterClockwise_Positive
             : SensorDirectionValue.Clockwise_Positive;
 

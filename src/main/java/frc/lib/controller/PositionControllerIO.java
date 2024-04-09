@@ -14,7 +14,13 @@ public interface PositionControllerIO {
      * Interpret counterclockwise rotation on the motor face as having positive velocity, if set to
      * true.
      */
-    public boolean ccwPositive = true;
+    public boolean ccwPositiveMotor = true;
+
+    /**
+     * Interpret counterclockwise rotation on the encoder as having positive velocity, if set to
+     * true.
+     */
+    public boolean ccwPositiveAbsoluteEncoder = true;
 
     /** Use the motor to brake the controlled mechanism on neutral output, if set to true. */
     public boolean neutralBrake = false;
