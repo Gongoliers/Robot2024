@@ -1,6 +1,5 @@
 package frc.robot.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
@@ -38,19 +37,6 @@ public class ArmConstants {
             CONTROLLER_CONSTANTS.sensorToMechanismRatio = 39.771428571;
             CONTROLLER_CONSTANTS.absoluteEncoderOffsetRotations = Units.degreesToRotations(-146.77) + Units.degreesToRotations(-27.07);
         }
-
-        public static final Rotation2d INITIAL_ANGLE = Rotation2d.fromDegrees(-26.45);
-
-        public static final Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-26.45);
-
-        public static final Rotation2d SHOOT_ANGLE = Rotation2d.fromDegrees(-15);
-
-        public static final Rotation2d EJECT_ANGLE = Rotation2d.fromDegrees(0);
-
-        public static final Rotation2d AMP_ANGLE = Rotation2d.fromDegrees(90);
-
-        /** Tolerance of the shoulder. */
-        public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(2.0);
 
         /** Maximum speed of the shoulder in rotations per second. */
         public static final double MAXIMUM_SPEED = Units.degreesToRotations(60.0);

@@ -6,7 +6,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
@@ -66,6 +65,10 @@ public class Superstructure extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     addStateToShuffleboard(tab, "Measurement", () -> measurement);
     addStateToShuffleboard(tab, "Goal", () -> goal);
+
+    ShuffleboardLayout state = Telemetry.addColumn(tab, "State");
+
+    state.addString("Running Command", () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
   }
 
   private void addStateToShuffleboard(ShuffleboardTab tab, String name, Supplier<SuperstructureState> state) {
@@ -136,34 +139,34 @@ public class Superstructure extends Subsystem {
   }
 
   public Command stow() {
-    return to(SuperstructureState.STOW);
+    return to(SuperstructureState.STOW).withName("STOW");
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE);
+    return to(SuperstructureState.INTAKE).withName("INTAKE");
   }
 
   public Command pull() {
-    return Commands.deadline(Commands.waitSeconds(0.15), to(SuperstructureState.PULL));
+    return to(SuperstructureState.PULL).withTimeout(0.15).withName("PULL");
   }
 
-  public Command shoot() {
-    return pull().andThen(to(SuperstructureState.SPEAKER_SHOOT));
+  public Command speaker() {
+    return pull().andThen(to(SuperstructureState.SPEAKER)).withName("SPEAKER");
   }
 
   public Command pass() {
-    return pull().andThen(to(SuperstructureState.PASS_SPIN).andThen(to(SuperstructureState.PASS_SHOOT)));
+    return pull().andThen(to(SuperstructureState.PASS)).withName("PASS");
   }
 
-  public Command ampPosition() {
-    return to(SuperstructureState.AMP_POSITION);
+  public Command climb() {
+    return to(SuperstructureState.CLIMB).withName("CLIMB");
   }
 
-  public Command ampShoot() {
-    return ampPosition().andThen(to(SuperstructureState.AMP_SHOOT));
+  public Command amp() {
+    return to(SuperstructureState.AMP).withName("AMP");
   }
   
   public Command eject() {
-    return to(SuperstructureState.EJECT_POSITION).andThen(to(SuperstructureState.EJECT));
+    return to(SuperstructureState.EJECT).withName("EJECT");
   }
 }

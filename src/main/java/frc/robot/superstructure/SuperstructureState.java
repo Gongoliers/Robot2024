@@ -1,16 +1,11 @@
 package frc.robot.superstructure;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.arm.Arm;
 import frc.robot.arm.ArmState;
-import frc.robot.arm.ArmConstants.ShoulderConstants;
 import frc.robot.intake.Intake;
 import frc.robot.intake.IntakeState;
-import frc.robot.intake.IntakeConstants.RollerConstants;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.ShooterState;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 import java.util.Objects;
 
 /** Represents the state of the superstructure. */
@@ -20,58 +15,39 @@ public record SuperstructureState(
     ShooterState shooterState) {
 
   public static final SuperstructureState INITIAL =
-      new SuperstructureState(ShoulderConstants.INITIAL_ANGLE, 0, 0, 0);
+      new SuperstructureState(ArmState.INITIAL, IntakeState.IDLE, ShooterState.IDLE);
 
   public static final SuperstructureState STOW =
-      new SuperstructureState(ShoulderConstants.STOW_ANGLE, 0, 0, 0);
-
-  public static final SuperstructureState INTAKE_POSITION =
-      new SuperstructureState(ShoulderConstants.STOW_ANGLE, 0, 0, 0);
+      new SuperstructureState(ArmState.STOW, IntakeState.IDLE, ShooterState.IDLE);
 
   public static final SuperstructureState INTAKE =
       new SuperstructureState(
-          ShoulderConstants.STOW_ANGLE,
-          RollerConstants.INTAKE_VELOCITY,
-          0,
-          SerializerConstants.INTAKE_VELOCITY);
+          ArmState.STOW,
+          IntakeState.INTAKE,
+          ShooterState.INTAKE);
 
-  public static final SuperstructureState PULL = new SuperstructureState(ShoulderConstants.STOW_ANGLE, 0, 0, SerializerConstants.PULL_VELOCITY);
+  public static final SuperstructureState PULL = new SuperstructureState(ArmState.STOW, IntakeState.IDLE, ShooterState.PULL);
 
-  public static final SuperstructureState EJECT_POSITION = new SuperstructureState(ShoulderConstants.EJECT_ANGLE, 0, 0, 0);
+  public static final SuperstructureState EJECT = new SuperstructureState(ArmState.EJECT, IntakeState.IDLE, ShooterState.EJECT);
 
-  public static final SuperstructureState EJECT = new SuperstructureState(ShoulderConstants.EJECT_ANGLE, 0, 0, SerializerConstants.PULL_VELOCITY);
-
-  public static final SuperstructureState SPEAKER_SHOOT =
+  public static final SuperstructureState SPEAKER =
       new SuperstructureState(
-          ShoulderConstants.SHOOT_ANGLE,
-          0,
-          FlywheelConstants.SPEAKER_VELOCITY,
-          SerializerConstants.SERIALIZE_VELOCITY);
+          ArmState.SHOOT,
+          IntakeState.IDLE,
+          ShooterState.SPEAKER);
 
-  public static final SuperstructureState PASS_SPIN =
+  public static final SuperstructureState PASS =
       new SuperstructureState(
-          ShoulderConstants.STOW_ANGLE, 0, FlywheelConstants.PASS_VELOCITY, 0);
+          ArmState.SHOOT,
+          IntakeState.IDLE,
+          ShooterState.PASS);
 
-  public static final SuperstructureState PASS_SHOOT =
+  public static final SuperstructureState CLIMB =
+      new SuperstructureState(ArmState.CLIMB, IntakeState.IDLE, ShooterState.IDLE);
+
+  public static final SuperstructureState AMP =
       new SuperstructureState(
-          ShoulderConstants.STOW_ANGLE,
-          0,
-          FlywheelConstants.PASS_VELOCITY,
-          SerializerConstants.SERIALIZE_VELOCITY);
-
-  public static final SuperstructureState AMP_POSITION =
-      new SuperstructureState(ShoulderConstants.AMP_ANGLE, 0, 0, 0);
-
-  public static final SuperstructureState AMP_SPIN =
-      new SuperstructureState(
-          ShoulderConstants.AMP_ANGLE, 0, FlywheelConstants.AMP_VELOCITY, 0);
-
-  public static final SuperstructureState AMP_SHOOT =
-      new SuperstructureState(
-          ShoulderConstants.AMP_ANGLE,
-          0,
-          FlywheelConstants.AMP_VELOCITY,
-          SerializerConstants.SERIALIZE_VELOCITY);
+          ArmState.AMP, IntakeState.IDLE, ShooterState.AMP);
 
   /**
    * Creates a new superstructure state.
@@ -84,25 +60,6 @@ public record SuperstructureState(
     Objects.requireNonNull(armState);
     Objects.requireNonNull(intakeState);
     Objects.requireNonNull(shooterState);
-  }
-
-  /**
-   * Creates a new superstructure state.
-   *
-   * @param shoulderAngle
-   * @param rollerVelocityRotationsPerSecond
-   * @param flywheelVelocityRotationsPerSecond
-   * @param serializerVelocityRotationsPerSecond
-   */
-  public SuperstructureState(
-      Rotation2d shoulderAngle,
-      double rollerVelocityRotationsPerSecond,
-      double flywheelVelocityRotationsPerSecond,
-      double serializerVelocityRotationsPerSecond) {
-    this(
-        new ArmState(shoulderAngle),
-        new IntakeState(rollerVelocityRotationsPerSecond, rollerVelocityRotationsPerSecond),
-        new ShooterState(flywheelVelocityRotationsPerSecond, serializerVelocityRotationsPerSecond));
   }
 
   /**

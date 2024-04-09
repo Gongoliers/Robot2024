@@ -29,9 +29,9 @@ public class Arm extends Subsystem {
     shoulderValues = new PositionControllerIOValues();
     shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
 
-    setPosition(new ArmState(ShoulderConstants.INITIAL_ANGLE));
-    setpoint = new ArmState(ShoulderConstants.INITIAL_ANGLE);
-    goal = new ArmState(ShoulderConstants.INITIAL_ANGLE);
+    setPosition(ArmState.INITIAL);
+    setpoint = ArmState.INITIAL;
+    goal = ArmState.INITIAL;
   }
 
   /**

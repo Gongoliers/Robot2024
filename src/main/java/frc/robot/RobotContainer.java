@@ -79,7 +79,7 @@ public class RobotContainer {
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
     operatorController.rightBumper().onTrue(superstructure.pass());
-    operatorController.rightTrigger().onTrue(superstructure.shoot());
+    operatorController.rightTrigger().onTrue(superstructure.speaker());
 
     // operatorController.a().onTrue(superstructure.ampPosition());
     // operatorController.b().onTrue(superstructure.ampShoot());
