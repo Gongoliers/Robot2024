@@ -28,6 +28,11 @@ public class IntakeConstants {
       CONTROLLER_CONSTANTS.neutralBrake = true;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
     }
+
+    public static final double INTAKE_SPEED = 34;
+
+    /** Maximum speed of the roller in rotations per second. */
+    public static final double MAXIMUM_SPEED = 67;
   }
 
   /** Constants for the back roller. */
@@ -52,10 +57,9 @@ public class IntakeConstants {
       CONTROLLER_CONSTANTS.neutralBrake = true;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
     }
-  }
 
-  /** Constants for the roller motor. */
-  public static class RollerConstants {
+    public static final double INTAKE_SPEED = 34;
+
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 67;
   }

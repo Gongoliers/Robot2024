@@ -1,5 +1,6 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
@@ -55,5 +56,17 @@ public class ArmConstants {
 
     /** Motion profile of the shoulder. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
+
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(-25);
+
+    public static final Rotation2d SPEAKER = Rotation2d.fromDegrees(-15);
+
+    public static final Rotation2d PASS = Rotation2d.fromDegrees(0);
+
+    public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
+
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(80);
+
+    public static final Rotation2d CLIMB = Rotation2d.fromDegrees(60);
   }
 }
