@@ -1,5 +1,6 @@
 package frc.lib.controller;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Telemetry;
@@ -51,9 +52,11 @@ public interface VelocityControllerIO {
       ShuffleboardTab tab, String name, VelocityControllerIOValues values) {
     ShuffleboardLayout velocityController = Telemetry.addColumn(tab, name);
 
-    velocityController.addDouble("Velocity (rps)", () -> values.velocityRotationsPerSecond);
     velocityController.addDouble(
-        "Acceleration (rpsps)", () -> values.accelerationRotationsPerSecondPerSecond);
+        "Velocity (dps)", () -> Units.rotationsToDegrees(values.velocityRotationsPerSecond));
+    velocityController.addDouble(
+        "Acceleration (dpsps)",
+        () -> Units.rotationsToDegrees(values.accelerationRotationsPerSecondPerSecond));
     velocityController.addDouble("Voltage (V)", () -> values.motorVolts);
     velocityController.addDouble("Current (A)", () -> values.motorAmps);
   }
