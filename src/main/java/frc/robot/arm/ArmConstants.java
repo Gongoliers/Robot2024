@@ -26,9 +26,10 @@ public class ArmConstants {
 
     static {
       PIDF.kS = 0.14;
-      PIDF.kG = 0.18;
+      PIDF.kG = 0.15;
       PIDF.kV = 4.0;
-      PIDF.kP = 8.0;
+      PIDF.kP = 48.0;
+      PIDF.kD = 0.54;
     }
 
     /** Shoulder's controller constants. */
@@ -44,11 +45,11 @@ public class ArmConstants {
     }
 
     /** Maximum speed of the shoulder in rotations per second. */
-    public static final double MAXIMUM_SPEED = Units.degreesToRotations(120.0);
+    public static final double MAXIMUM_SPEED = Units.degreesToRotations(240.0);
 
     /** Maximum acceleration of the shoulder in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1);
+        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
 
     /** Maximum speed and acceleration of the shoulder . */
     public static final TrapezoidProfile.Constraints CONSTRAINTS =

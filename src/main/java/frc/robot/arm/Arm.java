@@ -1,8 +1,10 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
+import frc.lib.Telemetry;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.robot.RobotConstants;
@@ -65,6 +67,8 @@ public class Arm extends Subsystem {
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
     PositionControllerIO.addToShuffleboard(tab, "Shoulder", shoulderValues);
+
+    Telemetry.addColumn(tab, "Setpoint").addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(setpoint.shoulderRotations().position));
   }
 
   public ArmState getState() {
