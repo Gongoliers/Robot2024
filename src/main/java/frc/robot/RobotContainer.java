@@ -73,6 +73,10 @@ public class RobotContainer {
 
   /** Configures controller bindings. */
   private void configureBindings() {
+    driverController.a().whileTrue(swerve.forwards());
+    driverController.b().whileTrue(swerve.sideways());
+    driverController.x().whileTrue(swerve.cross());
+
     driverController.y().onTrue(odometry.tare());
 
     operatorController.leftBumper().onTrue(superstructure.eject());
