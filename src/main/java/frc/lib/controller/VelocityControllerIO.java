@@ -57,6 +57,16 @@ public interface VelocityControllerIO {
     velocityController.addDouble(
         "Acceleration (dpsps)",
         () -> Units.rotationsToDegrees(values.accelerationRotationsPerSecondPerSecond));
+    velocityController.addDouble(
+        "Velocity (rps)", () -> values.velocityRotationsPerSecond);
+    velocityController.addDouble(
+        "Acceleration (rpsps)",
+        () -> values.accelerationRotationsPerSecondPerSecond);
+    velocityController.addDouble(
+        "Velocity (rpm)", () -> values.velocityRotationsPerSecond * 60);
+    velocityController.addDouble(
+        "Acceleration (rpmpm)",
+        () -> values.accelerationRotationsPerSecondPerSecond * 60);
     velocityController.addDouble("Voltage (V)", () -> values.motorVolts);
     velocityController.addDouble("Current (A)", () -> values.motorAmps);
   }

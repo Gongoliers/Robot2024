@@ -19,7 +19,7 @@ public record IntakeState(
   }
 
   public boolean at(IntakeState other) {
-    final double kToleranceRotationsPerSecond = 2.5;
+    final double kToleranceRotationsPerSecond = 1;
 
     return MathUtil.isNear(
             frontRollerVelocityRotationsPerSecond,

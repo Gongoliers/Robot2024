@@ -65,8 +65,12 @@ public class Superstructure extends Subsystem {
     ShuffleboardLayout state = Telemetry.addColumn(tab, "State");
 
     state.addString(
-        "Running Command",
+        "State",
         () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
+
+    ShuffleboardLayout at = Telemetry.addColumn(tab, "At Goal?");
+
+    at.addBoolean("At Goal?", () -> at(goal));
   }
 
   private void addStateToShuffleboard(
