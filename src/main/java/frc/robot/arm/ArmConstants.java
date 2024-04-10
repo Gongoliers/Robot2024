@@ -1,5 +1,6 @@
 package frc.robot.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
@@ -25,9 +26,9 @@ public class ArmConstants {
 
     static {
       PIDF.kS = 0.14;
-      PIDF.kG = 0.45;
+      PIDF.kG = 0.18;
       PIDF.kV = 4.0;
-      PIDF.kP = 20.0;
+      PIDF.kP = 8.0;
     }
 
     /** Shoulder's controller constants. */
@@ -35,15 +36,15 @@ public class ArmConstants {
         new PositionControllerIOConstants();
 
     static {
-      CONTROLLER_CONSTANTS.ccwPositive = false;
+      CONTROLLER_CONSTANTS.ccwPositiveMotor = true;
+      CONTROLLER_CONSTANTS.ccwPositiveAbsoluteEncoder = false;
       CONTROLLER_CONSTANTS.neutralBrake = true;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 39.771428571;
-      CONTROLLER_CONSTANTS.absoluteEncoderOffsetRotations =
-          Units.degreesToRotations(-146.77) + Units.degreesToRotations(-27.07);
+      CONTROLLER_CONSTANTS.absoluteEncoderOffsetRotations = Units.degreesToRotations(-173.135);
     }
 
     /** Maximum speed of the shoulder in rotations per second. */
-    public static final double MAXIMUM_SPEED = Units.degreesToRotations(60.0);
+    public static final double MAXIMUM_SPEED = Units.degreesToRotations(120.0);
 
     /** Maximum acceleration of the shoulder in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
@@ -55,5 +56,17 @@ public class ArmConstants {
 
     /** Motion profile of the shoulder. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
+
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(-25);
+
+    public static final Rotation2d SPEAKER = Rotation2d.fromDegrees(-15);
+
+    public static final Rotation2d PASS = Rotation2d.fromDegrees(0);
+
+    public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
+
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(80);
+
+    public static final Rotation2d CLIMB = Rotation2d.fromDegrees(60);
   }
 }

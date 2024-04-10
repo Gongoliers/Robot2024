@@ -1,6 +1,9 @@
 package frc.robot.shooter;
 
 import edu.wpi.first.math.MathUtil;
+import frc.robot.shooter.ShooterConstants.FlywheelConstants;
+import frc.robot.shooter.ShooterConstants.SerializerConstants;
+
 import java.util.Objects;
 
 public record ShooterState(
@@ -8,21 +11,21 @@ public record ShooterState(
 
   public static final ShooterState IDLE = new ShooterState(0, 0);
 
-  public static final ShooterState INTAKE = new ShooterState(0, 34);
+  public static final ShooterState INTAKE = new ShooterState(0, SerializerConstants.INTAKE_SPEED);
 
-  public static final ShooterState PULL = new ShooterState(0, -20);
+  public static final ShooterState PULL = new ShooterState(0, SerializerConstants.PULL_SPEED);
 
-  public static final ShooterState EJECT = new ShooterState(0, -44);
+  public static final ShooterState EJECT = new ShooterState(0, SerializerConstants.EJECT_SPEED);
 
-  public static final ShooterState SPEAKER_READY = new ShooterState(44, 0);
+  public static final ShooterState SPEAKER_READY = new ShooterState(FlywheelConstants.SPEAKER_SPEED, 0);
 
-  public static final ShooterState SPEAKER_SHOOT = new ShooterState(44, 20);
+  public static final ShooterState SPEAKER_SHOOT = new ShooterState(FlywheelConstants.SPEAKER_SPEED, SerializerConstants.FEED_SPEED);
 
-  public static final ShooterState PASS_READY = new ShooterState(44, 0);
+  public static final ShooterState PASS_READY = new ShooterState(FlywheelConstants.PASS_SPEED, 0);
 
-  public static final ShooterState PASS_SHOOT = new ShooterState(44, 20);
+  public static final ShooterState PASS_SHOOT = new ShooterState(FlywheelConstants.PASS_SPEED, SerializerConstants.FEED_SPEED);
 
-  public static final ShooterState AMP_SHOOT = new ShooterState(20, 20);
+  public static final ShooterState AMP_SHOOT = new ShooterState(FlywheelConstants.AMP_SPEED, SerializerConstants.FEED_SPEED);
 
   public ShooterState {
     Objects.requireNonNull(flywheelVelocityRotationsPerSecond);

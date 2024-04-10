@@ -17,6 +17,7 @@ public class IntakeConstants {
     static {
       PIDF.kS = 0.13;
       PIDF.kV = 0.1683;
+      PIDF.kP = 0.1;
     }
 
     /** Front roller's controller constants. */
@@ -25,15 +26,20 @@ public class IntakeConstants {
 
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = true;
+      CONTROLLER_CONSTANTS.neutralBrake = false;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
     }
+
+    public static final double INTAKE_SPEED = 34;
+
+    /** Maximum speed of the roller in rotations per second. */
+    public static final double MAXIMUM_SPEED = 67;
   }
 
   /** Constants for the back roller. */
   public static class BackRollerConstants {
     /** Back roller's CAN. */
-    public static final CAN CAN = new CAN(50);
+    public static final CAN CAN = new CAN(40);
 
     /** Back roller's PIDF constants. */
     public static final PIDFConstants PIDF = new PIDFConstants();
@@ -41,6 +47,7 @@ public class IntakeConstants {
     static {
       PIDF.kS = 0.13;
       PIDF.kV = 0.1759;
+      PIDF.kP = 0.1;
     }
 
     /** Back roller's controller constants. */
@@ -49,13 +56,12 @@ public class IntakeConstants {
 
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = true;
+      CONTROLLER_CONSTANTS.neutralBrake = false;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
     }
-  }
 
-  /** Constants for the roller motor. */
-  public static class RollerConstants {
+    public static final double INTAKE_SPEED = 34;
+
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 67;
   }

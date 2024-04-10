@@ -1,6 +1,9 @@
 package frc.robot.intake;
 
 import edu.wpi.first.math.MathUtil;
+import frc.robot.intake.IntakeConstants.BackRollerConstants;
+import frc.robot.intake.IntakeConstants.FrontRollerConstants;
+
 import java.util.Objects;
 
 public record IntakeState(
@@ -8,7 +11,7 @@ public record IntakeState(
 
   public static final IntakeState IDLE = new IntakeState(0, 0);
 
-  public static final IntakeState INTAKE = new IntakeState(34, 34);
+  public static final IntakeState INTAKE = new IntakeState(FrontRollerConstants.INTAKE_SPEED, BackRollerConstants.INTAKE_SPEED);
 
   public IntakeState {
     Objects.requireNonNull(frontRollerVelocityRotationsPerSecond);
@@ -16,7 +19,7 @@ public record IntakeState(
   }
 
   public boolean at(IntakeState other) {
-    final double kToleranceRotationsPerSecond = 2.5;
+    final double kToleranceRotationsPerSecond = 1;
 
     return MathUtil.isNear(
             frontRollerVelocityRotationsPerSecond,

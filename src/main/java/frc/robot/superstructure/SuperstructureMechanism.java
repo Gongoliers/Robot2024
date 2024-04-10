@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.lib.InterpolatableColor;
 import frc.robot.RobotConstants;
-import frc.robot.intake.IntakeConstants.RollerConstants;
+import frc.robot.intake.IntakeConstants.FrontRollerConstants;
 import frc.robot.shooter.ShooterConstants.FlywheelConstants;
 import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
@@ -161,6 +161,6 @@ public class SuperstructureMechanism {
     rollers.setColor(
         new Color8Bit(
             ROLLERS_COLOR.sample(
-                Math.abs(averageRollerVelocity), 0, RollerConstants.MAXIMUM_SPEED)));
+                Math.abs(averageRollerVelocity), 0, FrontRollerConstants.MAXIMUM_SPEED)));
   }
 }
