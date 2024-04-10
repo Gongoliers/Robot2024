@@ -102,6 +102,9 @@
           "Goal": {
             "open": true
           },
+          "Measurement": {
+            "open": true
+          },
           "State": {
             "open": true
           },
@@ -160,6 +163,9 @@
         "open": true
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   },
   "Plot": {
     "Plot <0>": {
