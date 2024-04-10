@@ -64,18 +64,18 @@ public class Intake extends Subsystem {
     VelocityControllerIO.addToShuffleboard(tab, "Front Roller", frontRollerValues);
     VelocityControllerIO.addToShuffleboard(tab, "Back Roller", backRollerValues);
 
-    tab.addBoolean("Roller Stuck?", this::rollerStuck);
+    tab.addBoolean("Roller Note?", this::rollerNote);
   }
 
   public boolean frontRollerStuck() {
-    return frontRollerValues.motorAmps > FrontRollerConstants.STUCK_AMPS;
+    return frontRollerValues.motorAmps > FrontRollerConstants.NOTE_AMPS;
   }
 
   public boolean backRollerStuck() {
-    return backRollerValues.motorAmps > BackRollerConstants.STUCK_AMPS;
+    return backRollerValues.motorAmps > BackRollerConstants.NOTE_AMPS;
   }
 
-  public boolean rollerStuck() {
+  public boolean rollerNote() {
     return frontRollerStuck() || backRollerStuck();
   }
   

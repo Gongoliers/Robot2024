@@ -37,7 +37,7 @@ public class IntakeConstants {
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 67;
 
-    public static final double STUCK_AMPS = 100;
+    public static final double NOTE_AMPS = 20;
   }
 
   /** Constants for the back roller. */
@@ -71,6 +71,6 @@ public class IntakeConstants {
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 67;
 
-    public static final double STUCK_AMPS = 80;
+    public static final double NOTE_AMPS = 20;
   }
 }

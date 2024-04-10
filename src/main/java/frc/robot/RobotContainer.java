@@ -1,8 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
@@ -29,6 +33,8 @@ public class RobotContainer {
 
   private final CommandXboxController driverController, operatorController;
 
+  private final XboxController rumbleController; 
+
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
     arm = Arm.getInstance();
@@ -41,6 +47,7 @@ public class RobotContainer {
 
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
+    rumbleController = new XboxController(1);
 
     initializeTelemetry();
     configureDefaultCommands();
@@ -88,6 +95,20 @@ public class RobotContainer {
     operatorController.a().onTrue(superstructure.amp());
     operatorController.x().onTrue(superstructure.stow());
     operatorController.y().onTrue(superstructure.climb());
+
+    new Trigger(intake::rollerNote).onTrue(rumbleOn()).onFalse(rumbleOff());
+  }
+
+  public void rumble(double value) {
+    rumbleController.setRumble(RumbleType.kBothRumble, value);
+  }
+
+  public Command rumbleOn() {
+    return Commands.runOnce(() -> rumble(1));
+  }
+
+  public Command rumbleOff() {
+    return Commands.runOnce(() -> rumble(0));
   }
 
   /**
