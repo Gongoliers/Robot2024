@@ -13,6 +13,8 @@ public record IntakeState(
 
   public static final IntakeState INTAKE = new IntakeState(FrontRollerConstants.INTAKE_SPEED, BackRollerConstants.INTAKE_SPEED);
 
+  public static final IntakeState EJECT = new IntakeState(FrontRollerConstants.EJECT_SPEED, BackRollerConstants.EJECT_SPEED);
+
   public IntakeState {
     Objects.requireNonNull(frontRollerVelocityRotationsPerSecond);
     Objects.requireNonNull(backRollerVelocityRotationsPerSecond);

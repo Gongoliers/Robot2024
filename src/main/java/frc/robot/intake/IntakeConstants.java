@@ -32,6 +32,8 @@ public class IntakeConstants {
 
     public static final double INTAKE_SPEED = 34;
 
+    public static final double EJECT_SPEED = -34;
+
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 67;
   }
@@ -61,6 +63,8 @@ public class IntakeConstants {
     }
 
     public static final double INTAKE_SPEED = 34;
+
+    public static final double EJECT_SPEED = -34;
 
     /** Maximum speed of the roller in rotations per second. */
     public static final double MAXIMUM_SPEED = 67;

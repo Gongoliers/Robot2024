@@ -22,10 +22,10 @@ public record SuperstructureState(
       new SuperstructureState(ArmState.STOW, IntakeState.INTAKE, ShooterState.INTAKE);
 
   public static final SuperstructureState EJECT_POSITION =
-      new SuperstructureState(ArmState.EJECT, IntakeState.IDLE, ShooterState.IDLE);
+      new SuperstructureState(ArmState.EJECT, IntakeState.EJECT, ShooterState.IDLE);
 
   public static final SuperstructureState EJECT =
-      new SuperstructureState(ArmState.EJECT, IntakeState.IDLE, ShooterState.EJECT);
+      new SuperstructureState(ArmState.EJECT, IntakeState.EJECT, ShooterState.EJECT);
 
   public static final SuperstructureState SPEAKER_PULL =
       new SuperstructureState(ArmState.SPEAKER, IntakeState.IDLE, ShooterState.PULL);
