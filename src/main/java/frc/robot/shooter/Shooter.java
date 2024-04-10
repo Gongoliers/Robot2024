@@ -37,8 +37,8 @@ public class Shooter extends Subsystem {
     flywheelValues = new VelocityControllerIOValues();
     flywheel.configure(FlywheelConstants.CONTROLLER_CONSTANTS);
 
-    setpoint = new ShooterState(0, 0);
-    goal = new ShooterState(0, 0);
+    setpoint = ShooterState.IDLE;
+    goal = ShooterState.IDLE;
   }
 
   /**

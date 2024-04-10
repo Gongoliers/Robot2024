@@ -31,8 +31,8 @@ public class Intake extends Subsystem {
     backRollerValues = new VelocityControllerIOValues();
     backRoller.configure(BackRollerConstants.CONTROLLER_CONSTANTS);
 
-    setpoint = new IntakeState(0, 0);
-    goal = new IntakeState(0, 0);
+    setpoint = IntakeState.IDLE;
+    goal = IntakeState.IDLE;
   }
 
   /**
