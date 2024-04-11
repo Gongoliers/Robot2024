@@ -66,9 +66,7 @@ public class Arm extends Subsystem {
     setpoint =
         new ArmState(
             ShoulderConstants.MOTION_PROFILE.calculate(
-                dt,
-                setpoint.shoulderRotations(),
-                goal.shoulderRotations()));
+                dt, setpoint.shoulderRotations(), goal.shoulderRotations()));
 
     shoulder.setSetpoint(
         setpoint.shoulderRotations().position, setpoint.shoulderRotations().velocity);
@@ -78,7 +76,10 @@ public class Arm extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     PositionControllerIO.addToShuffleboard(tab, "Shoulder", shoulderValues);
 
-    Telemetry.addColumn(tab, "Setpoint").addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(setpoint.shoulderRotations().position));
+    Telemetry.addColumn(tab, "Setpoint")
+        .addDouble(
+            "Setpoint (deg)",
+            () -> Units.rotationsToDegrees(setpoint.shoulderRotations().position));
   }
 
   public ArmState getState() {

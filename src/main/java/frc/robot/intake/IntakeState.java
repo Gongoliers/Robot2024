@@ -3,7 +3,6 @@ package frc.robot.intake;
 import edu.wpi.first.math.MathUtil;
 import frc.robot.intake.IntakeConstants.BackRollerConstants;
 import frc.robot.intake.IntakeConstants.FrontRollerConstants;
-
 import java.util.Objects;
 
 public record IntakeState(
@@ -11,9 +10,11 @@ public record IntakeState(
 
   public static final IntakeState IDLE = new IntakeState(0, 0);
 
-  public static final IntakeState INTAKE = new IntakeState(FrontRollerConstants.INTAKE_SPEED, BackRollerConstants.INTAKE_SPEED);
+  public static final IntakeState INTAKE =
+      new IntakeState(FrontRollerConstants.INTAKE_SPEED, BackRollerConstants.INTAKE_SPEED);
 
-  public static final IntakeState EJECT = new IntakeState(FrontRollerConstants.EJECT_SPEED, BackRollerConstants.EJECT_SPEED);
+  public static final IntakeState EJECT =
+      new IntakeState(FrontRollerConstants.EJECT_SPEED, BackRollerConstants.EJECT_SPEED);
 
   public IntakeState {
     Objects.requireNonNull(frontRollerVelocityRotationsPerSecond);

@@ -1,7 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -32,7 +32,7 @@ public class RobotContainer {
 
   private final CommandXboxController driverController, operatorController;
 
-  private final XboxController rumbleController; 
+  private final XboxController rumbleController;
 
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
@@ -103,9 +103,7 @@ public class RobotContainer {
 
   public Command rumble(RumbleType side) {
     return Commands.startEnd(
-      () -> rumbleController.setRumble(side, 1),
-      () -> rumbleController.setRumble(side, 0)
-    );
+        () -> rumbleController.setRumble(side, 1), () -> rumbleController.setRumble(side, 0));
   }
 
   /**

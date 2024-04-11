@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import frc.robot.arm.ArmConstants.ShoulderConstants;
-
 import java.util.Objects;
 
 public record ArmState(State shoulderRotations) {
@@ -36,6 +35,8 @@ public record ArmState(State shoulderRotations) {
 
   public boolean at(ArmState other) {
     return MathUtil.isNear(
-        shoulderRotations.position, other.shoulderRotations.position, Units.degreesToRotations(2.0));
+        shoulderRotations.position,
+        other.shoulderRotations.position,
+        Units.degreesToRotations(2.0));
   }
 }

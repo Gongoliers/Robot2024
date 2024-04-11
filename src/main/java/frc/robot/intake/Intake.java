@@ -77,7 +77,7 @@ public class Intake extends Subsystem {
   private boolean backRollerStuck() {
     return backRollerValues.motorAmps > BackRollerConstants.NOTE_AMPS;
   }
-  
+
   public IntakeState getState() {
     return new IntakeState(
         frontRollerValues.velocityRotationsPerSecond, backRollerValues.velocityRotationsPerSecond);

@@ -62,8 +62,12 @@ public class Shooter extends Subsystem {
 
     setpoint = goal;
 
-    double flywheelSetpoint = FlywheelConstants.ACCELERATION_LIMITER.calculate(setpoint.flywheelVelocityRotationsPerSecond());
-    double serializerSetpoint = SerializerConstants.ACCELERATION_LIMITER.calculate(setpoint.serializerVelocityRotationsPerSecond());
+    double flywheelSetpoint =
+        FlywheelConstants.ACCELERATION_LIMITER.calculate(
+            setpoint.flywheelVelocityRotationsPerSecond());
+    double serializerSetpoint =
+        SerializerConstants.ACCELERATION_LIMITER.calculate(
+            setpoint.serializerVelocityRotationsPerSecond());
 
     flywheel.setSetpoint(flywheelSetpoint);
     serializer.setSetpoint(serializerSetpoint);
@@ -77,7 +81,7 @@ public class Shooter extends Subsystem {
 
   public Trigger serializedNote() {
     return new Trigger(() -> serializerValues.motorAmps > SerializerConstants.NOTE_AMPS);
-  } 
+  }
 
   public ShooterState getState() {
     return new ShooterState(

@@ -45,7 +45,8 @@ public class ShooterConstants {
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 45.319;
 
-    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
+    public static final SlewRateLimiter ACCELERATION_LIMITER =
+        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
 
     public static final double NOTE_AMPS = 20;
   }
@@ -88,6 +89,7 @@ public class ShooterConstants {
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 60;
 
-    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
+    public static final SlewRateLimiter ACCELERATION_LIMITER =
+        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
   }
 }
