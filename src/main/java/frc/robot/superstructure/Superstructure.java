@@ -149,7 +149,7 @@ public class Superstructure extends Subsystem {
 
   public Command speaker() {
     return hold(SuperstructureState.SPEAKER_PULL)
-        .withTimeout(0.15)
+        .withTimeout(0.05)
         .andThen(to(SuperstructureState.SPEAKER_READY))
         .andThen(hold(SuperstructureState.SPEAKER_SHOOT))
         .withName("SPEAKER");
@@ -157,7 +157,7 @@ public class Superstructure extends Subsystem {
 
   public Command pass() {
     return hold(SuperstructureState.PASS_PULL)
-        .withTimeout(0.15)
+        .withTimeout(0.05)
         .andThen(to(SuperstructureState.PASS_READY))
         .andThen(hold(SuperstructureState.PASS_SHOOT))
         .withName("PASS");

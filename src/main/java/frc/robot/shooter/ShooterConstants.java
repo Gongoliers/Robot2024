@@ -1,6 +1,8 @@
 package frc.robot.shooter;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.lib.CAN;
+import frc.lib.MotionProfileCalculator;
 import frc.lib.PIDFConstants;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 
@@ -25,8 +27,8 @@ public class ShooterConstants {
         new VelocityControllerIOConstants();
 
     static {
-      CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = true;
+      CONTROLLER_CONSTANTS.ccwPositive = true;
+      CONTROLLER_CONSTANTS.neutralBrake = false;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 36.0 / 16.0;
     }
 
@@ -73,5 +75,7 @@ public class ShooterConstants {
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 46.711;
+
+    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25));
   }
 }
