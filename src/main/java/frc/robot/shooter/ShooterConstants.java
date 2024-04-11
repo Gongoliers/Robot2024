@@ -56,7 +56,7 @@ public class ShooterConstants {
 
     static {
       PIDF.kS = 0.14;
-      PIDF.kV = 0.1969;
+      PIDF.kV = 0.2;
     }
 
     /** Flywheel's controller constants. */
