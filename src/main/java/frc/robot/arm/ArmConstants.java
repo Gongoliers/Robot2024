@@ -44,7 +44,7 @@ public class ArmConstants {
     }
 
     /** Maximum speed of the shoulder in rotations per second. */
-    public static final double MAXIMUM_SPEED = Units.degreesToRotations(120.0);
+    public static final double MAXIMUM_SPEED = Units.degreesToRotations(240.0);
 
     /** Maximum acceleration of the shoulder in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
@@ -67,6 +67,6 @@ public class ArmConstants {
 
     public static final Rotation2d SKIM = Rotation2d.fromDegrees(30);
 
-    public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(80);
   }
 }

@@ -13,7 +13,7 @@ public record ShooterState(
 
   public static final ShooterState INTAKE = new ShooterState(0, SerializerConstants.INTAKE_SPEED);
 
-  public static final ShooterState PULL = new ShooterState(0, SerializerConstants.PULL_SPEED);
+  public static final ShooterState PULL = new ShooterState(FlywheelConstants.PULL_SPEED, SerializerConstants.PULL_SPEED);
 
   public static final ShooterState EJECT = new ShooterState(0, SerializerConstants.EJECT_SPEED);
 
@@ -34,8 +34,8 @@ public record ShooterState(
 
   public boolean at(ShooterState other) {
     return MathUtil.isNear(
-            flywheelVelocityRotationsPerSecond, other.flywheelVelocityRotationsPerSecond, 2.5)
+            flywheelVelocityRotationsPerSecond, other.flywheelVelocityRotationsPerSecond, 5)
         && MathUtil.isNear(
-            serializerVelocityRotationsPerSecond, other.serializerVelocityRotationsPerSecond, 2.5);
+            serializerVelocityRotationsPerSecond, other.serializerVelocityRotationsPerSecond, 5);
   }
 }

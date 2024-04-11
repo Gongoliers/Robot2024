@@ -62,9 +62,10 @@ public class Shooter extends Subsystem {
     setpoint = goal;
 
     double flywheelSetpoint = FlywheelConstants.ACCELERATION_LIMITER.calculate(setpoint.flywheelVelocityRotationsPerSecond());
+    double serializerSetpoint = SerializerConstants.ACCELERATION_LIMITER.calculate(setpoint.serializerVelocityRotationsPerSecond());
 
     flywheel.setSetpoint(flywheelSetpoint);
-    serializer.setSetpoint(setpoint.serializerVelocityRotationsPerSecond());
+    serializer.setSetpoint(serializerSetpoint);
   }
 
   @Override

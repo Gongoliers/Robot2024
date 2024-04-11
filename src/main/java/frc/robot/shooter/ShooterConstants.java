@@ -42,6 +42,8 @@ public class ShooterConstants {
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 45.319;
+
+    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
@@ -54,7 +56,7 @@ public class ShooterConstants {
 
     static {
       PIDF.kS = 0.14;
-      PIDF.kV = 0.2539;
+      PIDF.kV = 0.1969;
     }
 
     /** Flywheel's controller constants. */
@@ -67,15 +69,17 @@ public class ShooterConstants {
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 28.0 / 16.0;
     }
 
-    public static final double SPEAKER_SPEED = 44;
+    public static final double PULL_SPEED = -20;
 
-    public static final double PASS_SPEED = 44;
+    public static final double SPEAKER_SPEED = 60;
+
+    public static final double PASS_SPEED = 60;
 
     public static final double AMP_SPEED = 20;
 
     /** Maximum speed in rotations per second. */
-    public static final double MAXIMUM_SPEED = 46.711;
+    public static final double MAXIMUM_SPEED = 60;
 
-    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25));
+    public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
   }
 }
