@@ -28,7 +28,7 @@ public class ArmConstants {
       PIDF.kS = 0.14;
       PIDF.kG = 0.5125;
       PIDF.kV = 4.0;
-      PIDF.kP = 2.0;
+      PIDF.kP = 4.0;
     }
 
     /** Shoulder's controller constants. */

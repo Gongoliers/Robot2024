@@ -2,12 +2,12 @@ package frc.robot.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
-import frc.robot.RobotConstants;
 import frc.robot.arm.ArmConstants.ShoulderConstants;
 
 /** Subsystem class for the arm subsystem. */
@@ -22,6 +22,8 @@ public class Arm extends Subsystem {
   /** Shoulder values. */
   private final PositionControllerIOValues shoulderValues;
 
+  private double lastTimeSeconds;
+
   /** Arm goal. */
   private ArmState setpoint, goal;
 
@@ -30,6 +32,8 @@ public class Arm extends Subsystem {
     shoulder = ArmFactory.createShoulder();
     shoulderValues = new PositionControllerIOValues();
     shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
+
+    lastTimeSeconds = Timer.getFPGATimestamp();
 
     setPosition(ArmState.INITIAL);
     setpoint = ArmState.INITIAL;
@@ -53,10 +57,16 @@ public class Arm extends Subsystem {
   public void periodic() {
     shoulder.update(shoulderValues);
 
+    double timeSeconds = Timer.getFPGATimestamp();
+
+    double dt = timeSeconds - lastTimeSeconds;
+
+    lastTimeSeconds = timeSeconds;
+
     setpoint =
         new ArmState(
             ShoulderConstants.MOTION_PROFILE.calculate(
-                RobotConstants.PERIODIC_DURATION,
+                dt,
                 setpoint.shoulderRotations(),
                 goal.shoulderRotations()));
 
