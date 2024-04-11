@@ -156,12 +156,28 @@ public class Superstructure extends Subsystem {
         .withName("SPEAKER");
   }
 
-  public Command pass() {
-    return hold(SuperstructureState.PASS_PULL)
+  public Command podium() {
+    return hold(SuperstructureState.PODIUM_PULL)
         .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.PASS_READY))
-        .andThen(hold(SuperstructureState.PASS_SHOOT))
-        .withName("PASS");
+        .andThen(to(SuperstructureState.PODIUM_READY))
+        .andThen(hold(SuperstructureState.PODIUM_SHOOT))
+        .withName("PODIUM");
+  }
+
+  public Command lob() {
+    return hold(SuperstructureState.LOB_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.LOB_READY))
+        .andThen(hold(SuperstructureState.LOB_SHOOT))
+        .withName("LOB");
+  }
+
+  public Command skim() {
+    return hold(SuperstructureState.SKIM_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.SKIM_READY))
+        .andThen(hold(SuperstructureState.SKIM_SHOOT))
+        .withName("SKIM");
   }
 
   public Command amp() {

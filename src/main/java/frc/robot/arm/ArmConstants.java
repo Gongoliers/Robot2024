@@ -59,9 +59,11 @@ public class ArmConstants {
 
     public static final Rotation2d STOW = Rotation2d.fromDegrees(-26);
 
+    public static final Rotation2d LOB = Rotation2d.fromDegrees(-26);
+
     public static final Rotation2d SUBWOOFER = Rotation2d.fromDegrees(-15);
 
-    public static final Rotation2d PASS = Rotation2d.fromDegrees(-10);
+    public static final Rotation2d PODIUM = Rotation2d.fromDegrees(-10);
 
     public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
 

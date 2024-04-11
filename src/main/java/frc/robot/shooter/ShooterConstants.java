@@ -38,7 +38,9 @@ public class ShooterConstants {
 
     public static final double EJECT_SPEED = -44;
 
-    public static final double FEED_SPEED = 20;
+    public static final double SLOW_FEED_SPEED = 20;
+
+    public static final double FAST_FEED_SPEED = 44;
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 45.319;
@@ -75,7 +77,11 @@ public class ShooterConstants {
 
     public static final double SPEAKER_SPEED = 60;
 
-    public static final double PASS_SPEED = 60;
+    public static final double PODIUM_SPEED = 60;
+
+    public static final double LOB_SPEED = 60;
+
+    public static final double SKIM_SPEED = 60;
 
     public static final double AMP_SPEED = 20;
 

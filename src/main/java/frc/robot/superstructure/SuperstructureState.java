@@ -36,14 +36,32 @@ public record SuperstructureState(
   public static final SuperstructureState SUBWOOFER_SHOOT =
       new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SPEAKER_SHOOT);
 
-  public static final SuperstructureState PASS_PULL =
-      new SuperstructureState(ArmState.PASS, IntakeState.IDLE, ShooterState.PULL);
+  public static final SuperstructureState PODIUM_PULL =
+      new SuperstructureState(ArmState.PODIUM, IntakeState.IDLE, ShooterState.PULL);
 
-  public static final SuperstructureState PASS_READY =
-      new SuperstructureState(ArmState.PASS, IntakeState.IDLE, ShooterState.PASS_READY);
+  public static final SuperstructureState PODIUM_READY =
+      new SuperstructureState(ArmState.PODIUM, IntakeState.IDLE, ShooterState.PODIUM_READY);
 
-  public static final SuperstructureState PASS_SHOOT =
-      new SuperstructureState(ArmState.PASS, IntakeState.IDLE, ShooterState.PASS_SHOOT);
+  public static final SuperstructureState PODIUM_SHOOT =
+      new SuperstructureState(ArmState.PODIUM, IntakeState.IDLE, ShooterState.PODIUM_SHOOT);
+
+  public static final SuperstructureState LOB_PULL =
+      new SuperstructureState(ArmState.LOB, IntakeState.IDLE, ShooterState.PULL);
+
+  public static final SuperstructureState LOB_READY =
+      new SuperstructureState(ArmState.LOB, IntakeState.IDLE, ShooterState.LOB_READY);
+
+  public static final SuperstructureState LOB_SHOOT =
+      new SuperstructureState(ArmState.LOB, IntakeState.IDLE, ShooterState.LOB_SHOOT);
+
+  public static final SuperstructureState SKIM_PULL =
+      new SuperstructureState(ArmState.SKIM, IntakeState.IDLE, ShooterState.PULL);
+
+  public static final SuperstructureState SKIM_READY =
+      new SuperstructureState(ArmState.SKIM, IntakeState.IDLE, ShooterState.SKIM_READY);
+
+  public static final SuperstructureState SKIM_SHOOT =
+      new SuperstructureState(ArmState.SKIM, IntakeState.IDLE, ShooterState.SKIM_SHOOT);
 
   public static final SuperstructureState AMP_PULL =
       new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.PULL);

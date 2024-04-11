@@ -88,11 +88,13 @@ public class RobotContainer {
     operatorController.leftBumper().onTrue(superstructure.eject());
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
-    operatorController.rightBumper().onTrue(superstructure.pass());
+    operatorController.rightBumper().onTrue(superstructure.podium());
     operatorController.rightTrigger().onTrue(superstructure.subwoofer());
 
     operatorController.a().onTrue(superstructure.amp());
+    operatorController.b().onTrue(superstructure.lob());
     operatorController.x().onTrue(superstructure.stow());
+    operatorController.y().onTrue(superstructure.skim());
 
     intake.noteStuck().whileTrue(rumble(RumbleType.kLeftRumble));
 
