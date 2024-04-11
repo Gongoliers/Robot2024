@@ -34,6 +34,6 @@ public record ArmState(State shoulderRotations) {
 
   public boolean at(ArmState other) {
     return MathUtil.isNear(
-        shoulderRotations.position, other.shoulderRotations.position, Units.degreesToRotations(1.0));
+        shoulderRotations.position, other.shoulderRotations.position, Units.degreesToRotations(2.0));
   }
 }

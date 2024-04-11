@@ -48,6 +48,9 @@ public record SuperstructureState(
   public static final SuperstructureState CLIMB =
       new SuperstructureState(ArmState.CLIMB, IntakeState.IDLE, ShooterState.IDLE);
 
+  public static final SuperstructureState AMP_PULL =
+      new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.PULL);
+
   public static final SuperstructureState AMP_POSITION =
       new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.IDLE);
 

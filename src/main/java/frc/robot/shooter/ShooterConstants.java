@@ -34,7 +34,7 @@ public class ShooterConstants {
 
     public static final double INTAKE_SPEED = 34;
 
-    public static final double PULL_SPEED = -20;
+    public static final double PULL_SPEED = -10;
 
     public static final double EJECT_SPEED = -44;
 
