@@ -1,5 +1,6 @@
 package frc.robot.odometry;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.AllianceFlipHelper;
+import frc.lib.LimelightHelpers;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
@@ -74,6 +76,8 @@ public class Odometry extends Subsystem {
     field = new Field2d();
 
     yawUpdateConsumers = new ArrayList<Consumer<Rotation2d>>();
+
+    LimelightHelpers.SetFiducialIDFiltersOverride(OdometryConstants.LIMELIGHT_NAME, OdometryConstants.VALID_TAGS);
   }
 
   /**
@@ -92,6 +96,17 @@ public class Odometry extends Subsystem {
   @Override
   public void periodic() {
     gyroscope.update(gyroscopeValues);
+
+    LimelightHelpers.SetRobotOrientation(OdometryConstants.LIMELIGHT_NAME, getFieldRelativeHeading().getDegrees(), 0, 0, 0, 0, 0);
+
+    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(OdometryConstants.LIMELIGHT_NAME);
+
+    if(megaTag2.tagCount != 0) {
+      swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      swervePoseEstimator.addVisionMeasurement(
+          megaTag2.pose,
+          megaTag2.timestampSeconds);
+    }
 
     swervePoseEstimator.update(
         Rotation2d.fromRotations(gyroscopeValues.yawRotations),
