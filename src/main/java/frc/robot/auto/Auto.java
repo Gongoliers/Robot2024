@@ -71,7 +71,7 @@ public class Auto extends Subsystem {
         swerve);
 
     NamedCommands.registerCommand("stow", superstructure.stow());
-    NamedCommands.registerCommand("shoot", superstructure.speaker().withTimeout(1.5));
+    NamedCommands.registerCommand("shoot", superstructure.subwoofer().withTimeout(1.5));
     NamedCommands.registerCommand("intake", superstructure.intake().withTimeout(1.5));
 
     autoChooser = AutoBuilder.buildAutoChooser();

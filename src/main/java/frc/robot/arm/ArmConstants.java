@@ -59,14 +59,14 @@ public class ArmConstants {
 
     public static final Rotation2d STOW = Rotation2d.fromDegrees(-26);
 
-    public static final Rotation2d SPEAKER = Rotation2d.fromDegrees(-15);
+    public static final Rotation2d SUBWOOFER = Rotation2d.fromDegrees(-15);
 
-    public static final Rotation2d PASS = Rotation2d.fromDegrees(0);
+    public static final Rotation2d PASS = Rotation2d.fromDegrees(-10);
 
     public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
 
-    public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
+    public static final Rotation2d SKIM = Rotation2d.fromDegrees(30);
 
-    public static final Rotation2d CLIMB = Rotation2d.fromDegrees(60);
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
   }
 }

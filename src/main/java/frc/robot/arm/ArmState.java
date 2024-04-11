@@ -14,15 +14,15 @@ public record ArmState(State shoulderRotations) {
 
   public static final ArmState STOW = new ArmState(ShoulderConstants.STOW);
 
-  public static final ArmState SPEAKER = new ArmState(ShoulderConstants.SPEAKER);
+  public static final ArmState SUBWOOFER = new ArmState(ShoulderConstants.SUBWOOFER);
 
   public static final ArmState PASS = new ArmState(ShoulderConstants.PASS);
 
   public static final ArmState EJECT = new ArmState(ShoulderConstants.EJECT);
 
-  public static final ArmState AMP = new ArmState(ShoulderConstants.AMP);
+  public static final ArmState SKIM = new ArmState(ShoulderConstants.SKIM);
 
-  public static final ArmState CLIMB = new ArmState(ShoulderConstants.CLIMB);
+  public static final ArmState AMP = new ArmState(ShoulderConstants.AMP);
 
   public ArmState {
     Objects.requireNonNull(shoulderRotations);

@@ -147,11 +147,11 @@ public class Superstructure extends Subsystem {
         .withName("INTAKE");
   }
 
-  public Command speaker() {
-    return hold(SuperstructureState.SPEAKER_PULL)
+  public Command subwoofer() {
+    return hold(SuperstructureState.SUBWOOFER_PULL)
         .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.SPEAKER_READY))
-        .andThen(hold(SuperstructureState.SPEAKER_SHOOT))
+        .andThen(to(SuperstructureState.SUBWOOFER_READY))
+        .andThen(hold(SuperstructureState.SUBWOOFER_SHOOT))
         .withName("SPEAKER");
   }
 
@@ -161,10 +161,6 @@ public class Superstructure extends Subsystem {
         .andThen(to(SuperstructureState.PASS_READY))
         .andThen(hold(SuperstructureState.PASS_SHOOT))
         .withName("PASS");
-  }
-
-  public Command climb() {
-    return hold(SuperstructureState.CLIMB).withName("CLIMB");
   }
 
   public Command amp() {

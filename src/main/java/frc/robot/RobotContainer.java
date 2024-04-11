@@ -90,11 +90,10 @@ public class RobotContainer {
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
     operatorController.rightBumper().onTrue(superstructure.pass());
-    operatorController.rightTrigger().onTrue(superstructure.speaker());
+    operatorController.rightTrigger().onTrue(superstructure.subwoofer());
 
     operatorController.a().onTrue(superstructure.amp());
     operatorController.x().onTrue(superstructure.stow());
-    operatorController.y().onTrue(superstructure.climb());
 
     new Trigger(intake::rollerNote).onTrue(rumbleOn()).onFalse(rumbleOff());
   }
