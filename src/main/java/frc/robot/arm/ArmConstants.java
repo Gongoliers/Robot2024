@@ -26,10 +26,9 @@ public class ArmConstants {
 
     static {
       PIDF.kS = 0.14;
-      PIDF.kG = 0.15;
+      PIDF.kG = 0.5125;
       PIDF.kV = 4.0;
-      PIDF.kP = 48.0;
-      PIDF.kD = 0.54;
+      PIDF.kP = 2.0;
     }
 
     /** Shoulder's controller constants. */
@@ -45,7 +44,7 @@ public class ArmConstants {
     }
 
     /** Maximum speed of the shoulder in rotations per second. */
-    public static final double MAXIMUM_SPEED = Units.degreesToRotations(240.0);
+    public static final double MAXIMUM_SPEED = Units.degreesToRotations(120.0);
 
     /** Maximum acceleration of the shoulder in rotations per second per second. */
     public static final double MAXIMUM_ACCELERATION =
@@ -58,7 +57,7 @@ public class ArmConstants {
     /** Motion profile of the shoulder. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
 
-    public static final Rotation2d STOW = Rotation2d.fromDegrees(-25);
+    public static final Rotation2d STOW = Rotation2d.fromDegrees(-26);
 
     public static final Rotation2d SPEAKER = Rotation2d.fromDegrees(-15);
 
@@ -66,7 +65,7 @@ public class ArmConstants {
 
     public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
 
-    public static final Rotation2d AMP = Rotation2d.fromDegrees(80);
+    public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
 
     public static final Rotation2d CLIMB = Rotation2d.fromDegrees(60);
   }
