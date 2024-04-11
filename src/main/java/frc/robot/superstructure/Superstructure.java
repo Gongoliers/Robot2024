@@ -1,6 +1,5 @@
 package frc.robot.superstructure;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -11,6 +10,7 @@ import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.intake.Intake;
 import frc.robot.shooter.Shooter;
+import java.util.function.Supplier;
 
 /** Subsystem class for the superstructure subsystem. */
 public class Superstructure extends Subsystem {
@@ -27,7 +27,7 @@ public class Superstructure extends Subsystem {
   /** Reference to the shooter subsystem. */
   private final Shooter shooter;
 
-  private SuperstructureState measurement, setpoint, goal;
+  private SuperstructureState measurement, goal;
 
   /** Creates a new instance of the superstructure subsystem. */
   private Superstructure() {
@@ -37,7 +37,6 @@ public class Superstructure extends Subsystem {
 
     setPosition(SuperstructureState.INITIAL);
 
-    setpoint = SuperstructureState.INITIAL;
     goal = SuperstructureState.INITIAL;
   }
 
@@ -57,115 +56,72 @@ public class Superstructure extends Subsystem {
   @Override
   public void periodic() {
     updateMeasurement();
-    updateSetpoint();
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout measurement = Telemetry.addColumn(tab, "Measurement");
+    addStateToShuffleboard(tab, "Measurement", () -> measurement);
+    addStateToShuffleboard(tab, "Goal", () -> goal);
 
-    measurement.addDouble(
+    ShuffleboardLayout state = Telemetry.addColumn(tab, "State");
+
+    state.addString(
+        "State",
+        () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
+
+    ShuffleboardLayout at = Telemetry.addColumn(tab, "At Goal?");
+
+    at.addBoolean("At Goal?", () -> at(goal));
+  }
+
+  private void addStateToShuffleboard(
+      ShuffleboardTab tab, String name, Supplier<SuperstructureState> state) {
+    ShuffleboardLayout layout = Telemetry.addColumn(tab, name);
+
+    layout.addDouble(
         "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(this.measurement.shoulderAngleRotations().position));
-    measurement.addDouble(
+        () -> Units.rotationsToDegrees(state.get().armState().shoulderRotations().position));
+    layout.addDouble(
         "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.measurement.shoulderAngleRotations().velocity));
+        () -> Units.rotationsToDegrees(state.get().armState().shoulderRotations().velocity));
 
-    measurement.addDouble(
-        "Roller Velocity (rps)", () -> this.measurement.rollerVelocityRotationsPerSecond());
+    layout.addDouble(
+        "Front Roller Velocity (rps)",
+        () -> state.get().intakeState().frontRollerVelocityRotationsPerSecond());
 
-    measurement.addDouble(
-        "Flywheel Velocity (rps)", () -> this.measurement.flywheelVelocityRotationsPerSecond());
+    layout.addDouble(
+        "Back Roller Velocity (rps)",
+        () -> state.get().intakeState().backRollerVelocityRotationsPerSecond());
 
-    measurement.addDouble(
-        "Serializer Velocity (rps)", () -> this.measurement.serializerVelocityRotationsPerSecond());
+    layout.addDouble(
+        "Flywheel Velocity (rps)",
+        () -> state.get().shooterState().flywheelVelocityRotationsPerSecond());
 
-    ShuffleboardLayout setpoint = Telemetry.addColumn(tab, "Setpoint");
-
-    setpoint.addDouble(
-        "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().position));
-    setpoint.addDouble(
-        "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.setpoint.shoulderAngleRotations().velocity));
-
-    setpoint.addDouble(
-        "Roller Velocity (rps)", () -> this.setpoint.rollerVelocityRotationsPerSecond());
-
-    setpoint.addDouble(
-        "Flywheel Velocity (rps)", () -> this.setpoint.flywheelVelocityRotationsPerSecond());
-
-    setpoint.addDouble(
-        "Serializer Velocity (rps)", () -> this.setpoint.serializerVelocityRotationsPerSecond());
-
-    ShuffleboardLayout goal = Telemetry.addColumn(tab, "Goal");
-
-    goal.addDouble(
-        "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().position));
-    goal.addDouble(
-        "Shoulder Velocity (dps)",
-        () -> Units.rotationsToDegrees(this.goal.shoulderAngleRotations().velocity));
-
-    goal.addDouble("Roller Velocity (rps)", () -> this.goal.rollerVelocityRotationsPerSecond());
-
-    goal.addDouble("Flywheel Velocity (rps)", () -> this.goal.flywheelVelocityRotationsPerSecond());
-
-    goal.addDouble(
-        "Serializer Velocity (rps)", () -> this.goal.serializerVelocityRotationsPerSecond());
+    layout.addDouble(
+        "Serializer Velocity (rps)",
+        () -> state.get().shooterState().serializerVelocityRotationsPerSecond());
   }
 
   private void updateMeasurement() {
-    State measuredShoulderState = arm.getMeasuredShoulderState();
-
-    double measuredIntakeRollerVelocity = intake.getRollerVelocity();
-
-    double measuredShooterFlywheelVelocity = shooter.getFlywheelVelocity();
-    double measuredShooterSerializerVelocity = shooter.getSerializerVelocity();
-
-    measurement =
-        new SuperstructureState(
-            measuredShoulderState,
-            false,
-            measuredIntakeRollerVelocity,
-            measuredShooterFlywheelVelocity,
-            false,
-            measuredShooterSerializerVelocity);
+    measurement = new SuperstructureState(arm.getState(), intake.getState(), shooter.getState());
 
     SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
   }
 
   public SuperstructureState getState() {
-    updateMeasurement();
-
     return measurement;
   }
 
-  public void setSetpoint(SuperstructureState setpoint) {
-    this.setpoint = setpoint;
-  }
-
-  private void updateSetpoint() {
-    setpoint = SuperstructureState.nextSetpoint(setpoint, goal);
-
-    if (setpoint.shoulderManual() == false) {
-      arm.setSetpoint(
-          setpoint.shoulderAngleRotations().position, setpoint.shoulderAngleRotations().velocity);
-    }
-
-    shooter.setSetpoint(
-        setpoint.flywheelVelocityRotationsPerSecond(),
-        setpoint.serializerVelocityRotationsPerSecond());
-
-    intake.setSetpoint(setpoint.rollerVelocityRotationsPerSecond());
-  }
-
   public void setPosition(SuperstructureState state) {
-    arm.setShoulderPosition(state.shoulderAngleRotations().position);
+    arm.setPosition(state.armState());
   }
 
   public void setGoal(SuperstructureState goal) {
     this.goal = goal;
+
+    arm.setGoal(goal.armState());
+    intake.setGoal(goal.intakeState());
+    shooter.setGoal(goal.shooterState());
   }
 
   public boolean at(SuperstructureState goal) {
@@ -174,47 +130,68 @@ public class Superstructure extends Subsystem {
     return measurement.atGoal(goal);
   }
 
+  private Command hold(SuperstructureState goal) {
+    return run(() -> setGoal(goal));
+  }
+
   private Command to(SuperstructureState goal) {
-    return run(() -> setGoal(goal)).until(() -> at(goal)).raceWith(Commands.waitSeconds(1.0));
+    return run(() -> setGoal(goal)).until(() -> at(goal));
   }
 
   public Command stow() {
-    return to(SuperstructureState.STOW);
+    return hold(SuperstructureState.STOW).withName("STOW");
   }
 
   public Command intake() {
-    return to(SuperstructureState.INTAKE);
+    return to(SuperstructureState.STOW)
+        .andThen(hold(SuperstructureState.INTAKE))
+        .withName("INTAKE");
   }
 
-  public Command idle() {
-    return to(SuperstructureState.SPEAKER_SPIN);
+  public Command subwoofer() {
+    return hold(SuperstructureState.SUBWOOFER_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.SUBWOOFER_READY))
+        .andThen(hold(SuperstructureState.SUBWOOFER_SHOOT))
+        .withName("SPEAKER");
   }
 
-  public Command pull() {
-    return Commands.deadline(Commands.waitSeconds(0.15), to(SuperstructureState.PULL));
+  public Command podium() {
+    return hold(SuperstructureState.PODIUM_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.PODIUM_READY))
+        .andThen(hold(SuperstructureState.PODIUM_SHOOT))
+        .withName("PODIUM");
   }
 
-  public Command shoot() {
-    return pull().andThen(to(SuperstructureState.SPEAKER_SPIN).andThen(to(SuperstructureState.SPEAKER_SHOOT)));
+  public Command lob() {
+    return hold(SuperstructureState.LOB_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.LOB_READY))
+        .andThen(hold(SuperstructureState.LOB_SHOOT))
+        .withName("LOB");
   }
 
-  public Command pass() {
-    return pull().andThen(to(SuperstructureState.PASS_SPIN).andThen(to(SuperstructureState.PASS_SHOOT)));
+  public Command skim() {
+    return hold(SuperstructureState.SKIM_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.SKIM_READY))
+        .andThen(hold(SuperstructureState.SKIM_SHOOT))
+        .withName("SKIM");
   }
 
-  public Command ampPosition() {
-    return to(SuperstructureState.AMP_POSITION);
+  public Command amp() {
+    return hold(SuperstructureState.AMP_PULL)
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(SuperstructureState.AMP_POSITION))
+        .andThen(hold(SuperstructureState.AMP_SHOOT))
+        .withName("AMP");
   }
 
-  public Command ampShoot() {
-    return ampPosition().andThen(to(SuperstructureState.AMP_SHOOT));
-  }
-  
   public Command eject() {
-    return to(SuperstructureState.EJECT_POSITION).andThen(to(SuperstructureState.EJECT));
-  }
-
-  public Command manualControl() {
-    return to(SuperstructureState.MANUAL);
+    return to(SuperstructureState.EJECT_POSITION)
+        .andThen(Commands.waitSeconds(SuperstructureConstants.EJECT_PAUSE))
+        .andThen(hold(SuperstructureState.EJECT))
+        .withName("EJECT");
   }
 }

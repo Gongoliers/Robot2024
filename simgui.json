@@ -51,11 +51,17 @@
     },
     "transitory": {
       "Shuffleboard": {
+        ".recording": {
+          "open": true
+        },
         "Arm": {
           "Feedforward": {
             "open": true
           },
           "Position": {
+            "open": true
+          },
+          "Shoulder": {
             "open": true
           },
           "Velocities": {
@@ -99,7 +105,7 @@
           "Measurement": {
             "open": true
           },
-          "Setpoint": {
+          "State": {
             "open": true
           },
           "open": true,
@@ -214,7 +220,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

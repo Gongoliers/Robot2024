@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
@@ -72,8 +71,8 @@ public class Auto extends Subsystem {
         swerve);
 
     NamedCommands.registerCommand("stow", superstructure.stow());
-    NamedCommands.registerCommand("shoot", Commands.deadline(Commands.waitSeconds(3.0), superstructure.shoot()));
-    NamedCommands.registerCommand("intake", superstructure.intake());
+    NamedCommands.registerCommand("shoot", superstructure.subwoofer().withTimeout(1.5));
+    NamedCommands.registerCommand("intake", superstructure.intake().withTimeout(1.5));
 
     autoChooser = AutoBuilder.buildAutoChooser();
   }

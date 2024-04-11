@@ -1,10 +1,12 @@
 package frc.robot.intake;
 
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
-import frc.lib.Telemetry;
-import frc.robot.intake.RollerMotorIO.RollerMotorIOValues;
+import frc.lib.controller.VelocityControllerIO;
+import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
+import frc.robot.intake.IntakeConstants.BackRollerConstants;
+import frc.robot.intake.IntakeConstants.FrontRollerConstants;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
@@ -12,17 +14,26 @@ public class Intake extends Subsystem {
   /** Instance variable for the intake subsystem singleton. */
   private static Intake instance = null;
 
-  /** Roller motor. */
-  private final RollerMotorIO rollerMotor;
+  /** Rollers. */
+  private final VelocityControllerIO frontRoller, backRoller;
 
-  /** Roller motor values. */
-  private final RollerMotorIOValues rollerMotorValues = new RollerMotorIOValues();
+  /** Roller values. */
+  private final VelocityControllerIOValues frontRollerValues, backRollerValues;
+
+  private IntakeState setpoint, goal;
 
   /** Creates a new instance of the intake subsystem. */
   private Intake() {
-    rollerMotor = IntakeFactory.createRollerMotor();
+    frontRoller = IntakeFactory.createFrontRoller();
+    frontRollerValues = new VelocityControllerIOValues();
+    frontRoller.configure(FrontRollerConstants.CONTROLLER_CONSTANTS);
 
-    rollerMotor.configure();
+    backRoller = IntakeFactory.createBackRoller();
+    backRollerValues = new VelocityControllerIOValues();
+    backRoller.configure(BackRollerConstants.CONTROLLER_CONSTANTS);
+
+    setpoint = IntakeState.IDLE;
+    goal = IntakeState.IDLE;
   }
 
   /**
@@ -40,24 +51,43 @@ public class Intake extends Subsystem {
 
   @Override
   public void periodic() {
-    rollerMotor.update(rollerMotorValues);
+    frontRoller.update(frontRollerValues);
+    backRoller.update(backRollerValues);
+
+    setpoint = goal;
+
+    frontRoller.setSetpoint(setpoint.frontRollerVelocityRotationsPerSecond());
+    backRoller.setSetpoint(setpoint.backRollerVelocityRotationsPerSecond());
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout roller = Telemetry.addColumn(tab, "Roller");
-
-    roller.addDouble("Current (A)", () -> rollerMotorValues.currentAmps);
-    roller.addDouble("Velocity (rps)", () -> rollerMotorValues.velocityRotationsPerSecond);
+    VelocityControllerIO.addToShuffleboard(tab, "Front Roller", frontRollerValues);
+    VelocityControllerIO.addToShuffleboard(tab, "Back Roller", backRollerValues);
   }
 
-  public double getRollerVelocity() {
-    rollerMotor.update(rollerMotorValues);
-
-    return rollerMotorValues.velocityRotationsPerSecond;
+  public Trigger noteStuck() {
+    return new Trigger(() -> frontRollerStuck() || backRollerStuck());
   }
 
-  public void setSetpoint(double rollerVelocityRotationsPerSecond) {
-    rollerMotor.setSetpoint(rollerVelocityRotationsPerSecond);
+  private boolean frontRollerStuck() {
+    return frontRollerValues.motorAmps > FrontRollerConstants.NOTE_AMPS;
+  }
+
+  private boolean backRollerStuck() {
+    return backRollerValues.motorAmps > BackRollerConstants.NOTE_AMPS;
+  }
+  
+  public IntakeState getState() {
+    return new IntakeState(
+        frontRollerValues.velocityRotationsPerSecond, backRollerValues.velocityRotationsPerSecond);
+  }
+
+  public void setGoal(IntakeState goal) {
+    this.goal = goal;
+  }
+
+  public boolean atGoal() {
+    return getState().at(goal);
   }
 }

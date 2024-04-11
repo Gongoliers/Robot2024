@@ -1,12 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
-import frc.robot.arm.ManualCommand;
 import frc.robot.auto.Auto;
 import frc.robot.intake.Intake;
 import frc.robot.odometry.Odometry;
@@ -31,6 +32,8 @@ public class RobotContainer {
 
   private final CommandXboxController driverController, operatorController;
 
+  private final XboxController rumbleController; 
+
   /** Creates a new instance of the robot container. */
   private RobotContainer() {
     arm = Arm.getInstance();
@@ -43,6 +46,7 @@ public class RobotContainer {
 
     driverController = new CommandXboxController(0);
     operatorController = new CommandXboxController(1);
+    rumbleController = new XboxController(1);
 
     initializeTelemetry();
     configureDefaultCommands();
@@ -75,19 +79,33 @@ public class RobotContainer {
 
   /** Configures controller bindings. */
   private void configureBindings() {
+    driverController.a().whileTrue(swerve.forwards());
+    driverController.b().whileTrue(swerve.sideways());
+    driverController.x().whileTrue(swerve.cross());
+
     driverController.y().onTrue(odometry.tare());
 
     operatorController.leftBumper().onTrue(superstructure.eject());
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
-    operatorController.rightBumper().onTrue(superstructure.pass());
-    operatorController.rightTrigger().onTrue(superstructure.shoot());
+    operatorController.rightBumper().onTrue(superstructure.podium());
+    operatorController.rightTrigger().onTrue(superstructure.subwoofer());
 
-    // operatorController.a().onTrue(superstructure.ampPosition());
-    // operatorController.b().onTrue(superstructure.ampShoot());
+    operatorController.a().onTrue(superstructure.amp());
+    operatorController.b().onTrue(superstructure.lob());
     operatorController.x().onTrue(superstructure.stow());
+    operatorController.y().onTrue(superstructure.skim());
 
-    operatorController.y().whileTrue(superstructure.manualControl().andThen(new ManualCommand(operatorController::getLeftY))).onFalse(Commands.runOnce(() -> superstructure.setSetpoint(superstructure.getState())));
+    intake.noteStuck().whileTrue(rumble(RumbleType.kLeftRumble));
+
+    shooter.serializedNote().whileTrue(rumble(RumbleType.kRightRumble));
+  }
+
+  public Command rumble(RumbleType side) {
+    return Commands.startEnd(
+      () -> rumbleController.setRumble(side, 1),
+      () -> rumbleController.setRumble(side, 0)
+    );
   }
 
   /**

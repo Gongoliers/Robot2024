@@ -1,13 +1,14 @@
 package frc.robot.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.arm.ShoulderMotorIO.ShoulderMotorIOValues;
+import frc.lib.controller.PositionControllerIO;
+import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
+import frc.robot.arm.ArmConstants.ShoulderConstants;
 
 /** Subsystem class for the arm subsystem. */
 public class Arm extends Subsystem {
@@ -15,17 +16,28 @@ public class Arm extends Subsystem {
   /** Instance variable for the arm subsystem singleton. */
   private static Arm instance = null;
 
-  /** Shoulder motor. */
-  private final ShoulderMotorIO shoulderMotor;
+  /** Shoulder. */
+  private final PositionControllerIO shoulder;
 
-  /** Shoulder motor values. */
-  private final ShoulderMotorIOValues shoulderMotorValues = new ShoulderMotorIOValues();
+  /** Shoulder values. */
+  private final PositionControllerIOValues shoulderValues;
+
+  private double lastTimeSeconds;
+
+  /** Arm goal. */
+  private ArmState setpoint, goal;
 
   /** Creates a new instance of the arm subsystem. */
   private Arm() {
-    shoulderMotor = ArmFactory.createShoulderMotor();
+    shoulder = ArmFactory.createShoulder();
+    shoulderValues = new PositionControllerIOValues();
+    shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
 
-    shoulderMotor.configure();
+    lastTimeSeconds = Timer.getFPGATimestamp();
+
+    setPosition(ArmState.INITIAL);
+    setpoint = ArmState.INITIAL;
+    goal = ArmState.INITIAL;
   }
 
   /**
@@ -43,44 +55,47 @@ public class Arm extends Subsystem {
 
   @Override
   public void periodic() {
-    shoulderMotor.update(shoulderMotorValues);
+    shoulder.update(shoulderValues);
+
+    double timeSeconds = Timer.getFPGATimestamp();
+
+    double dt = timeSeconds - lastTimeSeconds;
+
+    lastTimeSeconds = timeSeconds;
+
+    setpoint =
+        new ArmState(
+            ShoulderConstants.MOTION_PROFILE.calculate(
+                dt,
+                setpoint.shoulderRotations(),
+                goal.shoulderRotations()));
+
+    shoulder.setSetpoint(
+        setpoint.shoulderRotations().position, setpoint.shoulderRotations().velocity);
   }
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout position = Telemetry.addColumn(tab, "Position");
+    PositionControllerIO.addToShuffleboard(tab, "Shoulder", shoulderValues);
 
-    position.addDouble(
-        "Shoulder Position (deg)",
-        () -> Units.rotationsToDegrees(shoulderMotorValues.positionRotations));
-
-    ShuffleboardLayout voltages = Telemetry.addColumn(tab, "Voltages");
-
-    voltages.addDouble("Shoulder Voltage (V)", () -> shoulderMotorValues.inputVoltage);
-
-    ShuffleboardLayout derivatives = Telemetry.addColumn(tab, "Derivatives");
-
-    derivatives.addDouble(
-        "Shoulder Velocity (rps)", () -> shoulderMotorValues.velocityRotationsPerSecond);
-    derivatives.addDouble(
-        "Shoulder Acceleration (rpsps)",
-        () -> shoulderMotorValues.accelerationRotationsPerSecondPerSecond);
+    Telemetry.addColumn(tab, "Setpoint").addDouble("Setpoint (deg)", () -> Units.rotationsToDegrees(setpoint.shoulderRotations().position));
   }
 
-  public State getMeasuredShoulderState() {
-    return new TrapezoidProfile.State(
-        shoulderMotorValues.positionRotations, shoulderMotorValues.velocityRotationsPerSecond);
+  public ArmState getState() {
+    return new ArmState(
+        new TrapezoidProfile.State(
+            shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond));
   }
 
-  public void setShoulderPosition(double positionRotations) {
-    shoulderMotor.setPosition(positionRotations);
+  public void setGoal(ArmState goal) {
+    this.goal = goal;
   }
 
-  public void setSetpoint(double positionRotations, double velocityRotationsPerSecond) {
-    shoulderMotor.setSetpoint(positionRotations, velocityRotationsPerSecond);
+  public boolean atGoal() {
+    return getState().at(goal);
   }
 
-  public void setVoltage(double volts) {
-    shoulderMotor.setVoltage(volts);
+  public void setPosition(ArmState armState) {
+    shoulder.setPosition(armState.shoulderRotations().position);
   }
 }
