@@ -4,6 +4,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
@@ -173,6 +174,7 @@ public class Superstructure extends Subsystem {
 
   public Command eject() {
     return to(SuperstructureState.EJECT_POSITION)
+        .andThen(Commands.waitSeconds(SuperstructureConstants.EJECT_PAUSE))
         .andThen(hold(SuperstructureState.EJECT))
         .withName("EJECT");
   }
