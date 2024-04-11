@@ -26,7 +26,7 @@ public class ShooterConstants {
 
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = false;
+      CONTROLLER_CONSTANTS.neutralBrake = true;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 36.0 / 16.0;
     }
 
@@ -61,7 +61,7 @@ public class ShooterConstants {
 
     static {
       CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = false;
+      CONTROLLER_CONSTANTS.neutralBrake = true;
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 28.0 / 16.0;
     }
 
