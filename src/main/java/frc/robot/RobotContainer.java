@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.auto.Auto;
@@ -95,19 +94,16 @@ public class RobotContainer {
     operatorController.a().onTrue(superstructure.amp());
     operatorController.x().onTrue(superstructure.stow());
 
-    new Trigger(intake::rollerNote).onTrue(rumbleOn()).onFalse(rumbleOff());
+    intake.noteStuck().whileTrue(rumble(RumbleType.kLeftRumble));
+
+    shooter.serializedNote().whileTrue(rumble(RumbleType.kRightRumble));
   }
 
-  public void rumble(double value) {
-    rumbleController.setRumble(RumbleType.kBothRumble, value);
-  }
-
-  public Command rumbleOn() {
-    return Commands.runOnce(() -> rumble(1));
-  }
-
-  public Command rumbleOff() {
-    return Commands.runOnce(() -> rumble(0));
+  public Command rumble(RumbleType side) {
+    return Commands.startEnd(
+      () -> rumbleController.setRumble(side, 1),
+      () -> rumbleController.setRumble(side, 0)
+    );
   }
 
   /**

@@ -44,6 +44,8 @@ public class ShooterConstants {
     public static final double MAXIMUM_SPEED = 45.319;
 
     public static final SlewRateLimiter ACCELERATION_LIMITER = new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
+
+    public static final double NOTE_AMPS = 20;
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */

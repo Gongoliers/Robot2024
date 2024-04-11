@@ -1,6 +1,7 @@
 package frc.robot.intake;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
@@ -63,20 +64,18 @@ public class Intake extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     VelocityControllerIO.addToShuffleboard(tab, "Front Roller", frontRollerValues);
     VelocityControllerIO.addToShuffleboard(tab, "Back Roller", backRollerValues);
-
-    tab.addBoolean("Roller Note?", this::rollerNote);
   }
 
-  public boolean frontRollerStuck() {
+  public Trigger noteStuck() {
+    return new Trigger(() -> frontRollerStuck() || backRollerStuck());
+  }
+
+  private boolean frontRollerStuck() {
     return frontRollerValues.motorAmps > FrontRollerConstants.NOTE_AMPS;
   }
 
-  public boolean backRollerStuck() {
+  private boolean backRollerStuck() {
     return backRollerValues.motorAmps > BackRollerConstants.NOTE_AMPS;
-  }
-
-  public boolean rollerNote() {
-    return frontRollerStuck() || backRollerStuck();
   }
   
   public IntakeState getState() {
