@@ -65,7 +65,7 @@ public class ArmConstants {
 
     public static final Rotation2d PODIUM = Rotation2d.fromDegrees(-10);
 
-    public static final Rotation2d EJECT = Rotation2d.fromDegrees(0);
+    public static final Rotation2d EJECT = Rotation2d.fromDegrees(30);
 
     public static final Rotation2d SKIM = Rotation2d.fromDegrees(30);
 
