@@ -1,10 +1,7 @@
 package frc.robot.superstructure;
 
-import frc.robot.arm.Arm;
 import frc.robot.arm.ArmState;
-import frc.robot.intake.Intake;
 import frc.robot.intake.IntakeState;
-import frc.robot.shooter.Shooter;
 import frc.robot.shooter.ShooterState;
 import java.util.Objects;
 
@@ -50,17 +47,5 @@ public record SuperstructureState(
     Objects.requireNonNull(armState);
     Objects.requireNonNull(intakeState);
     Objects.requireNonNull(shooterState);
-  }
-
-  /**
-   * Returns true if at the superstructure goal.
-   *
-   * @param goal
-   * @return true if at the superstructure goal.
-   */
-  public boolean atGoal(SuperstructureState goal) {
-    return Arm.getInstance().atGoal()
-        && Intake.getInstance().atGoal()
-        && Shooter.getInstance().atGoal();
   }
 }

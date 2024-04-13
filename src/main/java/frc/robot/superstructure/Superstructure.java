@@ -58,7 +58,9 @@ public class Superstructure extends Subsystem {
 
   @Override
   public void periodic() {
-    updateMeasurement();
+    measurement = new SuperstructureState(arm.getState(), intake.getState(), shooter.getState());
+
+    SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
   }
 
   @Override
@@ -66,15 +68,11 @@ public class Superstructure extends Subsystem {
     addStateToShuffleboard(tab, "Measurement", () -> measurement);
     addStateToShuffleboard(tab, "Goal", () -> goal);
 
-    ShuffleboardLayout state = Telemetry.addColumn(tab, "State");
-
-    state.addString(
+    Telemetry.addColumn(tab, "State").addString(
         "State",
         () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
 
-    ShuffleboardLayout at = Telemetry.addColumn(tab, "At Goal?");
-
-    at.addBoolean("At Goal?", () -> at(goal));
+    Telemetry.addColumn(tab, "At Goal?").addBoolean("At Goal?", this::atGoal);
   }
 
   private void addStateToShuffleboard(
@@ -105,16 +103,6 @@ public class Superstructure extends Subsystem {
         () -> state.get().shooterState().serializerVelocityRotationsPerSecond());
   }
 
-  private void updateMeasurement() {
-    measurement = new SuperstructureState(arm.getState(), intake.getState(), shooter.getState());
-
-    SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
-  }
-
-  public SuperstructureState getState() {
-    return measurement;
-  }
-
   public void setPosition(SuperstructureState state) {
     arm.setPosition(state.armState());
   }
@@ -127,10 +115,10 @@ public class Superstructure extends Subsystem {
     shooter.setGoal(goal.shooterState());
   }
 
-  public boolean at(SuperstructureState goal) {
-    updateMeasurement();
-
-    return measurement.atGoal(goal);
+  public boolean atGoal() {
+    return arm.atGoal()
+        && intake.atGoal()
+        && shooter.atGoal();
   }
 
   private Command hold(SuperstructureState goal) {
@@ -138,7 +126,7 @@ public class Superstructure extends Subsystem {
   }
 
   private Command to(SuperstructureState goal) {
-    return run(() -> setGoal(goal)).until(() -> at(goal));
+    return run(() -> setGoal(goal)).until(this::atGoal);
   }
 
   public Command stow() {
