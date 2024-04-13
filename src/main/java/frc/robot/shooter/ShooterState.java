@@ -17,29 +17,19 @@ public record ShooterState(
 
   public static final ShooterState EJECT = new ShooterState(0, SerializerConstants.EJECT_SPEED);
 
-  public static final ShooterState SPEAKER_READY =
-      new ShooterState(FlywheelConstants.SPEAKER_SPEED, 0);
-
-  public static final ShooterState SPEAKER_SHOOT =
+  public static final ShooterState SUBWOOFER =
       new ShooterState(FlywheelConstants.SPEAKER_SPEED, SerializerConstants.FAST_FEED_SPEED);
 
-  public static final ShooterState PODIUM_READY =
-      new ShooterState(FlywheelConstants.PODIUM_SPEED, 0);
-
-  public static final ShooterState PODIUM_SHOOT =
+  public static final ShooterState PODIUM =
       new ShooterState(FlywheelConstants.PODIUM_SPEED, SerializerConstants.FAST_FEED_SPEED);
 
-  public static final ShooterState LOB_READY = new ShooterState(FlywheelConstants.LOB_SPEED, 0);
-
-  public static final ShooterState LOB_SHOOT =
+  public static final ShooterState LOB =
       new ShooterState(FlywheelConstants.LOB_SPEED, SerializerConstants.FAST_FEED_SPEED);
 
-  public static final ShooterState SKIM_READY = new ShooterState(FlywheelConstants.SKIM_SPEED, 0);
-
-  public static final ShooterState SKIM_SHOOT =
+  public static final ShooterState SKIM =
       new ShooterState(FlywheelConstants.SKIM_SPEED, SerializerConstants.FAST_FEED_SPEED);
 
-  public static final ShooterState AMP_SHOOT =
+  public static final ShooterState AMP =
       new ShooterState(FlywheelConstants.AMP_SPEED, SerializerConstants.SLOW_FEED_SPEED);
 
   public ShooterState {

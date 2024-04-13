@@ -9,7 +9,10 @@ import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
 import frc.robot.intake.Intake;
+import frc.robot.intake.IntakeState;
 import frc.robot.shooter.Shooter;
+import frc.robot.shooter.ShooterState;
+
 import java.util.function.Supplier;
 
 /** Subsystem class for the superstructure subsystem. */
@@ -35,9 +38,9 @@ public class Superstructure extends Subsystem {
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
 
-    setPosition(SuperstructureState.INITIAL);
+    setPosition(SuperstructureState.STOW);
 
-    goal = SuperstructureState.INITIAL;
+    goal = SuperstructureState.STOW;
   }
 
   /**
@@ -148,44 +151,37 @@ public class Superstructure extends Subsystem {
         .withName("INTAKE");
   }
 
+  private Command shoot(SuperstructureState shot) {
+    final SuperstructureState pull = new SuperstructureState(shot.armState(), IntakeState.IDLE, ShooterState.PULL);
+
+    final ShooterState spin = new ShooterState(shot.shooterState().flywheelVelocityRotationsPerSecond(), 0);
+
+    final SuperstructureState ready = new SuperstructureState(shot.armState(), IntakeState.IDLE, spin);
+
+    return hold(pull)
+      .withTimeout(SuperstructureConstants.PULL_DURATION)
+      .andThen(to(ready))
+      .andThen(hold(shot));
+  }
+
   public Command subwoofer() {
-    return hold(SuperstructureState.SUBWOOFER_PULL)
-        .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.SUBWOOFER_READY))
-        .andThen(hold(SuperstructureState.SUBWOOFER_SHOOT))
-        .withName("SPEAKER");
+    return shoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
   }
 
   public Command podium() {
-    return hold(SuperstructureState.PODIUM_PULL)
-        .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.PODIUM_READY))
-        .andThen(hold(SuperstructureState.PODIUM_SHOOT))
-        .withName("PODIUM");
+    return shoot(SuperstructureState.PODIUM).withName("PODIUM");
   }
 
   public Command lob() {
-    return hold(SuperstructureState.LOB_PULL)
-        .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.LOB_READY))
-        .andThen(hold(SuperstructureState.LOB_SHOOT))
-        .withName("LOB");
+    return shoot(SuperstructureState.LOB).withName("LOB");
   }
 
   public Command skim() {
-    return hold(SuperstructureState.SKIM_PULL)
-        .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.SKIM_READY))
-        .andThen(hold(SuperstructureState.SKIM_SHOOT))
-        .withName("SKIM");
+    return shoot(SuperstructureState.SKIM).withName("SKIM");
   }
 
   public Command amp() {
-    return hold(SuperstructureState.AMP_PULL)
-        .withTimeout(SuperstructureConstants.PULL_DURATION)
-        .andThen(to(SuperstructureState.AMP_POSITION))
-        .andThen(hold(SuperstructureState.AMP_SHOOT))
-        .withName("AMP");
+    return shoot(SuperstructureState.AMP).withName("AMP");
   }
 
   public Command eject() {
