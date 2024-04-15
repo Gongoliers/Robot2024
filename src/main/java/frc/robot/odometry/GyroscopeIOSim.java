@@ -10,13 +10,13 @@ public class GyroscopeIOSim implements GyroscopeIO {
   /** Gyroscope's yaw. */
   private double yawRotations;
 
-  private final DoubleSupplier yawVelocityRotationsPerSecondSupplier;
+  private final DoubleSupplier yawVelocityRotations;
 
   /** Creates a new simulated gyroscope. */
   public GyroscopeIOSim(Odometry odometry) {
     yawRotations = 0.0;
 
-    yawVelocityRotationsPerSecondSupplier =
+    yawVelocityRotations =
         () -> Units.radiansToRotations(odometry.getVelocity().dtheta);
   }
 
@@ -26,11 +26,11 @@ public class GyroscopeIOSim implements GyroscopeIO {
   @Override
   public void update(GyroscopeIOValues values) {
     yawRotations +=
-        yawVelocityRotationsPerSecondSupplier.getAsDouble() * RobotConstants.PERIODIC_DURATION;
+        yawVelocityRotations.getAsDouble() * RobotConstants.PERIODIC_DURATION;
 
-    values.rollRotations = 0.0;
-    values.pitchRotations = 0.0;
     values.yawRotations = yawRotations;
+
+    values.yawVelocityRotations = yawVelocityRotations.getAsDouble();
   }
 
   @Override

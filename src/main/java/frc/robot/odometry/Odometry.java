@@ -101,7 +101,11 @@ public class Odometry extends Subsystem {
 
     LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(OdometryConstants.LIMELIGHT_NAME);
 
-    if(megaTag2.tagCount != 0) {
+    final boolean spinningFast = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
+
+    final boolean hasTag = megaTag2.tagCount != 0;
+
+    if(hasTag && !spinningFast) {
       swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       swervePoseEstimator.addVisionMeasurement(
           megaTag2.pose,

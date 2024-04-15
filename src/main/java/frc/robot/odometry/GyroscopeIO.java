@@ -13,6 +13,15 @@ public interface GyroscopeIO {
 
     /** Yaw angle in rotations. */
     public double yawRotations = 0.0;
+
+    /** Roll velocity in rotations. */
+    public double rollVelocityRotations = 0.0;
+
+    /** Pitch velocity in rotations. */
+    public double pitchVelocityRotations = 0.0;
+
+    /** Yaw velocity in rotations. */
+    public double yawVelocityRotations = 0.0;
   }
 
   /** Configures the gyroscope. */
