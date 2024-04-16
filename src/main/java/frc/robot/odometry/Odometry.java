@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.AllianceFlipHelper;
-import frc.lib.LimelightHelpers;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
@@ -51,6 +50,8 @@ public class Odometry extends Subsystem {
   /** List of functions to be called when pose is manually updated. */
   private final List<Consumer<Rotation2d>> yawUpdateConsumers;
 
+  private final Limelight limelight;
+
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
     gyroscope = OdometryFactory.createGyroscope(this);
@@ -72,12 +73,15 @@ public class Odometry extends Subsystem {
             initialGyroRotation,
             swerveModulePositionsSupplier.get(),
             initialPose);
+    swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
 
     field = new Field2d();
 
     yawUpdateConsumers = new ArrayList<Consumer<Rotation2d>>();
 
-    LimelightHelpers.SetFiducialIDFiltersOverride(OdometryConstants.LIMELIGHT_NAME, OdometryConstants.VALID_TAGS);
+    limelight = new Limelight("limelight");
+
+    limelight.setTagFilter(OdometryConstants.VALID_TAGS);
   }
 
   /**
@@ -97,19 +101,18 @@ public class Odometry extends Subsystem {
   public void periodic() {
     gyroscope.update(gyroscopeValues);
 
-    LimelightHelpers.SetRobotOrientation(OdometryConstants.LIMELIGHT_NAME, getFieldRelativeHeading().getDegrees(), 0, 0, 0, 0, 0);
+    limelight.setYaw(getFieldRelativeHeading());
 
-    LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(OdometryConstants.LIMELIGHT_NAME);
+    final boolean stationary = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
 
-    final boolean spinningFast = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
+    if (stationary) {
+      var pe = limelight.getPoseEstimate();
 
-    final boolean hasTag = megaTag2.tagCount != 0;
-
-    if(hasTag && !spinningFast) {
-      swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-      swervePoseEstimator.addVisionMeasurement(
-          megaTag2.pose,
-          megaTag2.timestampSeconds);
+      if (pe.isPresent()) {
+        swervePoseEstimator.addVisionMeasurement(
+            pe.get().pose,
+            pe.get().timestampSeconds);
+      }
     }
 
     swervePoseEstimator.update(
