@@ -73,7 +73,7 @@ public class Odometry extends Subsystem {
             initialGyroRotation,
             swerveModulePositionsSupplier.get(),
             initialPose);
-    swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+    swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
 
     field = new Field2d();
 
@@ -109,9 +109,7 @@ public class Odometry extends Subsystem {
       var pe = limelight.getPoseEstimate();
 
       if (pe.isPresent()) {
-        swervePoseEstimator.addVisionMeasurement(
-            pe.get().pose,
-            pe.get().timestampSeconds);
+        swervePoseEstimator.addVisionMeasurement(pe.get().pose, pe.get().timestampSeconds);
       }
     }
 

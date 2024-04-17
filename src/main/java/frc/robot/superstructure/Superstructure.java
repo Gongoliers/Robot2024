@@ -12,7 +12,6 @@ import frc.robot.intake.Intake;
 import frc.robot.intake.IntakeState;
 import frc.robot.shooter.Shooter;
 import frc.robot.shooter.ShooterState;
-
 import java.util.function.Supplier;
 
 /** Subsystem class for the superstructure subsystem. */
@@ -68,9 +67,10 @@ public class Superstructure extends Subsystem {
     addStateToShuffleboard(tab, "Measurement", () -> measurement);
     addStateToShuffleboard(tab, "Goal", () -> goal);
 
-    Telemetry.addColumn(tab, "State").addString(
-        "State",
-        () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
+    Telemetry.addColumn(tab, "State")
+        .addString(
+            "State",
+            () -> this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NONE");
 
     Telemetry.addColumn(tab, "At Goal?").addBoolean("At Goal?", this::atGoal);
   }
@@ -116,9 +116,7 @@ public class Superstructure extends Subsystem {
   }
 
   public boolean atGoal() {
-    return arm.atGoal()
-        && intake.atGoal()
-        && shooter.atGoal();
+    return arm.atGoal() && intake.atGoal() && shooter.atGoal();
   }
 
   private Command hold(SuperstructureState goal) {
@@ -140,16 +138,19 @@ public class Superstructure extends Subsystem {
   }
 
   private Command shoot(SuperstructureState shot) {
-    final SuperstructureState pull = new SuperstructureState(shot.armState(), IntakeState.IDLE, ShooterState.PULL);
+    final SuperstructureState pull =
+        new SuperstructureState(shot.armState(), IntakeState.IDLE, ShooterState.PULL);
 
-    final ShooterState spin = new ShooterState(shot.shooterState().flywheelVelocityRotationsPerSecond(), 0);
+    final ShooterState spin =
+        new ShooterState(shot.shooterState().flywheelVelocityRotationsPerSecond(), 0);
 
-    final SuperstructureState ready = new SuperstructureState(shot.armState(), IntakeState.IDLE, spin);
+    final SuperstructureState ready =
+        new SuperstructureState(shot.armState(), IntakeState.IDLE, spin);
 
     return hold(pull)
-      .withTimeout(SuperstructureConstants.PULL_DURATION)
-      .andThen(to(ready))
-      .andThen(hold(shot));
+        .withTimeout(SuperstructureConstants.PULL_DURATION)
+        .andThen(to(ready))
+        .andThen(hold(shot));
   }
 
   public Command subwoofer() {

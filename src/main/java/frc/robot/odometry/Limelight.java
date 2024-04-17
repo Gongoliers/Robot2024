@@ -1,33 +1,32 @@
 package frc.robot.odometry;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.LimelightHelpers;
 import frc.lib.LimelightHelpers.PoseEstimate;
+import java.util.Optional;
 
 public class Limelight {
 
-    private final String name; 
-    
-    public Limelight(String name) {
-        this.name = name;
-    }
+  private final String name;
 
-    public void setTagFilter(int[] tags) {
-        LimelightHelpers.SetFiducialIDFiltersOverride(this.name, tags);
-    }
+  public Limelight(String name) {
+    this.name = name;
+  }
 
-    public void setYaw(Rotation2d yaw) {
-        LimelightHelpers.SetRobotOrientation(this.name, yaw.getDegrees(), 0, 0, 0, 0, 0);
-    }
+  public void setTagFilter(int[] tags) {
+    LimelightHelpers.SetFiducialIDFiltersOverride(this.name, tags);
+  }
 
-    public Optional<PoseEstimate> getPoseEstimate() {
-        LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(this.name);
+  public void setYaw(Rotation2d yaw) {
+    LimelightHelpers.SetRobotOrientation(this.name, yaw.getDegrees(), 0, 0, 0, 0, 0);
+  }
 
-        if (megaTag2.tagCount < 1) return Optional.empty();
+  public Optional<PoseEstimate> getPoseEstimate() {
+    LimelightHelpers.PoseEstimate megaTag2 =
+        LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(this.name);
 
-        return Optional.of(megaTag2);
-    }
+    if (megaTag2.tagCount < 1) return Optional.empty();
 
+    return Optional.of(megaTag2);
+  }
 }

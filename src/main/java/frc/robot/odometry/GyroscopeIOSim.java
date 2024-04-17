@@ -16,8 +16,7 @@ public class GyroscopeIOSim implements GyroscopeIO {
   public GyroscopeIOSim(Odometry odometry) {
     yawRotations = 0.0;
 
-    yawVelocityRotations =
-        () -> Units.radiansToRotations(odometry.getVelocity().dtheta);
+    yawVelocityRotations = () -> Units.radiansToRotations(odometry.getVelocity().dtheta);
   }
 
   @Override
@@ -25,8 +24,7 @@ public class GyroscopeIOSim implements GyroscopeIO {
 
   @Override
   public void update(GyroscopeIOValues values) {
-    yawRotations +=
-        yawVelocityRotations.getAsDouble() * RobotConstants.PERIODIC_DURATION;
+    yawRotations += yawVelocityRotations.getAsDouble() * RobotConstants.PERIODIC_DURATION;
 
     values.yawRotations = yawRotations;
 
