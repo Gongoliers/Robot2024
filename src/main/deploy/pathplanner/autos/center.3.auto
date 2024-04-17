@@ -34,13 +34,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "center.toNearest"
+                        "pathName": "clean.center.toNearest"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "center.toSubwoofer"
+                        "pathName": "clean.center.toSubwoofer"
                       }
                     }
                   ]
@@ -72,13 +72,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "center.toStage"
+                        "pathName": "clean.center.toStage"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "center.stageToSub"
+                        "pathName": "clean.center.stageToSub"
                       }
                     }
                   ]

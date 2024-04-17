@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center.toNearest"
+            "pathName": "clean.center.toNearest"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "center.toSubwoofer"
+            "pathName": "clean.center.toSubwoofer"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center.leave"
+            "pathName": "clean.center.leave"
           }
         }
       ]

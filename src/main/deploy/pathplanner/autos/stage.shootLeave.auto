@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "stage.leave"
+            "pathName": "clean.stage.leave"
           }
         }
       ]

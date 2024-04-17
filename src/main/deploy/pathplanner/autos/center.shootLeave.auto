@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center.leave"
+            "pathName": "clean.center.leave"
           }
         }
       ]

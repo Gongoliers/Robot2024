@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "stage.toNearest"
+            "pathName": "clean.stage.toNearest"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "stage.toSubwoofer"
+            "pathName": "clean.stage.toSubwoofer"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "stage.leave"
+            "pathName": "clean.stage.leave"
           }
         }
       ]
