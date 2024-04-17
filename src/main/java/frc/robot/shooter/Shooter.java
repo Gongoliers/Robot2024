@@ -1,5 +1,6 @@
 package frc.robot.shooter;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
@@ -77,10 +78,21 @@ public class Shooter extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     VelocityControllerIO.addToShuffleboard(tab, "Serializer", serializerValues);
     VelocityControllerIO.addToShuffleboard(tab, "Flywheel", flywheelValues);
+
+    tab.addBoolean("Serializer Current Spike?", this::serializerCurrentSpike);
+    tab.addBoolean("Flywheel Current Spike?", this::flywheelCurrentSpike);
   }
 
+  private boolean serializerCurrentSpike() {
+    return serializerValues.motorAmps > SerializerConstants.NOTE_AMPS;
+  } 
+
   public Trigger serializedNote() {
-    return new Trigger(() -> serializerValues.motorAmps > SerializerConstants.NOTE_AMPS);
+    return new Trigger(this::serializerCurrentSpike);
+  }
+
+  public boolean flywheelCurrentSpike() {
+    return flywheelValues.motorAmps > FlywheelConstants.NOTE_AMPS;
   }
 
   public ShooterState getState() {

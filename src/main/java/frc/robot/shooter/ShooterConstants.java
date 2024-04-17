@@ -91,5 +91,7 @@ public class ShooterConstants {
 
     public static final SlewRateLimiter ACCELERATION_LIMITER =
         new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
+
+    public static final int NOTE_AMPS = 40;
   }
 }
