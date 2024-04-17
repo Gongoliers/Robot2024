@@ -150,6 +150,7 @@ public class Superstructure extends Subsystem {
     return hold(pull)
         .withTimeout(SuperstructureConstants.PULL_DURATION)
         .andThen(to(ready))
+        .andThen(Commands.waitSeconds(SuperstructureConstants.AFTER_READY_DURATION))
         .andThen(hold(shot));
   }
 

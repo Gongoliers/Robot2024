@@ -1,6 +1,5 @@
 package frc.robot.shooter;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
