@@ -11,6 +11,15 @@ public class AllianceFlipHelper {
    * @return whether the path should be flipped.
    */
   public static boolean shouldFlip() {
+    return isRedAlliance();
+  }
+
+  /**
+   * Returns true if on red alliance.
+   * 
+   * @return true if on red alliance.
+   */
+  public static boolean isRedAlliance() {
     return DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == Alliance.Red;
   }

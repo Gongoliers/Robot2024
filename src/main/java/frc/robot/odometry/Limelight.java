@@ -1,6 +1,7 @@
 package frc.robot.odometry;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.AllianceFlipHelper;
 import frc.lib.LimelightHelpers;
 import frc.lib.LimelightHelpers.PoseEstimate;
 import java.util.Optional;
@@ -18,6 +19,10 @@ public class Limelight {
   }
 
   public void setYaw(Rotation2d yaw) {
+    if (AllianceFlipHelper.shouldFlip()) {
+      yaw = yaw.plus(Rotation2d.fromDegrees(180));
+    }
+
     LimelightHelpers.SetRobotOrientation(this.name, yaw.getDegrees(), 0, 0, 0, 0, 0);
   }
 

@@ -101,15 +101,15 @@ public class Odometry extends Subsystem {
   public void periodic() {
     gyroscope.update(gyroscopeValues);
 
-    limelight.setYaw(getFieldRelativeHeading());
+    limelight.setYaw(Rotation2d.fromRotations(gyroscopeValues.yawRotations));
 
     final boolean stationary = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
 
     if (stationary) {
-      var pe = limelight.getPoseEstimate();
+      var poseEstimate = limelight.getPoseEstimate();
 
-      if (pe.isPresent()) {
-        swervePoseEstimator.addVisionMeasurement(pe.get().pose, pe.get().timestampSeconds);
+      if (poseEstimate.isPresent()) {
+        swervePoseEstimator.addVisionMeasurement(poseEstimate.get().pose, poseEstimate.get().timestampSeconds);
       }
     }
 
