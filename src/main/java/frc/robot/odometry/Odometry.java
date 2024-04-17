@@ -50,7 +50,7 @@ public class Odometry extends Subsystem {
   /** List of functions to be called when pose is manually updated. */
   private final List<Consumer<Rotation2d>> yawUpdateConsumers;
 
-  private final Limelight limelight;
+  private final Limelight eastLimelight, westLimelight;
 
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
@@ -79,9 +79,11 @@ public class Odometry extends Subsystem {
 
     yawUpdateConsumers = new ArrayList<Consumer<Rotation2d>>();
 
-    limelight = new Limelight("limelight");
+    eastLimelight = new Limelight("east");
+    westLimelight = new Limelight("west");
 
-    limelight.setTagFilter(OdometryConstants.VALID_TAGS);
+    eastLimelight.setTagFilter(OdometryConstants.VALID_TAGS);
+    westLimelight.setTagFilter(OdometryConstants.VALID_TAGS);
   }
 
   /**
@@ -101,16 +103,13 @@ public class Odometry extends Subsystem {
   public void periodic() {
     gyroscope.update(gyroscopeValues);
 
-    limelight.setYaw(Rotation2d.fromRotations(gyroscopeValues.yawRotations));
+    eastLimelight.setYaw(Rotation2d.fromRotations(gyroscopeValues.yawRotations));
 
     final boolean stationary = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
 
     if (stationary) {
-      var poseEstimate = limelight.getPoseEstimate();
-
-      if (poseEstimate.isPresent()) {
-        swervePoseEstimator.addVisionMeasurement(poseEstimate.get().pose, poseEstimate.get().timestampSeconds);
-      }
+      addPoseEstimateIfPresent(eastLimelight);
+      addPoseEstimateIfPresent(westLimelight);
     }
 
     swervePoseEstimator.update(
@@ -143,6 +142,14 @@ public class Odometry extends Subsystem {
     ShuffleboardLayout field = Telemetry.addColumn(tab, "Field");
 
     field.add("Field", this.field);
+  }
+
+  private void addPoseEstimateIfPresent(Limelight limelight) {
+      var poseEstimate = limelight.getPoseEstimate();
+
+      if (poseEstimate.isPresent()) {
+        swervePoseEstimator.addVisionMeasurement(poseEstimate.get().pose, poseEstimate.get().timestampSeconds);
+      }
   }
 
   /**
