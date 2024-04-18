@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0648639126144392,
-        "y": 7.087644470479496
+        "x": 1.1078351946667622,
+        "y": 7.162072914260491
       },
       "isLocked": true,
       "linkedName": "amp.subwoofer"
@@ -20,26 +20,15 @@
         "y": 7.003080254377342
       },
       "prevControl": {
-        "x": 2.2668505049073886,
-        "y": 7.003080254377342
+        "x": 0.904140353216511,
+        "y": 7.06163443710625
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "amp.nearestNote"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": 60.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
