@@ -165,6 +165,7 @@ public class Superstructure extends Subsystem {
   private Command shoot(SuperstructureState shot) {
     return pull(shot)
         .andThen(ready(shot))
+        .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
         .andThen(hold(shot));
   }
 
@@ -202,7 +203,7 @@ public class Superstructure extends Subsystem {
 
   public Command eject() {
     return to(SuperstructureState.EJECT_POSITION)
-        .andThen(Commands.waitSeconds(SuperstructureConstants.EJECT_PAUSE))
+        .andThen(Commands.waitSeconds(SuperstructureConstants.EJECT_PAUSE_DURATION))
         .andThen(hold(SuperstructureState.EJECT))
         .withName("EJECT");
   }
