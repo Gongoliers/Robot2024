@@ -64,6 +64,7 @@ public class ShooterConstants {
     static {
       PIDF.kS = 0.14;
       PIDF.kV = 0.2;
+      PIDF.kP = 0.14;
     }
 
     /** Flywheel's controller constants. */
@@ -92,7 +93,7 @@ public class ShooterConstants {
     public static final double MAXIMUM_SPEED = 60;
 
     public static final SlewRateLimiter ACCELERATION_LIMITER =
-        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25));
+        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.15));
 
     public static final double TOLERANCE = 5;
   }
