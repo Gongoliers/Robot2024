@@ -50,8 +50,6 @@ public class Odometry extends Subsystem {
   /** List of functions to be called when pose is manually updated. */
   private final List<Consumer<Rotation2d>> yawUpdateConsumers;
 
-  private final Limelight eastLimelight, westLimelight;
-
   /** Creates a new instance of the odometry subsystem. */
   private Odometry() {
     gyroscope = OdometryFactory.createGyroscope(this);
@@ -78,12 +76,6 @@ public class Odometry extends Subsystem {
     field = new Field2d();
 
     yawUpdateConsumers = new ArrayList<Consumer<Rotation2d>>();
-
-    eastLimelight = new Limelight("east");
-    westLimelight = new Limelight("west");
-
-    eastLimelight.setTagFilter(OdometryConstants.VALID_TAGS);
-    westLimelight.setTagFilter(OdometryConstants.VALID_TAGS);
   }
 
   /**
@@ -102,15 +94,6 @@ public class Odometry extends Subsystem {
   @Override
   public void periodic() {
     gyroscope.update(gyroscopeValues);
-
-    eastLimelight.setYaw(Rotation2d.fromRotations(gyroscopeValues.yawRotations));
-
-    final boolean stationary = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
-
-    if (false) {
-      addPoseEstimateIfPresent(eastLimelight);
-      addPoseEstimateIfPresent(westLimelight);
-    }
 
     swervePoseEstimator.update(
         Rotation2d.fromRotations(gyroscopeValues.yawRotations),
@@ -142,14 +125,6 @@ public class Odometry extends Subsystem {
     ShuffleboardLayout field = Telemetry.addColumn(tab, "Field");
 
     field.add("Field", this.field);
-  }
-
-  private void addPoseEstimateIfPresent(Limelight limelight) {
-      var poseEstimate = limelight.getPoseEstimate();
-
-      if (poseEstimate.isPresent()) {
-        swervePoseEstimator.addVisionMeasurement(poseEstimate.get().pose, poseEstimate.get().timestampSeconds);
-      }
   }
 
   /**
