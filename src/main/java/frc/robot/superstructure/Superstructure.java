@@ -165,6 +165,7 @@ public class Superstructure extends Subsystem {
   private Command shoot(SuperstructureState shot) {
     return pull(shot)
         .andThen(ready(shot))
+        .andThen(Commands.waitSeconds(1.0))
         .andThen(hold(shot));
   }
 
