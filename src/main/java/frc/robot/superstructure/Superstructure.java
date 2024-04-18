@@ -170,7 +170,9 @@ public class Superstructure extends Subsystem {
   }
 
   private Command shootNoPull(SuperstructureState shot) {
-    return ready(shot).andThen(hold(shot));
+    return ready(shot)
+      .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
+      .andThen(hold(shot));
   }
   
   public Command subwooferNoPull() {
