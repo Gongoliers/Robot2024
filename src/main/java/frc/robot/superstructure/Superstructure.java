@@ -152,18 +152,29 @@ public class Superstructure extends Subsystem {
     return hold(pull).withTimeout(SuperstructureConstants.PULL_DURATION);
   }
 
-  private Command shoot(SuperstructureState shot) {
+  private Command ready(SuperstructureState shot) {
     final ShooterState spin =
         new ShooterState(shot.shooterState().flywheelVelocityRotationsPerSecond(), 0);
 
     final SuperstructureState ready =
         new SuperstructureState(shot.armState(), IntakeState.IDLE, spin);
 
+    return to(ready).withTimeout(SuperstructureConstants.READY_DURATION);
+  }
+
+  private Command shoot(SuperstructureState shot) {
     return pull(shot)
-        .andThen(to(ready))
-        .andThen(Commands.waitSeconds(SuperstructureConstants.AFTER_READY_DURATION))
+        .andThen(ready(shot))
         .andThen(hold(shot));
   }
+
+  private Command shootNoPull(SuperstructureState shot) {
+    return ready(shot).andThen(hold(shot));
+  }
+  
+  public Command subwooferNoPull() {
+    return shootNoPull(SuperstructureState.SUBWOOFER).withName("SUBWOOFER_NO_PULL");
+  } 
 
   public Command subwoofer() {
     return shoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
@@ -183,6 +194,10 @@ public class Superstructure extends Subsystem {
 
   public Command amp() {
     return shoot(SuperstructureState.AMP).withName("AMP");
+  }
+
+  public Command bloop() {
+    return shoot(SuperstructureState.BLOOP).withName("BLOOP");
   }
 
   public Command eject() {

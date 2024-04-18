@@ -25,6 +25,8 @@ public record ArmState(State shoulderRotations) {
 
   public static final ArmState AMP = new ArmState(ShoulderConstants.AMP);
 
+  public static final ArmState BLOOP = new ArmState(ShoulderConstants.BLOOP);
+
   public ArmState {
     Objects.requireNonNull(shoulderRotations);
   }

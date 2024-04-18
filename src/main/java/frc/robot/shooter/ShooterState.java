@@ -32,6 +32,9 @@ public record ShooterState(
   public static final ShooterState AMP =
       new ShooterState(FlywheelConstants.AMP_SPEED, SerializerConstants.SLOW_FEED_SPEED);
 
+  public static final ShooterState BLOOP =
+      new ShooterState(FlywheelConstants.BLOOP_SPEED, SerializerConstants.FAST_FEED_SPEED);
+
   public ShooterState {
     Objects.requireNonNull(flywheelVelocityRotationsPerSecond);
     Objects.requireNonNull(serializerVelocityRotationsPerSecond);

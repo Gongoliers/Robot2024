@@ -36,6 +36,9 @@ public record SuperstructureState(
   public static final SuperstructureState AMP =
       new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.AMP);
 
+  public static final SuperstructureState BLOOP =
+      new SuperstructureState(ArmState.BLOOP, IntakeState.IDLE, ShooterState.BLOOP);
+
   /**
    * Creates a new superstructure state.
    *

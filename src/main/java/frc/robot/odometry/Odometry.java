@@ -107,7 +107,7 @@ public class Odometry extends Subsystem {
 
     final boolean stationary = Math.abs(gyroscopeValues.yawVelocityRotations) > 1.0;
 
-    if (stationary) {
+    if (false) {
       addPoseEstimateIfPresent(eastLimelight);
       addPoseEstimateIfPresent(westLimelight);
     }

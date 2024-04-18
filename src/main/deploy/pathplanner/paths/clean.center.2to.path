@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7151677380277848,
-        "y": 5.555088802485298
+        "x": 2.0166698250657547,
+        "y": 5.562647359246215
       },
       "isLocked": false,
       "linkedName": "center.nearestNote"

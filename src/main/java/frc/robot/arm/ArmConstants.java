@@ -70,5 +70,7 @@ public class ArmConstants {
     public static final Rotation2d SKIM = Rotation2d.fromDegrees(30);
 
     public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
+
+    public static final Rotation2d BLOOP = Rotation2d.fromDegrees(-26);
   }
 }

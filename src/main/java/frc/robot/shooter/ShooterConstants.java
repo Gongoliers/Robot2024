@@ -89,11 +89,13 @@ public class ShooterConstants {
 
     public static final double AMP_SPEED = 10;
 
+    public static final double BLOOP_SPEED = 30;
+
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 60;
 
     public static final SlewRateLimiter ACCELERATION_LIMITER =
-        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.15));
+        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25));
 
     public static final double TOLERANCE = 5;
   }
