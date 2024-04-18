@@ -137,18 +137,21 @@ public class Superstructure extends Subsystem {
         .withName("INTAKE");
   }
 
-  private Command shoot(SuperstructureState shot) {
+  private Command pull(SuperstructureState shot) {
     final SuperstructureState pull =
         new SuperstructureState(shot.armState(), IntakeState.IDLE, ShooterState.PULL);
 
+    return hold(pull).withTimeout(SuperstructureConstants.PULL_DURATION);
+  }
+
+  private Command shoot(SuperstructureState shot) {
     final ShooterState spin =
         new ShooterState(shot.shooterState().flywheelVelocityRotationsPerSecond(), 0);
 
     final SuperstructureState ready =
         new SuperstructureState(shot.armState(), IntakeState.IDLE, spin);
 
-    return hold(pull)
-        .withTimeout(SuperstructureConstants.PULL_DURATION)
+    return pull(shot)
         .andThen(to(ready))
         .andThen(Commands.waitSeconds(SuperstructureConstants.AFTER_READY_DURATION))
         .andThen(hold(shot));

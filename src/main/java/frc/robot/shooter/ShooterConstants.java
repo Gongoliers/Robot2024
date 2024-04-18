@@ -49,6 +49,8 @@ public class ShooterConstants {
         new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
 
     public static final double NOTE_AMPS = 20;
+
+    public static final double TOLERANCE = 5;
   }
 
   /** Constants for the flywheel motor used in the shooter subsystem. */
@@ -91,5 +93,7 @@ public class ShooterConstants {
 
     public static final SlewRateLimiter ACCELERATION_LIMITER =
         new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25));
+
+    public static final double TOLERANCE = 5;
   }
 }

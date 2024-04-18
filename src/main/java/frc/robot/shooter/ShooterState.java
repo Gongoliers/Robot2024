@@ -39,8 +39,8 @@ public record ShooterState(
 
   public boolean at(ShooterState other) {
     return MathUtil.isNear(
-            flywheelVelocityRotationsPerSecond, other.flywheelVelocityRotationsPerSecond, 5)
+            flywheelVelocityRotationsPerSecond, other.flywheelVelocityRotationsPerSecond, FlywheelConstants.TOLERANCE)
         && MathUtil.isNear(
-            serializerVelocityRotationsPerSecond, other.serializerVelocityRotationsPerSecond, 5);
+            serializerVelocityRotationsPerSecond, other.serializerVelocityRotationsPerSecond, SerializerConstants.TOLERANCE);
   }
 }
