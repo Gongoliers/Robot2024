@@ -119,6 +119,10 @@ public class Superstructure extends Subsystem {
     return arm.atGoal() && intake.atGoal() && shooter.atGoal();
   }
 
+  private Command instant(SuperstructureState goal) {
+    return runOnce(() -> setGoal(goal));
+  }
+
   private Command hold(SuperstructureState goal) {
     return run(() -> setGoal(goal));
   }
@@ -135,6 +139,10 @@ public class Superstructure extends Subsystem {
     return to(SuperstructureState.STOW)
         .andThen(hold(SuperstructureState.INTAKE))
         .withName("INTAKE");
+  }
+
+  public Command intakeInstant() {
+    return instant(SuperstructureState.INTAKE).withName("INTAKE_IMMEDIATE");
   }
 
   private Command pull(SuperstructureState shot) {
