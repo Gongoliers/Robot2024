@@ -35,8 +35,8 @@ public record DriveRequest(
   }
 
   public static DriveRequest fromController(CommandXboxController controller) {
-    boolean snipingRequested = controller.leftTrigger().getAsBoolean();
-    boolean aligningRequested = controller.rightTrigger().getAsBoolean();
+    boolean snipingRequested = Math.abs(controller.getLeftTriggerAxis()) > 0.5;
+    boolean aligningRequested = Math.abs(controller.getRightTriggerAxis()) > 0.5;
 
     double translationX = -controller.getLeftY();
 
