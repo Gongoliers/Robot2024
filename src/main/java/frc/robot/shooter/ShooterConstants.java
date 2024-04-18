@@ -84,14 +84,12 @@ public class ShooterConstants {
 
     public static final double SKIM_SPEED = 60;
 
-    public static final double AMP_SPEED = 20;
+    public static final double AMP_SPEED = 10;
 
     /** Maximum speed in rotations per second. */
     public static final double MAXIMUM_SPEED = 60;
 
     public static final SlewRateLimiter ACCELERATION_LIMITER =
         new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25));
-
-    public static final int NOTE_AMPS = 40;
   }
 }

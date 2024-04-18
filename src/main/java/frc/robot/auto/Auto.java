@@ -14,7 +14,6 @@ import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.odometry.Odometry;
-import frc.robot.shooter.Shooter;
 import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
@@ -33,9 +32,6 @@ public class Auto extends Subsystem {
   /** Reference to the superstructure subsystem. */
   private final Superstructure superstructure;
 
-  /** Reference to the shooter subsystem. */
-  private final Shooter shooter;
-
   /** Reference to the swerve subsystem. */
   private final Swerve swerve;
 
@@ -46,7 +42,6 @@ public class Auto extends Subsystem {
   private Auto() {
     odometry = Odometry.getInstance();
     superstructure = Superstructure.getInstance();
-    shooter = Shooter.getInstance();
     swerve = Swerve.getInstance();
 
     Supplier<Pose2d> robotPositionSupplier = () -> odometry.getPosition();
@@ -76,7 +71,7 @@ public class Auto extends Subsystem {
         swerve);
 
     NamedCommands.registerCommand("stow", superstructure.stow());
-    NamedCommands.registerCommand("shoot", superstructure.subwoofer().withTimeout(3).until(shooter::flywheelCurrentSpike));
+    NamedCommands.registerCommand("shoot", superstructure.subwoofer().withTimeout(3));
     NamedCommands.registerCommand("intake", superstructure.intake());
 
     autoChooser = AutoBuilder.buildAutoChooser();

@@ -79,7 +79,6 @@ public class Shooter extends Subsystem {
     VelocityControllerIO.addToShuffleboard(tab, "Flywheel", flywheelValues);
 
     tab.addBoolean("Serializer Current Spike?", this::serializerCurrentSpike);
-    tab.addBoolean("Flywheel Current Spike?", this::flywheelCurrentSpike);
   }
 
   private boolean serializerCurrentSpike() {
@@ -88,10 +87,6 @@ public class Shooter extends Subsystem {
 
   public Trigger serializedNote() {
     return new Trigger(this::serializerCurrentSpike);
-  }
-
-  public boolean flywheelCurrentSpike() {
-    return flywheelValues.motorAmps > FlywheelConstants.NOTE_AMPS;
   }
 
   public ShooterState getState() {

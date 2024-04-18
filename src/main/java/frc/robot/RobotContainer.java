@@ -92,7 +92,6 @@ public class RobotContainer {
     operatorController.rightTrigger().onTrue(superstructure.subwoofer());
 
     operatorController.a().onTrue(superstructure.amp());
-    operatorController.b().onTrue(superstructure.lob());
     operatorController.x().onTrue(superstructure.stow());
     operatorController.y().onTrue(superstructure.skim());
 
