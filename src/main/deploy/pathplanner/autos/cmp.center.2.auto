@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 6.63
+      "x": 1.3633965729469937,
+      "y": 5.555088802485298
     },
-    "rotation": 60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "clean.amp.toNearest"
+            "pathName": "clean.center.to2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "clean.amp.toSubwoofer"
+            "pathName": "clean.center.2to"
           }
         },
         {
@@ -50,7 +50,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "clean.amp.leave"
+            "pathName": "clean.center.leave"
           }
         }
       ]

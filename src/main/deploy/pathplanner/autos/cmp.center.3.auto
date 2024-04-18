@@ -34,13 +34,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.center.toNearest"
+                        "pathName": "clean.center.to2"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.center.toSubwoofer"
+                        "pathName": "clean.center.2to"
                       }
                     }
                   ]
@@ -72,51 +72,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.center.toStage"
+                        "pathName": "clean.center.to3"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.center.stageToSub"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "clean.center.toAmp"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "clean.center.ampToStage"
+                        "pathName": "clean.center.3to"
                       }
                     }
                   ]

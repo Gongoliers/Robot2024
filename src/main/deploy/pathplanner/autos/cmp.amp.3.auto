@@ -34,13 +34,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.amp.toNearest"
+                        "pathName": "clean.amp.to1"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.amp.toSubwoofer"
+                        "pathName": "clean.amp.1to"
                       }
                     }
                   ]
@@ -72,13 +72,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.amp.race"
+                        "pathName": "clean.amp.to4"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "clean.amp.raceBack"
+                        "pathName": "clean.amp.4to"
                       }
                     }
                   ]

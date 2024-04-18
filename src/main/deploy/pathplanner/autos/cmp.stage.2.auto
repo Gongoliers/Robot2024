@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "clean.stage.toNearest"
+            "pathName": "clean.stage.to3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "clean.stage.toSubwoofer"
+            "pathName": "clean.stage.3to"
           }
         },
         {
