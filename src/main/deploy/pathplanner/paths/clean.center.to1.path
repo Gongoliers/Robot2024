@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8962114847306633,
-        "y": 6.452980598268889
+        "x": 1.44283883432246,
+        "y": 6.253586715447326
       },
       "isLocked": false,
       "linkedName": "center.subwoofer"
@@ -20,8 +20,8 @@
         "y": 6.8157068696448375
       },
       "prevControl": {
-        "x": 1.9815373154284097,
-        "y": 6.511225119454518
+        "x": 1.618501382509183,
+        "y": 6.218454205809981
       },
       "nextControl": null,
       "isLocked": false,
