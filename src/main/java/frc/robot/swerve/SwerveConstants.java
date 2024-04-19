@@ -88,7 +88,7 @@ public class SwerveConstants {
       new SwerveModuleConfig(
           new SwerveModuleCAN(20, 10, 28, SWERVE_BUS),
           new Translation2d(-X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(0.213867));
+          Rotation2d.fromRotations(-0.276855).plus(Rotation2d.fromDegrees(180)));
 
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
