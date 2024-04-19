@@ -20,12 +20,6 @@ public record ShooterState(
   public static final ShooterState SUBWOOFER =
       new ShooterState(FlywheelConstants.SPEAKER_SPEED, SerializerConstants.FAST_FEED_SPEED);
 
-  public static final ShooterState PODIUM =
-      new ShooterState(FlywheelConstants.PODIUM_SPEED, SerializerConstants.FAST_FEED_SPEED);
-
-  public static final ShooterState LOB =
-      new ShooterState(FlywheelConstants.LOB_SPEED, SerializerConstants.FAST_FEED_SPEED);
-
   public static final ShooterState SKIM =
       new ShooterState(FlywheelConstants.SKIM_SPEED, SerializerConstants.FAST_FEED_SPEED);
 

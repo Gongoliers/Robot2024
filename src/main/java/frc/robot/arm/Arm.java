@@ -10,34 +10,39 @@ import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.robot.arm.ArmConstants.ShoulderConstants;
 
-/** Subsystem class for the arm subsystem. */
+/** Arm subsystem. */
 public class Arm extends Subsystem {
 
   /** Instance variable for the arm subsystem singleton. */
   private static Arm instance = null;
 
-  /** Shoulder. */
+  /** Shoulder position controller. */
   private final PositionControllerIO shoulder;
 
-  /** Shoulder values. */
+  /** Shoulder position controller values. */
   private final PositionControllerIOValues shoulderValues;
 
-  private double lastTimeSeconds;
+  /** Arm's goal. Set by superstructure to use as end goal for setpoints. */
+  private ArmState goal;
 
-  /** Arm goal. */
-  private ArmState setpoint, goal;
+  /** Arm's setpoint. Updated periodically to reach the goal within constraints. */
+  private ArmState setpoint;
 
-  /** Creates a new instance of the arm subsystem. */
+  /** Time of the start of the previous periodic call. Used for calculating the time elapsed since the previous setpoint was generated. */
+  private double previousTimeSeconds;
+
+  /** Creates a new arm subsystem and configures arm hardware. */
   private Arm() {
     shoulder = ArmFactory.createShoulder();
-    shoulderValues = new PositionControllerIOValues();
     shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
 
-    lastTimeSeconds = Timer.getFPGATimestamp();
+    shoulderValues = new PositionControllerIOValues();
 
-    setPosition(ArmState.INITIAL);
-    setpoint = ArmState.INITIAL;
-    goal = ArmState.INITIAL;
+    previousTimeSeconds = Timer.getFPGATimestamp();
+
+    setPosition(ArmState.STOW_POSITION);
+    setpoint = ArmState.STOW_POSITION;
+    goal = ArmState.STOW_POSITION;
   }
 
   /**
@@ -59,17 +64,18 @@ public class Arm extends Subsystem {
 
     double timeSeconds = Timer.getFPGATimestamp();
 
-    double dt = timeSeconds - lastTimeSeconds;
-
-    lastTimeSeconds = timeSeconds;
+    // Calculate the time elapsed in seconds since the previous setpoint was generated
+    double timeElapsedSeconds = timeSeconds - previousTimeSeconds;
 
     setpoint =
         new ArmState(
             ShoulderConstants.MOTION_PROFILE.calculate(
-                dt, setpoint.shoulderRotations(), goal.shoulderRotations()));
+                timeElapsedSeconds, setpoint.shoulderRotations(), goal.shoulderRotations()));
 
     shoulder.setSetpoint(
         setpoint.shoulderRotations().position, setpoint.shoulderRotations().velocity);
+
+    previousTimeSeconds = timeSeconds;
   }
 
   @Override
@@ -82,21 +88,41 @@ public class Arm extends Subsystem {
             () -> Units.rotationsToDegrees(setpoint.shoulderRotations().position));
   }
 
+  /**
+   * Returns the arm's state.
+   * 
+   * @return the arm's state.
+   */
   public ArmState getState() {
     return new ArmState(
         new TrapezoidProfile.State(
             shoulderValues.positionRotations, shoulderValues.velocityRotationsPerSecond));
   }
 
+  /**
+   * Sets the arm's goal state.
+   * 
+   * @param goal the arm's goal state.
+   */
   public void setGoal(ArmState goal) {
     this.goal = goal;
   }
 
+  /**
+   * Returns true if at the arm's set goal.
+   * 
+   * @return true if at the arm's set goal.
+   */
   public boolean atGoal() {
     return getState().at(goal);
   }
 
-  public void setPosition(ArmState armState) {
+  /**
+   * Sets the position of the shoulder motor encoders.
+   * 
+   * @param armState the position.
+   */
+  private void setPosition(ArmState armState) {
     shoulder.setPosition(armState.shoulderRotations().position);
   }
 }

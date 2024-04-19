@@ -37,8 +37,6 @@ public class Superstructure extends Subsystem {
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
 
-    setPosition(SuperstructureState.STOW);
-
     goal = SuperstructureState.STOW;
   }
 
@@ -101,10 +99,6 @@ public class Superstructure extends Subsystem {
     layout.addDouble(
         "Serializer Velocity (rps)",
         () -> state.get().shooterState().serializerVelocityRotationsPerSecond());
-  }
-
-  public void setPosition(SuperstructureState state) {
-    arm.setPosition(state.armState());
   }
 
   public void setGoal(SuperstructureState goal) {
@@ -181,14 +175,6 @@ public class Superstructure extends Subsystem {
 
   public Command subwoofer() {
     return shoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
-  }
-
-  public Command podium() {
-    return shoot(SuperstructureState.PODIUM).withName("PODIUM");
-  }
-
-  public Command lob() {
-    return shoot(SuperstructureState.LOB).withName("LOB");
   }
 
   public Command skim() {

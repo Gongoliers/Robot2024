@@ -25,10 +25,10 @@ public class ArmConstants {
     public static final PIDFConstants PIDF = new PIDFConstants();
 
     static {
-      PIDF.kS = 0.14;
-      PIDF.kG = 0.5125;
-      PIDF.kV = 4.0;
-      PIDF.kP = 4.0;
+      PIDF.kS = 0.14; // volts
+      PIDF.kG = 0.5125; // volts
+      PIDF.kV = 4.0; // volts per rotation per second
+      PIDF.kP = 4.0; // volts per rotation
     }
 
     /** Shoulder's controller constants. */
@@ -36,10 +36,24 @@ public class ArmConstants {
         new PositionControllerIOConstants();
 
     static {
+      // The leading shoulder motor has the correct reference frame
       CONTROLLER_CONSTANTS.ccwPositiveMotor = true;
+      
+      // The shoulder's absolute encoder has the wrong reference frame
       CONTROLLER_CONSTANTS.ccwPositiveAbsoluteEncoder = false;
+      
+      // Use brake mode to hold the arm in place
+      // Since the arm rests on a hard stop this isn't strictly necessary,
+      // but it prevents the arm from being knocked around if disabled
       CONTROLLER_CONSTANTS.neutralBrake = true;
+      
+      // Ask CAD if they can calculate this reduction or count the gears
       CONTROLLER_CONSTANTS.sensorToMechanismRatio = 39.771428571;
+
+      // 1. Rest the arm in the stow position
+      // 2. Use a digital level to determine the actual angle of the stow position
+      // 3. Observe the value reported by the absolute encoder while the arm is in the stow position
+      // 4. Calculate the absolute encoder offset by subtracting the absolute encoder value from the actual angle
       CONTROLLER_CONSTANTS.absoluteEncoderOffsetRotations = Units.degreesToRotations(-173.135);
     }
 
@@ -57,20 +71,10 @@ public class ArmConstants {
     /** Motion profile of the shoulder. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
 
-    public static final Rotation2d STOW = Rotation2d.fromDegrees(-26);
+    /** Shoulder angle when the arm is stowed. */
+    public static final Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-26);
 
-    public static final Rotation2d LOB = Rotation2d.fromDegrees(-26);
-
-    public static final Rotation2d SUBWOOFER = Rotation2d.fromDegrees(-26);
-
-    public static final Rotation2d PODIUM = Rotation2d.fromDegrees(-10);
-
-    public static final Rotation2d EJECT = Rotation2d.fromDegrees(30);
-
-    public static final Rotation2d SKIM = Rotation2d.fromDegrees(30);
-
-    public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
-
-    public static final Rotation2d BLOOP = Rotation2d.fromDegrees(-26);
+    /** Shoulder angle when the shooter is parallel to the ground. Used for flat shots. */
+    public static final Rotation2d FLAT_ANGLE = Rotation2d.fromDegrees(30);
   }
 }
