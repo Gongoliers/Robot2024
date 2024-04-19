@@ -1,7 +1,6 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.PIDFConstants;
 
@@ -11,8 +10,7 @@ public class SteerMotorPIDF {
   /** Feedback controller for position. */
   private final PIDController feedback;
 
-  /** Feedforward controller for position. */
-  private final SimpleMotorFeedforward feedforward;
+  private PIDFConstants pidfConstants;
 
   /** Creates a PIDF utility class. */
   public SteerMotorPIDF(PIDFConstants pidfConstants) {
@@ -21,7 +19,7 @@ public class SteerMotorPIDF {
     feedback.enableContinuousInput(-0.5, 0.5);
     feedback.setTolerance(pidfConstants.kPositionTolerance);
 
-    feedforward = new SimpleMotorFeedforward(pidfConstants.kS, 0.0);
+    this.pidfConstants = pidfConstants;
   }
 
   /**
@@ -43,7 +41,15 @@ public class SteerMotorPIDF {
   public double calculate(Rotation2d measurement, Rotation2d setpoint) {
     double feedbackVolts = feedback.calculate(measurement.getRotations(), setpoint.getRotations());
 
-    double feedforwardVolts = feedforward.calculate(0.0);
+    double feedforwardVolts = 0.0;
+
+    if (feedback.atSetpoint() == false) {
+      if (measurement.getRadians() > setpoint.getRadians()) {
+        feedforwardVolts = pidfConstants.kS;
+      } else {
+        feedforwardVolts = -pidfConstants.kS;
+      }
+    }
 
     return feedbackVolts + feedforwardVolts;
   }

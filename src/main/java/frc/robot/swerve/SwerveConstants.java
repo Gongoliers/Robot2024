@@ -163,7 +163,7 @@ public class SwerveConstants {
   static {
     STEER_PIDF_CONSTANTS.kP = 54.0; // volts per rotation
     STEER_PIDF_CONSTANTS.kD = 0.16; // volts per rotation per second 0.25
-    STEER_PIDF_CONSTANTS.kPositionTolerance = Units.degreesToRotations(0);
+    STEER_PIDF_CONSTANTS.kPositionTolerance = Units.degreesToRotations(1);
     STEER_PIDF_CONSTANTS.kS = 0.205;
   }
 }
