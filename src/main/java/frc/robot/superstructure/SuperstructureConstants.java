@@ -2,7 +2,7 @@ package frc.robot.superstructure;
 
 public class SuperstructureConstants {
 
-  public static final double PULL_DURATION = 0.15;
+  public static final double PULL_DURATION = 0.2;
 
   public static final double READY_DURATION = 1.0;
 
