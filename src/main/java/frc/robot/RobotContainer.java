@@ -93,7 +93,7 @@ public class RobotContainer {
     operatorController.rightTrigger().onTrue(superstructure.subwoofer());
 
     operatorController.povLeft().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER_HALF));
-    operatorController.povLeft().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER));
+    operatorController.povRight().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER));
     operatorController.povUp().onTrue(superstructure.feed(SuperstructureState.SUBWOOFER));
 
     operatorController.a().onTrue(superstructure.amp());
