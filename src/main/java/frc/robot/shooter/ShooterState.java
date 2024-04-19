@@ -17,7 +17,7 @@ public record ShooterState(
 
   public static final ShooterState EJECT = new ShooterState(0, SerializerConstants.EJECT_SPEED);
 
-  public static final ShooterState SUBWOOFER_HALF =
+  public static final ShooterState SUBWOOFER_PRE =
       new ShooterState(FlywheelConstants.SPEAKER_SPEED * 0.5, SerializerConstants.FAST_FEED_SPEED);
 
   public static final ShooterState SUBWOOFER =
