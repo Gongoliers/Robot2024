@@ -21,8 +21,11 @@ public record SuperstructureState(
   public static final SuperstructureState EJECT =
       new SuperstructureState(ArmState.EJECT, IntakeState.EJECT, ShooterState.EJECT);
 
-  public static final SuperstructureState SUBWOOFER =
-      new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER);
+  public static final SuperstructureState SUBWOOFER_HALF =
+      new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER_HALF);
+
+public static final SuperstructureState SUBWOOFER =
+    new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER);
 
   public static final SuperstructureState PODIUM =
       new SuperstructureState(ArmState.PODIUM, IntakeState.IDLE, ShooterState.PODIUM);
