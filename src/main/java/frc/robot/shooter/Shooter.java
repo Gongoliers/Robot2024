@@ -83,7 +83,7 @@ public class Shooter extends Subsystem {
 
   private boolean serializerCurrentSpike() {
     return serializerValues.motorAmps > SerializerConstants.NOTE_AMPS;
-  } 
+  }
 
   public Trigger serializedNote() {
     return new Trigger(this::serializerCurrentSpike);

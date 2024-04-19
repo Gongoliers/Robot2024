@@ -16,7 +16,7 @@ public class AllianceFlipHelper {
 
   /**
    * Returns true if on red alliance.
-   * 
+   *
    * @return true if on red alliance.
    */
   public static boolean isRedAlliance() {
