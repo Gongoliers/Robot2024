@@ -27,8 +27,15 @@ public class ArmConstants {
     /** Shoulder's config. */
     public static final MechanismConfig CONFIG =
         new MechanismConfig()
-            .withAbsoluteEncoder(new AbsoluteEncoderConfig().withCCWPositive(false).withOffset(Rotation2d.fromDegrees(-173.135)))
-            .withMotor(new MotorConfig().withCCWPositive(true).withNeutralBrake(true).withMotorToMechanismRatio(39.771428571))
+            .withAbsoluteEncoder(
+                new AbsoluteEncoderConfig()
+                    .withCCWPositive(false)
+                    .withOffset(Rotation2d.fromDegrees(-173.135)))
+            .withMotor(
+                new MotorConfig()
+                    .withCCWPositive(true)
+                    .withNeutralBrake(true)
+                    .withMotorToMechanismRatio(39.771428571))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts

@@ -19,7 +19,11 @@ public class ShooterConstants {
     /** Serializer's config. */
     public static final MechanismConfig PIDF_CONTROLLER_CONSTANTS =
         new MechanismConfig()
-            .withMotor(new MotorConfig().withCCWPositive(true).withNeutralBrake(false).withMotorToMechanismRatio(36.0 / 16.0))
+            .withMotor(
+                new MotorConfig()
+                    .withCCWPositive(true)
+                    .withNeutralBrake(false)
+                    .withMotorToMechanismRatio(36.0 / 16.0))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
@@ -55,7 +59,11 @@ public class ShooterConstants {
     /** Flywheel's config. */
     public static final MechanismConfig CONFIG =
         new MechanismConfig()
-            .withMotor(new MotorConfig().withCCWPositive(false).withNeutralBrake(true).withMotorToMechanismRatio(28.0 / 16.0))
+            .withMotor(
+                new MotorConfig()
+                    .withCCWPositive(false)
+                    .withNeutralBrake(true)
+                    .withMotorToMechanismRatio(28.0 / 16.0))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts

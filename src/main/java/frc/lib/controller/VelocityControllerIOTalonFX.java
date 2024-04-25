@@ -27,7 +27,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
    */
   protected VelocityControllerIOTalonFX(CAN can, MechanismConfig config) {
     this.config = config;
-    
+
     motor = new TalonFX(can.id(), can.bus());
 
     velocity = motor.getVelocity();

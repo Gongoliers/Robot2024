@@ -92,45 +92,45 @@ public class FeedbackControllerConfig {
 
   /**
    * Returns the feedback controller proportional gain.
-   * 
+   *
    * @return the feedback controller proportional gain.
-    */
+   */
   public double kP() {
     return kP;
   }
 
   /**
    * Returns the feedback controller integral gain.
-   * 
+   *
    * @return the feedback controller integral gain.
-    */
+   */
   public double kI() {
     return kI;
   }
 
   /**
    * Returns the feedback controller derivative gain.
-   * 
+   *
    * @return the feedback controller derivative gain.
-    */
+   */
   public double kD() {
     return kD;
   }
 
   /**
    * Returns the feedback controller position tolerance.
-   * 
+   *
    * @return the feedback controller position tolerance.
-    */
+   */
   public double kPositionTolerance() {
     return kPositionTolerance;
   }
 
   /**
    * Returns the feedback controller velocity tolerance.
-   * 
+   *
    * @return the feedback controller velocity tolerance.
-    */
+   */
   public double kVelocityTolerance() {
     return kVelocityTolerance;
   }

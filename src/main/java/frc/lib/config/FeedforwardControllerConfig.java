@@ -85,7 +85,7 @@ public class FeedforwardControllerConfig {
 
   /**
    * Returns the feedforward controller static gain.
-   * 
+   *
    * @return the feedforward controller static gain.
    */
   public double kS() {
@@ -94,7 +94,7 @@ public class FeedforwardControllerConfig {
 
   /**
    * Returns the feedforward controller gravity gain.
-   * 
+   *
    * @return the feedforward controller gravity gain.
    */
   public double kG() {
@@ -103,7 +103,7 @@ public class FeedforwardControllerConfig {
 
   /**
    * Returns the feedforward controller velocity gain.
-   * 
+   *
    * @return the feedforward controller velocity gain.
    */
   public double kV() {
@@ -112,11 +112,10 @@ public class FeedforwardControllerConfig {
 
   /**
    * Returns the feedforward controller acceleration gain.
-   * 
+   *
    * @return the feedforward controller acceleration gain.
    */
   public double kA() {
     return kA;
   }
-
 }

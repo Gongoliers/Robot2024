@@ -17,7 +17,7 @@ public class MechanismConfig {
 
   /**
    * Modifies this mechanism config to use the absolute encoder config.
-   * 
+   *
    * @param absoluteEncoderConfig the absolute encoder config.
    * @return this mechanism config.
    */
@@ -43,15 +43,14 @@ public class MechanismConfig {
    * @param feedforwardControllerConfig the feedforward controller config.
    * @return this mechanism config.
    */
-  public MechanismConfig withFeedforward(
-      FeedforwardControllerConfig feedforwardControllerConfig) {
+  public MechanismConfig withFeedforward(FeedforwardControllerConfig feedforwardControllerConfig) {
     this.feedforward = feedforwardControllerConfig;
     return this;
   }
 
   /**
    * Modifies this mechanism config to use the motor config.
-   * 
+   *
    * @param motorConfig the motor config.
    * @return this mechanism config.
    */
