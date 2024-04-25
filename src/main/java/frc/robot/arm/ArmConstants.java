@@ -5,9 +5,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.ControllerConstants;
-import frc.lib.FeedbackControllerConstants;
-import frc.lib.FeedforwardControllerConstants;
 import frc.lib.MotionProfileCalculator;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOConstants;
 
 /** Constants for the arm subsystem. */
@@ -27,13 +27,13 @@ public class ArmConstants {
     public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
         new ControllerConstants()
             .withFeedforward(
-                new FeedforwardControllerConstants()
+                new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
                     .withGravityFeedforward(0.5125) // volts
                     .withVelocityFeedforward(4.0) // volts per rotation per second
                 )
             .withFeedback(
-                new FeedbackControllerConstants().withProportionalGain(4.0) // volts per rotation
+                new FeedbackControllerConfig().withProportionalGain(4.0) // volts per rotation
                 );
 
     /** Shoulder's controller constants. */

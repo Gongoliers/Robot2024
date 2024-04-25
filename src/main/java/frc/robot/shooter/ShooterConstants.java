@@ -3,9 +3,9 @@ package frc.robot.shooter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.lib.CAN;
 import frc.lib.ControllerConstants;
-import frc.lib.FeedbackControllerConstants;
-import frc.lib.FeedforwardControllerConstants;
 import frc.lib.MotionProfileCalculator;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 
 /** Constants for the shooter subsystem. */
@@ -20,7 +20,7 @@ public class ShooterConstants {
     public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
         new ControllerConstants()
             .withFeedforward(
-                new FeedforwardControllerConstants()
+                new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
                     .withVelocityFeedforward(0.2617) // volts per rotation per second
                 );
@@ -65,12 +65,12 @@ public class ShooterConstants {
     public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
         new ControllerConstants()
             .withFeedforward(
-                new FeedforwardControllerConstants()
+                new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
                     .withVelocityFeedforward(0.2) // volts per rotation per second
                 )
             .withFeedback(
-                new FeedbackControllerConstants()
+                new FeedbackControllerConfig()
                     .withProportionalGain(0.14) // volts per rotation per second
                 );
 

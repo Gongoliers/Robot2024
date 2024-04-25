@@ -2,8 +2,8 @@ package frc.robot.intake;
 
 import frc.lib.CAN;
 import frc.lib.ControllerConstants;
-import frc.lib.FeedbackControllerConstants;
-import frc.lib.FeedforwardControllerConstants;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 
 /** Constants for the intake subsystem. */
@@ -17,12 +17,12 @@ public class IntakeConstants {
     public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
         new ControllerConstants()
             .withFeedforward(
-                new FeedforwardControllerConstants()
+                new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.13) // volts
                     .withVelocityFeedforward(0.1683) // volts per rotation per second
                 )
             .withFeedback(
-                new FeedbackControllerConstants()
+                new FeedbackControllerConfig()
                     .withProportionalGain(0.1) // volts per rotation per second
                 );
 
@@ -54,12 +54,12 @@ public class IntakeConstants {
     public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
         new ControllerConstants()
             .withFeedforward(
-                new FeedforwardControllerConstants()
+                new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.13) // volts
                     .withVelocityFeedforward(0.1759) // volts per rotation per second
                 )
             .withFeedback(
-                new FeedbackControllerConstants()
+                new FeedbackControllerConfig()
                     .withProportionalGain(0.1) // volts per rotation per second
                 );
 

@@ -5,9 +5,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.ControllerConstants;
-import frc.lib.FeedbackControllerConstants;
-import frc.lib.FeedforwardControllerConstants;
 import frc.lib.MotionProfileCalculator;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
 
 /** Constants for the swerve subsystem. */
 public class SwerveConstants {
@@ -155,7 +155,7 @@ public class SwerveConstants {
   public static final ControllerConstants DRIVE_PIDF_CONSTANTS =
       new ControllerConstants()
           .withFeedforward(
-              new FeedforwardControllerConstants()
+              new FeedforwardControllerConfig()
                   .withStaticFeedforward(0.14) // volts
                   .withVelocityFeedforward(calculateKv(0.12)) // volts per meter per second
               );
@@ -164,10 +164,10 @@ public class SwerveConstants {
   public static final ControllerConstants STEER_PIDF_CONSTANTS =
       new ControllerConstants()
           .withFeedforward(
-              new FeedforwardControllerConstants().withStaticFeedforward(0.205) // volts
+              new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
               )
           .withFeedback(
-              new FeedbackControllerConstants()
+              new FeedbackControllerConfig()
                   .withProportionalGain(54.0) // volts per rotation
                   .withDerivativeGain(0.16) // volts per rotation per second
                   .withPositionTolerance(Units.degreesToRotations(1)) // rotations
