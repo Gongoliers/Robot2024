@@ -21,26 +21,14 @@ public record SuperstructureState(
   public static final SuperstructureState EJECT =
       new SuperstructureState(ArmState.EJECT, IntakeState.EJECT, ShooterState.EJECT);
 
-  public static final SuperstructureState SUBWOOFER_PRE =
-      new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER_PRE);
-
   public static final SuperstructureState SUBWOOFER =
       new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER);
-
-  public static final SuperstructureState PODIUM =
-      new SuperstructureState(ArmState.PODIUM, IntakeState.IDLE, ShooterState.PODIUM);
-
-  public static final SuperstructureState LOB =
-      new SuperstructureState(ArmState.LOB, IntakeState.IDLE, ShooterState.LOB);
 
   public static final SuperstructureState SKIM =
       new SuperstructureState(ArmState.SKIM, IntakeState.IDLE, ShooterState.SKIM);
 
   public static final SuperstructureState AMP =
       new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.AMP);
-
-  public static final SuperstructureState BLOOP =
-      new SuperstructureState(ArmState.BLOOP, IntakeState.IDLE, ShooterState.BLOOP);
 
   /**
    * Creates a new superstructure state.

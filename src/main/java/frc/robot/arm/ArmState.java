@@ -9,23 +9,17 @@ import java.util.Objects;
 
 public record ArmState(State shoulderRotations) {
 
-  public static final ArmState INITIAL = new ArmState(ShoulderConstants.STOW);
+  public static final ArmState STOW = new ArmState(ShoulderConstants.STOW_ANGLE);
 
-  public static final ArmState STOW = new ArmState(ShoulderConstants.STOW);
+  public static final ArmState SUBWOOFER = new ArmState(ShoulderConstants.STOW_ANGLE);
 
-  public static final ArmState SUBWOOFER = new ArmState(ShoulderConstants.SUBWOOFER);
+  public static final ArmState EJECT = new ArmState(ShoulderConstants.FLAT_ANGLE);
 
-  public static final ArmState PODIUM = new ArmState(ShoulderConstants.PODIUM);
+  public static final ArmState SKIM = new ArmState(ShoulderConstants.FLAT_ANGLE);
 
-  public static final ArmState EJECT = new ArmState(ShoulderConstants.EJECT);
+  public static final ArmState LOB = new ArmState(ShoulderConstants.STOW_ANGLE);
 
-  public static final ArmState SKIM = new ArmState(ShoulderConstants.SKIM);
-
-  public static final ArmState LOB = new ArmState(ShoulderConstants.LOB);
-
-  public static final ArmState AMP = new ArmState(ShoulderConstants.AMP);
-
-  public static final ArmState BLOOP = new ArmState(ShoulderConstants.BLOOP);
+  public static final ArmState AMP = new ArmState(ShoulderConstants.AMP_ANGLE);
 
   public ArmState {
     Objects.requireNonNull(shoulderRotations);

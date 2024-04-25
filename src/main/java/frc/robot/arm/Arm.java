@@ -43,9 +43,9 @@ public class Arm extends Subsystem {
 
     previousTimeSeconds = Timer.getFPGATimestamp();
 
-    setPosition(ArmState.INITIAL);
-    setpoint = ArmState.INITIAL;
-    goal = ArmState.INITIAL;
+    setPosition(ArmState.STOW);
+    setpoint = ArmState.STOW;
+    goal = ArmState.STOW;
   }
 
   /**

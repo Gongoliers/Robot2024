@@ -62,20 +62,13 @@ public class ArmConstants {
     /** Motion profile of the shoulder. */
     public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
 
-    public static final Rotation2d STOW = Rotation2d.fromDegrees(-26);
+    /** Shoudler angle when stowed. */
+    public static final Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-26);
 
-    public static final Rotation2d LOB = Rotation2d.fromDegrees(-26);
+    /** Shoulder angle when shooter is parallel to the ground. */
+    public static final Rotation2d FLAT_ANGLE = Rotation2d.fromDegrees(30);
 
-    public static final Rotation2d SUBWOOFER = Rotation2d.fromDegrees(-26);
-
-    public static final Rotation2d PODIUM = Rotation2d.fromDegrees(-10);
-
-    public static final Rotation2d EJECT = Rotation2d.fromDegrees(30);
-
-    public static final Rotation2d SKIM = Rotation2d.fromDegrees(30);
-
-    public static final Rotation2d AMP = Rotation2d.fromDegrees(60);
-
-    public static final Rotation2d BLOOP = Rotation2d.fromDegrees(-26);
+    /** Shoulder angle when amping. */
+    public static final Rotation2d AMP_ANGLE = Rotation2d.fromDegrees(60);
   }
 }

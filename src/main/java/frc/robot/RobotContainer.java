@@ -89,15 +89,10 @@ public class RobotContainer {
     operatorController.leftBumper().onTrue(superstructure.eject());
     operatorController.leftTrigger().onTrue(superstructure.intake());
 
-    operatorController.rightBumper().onTrue(superstructure.podium());
-    operatorController.rightTrigger().onTrue(superstructure.subwoofer());
-
-    operatorController.povLeft().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER_PRE));
-    operatorController.povRight().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER));
-    operatorController.povUp().onTrue(superstructure.feed(SuperstructureState.SUBWOOFER));
+    operatorController.rightBumper().onTrue(superstructure.shoot(SuperstructureState.SUBWOOFER));
+    operatorController.rightTrigger().onTrue(superstructure.prepare(SuperstructureState.SUBWOOFER));
 
     operatorController.a().onTrue(superstructure.amp());
-    operatorController.b().onTrue(superstructure.bloop());
     operatorController.x().onTrue(superstructure.stow());
     operatorController.y().onTrue(superstructure.skim());
 

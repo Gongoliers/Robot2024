@@ -162,45 +162,33 @@ public class Superstructure extends Subsystem {
     return to(ready).withTimeout(SuperstructureConstants.READY_DURATION);
   }
 
-  private Command shoot(SuperstructureState shot) {
+  private Command autoShoot(SuperstructureState shot) {
     return pull(shot)
         .andThen(ready(shot))
         .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
         .andThen(hold(shot));
   }
 
-  private Command shootNoPull(SuperstructureState shot) {
+  private Command autoShootNoPull(SuperstructureState shot) {
     return ready(shot)
         .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
         .andThen(hold(shot));
   }
 
   public Command subwooferNoPull() {
-    return shootNoPull(SuperstructureState.SUBWOOFER).withName("SUBWOOFER_NO_PULL");
+    return autoShootNoPull(SuperstructureState.SUBWOOFER).withName("SUBWOOFER_NO_PULL");
   }
 
   public Command subwoofer() {
-    return shoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
-  }
-
-  public Command podium() {
-    return shoot(SuperstructureState.PODIUM).withName("PODIUM");
-  }
-
-  public Command lob() {
-    return shoot(SuperstructureState.LOB).withName("LOB");
+    return autoShoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
   }
 
   public Command skim() {
-    return shoot(SuperstructureState.SKIM).withName("SKIM");
+    return autoShoot(SuperstructureState.SKIM).withName("SKIM");
   }
 
   public Command amp() {
-    return shoot(SuperstructureState.AMP).withName("AMP");
-  }
-
-  public Command bloop() {
-    return shoot(SuperstructureState.BLOOP).withName("BLOOP");
+    return autoShoot(SuperstructureState.AMP).withName("AMP");
   }
 
   public Command eject() {
@@ -210,11 +198,11 @@ public class Superstructure extends Subsystem {
         .withName("EJECT");
   }
 
-  public Command spool(SuperstructureState shot) {
+  public Command prepare(SuperstructureState shot) {
     return pull(shot).andThen(ready(shot));
   }
 
-  public Command feed(SuperstructureState shot) {
+  public Command shoot(SuperstructureState shot) {
     return ready(shot)
         .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
         .andThen(hold(shot));
