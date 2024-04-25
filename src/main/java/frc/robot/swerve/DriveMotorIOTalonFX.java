@@ -7,7 +7,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.lib.CAN;
-import frc.lib.MotorCurrentLimits;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** TalonFX drive motor. */
@@ -35,8 +34,8 @@ public abstract class DriveMotorIOTalonFX implements DriveMotorIO {
 
     talonFXBaseConfig.Feedback.SensorToMechanismRatio = MK4iConstants.DRIVE_GEARING;
 
-    talonFXBaseConfig.CurrentLimits =
-        new MotorCurrentLimits(80.0, 30.0, 60.0, 0.1).asCurrentLimitsConfigs();
+    // talonFXBaseConfig.CurrentLimits =
+    //     new MotorCurrentLimits(80.0, 30.0, 60.0, 0.1).asCurrentLimitsConfigs();
 
     positionRotations = talonFX.getPosition();
     velocityRotationsPerSecond = talonFX.getVelocity();

@@ -6,7 +6,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.CAN;
-import frc.lib.MotorCurrentLimits;
 import frc.lib.config.Configurator;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
@@ -42,8 +41,8 @@ public class SteerMotorIOTalonFXPIDF extends SteerMotorIOTalonFX {
 
     talonFXPIDFConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
-    talonFXPIDFConfig.CurrentLimits =
-        new MotorCurrentLimits(35.0, 15.0, 25.0, 0.1).asCurrentLimitsConfigs();
+    // talonFXPIDFConfig.CurrentLimits =
+    //     new MotorCurrentLimits(35.0, 15.0, 25.0, 0.1).asCurrentLimitsConfigs();
 
     talonFXPIDFConfig.Feedback.SensorToMechanismRatio = MK4iConstants.STEER_GEARING;
 
