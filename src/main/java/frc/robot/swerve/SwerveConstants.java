@@ -8,6 +8,7 @@ import frc.lib.MotionProfileCalculator;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotorConfig;
 
 /** Constants for the swerve subsystem. */
 public class SwerveConstants {
@@ -17,23 +18,8 @@ public class SwerveConstants {
     /** Gearing between the steer motor and the wheel. */
     public static final double STEER_GEARING = 150.0 / 7.0;
 
-    /** Moment of inertia of the wheel when steering in joules kilograms meters squared. */
-    public static final double STEER_MOI = 0.004;
-
-    /** Gearing between the drive motor and the wheel for the L1 gear ratio. */
-    public static final double L1 = 8.14;
-
-    /** Gearing between the drive motor and the wheel for the L2 gear ratio. */
-    public static final double L2 = 6.75;
-
-    /** Gearing between the drive motor and the wheel for the L3 gear ratio. */
-    public static final double L3 = 6.12;
-
-    /** Gearing between the drive motor and the wheel for the L4 gear ratio. */
-    public static final double L4 = 5.14;
-
     /** Gearing between the drive motor and the wheel. */
-    public static final double DRIVE_GEARING = L2;
+    public static final double DRIVE_GEARING = 6.75;
 
     /** Diameter of the MK4i's wheels in meters. */
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
@@ -52,9 +38,6 @@ public class SwerveConstants {
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI * ODOMETRY_ERROR;
   }
 
-  /** If true, use Phoenix Pro Field-Oriented Control requests. */
-  public static final boolean USE_PHOENIX_PRO_FOC = false;
-
   /** Module X offset in meters. */
   public static final double X_OFFSET = Units.inchesToMeters(10.375);
 
@@ -69,28 +52,28 @@ public class SwerveConstants {
       new SwerveModuleConfig(
           new SwerveModuleCAN(16, 8, 24, SWERVE_BUS),
           new Translation2d(X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.084717));
+          Rotation2d.fromRotations(-0.084717).unaryMinus());
 
   /** Module configuration for the north east swerve module. */
   public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(18, 16, 30, SWERVE_BUS),
           new Translation2d(X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.196777));
+          Rotation2d.fromRotations(0.196777).unaryMinus());
 
   /** Module configuration for the south east swerve module. */
   public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(22, 12, 26, SWERVE_BUS),
           new Translation2d(-X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.276611));
+          Rotation2d.fromRotations(0.276611).unaryMinus());
 
   /** Module configuration for the south west swerve module. */
   public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
       new SwerveModuleConfig(
           new SwerveModuleCAN(20, 10, 28, SWERVE_BUS),
           new Translation2d(-X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.276855).plus(Rotation2d.fromDegrees(180)));
+          Rotation2d.fromRotations(-0.276855).plus(Rotation2d.fromDegrees(180)).unaryMinus());
 
   /**
    * Calculates the maximum attainable open loop speed in meters per second.
@@ -163,6 +146,11 @@ public class SwerveConstants {
   /** Constants for steer motor PIDF position controllers. */
   public static final MechanismConfig STEER_CONFIG =
       new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withCurrentLimit(20)
+                  .withMotorToMechanismRatio(MK4iConstants.STEER_GEARING))
           .withFeedforwardConfig(
               new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
               )

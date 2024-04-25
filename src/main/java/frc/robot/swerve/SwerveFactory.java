@@ -29,7 +29,8 @@ public class SwerveFactory {
       return new PositionControllerIOTalonFXSteer(
           config.moduleCAN().steer(),
           config.moduleCAN().azimuth(),
-          SwerveConstants.STEER_CONFIG,
+          SwerveConstants.STEER_CONFIG.withAbsoluteEncoderConfig(
+              SwerveConstants.STEER_CONFIG.absoluteEncoderConfig().withOffset(config.offset())),
           false);
 
     return new PositionControllerIOSim();
@@ -42,7 +43,7 @@ public class SwerveFactory {
    */
   public static DriveMotorIO createDriveMotor(SwerveModuleConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
-      return new DriveMotorIOTalonFXPID(config.moduleCAN().drive());
+      return new DriveMotorIOTalonFXPID(config.moduleCAN().drive(), false);
 
     return new DriveMotorIOSim();
   }

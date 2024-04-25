@@ -26,7 +26,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
    *
    * @param can the TalonFX's CAN identifier.
    */
-  public DriveMotorIOTalonFXPID(CAN can) {
+  public DriveMotorIOTalonFXPID(CAN can, boolean enableFOC) {
     super(can);
 
     velocityFeedforward =
@@ -37,7 +37,7 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
     velocityFeedback =
         SwerveConstants.DRIVE_PIDF_CONSTANTS.feedbackControllerConfig().createPIDController();
 
-    voltageOutRequest = new VoltageOut(0).withEnableFOC(SwerveConstants.USE_PHOENIX_PRO_FOC);
+    voltageOutRequest = new VoltageOut(0).withEnableFOC(enableFOC);
   }
 
   @Override
