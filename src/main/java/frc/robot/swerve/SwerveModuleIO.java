@@ -1,14 +1,10 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /** Swerve module hardware interface. */
 public interface SwerveModuleIO {
-
-  /** Sets the steer motor's position to the azimuth encoder's position. */
-  public void syncSteerPosition();
 
   /**
    * Gets the state of the swerve module.
@@ -16,13 +12,6 @@ public interface SwerveModuleIO {
    * @return the state of the swerve module.
    */
   public SwerveModuleState getState();
-
-  /**
-   * Gets the azimuth angle of the swerve module.
-   *
-   * @return the azimuth angle of the swerve module.
-   */
-  public Rotation2d getAzimuth();
 
   /**
    * Gets the setpoint of the swerve module.

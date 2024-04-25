@@ -1,6 +1,8 @@
 package frc.robot.swerve;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import frc.lib.controller.PositionControllerIO;
+import frc.lib.controller.PositionControllerIOSim;
+import frc.lib.controller.PositionControllerIOTalonFXSteer;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.Subsystem;
@@ -18,38 +20,19 @@ public class SwerveFactory {
   }
 
   /**
-   * Creates an azimuth encoder.
-   *
-   * @return an azimuth encoder.
-   */
-  public static AzimuthEncoderIO createAzimuthEncoder(SwerveModuleConfig config) {
-    if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
-      return new AzimuthEncoderIOCANcoder(config.moduleCAN().azimuth(), config.offset());
-
-    return new AzimuthEncoderIOSim();
-  }
-
-  /**
-   * Creates an azimuth encoder configuration.
-   *
-   * @return an azimuth encoder configuration.
-   */
-  public static CANcoderConfiguration createAzimuthEncoderConfig() {
-    CANcoderConfiguration azimuthEncoderConfig = new CANcoderConfiguration();
-
-    return azimuthEncoderConfig;
-  }
-
-  /**
    * Creates a steer motor.
    *
    * @return a steer motor.
    */
-  public static SteerMotorIO createSteerMotor(SwerveModuleConfig config) {
+  public static PositionControllerIO createSteerMotor(SwerveModuleConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
-      return new SteerMotorIOTalonFXPIDF(config.moduleCAN().steer(), config.moduleCAN().azimuth());
+      return new PositionControllerIOTalonFXSteer(
+          config.moduleCAN().steer(),
+          config.moduleCAN().azimuth(),
+          SwerveConstants.STEER_CONFIG,
+          false);
 
-    return new SteerMotorIOSim();
+    return new PositionControllerIOSim();
   }
 
   /**

@@ -161,13 +161,14 @@ public class SwerveConstants {
               );
 
   /** Constants for steer motor PIDF position controllers. */
-  public static final MechanismConfig STEER_PIDF_CONSTANTS =
+  public static final MechanismConfig STEER_CONFIG =
       new MechanismConfig()
           .withFeedforwardConfig(
               new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
               )
           .withFeedbackConfig(
               new FeedbackControllerConfig()
+                  .withContinuousInput(true)
                   .withProportionalGain(54.0) // volts per rotation
                   .withDerivativeGain(0.16) // volts per rotation per second
                   .withPositionTolerance(Units.degreesToRotations(1)) // rotations

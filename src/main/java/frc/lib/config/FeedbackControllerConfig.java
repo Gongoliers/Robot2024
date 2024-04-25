@@ -14,13 +14,14 @@ public class FeedbackControllerConfig {
   /** Feedback controller derivative gain. */
   private double kD = 0.0;
 
+  /** Feedback controller continuous input. */
+  private boolean continuousInput = false;
+
   /** Feedback controller position tolerance. */
-  private double kPositionTolerance = 0.0;
+  private double positionTolerance = 0.0;
 
   /** Feedback controller velocity tolerance. */
-  private double kVelocityTolerance = 0.0;
-
-  // TODO Add velocity / acceleration constraints, profiled PID controller?
+  private double velocityTolerance = 0.0;
 
   /**
    * Modifies this controller config's proportional gain.
@@ -56,38 +57,36 @@ public class FeedbackControllerConfig {
   }
 
   /**
-   * Modifies this controller config's position tolerance.
+   * Modifies this controller config's continuous input.
    *
-   * @param kPositionTolerance the position tolerance.
+   * @param continuousInput the continuous input.
    * @return this controller config.
    */
-  public FeedbackControllerConfig withPositionTolerance(double kPositionTolerance) {
-    this.kPositionTolerance = kPositionTolerance;
+  public FeedbackControllerConfig withContinuousInput(boolean continuousInput) {
+    this.continuousInput = continuousInput;
+    return this;
+  }
+
+  /**
+   * Modifies this controller config's position tolerance.
+   *
+   * @param positionTolerance the position tolerance.
+   * @return this controller config.
+   */
+  public FeedbackControllerConfig withPositionTolerance(double positionTolerance) {
+    this.positionTolerance = positionTolerance;
     return this;
   }
 
   /**
    * Modifies this controller config's velocity tolerance.
    *
-   * @param kVelocityTolerance the velocity tolerance.
+   * @param velocityTolerance the velocity tolerance.
    * @return this controller config.
    */
-  public FeedbackControllerConfig withVelocityTolerance(double kVelocityTolerance) {
-    this.kVelocityTolerance = kVelocityTolerance;
+  public FeedbackControllerConfig withVelocityTolerance(double velocityTolerance) {
+    this.velocityTolerance = velocityTolerance;
     return this;
-  }
-
-  /**
-   * Creates a new PID controller using this feedback config.
-   *
-   * @return a new PID controller using this feedback config.
-   */
-  public PIDController createPIDController() {
-    PIDController pidController = new PIDController(kP, kI, kD);
-
-    pidController.setTolerance(kPositionTolerance, kVelocityTolerance);
-
-    return pidController;
   }
 
   /**
@@ -118,12 +117,21 @@ public class FeedbackControllerConfig {
   }
 
   /**
+   * Returns the feedback controller continuous input.
+   *
+   * @return the feedback controller continuous input.
+   */
+  public boolean continuousInput() {
+    return continuousInput;
+  }
+
+  /**
    * Returns the feedback controller position tolerance.
    *
    * @return the feedback controller position tolerance.
    */
-  public double kPositionTolerance() {
-    return kPositionTolerance;
+  public double positionTolerance() {
+    return positionTolerance;
   }
 
   /**
@@ -131,7 +139,24 @@ public class FeedbackControllerConfig {
    *
    * @return the feedback controller velocity tolerance.
    */
-  public double kVelocityTolerance() {
-    return kVelocityTolerance;
+  public double velocityTolerance() {
+    return velocityTolerance;
+  }
+
+  /**
+   * Creates a new PID controller using this feedback config.
+   *
+   * @return a new PID controller using this feedback config.
+   */
+  public PIDController createPIDController() {
+    final PIDController pidController = new PIDController(kP, kI, kD);
+
+    pidController.setTolerance(positionTolerance, velocityTolerance);
+
+    if (continuousInput) {
+      pidController.enableContinuousInput(-0.5, 0.5);
+    }
+
+    return pidController;
   }
 }

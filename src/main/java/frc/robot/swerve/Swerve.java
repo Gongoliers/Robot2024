@@ -8,7 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
@@ -87,7 +86,6 @@ public class Swerve extends Subsystem {
 
       ShuffleboardLayout swerveModuleColumn = Telemetry.addColumn(tab, "Module " + i);
 
-      swerveModuleColumn.addDouble("Azimuth (deg)", () -> swerveModule.getAzimuth().getDegrees());
       swerveModuleColumn.addDouble("Angle (deg)", () -> swerveModule.getState().angle.getDegrees());
       swerveModuleColumn.addDouble(
           "Velocity (mps)", () -> swerveModule.getState().speedMetersPerSecond);
@@ -95,9 +93,6 @@ public class Swerve extends Subsystem {
           "Setpoint Angle (deg)", () -> swerveModule.getSetpoint().angle.getDegrees());
       swerveModuleColumn.addDouble(
           "Setpoint Velocity (mps)", () -> swerveModule.getSetpoint().speedMetersPerSecond);
-
-      swerveModuleColumn.add(
-          Commands.runOnce(swerveModule::syncSteerPosition).withName("Sync Steer"));
     }
   }
 
