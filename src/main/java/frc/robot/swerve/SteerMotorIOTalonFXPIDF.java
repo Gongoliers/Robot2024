@@ -6,8 +6,8 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.CAN;
-import frc.lib.Configurator;
 import frc.lib.MotorCurrentLimits;
+import frc.lib.config.Configurator;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** TalonFX steer motor controlled by an external PIDF controller. */

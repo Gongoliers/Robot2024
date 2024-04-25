@@ -5,7 +5,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.CAN;
-import frc.lib.Configurator;
+import frc.lib.config.Configurator;
 
 /** CANcoder azimuth encoder. */
 public class AzimuthEncoderIOCANcoder implements AzimuthEncoderIO {

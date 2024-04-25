@@ -11,7 +11,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.Configurator;
+import frc.lib.config.Configurator;
 import frc.lib.config.MechanismConfig;
 
 /** Position controller using two TalonFXs and a CANcoder and an external PIDF for an arm. */

@@ -5,7 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.lib.CAN;
-import frc.lib.Configurator;
+import frc.lib.config.Configurator;
 import frc.lib.config.MechanismConfig;
 
 /** Velocity controller using TalonFX. */
