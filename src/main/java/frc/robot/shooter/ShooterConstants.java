@@ -2,11 +2,11 @@ package frc.robot.shooter;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.lib.CAN;
-import frc.lib.ControllerConstants;
 import frc.lib.MotionProfileCalculator;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
-import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
+import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotorConfig;
 
 /** Constants for the shooter subsystem. */
 public class ShooterConstants {
@@ -16,24 +16,15 @@ public class ShooterConstants {
     /** Serializer's CAN. */
     public static final CAN CAN = new CAN(42);
 
-    /** Serializer's PIDF constants. */
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
-        new ControllerConstants()
+    /** Serializer's config. */
+    public static final MechanismConfig PIDF_CONTROLLER_CONSTANTS =
+        new MechanismConfig()
+            .withMotor(new MotorConfig().withCCWPositive(true).withNeutralBrake(false).withMotorToMechanismRatio(36.0 / 16.0))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
                     .withVelocityFeedforward(0.2617) // volts per rotation per second
                 );
-
-    /** Serializer's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
-        new VelocityControllerIOConstants();
-
-    static {
-      CONTROLLER_CONSTANTS.ccwPositive = true;
-      CONTROLLER_CONSTANTS.neutralBrake = false;
-      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 36.0 / 16.0;
-    }
 
     public static final double INTAKE_SPEED = 34;
 
@@ -61,9 +52,10 @@ public class ShooterConstants {
     /** Flywheel's CAN. */
     public static final CAN CAN = new CAN(44);
 
-    /** Flywheel's PIDF constants. */
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
-        new ControllerConstants()
+    /** Flywheel's config. */
+    public static final MechanismConfig CONFIG =
+        new MechanismConfig()
+            .withMotor(new MotorConfig().withCCWPositive(false).withNeutralBrake(true).withMotorToMechanismRatio(28.0 / 16.0))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
@@ -73,16 +65,6 @@ public class ShooterConstants {
                 new FeedbackControllerConfig()
                     .withProportionalGain(0.14) // volts per rotation per second
                 );
-
-    /** Flywheel's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
-        new VelocityControllerIOConstants();
-
-    static {
-      CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = true;
-      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 28.0 / 16.0;
-    }
 
     public static final double PULL_SPEED = -20;
 

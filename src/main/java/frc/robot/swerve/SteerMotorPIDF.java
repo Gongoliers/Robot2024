@@ -3,7 +3,7 @@ package frc.robot.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.lib.ControllerConstants;
+import frc.lib.config.MechanismConfig;
 
 /** Utility class for calculating PIDF for steer motors. */
 public class SteerMotorPIDF {
@@ -15,7 +15,7 @@ public class SteerMotorPIDF {
   private final PIDController feedback;
 
   /** Creates a PIDF utility class. */
-  public SteerMotorPIDF(ControllerConstants pidfConstants) {
+  public SteerMotorPIDF(MechanismConfig pidfConstants) {
     feedforward = pidfConstants.feedforward.createSimpleMotorFeedforward();
 
     feedback = pidfConstants.feedback.createPIDController();

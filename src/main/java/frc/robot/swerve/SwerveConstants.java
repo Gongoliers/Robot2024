@@ -4,10 +4,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.lib.ControllerConstants;
 import frc.lib.MotionProfileCalculator;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.MechanismConfig;
 
 /** Constants for the swerve subsystem. */
 public class SwerveConstants {
@@ -152,8 +152,8 @@ public class SwerveConstants {
         / MK4iConstants.WHEEL_CIRCUMFERENCE;
   }
 
-  public static final ControllerConstants DRIVE_PIDF_CONSTANTS =
-      new ControllerConstants()
+  public static final MechanismConfig DRIVE_PIDF_CONSTANTS =
+      new MechanismConfig()
           .withFeedforward(
               new FeedforwardControllerConfig()
                   .withStaticFeedforward(0.14) // volts
@@ -161,8 +161,8 @@ public class SwerveConstants {
               );
 
   /** Constants for steer motor PIDF position controllers. */
-  public static final ControllerConstants STEER_PIDF_CONSTANTS =
-      new ControllerConstants()
+  public static final MechanismConfig STEER_PIDF_CONSTANTS =
+      new MechanismConfig()
           .withFeedforward(
               new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
               )

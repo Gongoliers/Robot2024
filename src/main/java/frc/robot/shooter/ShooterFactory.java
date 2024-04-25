@@ -34,7 +34,7 @@ public class ShooterFactory {
   public static VelocityControllerIO createFlywheel() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER)) {
       return new VelocityControllerIOTalonFXPIDF(
-          FlywheelConstants.CAN, FlywheelConstants.PIDF_CONTROLLER_CONSTANTS);
+          FlywheelConstants.CAN, FlywheelConstants.CONFIG);
     }
 
     return new VelocityControllerIOSim();

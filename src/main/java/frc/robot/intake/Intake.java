@@ -26,11 +26,11 @@ public class Intake extends Subsystem {
   private Intake() {
     frontRoller = IntakeFactory.createFrontRoller();
     frontRollerValues = new VelocityControllerIOValues();
-    frontRoller.configure(FrontRollerConstants.CONTROLLER_CONSTANTS);
+    frontRoller.configure();
 
     backRoller = IntakeFactory.createBackRoller();
     backRollerValues = new VelocityControllerIOValues();
-    backRoller.configure(BackRollerConstants.CONTROLLER_CONSTANTS);
+    backRoller.configure();
 
     setpoint = IntakeState.IDLE;
     goal = IntakeState.IDLE;

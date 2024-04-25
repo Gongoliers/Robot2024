@@ -8,24 +8,6 @@ import frc.lib.Telemetry;
 /** Velocity controller interface. */
 public interface VelocityControllerIO {
 
-  /** Velocity controller constants. */
-  public static class VelocityControllerIOConstants {
-    /**
-     * Interpret counterclockwise rotation on the motor face as having positive velocity, if set to
-     * true.
-     */
-    public boolean ccwPositive = true;
-
-    /** Use the motor to brake the controlled mechanism on neutral output, if set to true. */
-    public boolean neutralBrake = false;
-
-    /** Maximum amount of current, in amps, to provide to the motor. */
-    public double currentLimitAmps = 40.0;
-
-    /** Ratio between the velocity sensor and the controlled mechanism. */
-    public double sensorToMechanismRatio = 1.0;
-  }
-
   /** Velocity controller values. */
   public static class VelocityControllerIOValues {
     /** Velocity in rotations per second. */
@@ -72,7 +54,7 @@ public interface VelocityControllerIO {
    *
    * @param constants
    */
-  public void configure(VelocityControllerIOConstants constants);
+  public void configure();
 
   /**
    * Updates the velocity controller's values.

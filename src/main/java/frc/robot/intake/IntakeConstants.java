@@ -1,10 +1,10 @@
 package frc.robot.intake;
 
 import frc.lib.CAN;
-import frc.lib.ControllerConstants;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
-import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
+import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotorConfig;
 
 /** Constants for the intake subsystem. */
 public class IntakeConstants {
@@ -13,9 +13,10 @@ public class IntakeConstants {
     /** Front roller's CAN. */
     public static final CAN CAN = new CAN(50);
 
-    /** Front roller's PIDF constants. */
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
-        new ControllerConstants()
+    /** Front roller's config. */
+    public static final MechanismConfig CONFIG =
+        new MechanismConfig()
+            .withMotor(new MotorConfig().withCCWPositive(false).withNeutralBrake(false).withMotorToMechanismRatio(24.0 / 16.0))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.13) // volts
@@ -25,16 +26,6 @@ public class IntakeConstants {
                 new FeedbackControllerConfig()
                     .withProportionalGain(0.1) // volts per rotation per second
                 );
-
-    /** Front roller's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
-        new VelocityControllerIOConstants();
-
-    static {
-      CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = false;
-      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
-    }
 
     public static final double INTAKE_SPEED = 34;
 
@@ -51,8 +42,9 @@ public class IntakeConstants {
     /** Back roller's CAN. */
     public static final CAN CAN = new CAN(40);
 
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
-        new ControllerConstants()
+    public static final MechanismConfig CONFIG =
+        new MechanismConfig()
+            .withMotor(new MotorConfig().withCCWPositive(false).withNeutralBrake(false).withMotorToMechanismRatio(24.0 / 16.0))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.13) // volts
@@ -62,16 +54,6 @@ public class IntakeConstants {
                 new FeedbackControllerConfig()
                     .withProportionalGain(0.1) // volts per rotation per second
                 );
-
-    /** Back roller's controller constants. */
-    public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
-        new VelocityControllerIOConstants();
-
-    static {
-      CONTROLLER_CONSTANTS.ccwPositive = false;
-      CONTROLLER_CONSTANTS.neutralBrake = false;
-      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 24.0 / 16.0;
-    }
 
     public static final double INTAKE_SPEED = 34;
 

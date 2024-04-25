@@ -22,7 +22,7 @@ public class ArmFactory {
           ShoulderConstants.LEADER_CAN,
           ShoulderConstants.FOLLOWER_CAN,
           ShoulderConstants.ENCODER_CAN,
-          ShoulderConstants.PIDF_CONTROLLER_CONSTANTS,
+          ShoulderConstants.CONFIG,
           false,
           true);
     }

@@ -8,33 +8,6 @@ import frc.lib.Telemetry;
 /** Position controller interface. */
 public interface PositionControllerIO {
 
-  /** Position controller constants. */
-  public static class PositionControllerIOConstants {
-    /**
-     * Interpret counterclockwise rotation on the motor face as having positive velocity, if set to
-     * true.
-     */
-    public boolean ccwPositiveMotor = true;
-
-    /**
-     * Interpret counterclockwise rotation on the encoder as having positive velocity, if set to
-     * true.
-     */
-    public boolean ccwPositiveAbsoluteEncoder = true;
-
-    /** Use the motor to brake the controlled mechanism on neutral output, if set to true. */
-    public boolean neutralBrake = false;
-
-    /** Maximum amount of current, in amps, to provide to the motor. */
-    public double currentLimitAmps = 40.0;
-
-    /** Ratio between the position sensor and the controlled mechanism. */
-    public double sensorToMechanismRatio = 1.0;
-
-    /** Offset between absolute encoder reading and controlled mechanism position in rotations. */
-    public double absoluteEncoderOffsetRotations = 0.0;
-  }
-
   /** Position controller values. */
   public static class PositionControllerIOValues {
     /** Position in rotations. */
@@ -80,7 +53,7 @@ public interface PositionControllerIO {
    *
    * @param constants
    */
-  public void configure(PositionControllerIOConstants constants);
+  public void configure();
 
   /**
    * Updates the position controller's values.

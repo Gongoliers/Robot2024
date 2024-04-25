@@ -6,7 +6,7 @@ public class VelocityControllerIOSim implements VelocityControllerIO {
   private double velocityRotationsPerSecond = 0.0;
 
   @Override
-  public void configure(VelocityControllerIOConstants constants) {}
+  public void configure() {}
 
   @Override
   public void update(VelocityControllerIOValues values) {

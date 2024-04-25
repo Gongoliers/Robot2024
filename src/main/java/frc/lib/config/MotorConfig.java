@@ -9,6 +9,9 @@ public class MotorConfig {
     /** Interpret counterclockwise rotation on the motor face as having positive velocity. */
     private boolean ccwPositive = true;
 
+    /** Ratio between the motor and the mechanism. */
+    private double motorToMechanismRatio = 1.0;
+
     /** Maximum amount of current, in amps, to provide to the motor. */
     private double currentLimitAmps = 40.0;
 
@@ -31,6 +34,17 @@ public class MotorConfig {
      */
     public MotorConfig withCCWPositive(boolean ccwPositive) {
         this.ccwPositive = ccwPositive;
+        return this;
+    }
+
+    /**
+     * Modifies this motor config's motor to mechanism ratio.
+     * 
+     * @param motorToMechanismRatio the motor to mechanism ratio.
+     * @return this motor config.
+     */
+    public MotorConfig withMotorToMechanismRatio(double motorToMechanismRatio) {
+        this.currentLimitAmps = motorToMechanismRatio;
         return this;
     }
 
@@ -61,6 +75,15 @@ public class MotorConfig {
      */
     public boolean ccwPositive() {
         return ccwPositive;
+    }
+
+    /**
+     * Returns the motor to mechanism ratio.
+     * 
+     * @return the motor to mechansim ratio.
+     */
+    public double motorToMechanismRatio() {
+        return motorToMechanismRatio;
     }
 
     /**

@@ -17,10 +17,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.Configurator;
-import frc.lib.ControllerConstants;
+import frc.lib.config.MechanismConfig;
 
 /** Position controller using two TalonFXs and a CANcoder and an external PIDF for an arm. */
 public class PositionControllerIOTalonFX2 implements PositionControllerIO {
+
+  private final MechanismConfig config;
 
   private final TalonFX leaderMotor, followerMotor;
 
@@ -41,7 +43,7 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
    * @param leaderCAN
    * @param followerCAN
    * @param encoderCAN
-   * @param pidf
+   * @param config
    * @param enableFOC
    * @param invertFollower
    */
@@ -49,9 +51,11 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
       CAN leaderCAN,
       CAN followerCAN,
       CAN encoderCAN,
-      ControllerConstants pidf,
+      MechanismConfig config,
       boolean enableFOC,
       boolean invertFollower) {
+    this.config = config;
+
     leaderMotor = new TalonFX(leaderCAN.id(), leaderCAN.bus());
     followerMotor = new TalonFX(followerCAN.id(), followerCAN.bus());
 
@@ -65,9 +69,9 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
     volts = leaderMotor.getMotorVoltage();
     amps = leaderMotor.getStatorCurrent();
 
-    feedforward = pidf.feedforward.createArmFeedforward();
+    feedforward = config.feedforward.createArmFeedforward();
 
-    feedback = pidf.feedback.createPIDController();
+    feedback = config.feedback.createPIDController();
 
     followerMotor.setControl(new Follower(leaderMotor.getDeviceID(), invertFollower));
 
@@ -75,7 +79,7 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
   }
 
   @Override
-  public void configure(PositionControllerIOConstants constants) {
+  public void configure() {
     BaseStatusSignal.setUpdateFrequencyForAll(100.0, position, velocity, acceleration, volts, amps);
 
     ParentDevice.optimizeBusUtilizationForAll(leaderMotor, followerMotor, encoder);
@@ -83,34 +87,34 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     motorConfig.MotorOutput.Inverted =
-        constants.ccwPositiveMotor
+        config.motor.ccwPositive()
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
     motorConfig.MotorOutput.NeutralMode =
-        constants.neutralBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+        config.motor.neutralBrake() ? NeutralModeValue.Brake : NeutralModeValue.Coast;
 
     // Stator current is a measure of the current inside of the motor and is typically higher than
     // supply (breaker) current
-    motorConfig.CurrentLimits.StatorCurrentLimit = constants.currentLimitAmps * 2.0;
+    motorConfig.CurrentLimits.StatorCurrentLimit = config.motor.currentLimitAmps() * 2.0;
     motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
-    motorConfig.CurrentLimits.SupplyCurrentLimit = constants.currentLimitAmps;
+    motorConfig.CurrentLimits.SupplyCurrentLimit = config.motor.currentLimitAmps();
     // Allow higher current spikes (150%) for a brief duration (one second)
     // REV 40A auto-resetting breakers typically trip when current exceeds 300% for one second
-    motorConfig.CurrentLimits.SupplyCurrentThreshold = constants.currentLimitAmps * 1.5;
+    motorConfig.CurrentLimits.SupplyCurrentThreshold = config.motor.currentLimitAmps() * 1.5;
     motorConfig.CurrentLimits.SupplyTimeThreshold = 1;
     motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-    motorConfig.Feedback.SensorToMechanismRatio = constants.sensorToMechanismRatio;
+    motorConfig.Feedback.SensorToMechanismRatio = config.motor.motorToMechanismRatio();
 
     Configurator.configureTalonFX(leaderMotor.getConfigurator(), motorConfig);
     Configurator.configureTalonFX(followerMotor.getConfigurator(), motorConfig);
 
     CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
 
-    encoderConfig.MagnetSensor.MagnetOffset = constants.absoluteEncoderOffsetRotations;
+    encoderConfig.MagnetSensor.MagnetOffset = config.absoluteEncoder.offset().getRotations();
     encoderConfig.MagnetSensor.SensorDirection =
-        constants.ccwPositiveAbsoluteEncoder
+        config.absoluteEncoder.ccwPositive()
             ? SensorDirectionValue.CounterClockwise_Positive
             : SensorDirectionValue.Clockwise_Positive;
 

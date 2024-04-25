@@ -37,7 +37,7 @@ public class Arm extends Subsystem {
   /** Creates the arm subsystem and configures arm hardware. */
   private Arm() {
     shoulder = ArmFactory.createShoulder();
-    shoulder.configure(ShoulderConstants.CONTROLLER_CONSTANTS);
+    shoulder.configure();
 
     shoulderValues = new PositionControllerIOValues();
 

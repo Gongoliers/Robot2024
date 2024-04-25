@@ -8,7 +8,7 @@ public class PositionControllerIOSim implements PositionControllerIO {
   private double velocityRotationsPerSecond = 0.0;
 
   @Override
-  public void configure(PositionControllerIOConstants constants) {}
+  public void configure() {}
 
   @Override
   public void update(PositionControllerIOValues values) {

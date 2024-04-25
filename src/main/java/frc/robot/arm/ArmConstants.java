@@ -4,11 +4,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.ControllerConstants;
 import frc.lib.MotionProfileCalculator;
+import frc.lib.config.AbsoluteEncoderConfig;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
-import frc.lib.controller.PositionControllerIO.PositionControllerIOConstants;
+import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotorConfig;
 
 /** Constants for the arm subsystem. */
 public class ArmConstants {
@@ -23,9 +24,11 @@ public class ArmConstants {
     /** Shoulder's encoder CAN. */
     public static final CAN ENCODER_CAN = new CAN(52);
 
-    /** Shoulder's PIDF constants. */
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
-        new ControllerConstants()
+    /** Shoulder's config. */
+    public static final MechanismConfig CONFIG =
+        new MechanismConfig()
+            .withAbsoluteEncoder(new AbsoluteEncoderConfig().withCCWPositive(false).withOffset(Rotation2d.fromDegrees(-173.135)))
+            .withMotor(new MotorConfig().withCCWPositive(true).withNeutralBrake(true).withMotorToMechanismRatio(39.771428571))
             .withFeedforward(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
@@ -35,18 +38,6 @@ public class ArmConstants {
             .withFeedback(
                 new FeedbackControllerConfig().withProportionalGain(4.0) // volts per rotation
                 );
-
-    /** Shoulder's controller constants. */
-    public static final PositionControllerIOConstants CONTROLLER_CONSTANTS =
-        new PositionControllerIOConstants();
-
-    static {
-      CONTROLLER_CONSTANTS.ccwPositiveMotor = true;
-      CONTROLLER_CONSTANTS.ccwPositiveAbsoluteEncoder = false;
-      CONTROLLER_CONSTANTS.neutralBrake = true;
-      CONTROLLER_CONSTANTS.sensorToMechanismRatio = 39.771428571;
-      CONTROLLER_CONSTANTS.absoluteEncoderOffsetRotations = Units.degreesToRotations(-173.135);
-    }
 
     /** Maximum speed of the shoulder in rotations per second. */
     public static final double MAXIMUM_SPEED = Units.degreesToRotations(240.0);

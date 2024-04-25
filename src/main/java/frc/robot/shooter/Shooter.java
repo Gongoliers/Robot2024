@@ -32,11 +32,11 @@ public class Shooter extends Subsystem {
   private Shooter() {
     serializer = ShooterFactory.createSerializer();
     serializerValues = new VelocityControllerIOValues();
-    serializer.configure(SerializerConstants.CONTROLLER_CONSTANTS);
+    serializer.configure();
 
     flywheel = ShooterFactory.createFlywheel();
     flywheelValues = new VelocityControllerIOValues();
-    flywheel.configure(FlywheelConstants.CONTROLLER_CONSTANTS);
+    flywheel.configure();
 
     setpoint = ShooterState.IDLE;
     goal = ShooterState.IDLE;
