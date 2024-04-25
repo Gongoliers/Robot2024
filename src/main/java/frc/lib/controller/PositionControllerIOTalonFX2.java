@@ -2,16 +2,11 @@ package frc.lib.controller;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -84,43 +79,13 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
 
     ParentDevice.optimizeBusUtilizationForAll(leaderMotor, followerMotor, encoder);
 
-    TalonFXConfiguration motorConfig = new TalonFXConfiguration();
+    Configurator.configureTalonFX(
+        leaderMotor.getConfigurator(), config.motorConfig().createTalonFXConfig());
+    Configurator.configureTalonFX(
+        followerMotor.getConfigurator(), config.motorConfig().createTalonFXConfig());
 
-    motorConfig.MotorOutput.Inverted =
-        config.motorConfig().ccwPositive()
-            ? InvertedValue.CounterClockwise_Positive
-            : InvertedValue.Clockwise_Positive;
-    motorConfig.MotorOutput.NeutralMode =
-        config.motorConfig().neutralBrake() ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-
-    // Stator current is a measure of the current inside of the motor and is typically higher than
-    // supply (breaker) current
-    motorConfig.CurrentLimits.StatorCurrentLimit = config.motorConfig().currentLimitAmps() * 2.0;
-    motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
-    motorConfig.CurrentLimits.SupplyCurrentLimit = config.motorConfig().currentLimitAmps();
-    // Allow higher current spikes (150%) for a brief duration (one second)
-    // REV 40A auto-resetting breakers typically trip when current exceeds 300% for one second
-    motorConfig.CurrentLimits.SupplyCurrentThreshold =
-        config.motorConfig().currentLimitAmps() * 1.5;
-    motorConfig.CurrentLimits.SupplyTimeThreshold = 1;
-    motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-    motorConfig.Feedback.SensorToMechanismRatio = config.motorConfig().motorToMechanismRatio();
-
-    Configurator.configureTalonFX(leaderMotor.getConfigurator(), motorConfig);
-    Configurator.configureTalonFX(followerMotor.getConfigurator(), motorConfig);
-
-    CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
-
-    encoderConfig.MagnetSensor.MagnetOffset =
-        config.absoluteEncoderConfig().offset().getRotations();
-    encoderConfig.MagnetSensor.SensorDirection =
-        config.absoluteEncoderConfig().ccwPositive()
-            ? SensorDirectionValue.CounterClockwise_Positive
-            : SensorDirectionValue.Clockwise_Positive;
-
-    Configurator.configureCANcoder(encoder.getConfigurator(), encoderConfig);
+    Configurator.configureCANcoder(
+        encoder.getConfigurator(), config.absoluteEncoderConfig().createCANcoderConfig());
   }
 
   @Override
