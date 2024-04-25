@@ -1,6 +1,5 @@
 package frc.lib.controller;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Telemetry;
@@ -10,6 +9,9 @@ public interface VelocityControllerIO {
 
   /** Velocity controller values. */
   public static class VelocityControllerIOValues {
+    /** Position in rotations. */
+    public double positionRotations = 0.0;
+
     /** Velocity in rotations per second. */
     public double velocityRotationsPerSecond = 0.0;
 
@@ -34,17 +36,10 @@ public interface VelocityControllerIO {
       ShuffleboardTab tab, String name, VelocityControllerIOValues values) {
     ShuffleboardLayout velocityController = Telemetry.addColumn(tab, name);
 
-    velocityController.addDouble(
-        "Velocity (dps)", () -> Units.rotationsToDegrees(values.velocityRotationsPerSecond));
-    velocityController.addDouble(
-        "Acceleration (dpsps)",
-        () -> Units.rotationsToDegrees(values.accelerationRotationsPerSecondPerSecond));
+    velocityController.addDouble("Position (rot)", () -> values.positionRotations);
     velocityController.addDouble("Velocity (rps)", () -> values.velocityRotationsPerSecond);
     velocityController.addDouble(
         "Acceleration (rpsps)", () -> values.accelerationRotationsPerSecondPerSecond);
-    velocityController.addDouble("Velocity (rpm)", () -> values.velocityRotationsPerSecond * 60);
-    velocityController.addDouble(
-        "Acceleration (rpmpm)", () -> values.accelerationRotationsPerSecondPerSecond * 60);
     velocityController.addDouble("Voltage (V)", () -> values.motorVolts);
     velocityController.addDouble("Current (A)", () -> values.motorAmps);
   }
@@ -62,6 +57,13 @@ public interface VelocityControllerIO {
    * @param values
    */
   public void update(VelocityControllerIOValues values);
+
+  /**
+   * Sets the velocity controller position.
+   *
+   * @param positionRotations
+   */
+  public void setPosition(double positionRotations);
 
   /**
    * Sets the velocity setpoint.

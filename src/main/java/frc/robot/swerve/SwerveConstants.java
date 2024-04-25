@@ -135,15 +135,21 @@ public class SwerveConstants {
         / MK4iConstants.WHEEL_CIRCUMFERENCE;
   }
 
-  public static final MechanismConfig DRIVE_PIDF_CONSTANTS =
+  /** Drive motor config. */
+  public static final MechanismConfig DRIVE_CONFIG =
       new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withCurrentLimit(40)
+                  .withMotorToMechanismRatio(MK4iConstants.DRIVE_GEARING))
           .withFeedforwardConfig(
               new FeedforwardControllerConfig()
                   .withStaticFeedforward(0.14) // volts
                   .withVelocityFeedforward(calculateKv(0.12)) // volts per meter per second
               );
 
-  /** Constants for steer motor PIDF position controllers. */
+  /** Steer motor config. */
   public static final MechanismConfig STEER_CONFIG =
       new MechanismConfig()
           .withMotorConfig(

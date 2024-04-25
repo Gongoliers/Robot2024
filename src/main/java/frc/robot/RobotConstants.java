@@ -16,12 +16,6 @@ public class RobotConstants {
   /** Voltage of the robot's battery, */
   public static final double BATTERY_VOLTAGE = 12.0;
 
-  /**
-   * Duration between the robot being disabled and the swerve subsystem is allowed to coast in
-   * seconds.
-   */
-  public static final double DISABLE_COAST_DELAY = 3.0;
-
   /** Distance from the frame perimeter to the origin in meters. */
   public static final double FRAME_PERIMETER_TO_ORIGIN_DISTANCE = Units.inchesToMeters(14);
 

@@ -6,7 +6,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
-import frc.robot.swerve.DriveMotorIO.DriveMotorIOValues;
+import frc.lib.controller.VelocityControllerIO;
+import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
+import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
 /** Custom swerve module. */
 public class SwerveModuleIOCustom implements SwerveModuleIO {
@@ -18,10 +20,10 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   private final PositionControllerIOValues steerMotorValues = new PositionControllerIOValues();
 
   /** Drive motor. */
-  private final DriveMotorIO driveMotor;
+  private final VelocityControllerIO driveMotor;
 
   /** Drive motor values. */
-  private final DriveMotorIOValues driveMotorValues = new DriveMotorIOValues();
+  private final VelocityControllerIOValues driveMotorValues = new VelocityControllerIOValues();
 
   /** Speeds below this speed are zeroed. */
   private final double kSpeedDeadbandMetersPerSecond = 0.025;
@@ -50,7 +52,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     driveMotor.update(driveMotorValues);
 
     return new SwerveModuleState(
-        driveMotorValues.velocityMetersPerSecond,
+        driveMotorValues.velocityRotationsPerSecond * MK4iConstants.WHEEL_CIRCUMFERENCE,
         Rotation2d.fromRotations(steerMotorValues.positionRotations));
   }
 
@@ -64,7 +66,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     setpoint = optimize(setpoint, getState(), lazy);
 
     steerMotor.setSetpoint(setpoint.angle.getRotations(), 0);
-    driveMotor.setSetpoint(setpoint.speedMetersPerSecond);
+    driveMotor.setSetpoint(setpoint.speedMetersPerSecond / MK4iConstants.WHEEL_CIRCUMFERENCE);
 
     this.setpoint = setpoint;
   }
@@ -112,12 +114,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     driveMotor.update(driveMotorValues);
 
     return new SwerveModulePosition(
-        driveMotorValues.positionMeters,
+        driveMotorValues.positionRotations * MK4iConstants.WHEEL_CIRCUMFERENCE,
         Rotation2d.fromRotations(steerMotorValues.positionRotations));
-  }
-
-  @Override
-  public void setBrake(boolean brake) {
-    driveMotor.setBrake(brake);
   }
 }

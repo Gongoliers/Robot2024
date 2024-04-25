@@ -15,7 +15,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
 
   protected final TalonFX motor;
 
-  protected final StatusSignal<Double> velocity, acceleration, volts, amps;
+  protected final StatusSignal<Double> position, velocity, acceleration, volts, amps;
 
   /**
    * Creates a new velocity controller using TalonFX.
@@ -27,6 +27,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
 
     motor = new TalonFX(can.id(), can.bus());
 
+    position = motor.getPosition();
     velocity = motor.getVelocity();
     acceleration = motor.getAcceleration();
     volts = motor.getMotorVoltage();
@@ -35,7 +36,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
 
   @Override
   public void configure() {
-    BaseStatusSignal.setUpdateFrequencyForAll(100.0, velocity, acceleration, volts, amps);
+    BaseStatusSignal.setUpdateFrequencyForAll(100.0, position, velocity, acceleration, volts, amps);
 
     ParentDevice.optimizeBusUtilizationForAll(motor);
 
@@ -45,12 +46,18 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
 
   @Override
   public void update(VelocityControllerIOValues values) {
-    BaseStatusSignal.refreshAll(velocity, acceleration, volts, amps);
+    BaseStatusSignal.refreshAll(position, velocity, acceleration, volts, amps);
 
+    values.positionRotations = position.getValue();
     values.velocityRotationsPerSecond = velocity.getValue();
     values.accelerationRotationsPerSecondPerSecond = acceleration.getValue();
     values.motorVolts = volts.getValue();
     values.motorAmps = amps.getValue();
+  }
+
+  @Override
+  public void setPosition(double positionRotations) {
+    motor.setPosition(positionRotations);
   }
 
   @Override

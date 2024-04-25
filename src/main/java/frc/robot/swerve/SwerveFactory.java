@@ -3,6 +3,9 @@ package frc.robot.swerve;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIOSim;
 import frc.lib.controller.PositionControllerIOTalonFXSteer;
+import frc.lib.controller.VelocityControllerIO;
+import frc.lib.controller.VelocityControllerIOSim;
+import frc.lib.controller.VelocityControllerIOTalonFXPIDF;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.Subsystem;
@@ -41,10 +44,11 @@ public class SwerveFactory {
    *
    * @return a drive motor.
    */
-  public static DriveMotorIO createDriveMotor(SwerveModuleConfig config) {
+  public static VelocityControllerIO createDriveMotor(SwerveModuleConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
-      return new DriveMotorIOTalonFXPID(config.moduleCAN().drive(), false);
+      return new VelocityControllerIOTalonFXPIDF(
+          config.moduleCAN().drive(), SwerveConstants.DRIVE_CONFIG, false);
 
-    return new DriveMotorIOSim();
+    return new VelocityControllerIOSim();
   }
 }

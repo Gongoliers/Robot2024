@@ -1,6 +1,5 @@
 package frc.lib.controller;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Telemetry;
@@ -37,13 +36,10 @@ public interface PositionControllerIO {
       ShuffleboardTab tab, String name, PositionControllerIOValues values) {
     ShuffleboardLayout positionController = Telemetry.addColumn(tab, name);
 
+    positionController.addDouble("Position (rot)", () -> values.positionRotations);
+    positionController.addDouble("Velocity (rps)", () -> values.velocityRotationsPerSecond);
     positionController.addDouble(
-        "Position (deg)", () -> Units.rotationsToDegrees(values.positionRotations));
-    positionController.addDouble(
-        "Velocity (dps)", () -> Units.rotationsToDegrees(values.velocityRotationsPerSecond));
-    positionController.addDouble(
-        "Acceleration (dpsps)",
-        () -> Units.rotationsToDegrees(values.accelerationRotationsPerSecondPerSecond));
+        "Acceleration (rpsps)", () -> values.accelerationRotationsPerSecondPerSecond);
     positionController.addDouble("Voltage (V)", () -> values.motorVolts);
     positionController.addDouble("Current (A)", () -> values.motorAmps);
   }
@@ -63,7 +59,7 @@ public interface PositionControllerIO {
   public void update(PositionControllerIOValues values);
 
   /**
-   * Sets the mechanism position.
+   * Sets the position controller position.
    *
    * @param positionRotations
    */
