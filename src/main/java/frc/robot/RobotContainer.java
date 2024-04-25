@@ -14,6 +14,7 @@ import frc.robot.odometry.Odometry;
 import frc.robot.shooter.Shooter;
 import frc.robot.superstructure.Superstructure;
 import frc.robot.superstructure.SuperstructureMechanism;
+import frc.robot.superstructure.SuperstructureState;
 import frc.robot.swerve.Swerve;
 
 /** Initializes subsystems and commands. */
@@ -90,6 +91,10 @@ public class RobotContainer {
 
     operatorController.rightBumper().onTrue(superstructure.podium());
     operatorController.rightTrigger().onTrue(superstructure.subwoofer());
+
+    operatorController.povLeft().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER_PRE));
+    operatorController.povRight().onTrue(superstructure.spool(SuperstructureState.SUBWOOFER));
+    operatorController.povUp().onTrue(superstructure.feed(SuperstructureState.SUBWOOFER));
 
     operatorController.a().onTrue(superstructure.amp());
     operatorController.b().onTrue(superstructure.bloop());
