@@ -34,7 +34,10 @@ public class SteerMotorIOSim implements SteerMotorIO {
     ControllerConstants pidfConstants = SwerveConstants.STEER_PIDF_CONSTANTS;
 
     // Simulation is an ideal environment that does not have friction
-    pidfConstants = pidfConstants.withFeedforward(pidfConstants.feedforward.withStaticFeedforward(0.0)).withFeedback(pidfConstants.feedback.withPositionTolerance(0.0));
+    pidfConstants =
+        pidfConstants
+            .withFeedforward(pidfConstants.feedforward.withStaticFeedforward(0.0))
+            .withFeedback(pidfConstants.feedback.withPositionTolerance(0.0));
 
     pidf = new SteerMotorPIDF(pidfConstants);
   }

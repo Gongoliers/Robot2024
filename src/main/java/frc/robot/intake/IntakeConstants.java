@@ -14,16 +14,17 @@ public class IntakeConstants {
     public static final CAN CAN = new CAN(50);
 
     /** Front roller's PIDF constants. */
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
-      .withFeedforward(
-        new FeedforwardControllerConstants()
-        .withStaticFeedforward(0.13) // volts
-        .withVelocityFeedforward(0.1683) // volts per rotation per second
-      )
-      .withFeedback(
-        new FeedbackControllerConstants()
-        .withProportionalGain(0.1) // volts per rotation per second
-      );
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
+        new ControllerConstants()
+            .withFeedforward(
+                new FeedforwardControllerConstants()
+                    .withStaticFeedforward(0.13) // volts
+                    .withVelocityFeedforward(0.1683) // volts per rotation per second
+                )
+            .withFeedback(
+                new FeedbackControllerConstants()
+                    .withProportionalGain(0.1) // volts per rotation per second
+                );
 
     /** Front roller's controller constants. */
     public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
@@ -50,16 +51,17 @@ public class IntakeConstants {
     /** Back roller's CAN. */
     public static final CAN CAN = new CAN(40);
 
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
-      .withFeedforward(
-        new FeedforwardControllerConstants()
-        .withStaticFeedforward(0.13) // volts
-        .withVelocityFeedforward(0.1759) // volts per rotation per second
-      )
-      .withFeedback(
-        new FeedbackControllerConstants()
-        .withProportionalGain(0.1) // volts per rotation per second
-      );
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
+        new ControllerConstants()
+            .withFeedforward(
+                new FeedforwardControllerConstants()
+                    .withStaticFeedforward(0.13) // volts
+                    .withVelocityFeedforward(0.1759) // volts per rotation per second
+                )
+            .withFeedback(
+                new FeedbackControllerConstants()
+                    .withProportionalGain(0.1) // volts per rotation per second
+                );
 
     /** Back roller's controller constants. */
     public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =

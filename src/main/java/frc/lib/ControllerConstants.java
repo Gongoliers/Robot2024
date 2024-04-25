@@ -11,18 +11,19 @@ public class ControllerConstants {
 
   /**
    * Modifies these controller constants to use the feedforward controller constants.
-   * 
+   *
    * @param feedforwardControllerConstants the feedforward controller constants to use.
    * @return these controller constants.
    */
-  public ControllerConstants withFeedforward(FeedforwardControllerConstants feedforwardControllerConstants) {
+  public ControllerConstants withFeedforward(
+      FeedforwardControllerConstants feedforwardControllerConstants) {
     this.feedforward = feedforwardControllerConstants;
     return this;
   }
 
   /**
    * Modifies these controller constants to use the feedback controller constants.
-   * 
+   *
    * @param feedbackControllerConstants the feedback controller constants to use.
    * @return these controller constants.
    */

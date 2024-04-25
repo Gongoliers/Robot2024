@@ -28,7 +28,10 @@ public class Arm extends Subsystem {
   /** Arm's setpoint. Updated periodically to reach goal within constraints. */
   private ArmState setpoint;
 
-  /** Time of the previous periodic call. Used for calculating the time elapsed between generating setpoints. */
+  /**
+   * Time of the previous periodic call. Used for calculating the time elapsed between generating
+   * setpoints.
+   */
   private double previousTimeSeconds;
 
   /** Creates the arm subsystem and configures arm hardware. */
@@ -90,7 +93,7 @@ public class Arm extends Subsystem {
 
   /**
    * Returns the arm's state.
-   * 
+   *
    * @return the arm's state.
    */
   public ArmState getState() {
@@ -101,7 +104,7 @@ public class Arm extends Subsystem {
 
   /**
    * Sets the arm's goal state.
-   * 
+   *
    * @param goal the arm's goal state.
    */
   public void setGoal(ArmState goal) {
@@ -110,7 +113,7 @@ public class Arm extends Subsystem {
 
   /**
    * Returns true if the arm is at the goal state.
-   * 
+   *
    * @return true if the arm is at the goal state.
    */
   public boolean atGoal() {
@@ -119,7 +122,7 @@ public class Arm extends Subsystem {
 
   /**
    * Sets the position.
-   * 
+   *
    * @param state the state to use as position.
    */
   public void setPosition(ArmState state) {

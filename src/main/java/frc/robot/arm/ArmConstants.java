@@ -4,10 +4,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.MotionProfileCalculator;
 import frc.lib.ControllerConstants;
 import frc.lib.FeedbackControllerConstants;
 import frc.lib.FeedforwardControllerConstants;
+import frc.lib.MotionProfileCalculator;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOConstants;
 
 /** Constants for the arm subsystem. */
@@ -24,17 +24,17 @@ public class ArmConstants {
     public static final CAN ENCODER_CAN = new CAN(52);
 
     /** Shoulder's PIDF constants. */
-    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
-      .withFeedforward(
-        new FeedforwardControllerConstants()
-        .withStaticFeedforward(0.14) // volts
-        .withGravityFeedforward(0.5125) // volts
-        .withVelocityFeedforward(4.0) // volts per rotation per second
-      )
-      .withFeedback(
-        new FeedbackControllerConstants()
-        .withProportionalGain(4.0) // volts per rotation
-      );
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS =
+        new ControllerConstants()
+            .withFeedforward(
+                new FeedforwardControllerConstants()
+                    .withStaticFeedforward(0.14) // volts
+                    .withGravityFeedforward(0.5125) // volts
+                    .withVelocityFeedforward(4.0) // volts per rotation per second
+                )
+            .withFeedback(
+                new FeedbackControllerConstants().withProportionalGain(4.0) // volts per rotation
+                );
 
     /** Shoulder's controller constants. */
     public static final PositionControllerIOConstants CONTROLLER_CONSTANTS =

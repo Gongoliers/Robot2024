@@ -211,13 +211,12 @@ public class Superstructure extends Subsystem {
   }
 
   public Command spool(SuperstructureState shot) {
-    return pull(shot)
-      .andThen(ready(shot));
+    return pull(shot).andThen(ready(shot));
   }
 
   public Command feed(SuperstructureState shot) {
     return ready(shot)
-      .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
-      .andThen(hold(shot));
+        .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
+        .andThen(hold(shot));
   }
 }

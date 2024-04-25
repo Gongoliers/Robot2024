@@ -29,7 +29,8 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
   public DriveMotorIOTalonFXPID(CAN can) {
     super(can);
 
-    velocityFeedforward = SwerveConstants.DRIVE_PIDF_CONSTANTS.feedforward.createSimpleMotorFeedforward();
+    velocityFeedforward =
+        SwerveConstants.DRIVE_PIDF_CONSTANTS.feedforward.createSimpleMotorFeedforward();
 
     velocityFeedback = SwerveConstants.DRIVE_PIDF_CONSTANTS.feedback.createPIDController();
 
