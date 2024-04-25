@@ -3,25 +3,23 @@ package frc.robot.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
 
 /** Utility class for calculating PIDF for steer motors. */
 public class SteerMotorPIDF {
 
-  /** Feedback controller for position. */
-  private final PIDController feedback;
-
   /** Feedforward controller for position. */
   private final SimpleMotorFeedforward feedforward;
 
+  /** Feedback controller for position. */
+  private final PIDController feedback;
+
   /** Creates a PIDF utility class. */
-  public SteerMotorPIDF(PIDFConstants pidfConstants) {
-    feedback = new PIDController(pidfConstants.kP, 0.0, pidfConstants.kD);
+  public SteerMotorPIDF(ControllerConstants pidfConstants) {
+    feedforward = pidfConstants.feedforward.createSimpleMotorFeedforward();
 
+    feedback = pidfConstants.feedback.createPIDController();
     feedback.enableContinuousInput(-0.5, 0.5);
-    feedback.setTolerance(pidfConstants.kPositionTolerance);
-
-    feedforward = new SimpleMotorFeedforward(pidfConstants.kS, 0.0);
   }
 
   /**

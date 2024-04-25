@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.MotionProfileCalculator;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
+import frc.lib.FeedbackControllerConstants;
+import frc.lib.FeedforwardControllerConstants;
 
 /** Constants for the swerve subsystem. */
 public class SwerveConstants {
@@ -137,8 +139,6 @@ public class SwerveConstants {
   public static final TrapezoidProfile ROTATION_MOTION_PROFILE =
       new TrapezoidProfile(ROTATION_CONSTRAINTS);
 
-  public static final PIDFConstants DRIVE_PIDF_CONSTANTS = new PIDFConstants();
-
   /**
    * Converts a kV constant in volts per rotor rotation per second to a kV constant in volts per
    * meters per second.
@@ -152,18 +152,22 @@ public class SwerveConstants {
         / MK4iConstants.WHEEL_CIRCUMFERENCE;
   }
 
-  static {
-    DRIVE_PIDF_CONSTANTS.kS = 0.14;
-    DRIVE_PIDF_CONSTANTS.kV = calculateKv(0.12); // volts per meter per second
-  }
+  public static final ControllerConstants DRIVE_PIDF_CONSTANTS = new ControllerConstants()
+    .withFeedforward(
+        new FeedforwardControllerConstants()
+        .withStaticFeedforward(0.14) // volts
+        .withVelocityFeedforward(calculateKv(0.12)) // volts per meter per second
+    );
 
   /** Constants for steer motor PIDF position controllers. */
-  public static final PIDFConstants STEER_PIDF_CONSTANTS = new PIDFConstants();
-
-  static {
-    STEER_PIDF_CONSTANTS.kP = 54.0; // volts per rotation
-    STEER_PIDF_CONSTANTS.kD = 0.16; // volts per rotation per second 0.25
-    STEER_PIDF_CONSTANTS.kPositionTolerance = Units.degreesToRotations(0);
-    STEER_PIDF_CONSTANTS.kS = 0.205;
-  }
+  public static final ControllerConstants STEER_PIDF_CONSTANTS = new ControllerConstants()
+    .withFeedforward(
+        new FeedforwardControllerConstants()
+        .withStaticFeedforward(0.205) // volts
+    ).withFeedback(
+        new FeedbackControllerConstants()
+        .withProportionalGain(54.0) // volts per rotation
+        .withDerivativeGain(0.16) // volts per rotation per second
+        .withPositionTolerance(Units.degreesToRotations(0)) // rotations
+    );
 }

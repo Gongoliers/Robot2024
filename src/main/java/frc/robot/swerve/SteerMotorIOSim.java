@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
 import frc.robot.RobotConstants;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
 
@@ -31,11 +31,10 @@ public class SteerMotorIOSim implements SteerMotorIO {
     positionRotations = 0.0;
     velocityRotationsPerSecond = 0.0;
 
-    PIDFConstants pidfConstants = SwerveConstants.STEER_PIDF_CONSTANTS;
+    ControllerConstants pidfConstants = SwerveConstants.STEER_PIDF_CONSTANTS;
 
     // Simulation is an ideal environment that does not have friction
-    pidfConstants.kPositionTolerance = 0.0;
-    pidfConstants.kS = 0.0;
+    pidfConstants = pidfConstants.withFeedforward(pidfConstants.feedforward.withStaticFeedforward(0.0)).withFeedback(pidfConstants.feedback.withPositionTolerance(0.0));
 
     pidf = new SteerMotorPIDF(pidfConstants);
   }

@@ -17,7 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.Configurator;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
 
 /** Position controller using two TalonFXs and a CANcoder and an external PIDF for an arm. */
 public class PositionControllerIOTalonFX2 implements PositionControllerIO {
@@ -49,7 +49,7 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
       CAN leaderCAN,
       CAN followerCAN,
       CAN encoderCAN,
-      PIDFConstants pidf,
+      ControllerConstants pidf,
       boolean enableFOC,
       boolean invertFollower) {
     leaderMotor = new TalonFX(leaderCAN.id(), leaderCAN.bus());
@@ -65,9 +65,9 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
     volts = leaderMotor.getMotorVoltage();
     amps = leaderMotor.getStatorCurrent();
 
-    feedforward = new ArmFeedforward(pidf.kS, pidf.kG, pidf.kV, pidf.kA);
+    feedforward = pidf.feedforward.createArmFeedforward();
 
-    feedback = new PIDController(pidf.kP, pidf.kI, pidf.kD);
+    feedback = pidf.feedback.createPIDController();
 
     followerMotor.setControl(new Follower(leaderMotor.getDeviceID(), invertFollower));
 

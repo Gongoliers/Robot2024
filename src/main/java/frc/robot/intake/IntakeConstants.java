@@ -1,7 +1,9 @@
 package frc.robot.intake;
 
 import frc.lib.CAN;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
+import frc.lib.FeedbackControllerConstants;
+import frc.lib.FeedforwardControllerConstants;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 
 /** Constants for the intake subsystem. */
@@ -12,13 +14,16 @@ public class IntakeConstants {
     public static final CAN CAN = new CAN(50);
 
     /** Front roller's PIDF constants. */
-    public static final PIDFConstants PIDF = new PIDFConstants();
-
-    static {
-      PIDF.kS = 0.13;
-      PIDF.kV = 0.1683;
-      PIDF.kP = 0.1;
-    }
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
+      .withFeedforward(
+        new FeedforwardControllerConstants()
+        .withStaticFeedforward(0.13) // volts
+        .withVelocityFeedforward(0.1683) // volts per rotation per second
+      )
+      .withFeedback(
+        new FeedbackControllerConstants()
+        .withProportionalGain(0.1) // volts per rotation per second
+      );
 
     /** Front roller's controller constants. */
     public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
@@ -45,14 +50,16 @@ public class IntakeConstants {
     /** Back roller's CAN. */
     public static final CAN CAN = new CAN(40);
 
-    /** Back roller's PIDF constants. */
-    public static final PIDFConstants PIDF = new PIDFConstants();
-
-    static {
-      PIDF.kS = 0.13;
-      PIDF.kV = 0.1759;
-      PIDF.kP = 0.1;
-    }
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
+      .withFeedforward(
+        new FeedforwardControllerConstants()
+        .withStaticFeedforward(0.13) // volts
+        .withVelocityFeedforward(0.1759) // volts per rotation per second
+      )
+      .withFeedback(
+        new FeedbackControllerConstants()
+        .withProportionalGain(0.1) // volts per rotation per second
+      );
 
     /** Back roller's controller constants. */
     public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =

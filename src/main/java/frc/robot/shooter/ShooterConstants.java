@@ -3,7 +3,9 @@ package frc.robot.shooter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.lib.CAN;
 import frc.lib.MotionProfileCalculator;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
+import frc.lib.FeedbackControllerConstants;
+import frc.lib.FeedforwardControllerConstants;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOConstants;
 
 /** Constants for the shooter subsystem. */
@@ -15,12 +17,12 @@ public class ShooterConstants {
     public static final CAN CAN = new CAN(42);
 
     /** Serializer's PIDF constants. */
-    public static final PIDFConstants PIDF = new PIDFConstants();
-
-    static {
-      PIDF.kS = 0.14;
-      PIDF.kV = 0.2617;
-    }
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
+      .withFeedforward(
+        new FeedforwardControllerConstants()
+        .withStaticFeedforward(0.14) // volts
+        .withVelocityFeedforward(0.2617) // volts per rotation per second
+      );
 
     /** Serializer's controller constants. */
     public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =
@@ -59,13 +61,16 @@ public class ShooterConstants {
     public static final CAN CAN = new CAN(44);
 
     /** Flywheel's PIDF constants. */
-    public static final PIDFConstants PIDF = new PIDFConstants();
-
-    static {
-      PIDF.kS = 0.14;
-      PIDF.kV = 0.2;
-      PIDF.kP = 0.14;
-    }
+    public static final ControllerConstants PIDF_CONTROLLER_CONSTANTS = new ControllerConstants()
+      .withFeedforward(
+        new FeedforwardControllerConstants()
+        .withStaticFeedforward(0.14) // volts
+        .withVelocityFeedforward(0.2) // volts per rotation per second
+      )
+      .withFeedback(
+        new FeedbackControllerConstants()
+        .withProportionalGain(0.14) // volts per rotation per second
+      );
 
     /** Flywheel's controller constants. */
     public static final VelocityControllerIOConstants CONTROLLER_CONSTANTS =

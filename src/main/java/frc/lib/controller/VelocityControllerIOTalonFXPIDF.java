@@ -4,7 +4,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.CAN;
-import frc.lib.PIDFConstants;
+import frc.lib.ControllerConstants;
 
 /** Velocity controller using TalonFX and external PIDF. */
 public class VelocityControllerIOTalonFXPIDF extends VelocityControllerIOTalonFX {
@@ -22,12 +22,12 @@ public class VelocityControllerIOTalonFXPIDF extends VelocityControllerIOTalonFX
    * @param pidf
    * @param enableFOC
    */
-  public VelocityControllerIOTalonFXPIDF(CAN can, PIDFConstants pidf, boolean enableFOC) {
+  public VelocityControllerIOTalonFXPIDF(CAN can, ControllerConstants pidf, boolean enableFOC) {
     super(can);
 
-    feedforward = new SimpleMotorFeedforward(pidf.kS, pidf.kV, pidf.kA);
+    feedforward = pidf.feedforward.createSimpleMotorFeedforward();
 
-    feedback = new PIDController(pidf.kP, pidf.kI, pidf.kD);
+    feedback = pidf.feedback.createPIDController();
 
     voltage = new VoltageOut(0.0).withEnableFOC(enableFOC);
   }
@@ -38,7 +38,7 @@ public class VelocityControllerIOTalonFXPIDF extends VelocityControllerIOTalonFX
    * @param can
    * @param pidf
    */
-  public VelocityControllerIOTalonFXPIDF(CAN can, PIDFConstants pidf) {
+  public VelocityControllerIOTalonFXPIDF(CAN can, ControllerConstants pidf) {
     this(can, pidf, false);
   }
 
