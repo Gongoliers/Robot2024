@@ -45,25 +45,26 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
     TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     motorConfig.MotorOutput.Inverted =
-        config.motor.ccwPositive()
+        config.motorConfig().ccwPositive()
             ? InvertedValue.CounterClockwise_Positive
             : InvertedValue.Clockwise_Positive;
     motorConfig.MotorOutput.NeutralMode =
-        config.motor.neutralBrake() ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+        config.motorConfig().neutralBrake() ? NeutralModeValue.Brake : NeutralModeValue.Coast;
 
     // Stator current is a measure of the current inside of the motor and is typically higher than
     // supply (breaker) current
-    motorConfig.CurrentLimits.StatorCurrentLimit = config.motor.currentLimitAmps() * 2.0;
+    motorConfig.CurrentLimits.StatorCurrentLimit = config.motorConfig().currentLimitAmps() * 2.0;
     motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
-    motorConfig.CurrentLimits.SupplyCurrentLimit = config.motor.currentLimitAmps();
+    motorConfig.CurrentLimits.SupplyCurrentLimit = config.motorConfig().currentLimitAmps();
     // Allow higher current spikes (150%) for a brief duration (one second)
     // REV 40A auto-resetting breakers typically trip when current exceeds 300% for one second
-    motorConfig.CurrentLimits.SupplyCurrentThreshold = config.motor.currentLimitAmps() * 1.5;
+    motorConfig.CurrentLimits.SupplyCurrentThreshold =
+        config.motorConfig().currentLimitAmps() * 1.5;
     motorConfig.CurrentLimits.SupplyTimeThreshold = 1;
     motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-    motorConfig.Feedback.SensorToMechanismRatio = config.motor.motorToMechanismRatio();
+    motorConfig.Feedback.SensorToMechanismRatio = config.motorConfig().motorToMechanismRatio();
 
     Configurator.configureTalonFX(motor.getConfigurator(), motorConfig);
   }

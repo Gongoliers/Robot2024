@@ -30,9 +30,12 @@ public class DriveMotorIOTalonFXPID extends DriveMotorIOTalonFX {
     super(can);
 
     velocityFeedforward =
-        SwerveConstants.DRIVE_PIDF_CONSTANTS.feedforward.createSimpleMotorFeedforward();
+        SwerveConstants.DRIVE_PIDF_CONSTANTS
+            .feedforwardControllerConfig()
+            .createSimpleMotorFeedforward();
 
-    velocityFeedback = SwerveConstants.DRIVE_PIDF_CONSTANTS.feedback.createPIDController();
+    velocityFeedback =
+        SwerveConstants.DRIVE_PIDF_CONSTANTS.feedbackControllerConfig().createPIDController();
 
     voltageOutRequest = new VoltageOut(0).withEnableFOC(SwerveConstants.USE_PHOENIX_PRO_FOC);
   }

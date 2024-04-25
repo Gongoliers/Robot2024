@@ -154,7 +154,7 @@ public class SwerveConstants {
 
   public static final MechanismConfig DRIVE_PIDF_CONSTANTS =
       new MechanismConfig()
-          .withFeedforward(
+          .withFeedforwardConfig(
               new FeedforwardControllerConfig()
                   .withStaticFeedforward(0.14) // volts
                   .withVelocityFeedforward(calculateKv(0.12)) // volts per meter per second
@@ -163,10 +163,10 @@ public class SwerveConstants {
   /** Constants for steer motor PIDF position controllers. */
   public static final MechanismConfig STEER_PIDF_CONSTANTS =
       new MechanismConfig()
-          .withFeedforward(
+          .withFeedforwardConfig(
               new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
               )
-          .withFeedback(
+          .withFeedbackConfig(
               new FeedbackControllerConfig()
                   .withProportionalGain(54.0) // volts per rotation
                   .withDerivativeGain(0.16) // volts per rotation per second

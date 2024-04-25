@@ -16,17 +16,17 @@ public class IntakeConstants {
     /** Front roller's config. */
     public static final MechanismConfig CONFIG =
         new MechanismConfig()
-            .withMotor(
+            .withMotorConfig(
                 new MotorConfig()
                     .withCCWPositive(false)
                     .withNeutralBrake(false)
                     .withMotorToMechanismRatio(24.0 / 16.0))
-            .withFeedforward(
+            .withFeedforwardConfig(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.13) // volts
                     .withVelocityFeedforward(0.1683) // volts per rotation per second
                 )
-            .withFeedback(
+            .withFeedbackConfig(
                 new FeedbackControllerConfig()
                     .withProportionalGain(0.1) // volts per rotation per second
                 );
@@ -48,17 +48,17 @@ public class IntakeConstants {
 
     public static final MechanismConfig CONFIG =
         new MechanismConfig()
-            .withMotor(
+            .withMotorConfig(
                 new MotorConfig()
                     .withCCWPositive(false)
                     .withNeutralBrake(false)
                     .withMotorToMechanismRatio(24.0 / 16.0))
-            .withFeedforward(
+            .withFeedforwardConfig(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.13) // volts
                     .withVelocityFeedforward(0.1759) // volts per rotation per second
                 )
-            .withFeedback(
+            .withFeedbackConfig(
                 new FeedbackControllerConfig()
                     .withProportionalGain(0.1) // volts per rotation per second
                 );

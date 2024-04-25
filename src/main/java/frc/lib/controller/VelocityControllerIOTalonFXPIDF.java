@@ -25,9 +25,9 @@ public class VelocityControllerIOTalonFXPIDF extends VelocityControllerIOTalonFX
   public VelocityControllerIOTalonFXPIDF(CAN can, MechanismConfig config, boolean enableFOC) {
     super(can, config);
 
-    feedforward = config.feedforward.createSimpleMotorFeedforward();
+    feedforward = config.feedforwardControllerConfig().createSimpleMotorFeedforward();
 
-    feedback = config.feedback.createPIDController();
+    feedback = config.feedbackControllerConfig().createPIDController();
 
     voltage = new VoltageOut(0.0).withEnableFOC(enableFOC);
   }

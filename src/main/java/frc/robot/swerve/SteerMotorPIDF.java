@@ -15,10 +15,10 @@ public class SteerMotorPIDF {
   private final PIDController feedback;
 
   /** Creates a PIDF utility class. */
-  public SteerMotorPIDF(MechanismConfig pidfConstants) {
-    feedforward = pidfConstants.feedforward.createSimpleMotorFeedforward();
+  public SteerMotorPIDF(MechanismConfig config) {
+    feedforward = config.feedforwardControllerConfig().createSimpleMotorFeedforward();
 
-    feedback = pidfConstants.feedback.createPIDController();
+    feedback = config.feedbackControllerConfig().createPIDController();
     feedback.enableContinuousInput(-0.5, 0.5);
   }
 

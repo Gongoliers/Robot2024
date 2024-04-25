@@ -4,16 +4,17 @@ package frc.lib.config;
 public class MechanismConfig {
 
   /** Absolute encoder config. */
-  public AbsoluteEncoderConfig absoluteEncoder = new AbsoluteEncoderConfig();
+  private AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
 
   /** Feedback controller config. */
-  public FeedbackControllerConfig feedback = new FeedbackControllerConfig();
+  private FeedbackControllerConfig feedbackControllerConfig = new FeedbackControllerConfig();
 
   /** Feedforward controller config. */
-  public FeedforwardControllerConfig feedforward = new FeedforwardControllerConfig();
+  private FeedforwardControllerConfig feedforwardControllerConfig =
+      new FeedforwardControllerConfig();
 
   /** Motor config. */
-  public MotorConfig motor = new MotorConfig();
+  private MotorConfig motorConfig = new MotorConfig();
 
   /**
    * Modifies this mechanism config to use the absolute encoder config.
@@ -21,8 +22,8 @@ public class MechanismConfig {
    * @param absoluteEncoderConfig the absolute encoder config.
    * @return this mechanism config.
    */
-  public MechanismConfig withAbsoluteEncoder(AbsoluteEncoderConfig absoluteEncoderConfig) {
-    this.absoluteEncoder = absoluteEncoderConfig;
+  public MechanismConfig withAbsoluteEncoderConfig(AbsoluteEncoderConfig absoluteEncoderConfig) {
+    this.absoluteEncoderConfig = absoluteEncoderConfig;
     return this;
   }
 
@@ -32,8 +33,8 @@ public class MechanismConfig {
    * @param feedbackControllerConfig the feedback controller config.
    * @return this mechanism config.
    */
-  public MechanismConfig withFeedback(FeedbackControllerConfig feedbackControllerConfig) {
-    this.feedback = feedbackControllerConfig;
+  public MechanismConfig withFeedbackConfig(FeedbackControllerConfig feedbackControllerConfig) {
+    this.feedbackControllerConfig = feedbackControllerConfig;
     return this;
   }
 
@@ -43,8 +44,9 @@ public class MechanismConfig {
    * @param feedforwardControllerConfig the feedforward controller config.
    * @return this mechanism config.
    */
-  public MechanismConfig withFeedforward(FeedforwardControllerConfig feedforwardControllerConfig) {
-    this.feedforward = feedforwardControllerConfig;
+  public MechanismConfig withFeedforwardConfig(
+      FeedforwardControllerConfig feedforwardControllerConfig) {
+    this.feedforwardControllerConfig = feedforwardControllerConfig;
     return this;
   }
 
@@ -54,8 +56,44 @@ public class MechanismConfig {
    * @param motorConfig the motor config.
    * @return this mechanism config.
    */
-  public MechanismConfig withMotor(MotorConfig motorConfig) {
-    this.motor = motorConfig;
+  public MechanismConfig withMotorConfig(MotorConfig motorConfig) {
+    this.motorConfig = motorConfig;
     return this;
+  }
+
+  /**
+   * Returns the absolute encoder config.
+   *
+   * @return the absolute encoder config.
+   */
+  public AbsoluteEncoderConfig absoluteEncoderConfig() {
+    return absoluteEncoderConfig;
+  }
+
+  /**
+   * Returns the feedback controller config.
+   *
+   * @return the feedback controller config.
+   */
+  public FeedbackControllerConfig feedbackControllerConfig() {
+    return feedbackControllerConfig;
+  }
+
+  /**
+   * Returns the feedforward controller config.
+   *
+   * @return the feedforward controller config.
+   */
+  public FeedforwardControllerConfig feedforwardControllerConfig() {
+    return feedforwardControllerConfig;
+  }
+
+  /**
+   * Returns the motor config.
+   *
+   * @return the motor config.
+   */
+  public MotorConfig motorConfig() {
+    return motorConfig;
   }
 }

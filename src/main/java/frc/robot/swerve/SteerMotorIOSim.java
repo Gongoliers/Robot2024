@@ -31,15 +31,15 @@ public class SteerMotorIOSim implements SteerMotorIO {
     positionRotations = 0.0;
     velocityRotationsPerSecond = 0.0;
 
-    MechanismConfig pidfConstants = SwerveConstants.STEER_PIDF_CONSTANTS;
+    MechanismConfig config = SwerveConstants.STEER_PIDF_CONSTANTS;
 
     // Simulation is an ideal environment that does not have friction
-    pidfConstants =
-        pidfConstants
-            .withFeedforward(pidfConstants.feedforward.withStaticFeedforward(0.0))
-            .withFeedback(pidfConstants.feedback.withPositionTolerance(0.0));
+    config =
+        config
+            .withFeedforwardConfig(config.feedforwardControllerConfig().withStaticFeedforward(0.0))
+            .withFeedbackConfig(config.feedbackControllerConfig().withPositionTolerance(0.0));
 
-    pidf = new SteerMotorPIDF(pidfConstants);
+    pidf = new SteerMotorPIDF(config);
   }
 
   @Override
