@@ -1,9 +1,9 @@
-package frc.robot.odometry;
+package frc.lib.sensor;
 
-/** Gyroscope hardware interface. */
+/** Gyroscope interface. */
 public interface GyroscopeIO {
 
-  /** Gyroscope's hardware interface. */
+  /** Gyroscope interface. */
   public static class GyroscopeIOValues {
     /** Roll angle in rotations. */
     public double rollRotations = 0.0;

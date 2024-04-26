@@ -1,35 +1,25 @@
 package frc.robot.odometry;
 
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import edu.wpi.first.math.util.Units;
+import frc.lib.sensor.GyroscopeIO;
+import frc.lib.sensor.GyroscopeIOPigeon2;
+import frc.lib.sensor.GyroscopeIOSim;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.Subsystem;
 
-/** Helper class for creating hardware for the odometry subsystem. */
+/** Factory for creating odometry subsystem hardware. */
 public class OdometryFactory {
 
   /**
-   * Creates a gyroscope.
+   * Creates the gyroscope.
    *
-   * @return a gyroscope.
+   * @return the gyroscope.
    */
   public static GyroscopeIO createGyroscope(Odometry odometry) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ODOMETRY))
       return new GyroscopeIOPigeon2();
 
-    return new GyroscopeIOSim(odometry);
-  }
-
-  /**
-   * Creates a gyroscope configuration.
-   *
-   * @return a gyroscope configuration.
-   */
-  public static Pigeon2Configuration createGyroscopeConfig() {
-    Pigeon2Configuration gyroscopeConfig = new Pigeon2Configuration();
-
-    gyroscopeConfig.Pigeon2Features.EnableCompass = false;
-
-    return gyroscopeConfig;
+    return new GyroscopeIOSim(() -> Units.radiansToRotations(odometry.getVelocity().dtheta));
   }
 }

@@ -15,6 +15,7 @@ public class ArmFactory {
   /**
    * Creates the shoulder controller.
    *
+   * @param config the shoulder controller config.
    * @return the shoulder controller.
    */
   public static PositionControllerIO createShoulder(MechanismConfig config) {

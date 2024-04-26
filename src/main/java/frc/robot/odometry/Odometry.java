@@ -1,6 +1,5 @@
 package frc.robot.odometry;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,17 +15,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.robot.odometry.GyroscopeIO.GyroscopeIOValues;
+import frc.lib.sensor.GyroscopeIO;
+import frc.lib.sensor.GyroscopeIO.GyroscopeIOValues;
 import frc.robot.swerve.Swerve;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/** Subsystem class for the odometry subsystem. */
+/** Odometry subsystem. */
 public class Odometry extends Subsystem {
 
-  /** Instance variable for the odometry subsystem singleton. */
+  /** Odometry singleton. */
   private static Odometry instance = null;
 
   /** Gyroscope. */
@@ -47,10 +44,7 @@ public class Odometry extends Subsystem {
   /** Field. */
   private final Field2d field;
 
-  /** List of functions to be called when pose is manually updated. */
-  private final List<Consumer<Rotation2d>> yawUpdateConsumers;
-
-  /** Creates a new instance of the odometry subsystem. */
+  /** Initializes the odometry subsystem and configures odometry hardware. */
   private Odometry() {
     gyroscope = OdometryFactory.createGyroscope(this);
     gyroscope.configure();
@@ -61,21 +55,14 @@ public class Odometry extends Subsystem {
 
     gyroscope.update(gyroscopeValues);
 
-    Rotation2d initialGyroRotation = Rotation2d.fromRotations(gyroscopeValues.yawRotations);
-
-    Pose2d initialPose = new Pose2d();
-
     swervePoseEstimator =
         new SwerveDrivePoseEstimator(
             Swerve.getInstance().getKinematics(),
-            initialGyroRotation,
+            Rotation2d.fromRotations(gyroscopeValues.yawRotations),
             swerveModulePositionsSupplier.get(),
-            initialPose);
-    swervePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+            new Pose2d());
 
     field = new Field2d();
-
-    yawUpdateConsumers = new ArrayList<Consumer<Rotation2d>>();
   }
 
   /**
@@ -142,6 +129,8 @@ public class Odometry extends Subsystem {
    * @return the rotation of the robot on the field where zero is away from the blue alliance wall.
    */
   public Rotation2d getFieldRelativeHeading() {
+    // TODO Doesn't obey WPILib's coordinate system
+
     return getPosition().getRotation();
   }
 
@@ -153,8 +142,6 @@ public class Odometry extends Subsystem {
    *     alliance.
    */
   public Rotation2d getDriverRelativeHeading() {
-    gyroscope.update(gyroscopeValues);
-
     return Rotation2d.fromRotations(gyroscopeValues.yawRotations);
   }
 
@@ -182,15 +169,6 @@ public class Odometry extends Subsystem {
   }
 
   /**
-   * Adds a consumer for when pose is manually updated.
-   *
-   * @param consumer consumer for when pose is manually updated.
-   */
-  public void onYawUpdate(Consumer<Rotation2d> consumer) {
-    yawUpdateConsumers.add(consumer);
-  }
-
-  /**
    * Zeroes the driver-relative rotation of the robot.
    *
    * @return a command that zeroes the driver-relative rotation of the robot.
@@ -199,8 +177,6 @@ public class Odometry extends Subsystem {
     return Commands.runOnce(
         () -> {
           gyroscope.setYaw(0.0);
-
-          yawUpdateConsumers.forEach(consumer -> consumer.accept(Rotation2d.fromDegrees(0)));
         });
   }
 
