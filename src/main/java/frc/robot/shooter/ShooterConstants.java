@@ -2,10 +2,10 @@ package frc.robot.shooter;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.lib.CAN;
-import frc.lib.MotionProfileCalculator;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotionProfileConfig;
 import frc.lib.config.MotorConfig;
 
 /** Constants for the shooter subsystem. */
@@ -17,13 +17,18 @@ public class ShooterConstants {
     public static final CAN CAN = new CAN(42);
 
     /** Serializer's config. */
-    public static final MechanismConfig PIDF_CONTROLLER_CONSTANTS =
+    public static final MechanismConfig CONFIG =
         new MechanismConfig()
             .withMotorConfig(
                 new MotorConfig()
                     .withCCWPositive(true)
                     .withNeutralBrake(false)
                     .withMotorToMechanismRatio(36.0 / 16.0))
+            .withMotionProfileConfig(
+                new MotionProfileConfig()
+                    .withMaximumVelocity(45) // rotations per second
+                    .withMaximumAcceleration(450) // rotations per second per second
+                )
             .withFeedforwardConfig(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
@@ -40,11 +45,8 @@ public class ShooterConstants {
 
     public static final double FAST_FEED_SPEED = 44;
 
-    /** Maximum speed in rotations per second. */
-    public static final double MAXIMUM_SPEED = 45.319;
-
     public static final SlewRateLimiter ACCELERATION_LIMITER =
-        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.1));
+        CONFIG.motionProfileConfig().createRateLimiter();
 
     public static final double NOTE_AMPS = 20;
 
@@ -64,6 +66,11 @@ public class ShooterConstants {
                     .withCCWPositive(false)
                     .withNeutralBrake(true)
                     .withMotorToMechanismRatio(28.0 / 16.0))
+            .withMotionProfileConfig(
+                new MotionProfileConfig()
+                    .withMaximumVelocity(60) // rotations per second
+                    .withMaximumAcceleration(200) // rotations per second per second
+                )
             .withFeedforwardConfig(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
@@ -88,11 +95,8 @@ public class ShooterConstants {
 
     public static final double BLOOP_SPEED = 30;
 
-    /** Maximum speed in rotations per second. */
-    public static final double MAXIMUM_SPEED = 60;
-
     public static final SlewRateLimiter ACCELERATION_LIMITER =
-        new SlewRateLimiter(MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.3));
+        CONFIG.motionProfileConfig().createRateLimiter();
 
     public static final double TOLERANCE = 5;
   }

@@ -99,8 +99,8 @@ public class DriveCommand extends Command {
     double omegaRadiansPerSecond =
         MathUtil.clamp(
             desiredChassisSpeeds.omegaRadiansPerSecond,
-            -SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians(),
-            SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRadians());
+            -SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians(),
+            SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians());
 
     return new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
   }

@@ -144,19 +144,19 @@ public class SuperstructureMechanism {
             FLYWHEEL_COLOR.sample(
                 Math.abs(state.shooterState().flywheelVelocityRotationsPerSecond()),
                 0,
-                FlywheelConstants.MAXIMUM_SPEED)));
+                FlywheelConstants.CONFIG.motionProfileConfig().maximumVelocity())));
 
     serializer.setColor(
         new Color8Bit(
             SERIALIZER_COLOR.sample(
                 Math.abs(state.shooterState().serializerVelocityRotationsPerSecond()),
                 0,
-                SerializerConstants.MAXIMUM_SPEED)));
+                SerializerConstants.CONFIG.motionProfileConfig().maximumVelocity())));
 
     double averageRollerVelocity =
-        (state.intakeState().frontRollerVelocityRotationsPerSecond()
-                + state.intakeState().backRollerVelocityRotationsPerSecond())
-            / 2;
+        0.5
+            * (state.intakeState().frontRollerVelocityRotationsPerSecond()
+                + state.intakeState().backRollerVelocityRotationsPerSecond());
 
     rollers.setColor(
         new Color8Bit(

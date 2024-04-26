@@ -20,7 +20,7 @@ public class ShooterFactory {
   public static VelocityControllerIO createSerializer() {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER)) {
       return new VelocityControllerIOTalonFXPIDF(
-          SerializerConstants.CAN, SerializerConstants.PIDF_CONTROLLER_CONSTANTS);
+          SerializerConstants.CAN, SerializerConstants.CONFIG);
     }
 
     return new VelocityControllerIOSim();

@@ -5,8 +5,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,8 +15,6 @@ import frc.robot.odometry.Odometry;
 import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /** Subsystem class for the auto subsystem. */
 public class Auto extends Subsystem {
@@ -44,29 +40,17 @@ public class Auto extends Subsystem {
     superstructure = Superstructure.getInstance();
     swerve = Swerve.getInstance();
 
-    Supplier<Pose2d> robotPositionSupplier = () -> odometry.getPosition();
-
-    Consumer<Pose2d> robotPositionConsumer = position -> odometry.setPosition(position);
-
-    Supplier<ChassisSpeeds> swerveChassisSpeedsSupplier = () -> swerve.getChassisSpeeds();
-
-    Consumer<ChassisSpeeds> swerveChassisSpeedsConsumer =
-        chassisSpeeds -> swerve.setChassisSpeeds(chassisSpeeds);
-
-    HolonomicPathFollowerConfig holonomicPathFollowerConfig =
+    AutoBuilder.configureHolonomic(
+        odometry::getPosition,
+        odometry::setPosition,
+        swerve::getChassisSpeeds,
+        swerve::setChassisSpeeds,
         new HolonomicPathFollowerConfig(
             new PIDConstants(1.0),
             new PIDConstants(1.0),
-            SwerveConstants.MAXIMUM_ATTAINABLE_SPEED,
+            SwerveConstants.MAXIMUM_SPEED,
             SwerveConstants.NORTH_EAST_MODULE_CONFIG.position().getNorm(),
-            new ReplanningConfig());
-
-    AutoBuilder.configureHolonomic(
-        robotPositionSupplier,
-        robotPositionConsumer,
-        swerveChassisSpeedsSupplier,
-        swerveChassisSpeedsConsumer,
-        holonomicPathFollowerConfig,
+            new ReplanningConfig()),
         AllianceFlipHelper::shouldFlip,
         swerve);
 

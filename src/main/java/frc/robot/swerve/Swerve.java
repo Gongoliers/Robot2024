@@ -60,8 +60,6 @@ public class Swerve extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout translationConstants = Telemetry.addColumn(tab, "Translation Constants");
 
-    translationConstants.addDouble(
-        "Maximum Attainable Velocity (mps)", () -> SwerveConstants.MAXIMUM_ATTAINABLE_SPEED);
     translationConstants.addDouble("Maximum Velocity (mps)", () -> SwerveConstants.MAXIMUM_SPEED);
     translationConstants.addDouble(
         "Maximum Accleration (mpsps)", () -> SwerveConstants.MAXIMUM_ACCELERATION);
@@ -70,13 +68,7 @@ public class Swerve extends Subsystem {
 
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
     rotationConstants.addDouble(
-        "Maximum Attainable Velocity (rps)",
-        () -> SwerveConstants.MAXIMUM_ATTAINABLE_ROTATION_SPEED.getRotations());
-    rotationConstants.addDouble(
         "Maximum Velocity (rps)", () -> SwerveConstants.MAXIMUM_ROTATION_SPEED.getRotations());
-    rotationConstants.addDouble(
-        "Maximum Acceleration (rpsps)",
-        () -> SwerveConstants.MAXIMUM_ROTATION_ACCELERATION.getRotations());
 
     Telemetry.addSwerveModuleStates(tab, "Swerve Module States", this::getModuleStates);
     Telemetry.addSwerveModuleStates(tab, "Swerve Module Setpoints", this::getModuleSetpoints);
@@ -179,8 +171,7 @@ public class Swerve extends Subsystem {
    * @param lazy if true, optimize the module setpoint.
    */
   public void setSetpoints(SwerveModuleState[] setpoints, boolean lazy) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        setpoints, SwerveConstants.MAXIMUM_ATTAINABLE_SPEED);
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpoints, SwerveConstants.MAXIMUM_SPEED);
 
     for (int i = 0; i < 4; i++) {
       swerveModules[i].setSetpoint(setpoints[i], lazy);

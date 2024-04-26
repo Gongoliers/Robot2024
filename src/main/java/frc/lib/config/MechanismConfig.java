@@ -13,6 +13,9 @@ public class MechanismConfig {
   private FeedforwardControllerConfig feedforwardControllerConfig =
       new FeedforwardControllerConfig();
 
+  /** Motion profile config. */
+  private MotionProfileConfig motionProfileConfig = new MotionProfileConfig();
+
   /** Motor config. */
   private MotorConfig motorConfig = new MotorConfig();
 
@@ -47,6 +50,17 @@ public class MechanismConfig {
   public MechanismConfig withFeedforwardConfig(
       FeedforwardControllerConfig feedforwardControllerConfig) {
     this.feedforwardControllerConfig = feedforwardControllerConfig;
+    return this;
+  }
+
+  /**
+   * Modifies this mechanism config to use the motion profile config.
+   *
+   * @param motionProfileConfig the motion profile config.
+   * @return this mechanism config.
+   */
+  public MechanismConfig withMotionProfileConfig(MotionProfileConfig motionProfileConfig) {
+    this.motionProfileConfig = motionProfileConfig;
     return this;
   }
 
@@ -86,6 +100,15 @@ public class MechanismConfig {
    */
   public FeedforwardControllerConfig feedforwardControllerConfig() {
     return feedforwardControllerConfig;
+  }
+
+  /**
+   * Returns the motion profile config.
+   *
+   * @return the motion profile config.
+   */
+  public MotionProfileConfig motionProfileConfig() {
+    return motionProfileConfig;
   }
 
   /**

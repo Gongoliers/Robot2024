@@ -4,11 +4,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.MotionProfileCalculator;
 import frc.lib.config.AbsoluteEncoderConfig;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotionProfileConfig;
 import frc.lib.config.MotorConfig;
 
 /** Constants for the arm subsystem. */
@@ -36,6 +36,11 @@ public class ArmConstants {
                     .withCCWPositive(true)
                     .withNeutralBrake(true)
                     .withMotorToMechanismRatio(39.771428571))
+            .withMotionProfileConfig(
+                new MotionProfileConfig()
+                    .withMaximumVelocity(Units.degreesToRotations(240.0)) // rotations per second
+                    .withMaximumAcceleration(Units.degreesToRadians(240.0)) // rotations per second
+                )
             .withFeedforwardConfig(
                 new FeedforwardControllerConfig()
                     .withStaticFeedforward(0.14) // volts
@@ -46,19 +51,9 @@ public class ArmConstants {
                 new FeedbackControllerConfig().withProportionalGain(4.0) // volts per rotation
                 );
 
-    /** Maximum speed of the shoulder in rotations per second. */
-    public static final double MAXIMUM_SPEED = Units.degreesToRotations(240.0);
-
-    /** Maximum acceleration of the shoulder in rotations per second per second. */
-    public static final double MAXIMUM_ACCELERATION =
-        MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
-
-    /** Maximum speed and acceleration of the shoulder . */
-    public static final TrapezoidProfile.Constraints CONSTRAINTS =
-        new TrapezoidProfile.Constraints(MAXIMUM_SPEED, MAXIMUM_ACCELERATION);
-
     /** Motion profile of the shoulder. */
-    public static final TrapezoidProfile MOTION_PROFILE = new TrapezoidProfile(CONSTRAINTS);
+    public static final TrapezoidProfile MOTION_PROFILE =
+        CONFIG.motionProfileConfig().createTrapezoidProfile();
 
     /** Shoudler angle when stowed. */
     public static final Rotation2d STOW_ANGLE = Rotation2d.fromDegrees(-26);

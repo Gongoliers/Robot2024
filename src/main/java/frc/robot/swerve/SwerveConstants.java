@@ -2,9 +2,7 @@ package frc.robot.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.lib.MotionProfileCalculator;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
 import frc.lib.config.MechanismConfig;
@@ -65,52 +63,14 @@ public class SwerveConstants {
           new Translation2d(-X_OFFSET, Y_OFFSET),
           Rotation2d.fromRotations(-0.276855).plus(Rotation2d.fromDegrees(180)).unaryMinus());
 
-  /**
-   * Calculates the maximum attainable open loop speed in meters per second.
-   *
-   * @param driveRotorVelocityRotationsPerSecondAt12Volts the rotor velocity of the drive motor in
-   *     rotations per second when the motor is supplied 12 volts.
-   * @return the maximum attainable open loop speed in meters per second.
-   */
-  private static double calculateMaximumAttainableSpeed(
-      double driveRotorVelocityRotationsPerSecondAt12Volts) {
-    return driveRotorVelocityRotationsPerSecondAt12Volts
-        / MK4iConstants.DRIVE_GEARING
-        * MK4iConstants.WHEEL_CIRCUMFERENCE;
-  }
-
-  /** Maximum attainable speed in meters per second. */
-  public static final double MAXIMUM_ATTAINABLE_SPEED = calculateMaximumAttainableSpeed(100);
-
   /** Maximum speed in meters per second. */
-  public static final double MAXIMUM_SPEED = MAXIMUM_ATTAINABLE_SPEED;
+  public static final double MAXIMUM_SPEED = 4.5;
 
   /** Maximum acceleration in meters per second per second. */
-  public static final double MAXIMUM_ACCELERATION =
-      MotionProfileCalculator.calculateAcceleration(MAXIMUM_SPEED, 0.25);
-
-  /** Maximum attainable rotational speed. */
-  public static final Rotation2d MAXIMUM_ATTAINABLE_ROTATION_SPEED =
-      Rotation2d.fromRotations(
-          MAXIMUM_ATTAINABLE_SPEED / NORTH_WEST_MODULE_CONFIG.position().getNorm());
+  public static final double MAXIMUM_ACCELERATION = 18;
 
   /** Maximum rotational speed. */
-  public static final Rotation2d MAXIMUM_ROTATION_SPEED = Rotation2d.fromRotations(0.5);
-
-  /** Maximum acceleration in rotations per second per second. */
-  public static final Rotation2d MAXIMUM_ROTATION_ACCELERATION =
-      Rotation2d.fromRotations(
-          MotionProfileCalculator.calculateAcceleration(
-              MAXIMUM_ROTATION_SPEED.getRotations(), 0.1));
-
-  /** Maximum rotation speed and rotation acceleration. */
-  public static final TrapezoidProfile.Constraints ROTATION_CONSTRAINTS =
-      new TrapezoidProfile.Constraints(
-          MAXIMUM_ROTATION_SPEED.getRotations(), MAXIMUM_ROTATION_ACCELERATION.getRotations());
-
-  /** Rotation motion profile. */
-  public static final TrapezoidProfile ROTATION_MOTION_PROFILE =
-      new TrapezoidProfile(ROTATION_CONSTRAINTS);
+  public static final Rotation2d MAXIMUM_ROTATION_SPEED = Rotation2d.fromRotations(0.25);
 
   /** Drive motor config. */
   public static final MechanismConfig DRIVE_CONFIG =
