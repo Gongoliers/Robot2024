@@ -3,16 +3,61 @@ package frc.robot.intake;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotionProfileConfig;
+import frc.lib.config.MotorConfig;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
-import frc.robot.intake.IntakeConstants.BackRollerConstants;
-import frc.robot.intake.IntakeConstants.FrontRollerConstants;
 
 /** Subsystem class for the intake subsystem. */
 public class Intake extends Subsystem {
 
-  /** Instance variable for the intake subsystem singleton. */
+  /** Intake singleton. */
   private static Intake instance = null;
+
+  /** Front roller config. */
+  private final MechanismConfig frontRollerConfig =
+      new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withNeutralBrake(false)
+                  .withMotorToMechanismRatio(24.0 / 16.0))
+          .withMotionProfileConfig(
+              new MotionProfileConfig().withMaximumVelocity(66) // rotations per second
+              )
+          .withFeedforwardConfig(
+              new FeedforwardControllerConfig()
+                  .withStaticFeedforward(0.13) // volts
+                  .withVelocityFeedforward(0.1683) // volts per rotation per second
+              )
+          .withFeedbackConfig(
+              new FeedbackControllerConfig()
+                  .withProportionalGain(0.1) // volts per rotation per second
+              );
+
+  /** Back roller config. */
+  private final MechanismConfig backRollerConfig =
+      new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withNeutralBrake(false)
+                  .withMotorToMechanismRatio(24.0 / 16.0))
+          .withMotionProfileConfig(
+              new MotionProfileConfig().withMaximumVelocity(66) // rotations per second
+              )
+          .withFeedforwardConfig(
+              new FeedforwardControllerConfig()
+                  .withStaticFeedforward(0.13) // volts
+                  .withVelocityFeedforward(0.1759) // volts per rotation per second
+              )
+          .withFeedbackConfig(
+              new FeedbackControllerConfig()
+                  .withProportionalGain(0.1) // volts per rotation per second
+              );
 
   /** Rollers. */
   private final VelocityControllerIO frontRoller, backRoller;
@@ -20,26 +65,32 @@ public class Intake extends Subsystem {
   /** Roller values. */
   private final VelocityControllerIOValues frontRollerValues, backRollerValues;
 
-  private IntakeState setpoint, goal;
+  /** Intake goal. Set by superstructure. */
+  private IntakeState goal;
 
-  /** Creates a new instance of the intake subsystem. */
+  /** Intake setpoint. Updated periodically to reach goal within constraints. */
+  private IntakeState setpoint;
+
+  /** Initializes the intake subsystem and configures intake hardware. */
   private Intake() {
-    frontRoller = IntakeFactory.createFrontRoller();
-    frontRollerValues = new VelocityControllerIOValues();
+    frontRoller = IntakeFactory.createFrontRoller(frontRollerConfig);
     frontRoller.configure();
 
-    backRoller = IntakeFactory.createBackRoller();
-    backRollerValues = new VelocityControllerIOValues();
+    frontRollerValues = new VelocityControllerIOValues();
+
+    backRoller = IntakeFactory.createBackRoller(backRollerConfig);
     backRoller.configure();
+
+    backRollerValues = new VelocityControllerIOValues();
 
     setpoint = IntakeState.IDLE;
     goal = IntakeState.IDLE;
   }
 
   /**
-   * Gets the instance of the intake subsystem.
+   * Returns the intake subsystem instance.
    *
-   * @return the instance of the intake subsystem.
+   * @return the intake subsystem instance.
    */
   public static Intake getInstance() {
     if (instance == null) {
@@ -66,28 +117,58 @@ public class Intake extends Subsystem {
     VelocityControllerIO.addToShuffleboard(tab, "Back Roller", backRollerValues);
   }
 
-  public Trigger noteStuck() {
-    return new Trigger(() -> frontRollerStuck() || backRollerStuck());
-  }
-
-  private boolean frontRollerStuck() {
-    return frontRollerValues.motorAmps > FrontRollerConstants.NOTE_AMPS;
-  }
-
-  private boolean backRollerStuck() {
-    return backRollerValues.motorAmps > BackRollerConstants.NOTE_AMPS;
-  }
-
+  /**
+   * Returns the intake state.
+   *
+   * @return the intake state.
+   */
   public IntakeState getState() {
     return new IntakeState(
         frontRollerValues.velocityRotationsPerSecond, backRollerValues.velocityRotationsPerSecond);
   }
 
+  /**
+   * Sets the intake goal state.
+   *
+   * @param goal the intake goal state.
+   */
   public void setGoal(IntakeState goal) {
     this.goal = goal;
   }
 
+  /**
+   * Returns true if the intake is at the goal state.
+   *
+   * @return true if the intake is at the goal state.
+   */
   public boolean atGoal() {
     return getState().at(goal);
+  }
+
+  /**
+   * Returns a trigger for if a note is stuck.
+   *
+   * @return a trigger for if a note is stuck.
+   */
+  public Trigger noteStuck() {
+    return new Trigger(() -> frontRollerStuck() || backRollerStuck());
+  }
+
+  /**
+   * Returns true if the front roller is stuck.
+   *
+   * @return true if the front roller is stuck.
+   */
+  private boolean frontRollerStuck() {
+    return frontRollerValues.motorAmps > 40.0;
+  }
+
+  /**
+   * Returns true if the back roller is stuck.
+   *
+   * @return true if the back roller is stuck.
+   */
+  private boolean backRollerStuck() {
+    return backRollerValues.motorAmps > 40.0;
   }
 }

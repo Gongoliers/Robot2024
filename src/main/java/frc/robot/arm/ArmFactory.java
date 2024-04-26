@@ -9,13 +9,13 @@ import frc.robot.Robot;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.Subsystem;
 
-/** Helper class for creating hardware for the arm subsystem. */
+/** Factory for creating arm subsystem hardware. */
 public class ArmFactory {
 
   /**
-   * Creates a shoulder motor.
+   * Creates the shoulder controller.
    *
-   * @return a shoulder motor.
+   * @return the shoulder controller.
    */
   public static PositionControllerIO createShoulder(MechanismConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.ARM)) {

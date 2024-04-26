@@ -107,11 +107,11 @@ public class RobotContainer {
   }
 
   /**
-   * Gets the command to run during the autonomous period.
+   * Returns the command to run during the autonomous period.
    *
    * @return the command to run during the autonomous period.
    */
   public Command getAutonomousCommand() {
-    return auto.getAutonomousCommand();
+    return auto.getSelectedCommand();
   }
 }

@@ -10,25 +10,26 @@ public record SuperstructureState(
     ArmState armState, IntakeState intakeState, ShooterState shooterState) {
 
   public static final SuperstructureState STOW =
-      new SuperstructureState(ArmState.STOW, IntakeState.IDLE, ShooterState.IDLE);
+      new SuperstructureState(ArmState.STOW_POSITION, IntakeState.IDLE, ShooterState.IDLE);
 
   public static final SuperstructureState INTAKE =
-      new SuperstructureState(ArmState.STOW, IntakeState.INTAKE, ShooterState.INTAKE);
+      new SuperstructureState(ArmState.STOW_POSITION, IntakeState.INTAKING, ShooterState.INTAKE);
 
   public static final SuperstructureState EJECT_POSITION =
-      new SuperstructureState(ArmState.EJECT, IntakeState.EJECT, ShooterState.IDLE);
+      new SuperstructureState(ArmState.EJECT_POSITION, IntakeState.EJECTING, ShooterState.IDLE);
 
   public static final SuperstructureState EJECT =
-      new SuperstructureState(ArmState.EJECT, IntakeState.EJECT, ShooterState.EJECT);
+      new SuperstructureState(ArmState.EJECT_POSITION, IntakeState.EJECTING, ShooterState.EJECT);
 
   public static final SuperstructureState SUBWOOFER =
-      new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER);
+      new SuperstructureState(
+          ArmState.SUBWOOFER_POSITION, IntakeState.IDLE, ShooterState.SUBWOOFER);
 
   public static final SuperstructureState SKIM =
-      new SuperstructureState(ArmState.SKIM, IntakeState.IDLE, ShooterState.SKIM);
+      new SuperstructureState(ArmState.SKIM_POSITION, IntakeState.IDLE, ShooterState.SKIM);
 
   public static final SuperstructureState AMP =
-      new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.AMP);
+      new SuperstructureState(ArmState.AMP_POSITION, IntakeState.IDLE, ShooterState.AMP);
 
   /**
    * Creates a new superstructure state.

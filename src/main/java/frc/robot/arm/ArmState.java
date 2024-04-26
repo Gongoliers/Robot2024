@@ -6,28 +6,48 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import java.util.Objects;
 
+/** Arm state. */
 public record ArmState(State shoulderRotations) {
 
-  public static final ArmState STOW = new ArmState(Rotation2d.fromDegrees(-26));
+  /** Stow position. */
+  public static final ArmState STOW_POSITION = new ArmState(Rotation2d.fromDegrees(-26));
 
-  public static final ArmState SUBWOOFER = new ArmState(Rotation2d.fromDegrees(-26));
+  /** Subwoofer shot position. */
+  public static final ArmState SUBWOOFER_POSITION = new ArmState(Rotation2d.fromDegrees(-26));
 
-  public static final ArmState EJECT = new ArmState(Rotation2d.fromDegrees(30));
+  /** Eject position. */
+  public static final ArmState EJECT_POSITION = new ArmState(Rotation2d.fromDegrees(30));
 
-  public static final ArmState SKIM = new ArmState(Rotation2d.fromDegrees(30));
+  /** Skim shot position. */
+  public static final ArmState SKIM_POSITION = new ArmState(Rotation2d.fromDegrees(30));
 
-  public static final ArmState LOB = new ArmState(Rotation2d.fromDegrees(-26));
+  /** Amp position. */
+  public static final ArmState AMP_POSITION = new ArmState(Rotation2d.fromDegrees(60));
 
-  public static final ArmState AMP = new ArmState(Rotation2d.fromDegrees(60));
-
+  /**
+   * Arm state.
+   *
+   * @param shoulderRotations the shoulder state in rotations and rotations per second.
+   */
   public ArmState {
     Objects.requireNonNull(shoulderRotations);
   }
 
+  /**
+   * Arm state.
+   *
+   * @param shoulder the shoulder position.
+   */
   public ArmState(Rotation2d shoulder) {
     this(new State(shoulder.getRotations(), 0));
   }
 
+  /**
+   * Returns true if this arm state is at another arm state.
+   *
+   * @param other another arm state.
+   * @return true if this arm state is at another arm state.
+   */
   public boolean at(ArmState other) {
     return MathUtil.isNear(
         shoulderRotations.position,

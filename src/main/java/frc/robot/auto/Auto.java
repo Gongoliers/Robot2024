@@ -16,25 +16,25 @@ import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
 
-/** Subsystem class for the auto subsystem. */
+/** Auto subsystem. */
 public class Auto extends Subsystem {
 
-  /** Instance variable for the auto subsystem singleton. */
+  /** Auto singleton. */
   private static Auto instance = null;
 
-  /** Reference to the odometry subsystem. */
+  /** Odometry subsystem reference. */
   private final Odometry odometry;
 
-  /** Reference to the superstructure subsystem. */
+  /** Superstructure subsystem reference. */
   private final Superstructure superstructure;
 
-  /** Reference to the swerve subsystem. */
+  /** Swerve subsystem reference. */
   private final Swerve swerve;
 
-  /** Sendable chooser for the subsystem. */
+  /** Auto command chooser. */
   private final SendableChooser<Command> autoChooser;
 
-  /** Creates a new instance of the auto subsystem. */
+  /** Initializes the auto subsystem. */
   private Auto() {
     odometry = Odometry.getInstance();
     superstructure = Superstructure.getInstance();
@@ -65,9 +65,9 @@ public class Auto extends Subsystem {
   }
 
   /**
-   * Gets the instance of the auto subsystem.
+   * Returns the auto subsystem instance.
    *
-   * @return the instance of the auto subsystem.
+   * @return the auto subsystem instance.
    */
   public static Auto getInstance() {
     if (instance == null) {
@@ -86,20 +86,11 @@ public class Auto extends Subsystem {
   }
 
   /**
-   * Gets the command to run during the autonomous period.
+   * Returns the selected auto command.
    *
-   * @return the command to run during the autonomous period.
+   * @return the selected auto command.
    */
-  public Command getAutonomousCommand() {
+  public Command getSelectedCommand() {
     return autoChooser.getSelected();
-  }
-
-  /**
-   * Gets the chooser for the command to run during the autonomous period.
-   *
-   * @return the chooser for the command to run during the autonomous period.
-   */
-  public SendableChooser<Command> getAutonomousChooser() {
-    return autoChooser;
   }
 }

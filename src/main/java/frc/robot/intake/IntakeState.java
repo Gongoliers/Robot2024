@@ -3,30 +3,40 @@ package frc.robot.intake;
 import edu.wpi.first.math.MathUtil;
 import java.util.Objects;
 
+/** Intake state */
 public record IntakeState(
     double frontRollerVelocityRotationsPerSecond, double backRollerVelocityRotationsPerSecond) {
 
+  /** Idle state. */
   public static final IntakeState IDLE = new IntakeState(0, 0);
 
-  public static final IntakeState INTAKE = new IntakeState((double) 34, (double) 34);
+  /** Intaking state. */
+  public static final IntakeState INTAKING = new IntakeState(34.0, 34.0);
 
-  public static final IntakeState EJECT = new IntakeState((double) -34, (double) -34);
+  /** Ejecting state. */
+  public static final IntakeState EJECTING = new IntakeState(-34.0, -34.0);
 
+  /**
+   * Intake state.
+   *
+   * @param frontRollerVelocityRotationsPerSecond front roller velocity in rotations per second.
+   * @param backRollerVelocityRotationsPerSecond back roller velocity in rotations per second.
+   */
   public IntakeState {
     Objects.requireNonNull(frontRollerVelocityRotationsPerSecond);
     Objects.requireNonNull(backRollerVelocityRotationsPerSecond);
   }
 
+  /**
+   * Returns true if this intake state is at another intake state.
+   *
+   * @param other another intake state.
+   * @return true if this intake state is at another intake state.
+   */
   public boolean at(IntakeState other) {
-    final double kToleranceRotationsPerSecond = 1;
-
     return MathUtil.isNear(
-            frontRollerVelocityRotationsPerSecond,
-            other.frontRollerVelocityRotationsPerSecond,
-            kToleranceRotationsPerSecond)
+            frontRollerVelocityRotationsPerSecond, other.frontRollerVelocityRotationsPerSecond, 1.0)
         && MathUtil.isNear(
-            backRollerVelocityRotationsPerSecond,
-            other.backRollerVelocityRotationsPerSecond,
-            kToleranceRotationsPerSecond);
+            backRollerVelocityRotationsPerSecond, other.backRollerVelocityRotationsPerSecond, 1.0);
   }
 }

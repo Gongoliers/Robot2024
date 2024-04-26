@@ -19,10 +19,10 @@ import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 /** Arm subsystem. */
 public class Arm extends Subsystem {
 
-  /** Arm subsystem singleton. */
+  /** Arm singleton. */
   private static Arm instance = null;
 
-  /** Shoulder's config. */
+  /** Shoulder config. */
   private final MechanismConfig shoulderConfig =
       new MechanismConfig()
           .withAbsoluteEncoderConfig(
@@ -58,10 +58,10 @@ public class Arm extends Subsystem {
   /** Motion profile of the shoulder. */
   private final TrapezoidProfile shoulderMotionProfile;
 
-  /** Arm's goal. Set by superstructure. */
+  /** Arm goal. Set by superstructure. */
   private ArmState goal;
 
-  /** Arm's setpoint. Updated periodically to reach goal within constraints. */
+  /** Arm setpoint. Updated periodically to reach goal within constraints. */
   private ArmState setpoint;
 
   /**
@@ -70,7 +70,7 @@ public class Arm extends Subsystem {
    */
   private double previousTimeSeconds;
 
-  /** Creates the arm subsystem and configures arm hardware. */
+  /** Initializes the arm subsystem and configures arm hardware. */
   private Arm() {
     shoulder = ArmFactory.createShoulder(shoulderConfig);
     shoulder.configure();
@@ -81,15 +81,15 @@ public class Arm extends Subsystem {
 
     previousTimeSeconds = Timer.getFPGATimestamp();
 
-    setPosition(ArmState.STOW);
-    setpoint = ArmState.STOW;
-    goal = ArmState.STOW;
+    setPosition(ArmState.STOW_POSITION);
+    setpoint = ArmState.STOW_POSITION;
+    goal = ArmState.STOW_POSITION;
   }
 
   /**
-   * Gets the instance of the arm subsystem.
+   * Returns the arm subsystem instance.
    *
-   * @return the instance of the arm subsystem.
+   * @return the arm subsystem instance.
    */
   public static Arm getInstance() {
     if (instance == null) {
@@ -130,9 +130,9 @@ public class Arm extends Subsystem {
   }
 
   /**
-   * Returns the arm's state.
+   * Returns the arm state.
    *
-   * @return the arm's state.
+   * @return the arm state.
    */
   public ArmState getState() {
     return new ArmState(
@@ -141,9 +141,9 @@ public class Arm extends Subsystem {
   }
 
   /**
-   * Sets the arm's goal state.
+   * Sets the arm goal state.
    *
-   * @param goal the arm's goal state.
+   * @param goal the arm goal state.
    */
   public void setGoal(ArmState goal) {
     this.goal = goal;
