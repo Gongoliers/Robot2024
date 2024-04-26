@@ -24,18 +24,8 @@ public class SwerveConstants {
     /** Diameter of the MK4i's wheels in meters. */
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
 
-    /** Actual distance driven during the odometry test in meters. */
-    public static final double ODOMETRY_TEST_ACTUAL_DISTANCE = 5.49;
-
-    /** Reported distance driven during the odometry test in meters. */
-    public static final double ODOMETRY_TEST_REPORTED_DISTANCE = 5.0;
-
-    /** Conversion between odometry distance and actual distance travelled. */
-    public static final double ODOMETRY_ERROR =
-        ODOMETRY_TEST_REPORTED_DISTANCE / ODOMETRY_TEST_ACTUAL_DISTANCE;
-
     /** Conversion between wheel rotations and distances in meters. */
-    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI * ODOMETRY_ERROR;
+    public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   }
 
   /** Module X offset in meters. */
@@ -122,19 +112,6 @@ public class SwerveConstants {
   public static final TrapezoidProfile ROTATION_MOTION_PROFILE =
       new TrapezoidProfile(ROTATION_CONSTRAINTS);
 
-  /**
-   * Converts a kV constant in volts per rotor rotation per second to a kV constant in volts per
-   * meters per second.
-   *
-   * @param voltsPerRotorRotationPerSecond a kV constant in volts per rotor rotations per second.
-   * @return a kV constant in volts per rotor rotations per second.
-   */
-  private static double calculateKv(double voltsPerRotorRotationPerSecond) {
-    return voltsPerRotorRotationPerSecond
-        * MK4iConstants.DRIVE_GEARING
-        / MK4iConstants.WHEEL_CIRCUMFERENCE;
-  }
-
   /** Drive motor config. */
   public static final MechanismConfig DRIVE_CONFIG =
       new MechanismConfig()
@@ -146,7 +123,11 @@ public class SwerveConstants {
           .withFeedforwardConfig(
               new FeedforwardControllerConfig()
                   .withStaticFeedforward(0.14) // volts
-                  .withVelocityFeedforward(calculateKv(0.12)) // volts per meter per second
+                  .withVelocityFeedforward(0.725) // volts per rotation per second
+              )
+          .withFeedbackConfig(
+              new FeedbackControllerConfig()
+                  .withProportionalGain(0.75) // volts per rotation per second
               );
 
   /** Steer motor config. */
