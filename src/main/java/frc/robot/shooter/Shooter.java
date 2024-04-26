@@ -1,51 +1,112 @@
 package frc.robot.shooter;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.MechanismConfig;
+import frc.lib.config.MotionProfileConfig;
+import frc.lib.config.MotorConfig;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
-/** Subsystem class for the shooter subsystem. */
+/** Shooter subsystem. */
 public class Shooter extends Subsystem {
 
-  /** Instance variable for the shooter subsystem singleton. */
+  /** Shooter singleton. */
   private static Shooter instance = null;
 
-  /** Serializer. */
-  private final VelocityControllerIO serializer;
+  private final MechanismConfig flywheelConfig =
+      new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withNeutralBrake(true)
+                  .withMotorToMechanismRatio(28.0 / 16.0))
+          .withMotionProfileConfig(
+              new MotionProfileConfig()
+                  .withMaximumVelocity(60) // rotations per second
+                  .withMaximumAcceleration(200) // rotations per second per second
+              )
+          .withFeedforwardConfig(
+              new FeedforwardControllerConfig()
+                  .withStaticFeedforward(0.14) // volts
+                  .withVelocityFeedforward(0.2) // volts per rotation per second
+              )
+          .withFeedbackConfig(
+              new FeedbackControllerConfig()
+                  .withProportionalGain(0.14) // volts per rotation per second
+              );
 
-  /** Serializer values. */
-  private final VelocityControllerIOValues serializerValues;
-
-  /** Flywheel. */
+  /** Flywheel controller. */
   private final VelocityControllerIO flywheel;
 
-  /** Flywheel values. */
+  /** Flywheel controller values. */
   private final VelocityControllerIOValues flywheelValues;
 
-  private ShooterState setpoint, goal;
+  /** Flywheel controller acceleration limiter. */
+  private final SlewRateLimiter flywheelAccelerationLimiter;
 
-  /** Creates a new instance of the shooter subsystem. */
+  /** Serializer config. */
+  private final MechanismConfig serializerConfig =
+      new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(true)
+                  .withNeutralBrake(false)
+                  .withMotorToMechanismRatio(36.0 / 16.0))
+          .withMotionProfileConfig(
+              new MotionProfileConfig()
+                  .withMaximumVelocity(45) // rotations per second
+                  .withMaximumAcceleration(450) // rotations per second per second
+              )
+          .withFeedforwardConfig(
+              new FeedforwardControllerConfig()
+                  .withStaticFeedforward(0.14) // volts
+                  .withVelocityFeedforward(0.2617) // volts per rotation per second
+              );
+
+  /** Serializer controller. */
+  private final VelocityControllerIO serializer;
+
+  /** Serializer controller values. */
+  private final VelocityControllerIOValues serializerValues;
+
+  /** Serializer controller acceleration limiter. */
+  private final SlewRateLimiter serializerAccelerationLimiter;
+
+  /** Shooter goal. Set by superstructure. */
+  private ShooterState goal;
+
+  /** Shooter setpoint. Updated periodically to reach goal within constraints. */
+  private ShooterState setpoint;
+
+  /** Initializes the shooter subsystem and configures shooter hardware. */
   private Shooter() {
-    serializer = ShooterFactory.createSerializer();
-    serializerValues = new VelocityControllerIOValues();
-    serializer.configure();
-
-    flywheel = ShooterFactory.createFlywheel();
-    flywheelValues = new VelocityControllerIOValues();
+    flywheel = ShooterFactory.createFlywheel(flywheelConfig);
     flywheel.configure();
 
-    setpoint = ShooterState.IDLE;
-    goal = ShooterState.IDLE;
+    flywheelValues = new VelocityControllerIOValues();
+
+    flywheelAccelerationLimiter = flywheelConfig.motionProfileConfig().createRateLimiter();
+
+    serializer = ShooterFactory.createSerializer(serializerConfig);
+    serializer.configure();
+
+    serializerValues = new VelocityControllerIOValues();
+
+    serializerAccelerationLimiter = serializerConfig.motionProfileConfig().createRateLimiter();
+
+    setpoint = ShooterState.IDLING;
+    goal = ShooterState.IDLING;
   }
 
   /**
-   * Gets the instance of the shooter subsystem.
+   * Returns the shooter subsystem instance.
    *
-   * @return the instance of the shooter subsystem.
+   * @return the shooter subsystem instance.
    */
   public static Shooter getInstance() {
     if (instance == null) {
@@ -57,17 +118,15 @@ public class Shooter extends Subsystem {
 
   @Override
   public void periodic() {
-    serializer.update(serializerValues);
     flywheel.update(flywheelValues);
+    serializer.update(serializerValues);
 
     setpoint = goal;
 
     double flywheelSetpoint =
-        FlywheelConstants.ACCELERATION_LIMITER.calculate(
-            setpoint.flywheelVelocityRotationsPerSecond());
+        flywheelAccelerationLimiter.calculate(setpoint.flywheelVelocityRotationsPerSecond());
     double serializerSetpoint =
-        SerializerConstants.ACCELERATION_LIMITER.calculate(
-            setpoint.serializerVelocityRotationsPerSecond());
+        serializerAccelerationLimiter.calculate(setpoint.serializerVelocityRotationsPerSecond());
 
     flywheel.setSetpoint(flywheelSetpoint);
     serializer.setSetpoint(serializerSetpoint);
@@ -75,30 +134,55 @@ public class Shooter extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    VelocityControllerIO.addToShuffleboard(tab, "Serializer", serializerValues);
     VelocityControllerIO.addToShuffleboard(tab, "Flywheel", flywheelValues);
+    VelocityControllerIO.addToShuffleboard(tab, "Serializer", serializerValues);
 
     tab.addBoolean("Serializer Current Spike?", this::serializerCurrentSpike);
   }
 
-  private boolean serializerCurrentSpike() {
-    return serializerValues.motorAmps > SerializerConstants.NOTE_AMPS;
-  }
-
-  public Trigger serializedNote() {
-    return new Trigger(this::serializerCurrentSpike);
-  }
-
+  /**
+   * Returns the shooter state.
+   *
+   * @return the shooter state.
+   */
   public ShooterState getState() {
     return new ShooterState(
         flywheelValues.velocityRotationsPerSecond, serializerValues.velocityRotationsPerSecond);
   }
 
+  /**
+   * Sets the shooter goal state.
+   *
+   * @param goal the shooter goal state.
+   */
   public void setGoal(ShooterState goal) {
     this.goal = goal;
   }
 
+  /**
+   * Returns true if the shooter is at the goal state.
+   *
+   * @return true if the shooter is at the goal state.
+   */
   public boolean atGoal() {
     return getState().at(goal);
+  }
+
+  /**
+   * Returns a trigger for if a note is serialized.
+   *
+   * @return a trigger for if a note is serialized.
+   */
+  public Trigger serializedNote() {
+    return new Trigger(this::serializerCurrentSpike);
+  }
+
+  /**
+   * Returns true if the serializer has a current spike.
+   *
+   * @return true if the serializer has a current spike.
+   */
+  private boolean serializerCurrentSpike() {
+    return serializerValues.motorAmps > 20.0;
   }
 }

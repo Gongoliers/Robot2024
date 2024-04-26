@@ -7,8 +7,8 @@ import java.util.Objects;
 public record IntakeState(
     double frontRollerVelocityRotationsPerSecond, double backRollerVelocityRotationsPerSecond) {
 
-  /** Idle state. */
-  public static final IntakeState IDLE = new IntakeState(0, 0);
+  /** Idling state. */
+  public static final IntakeState IDLING = new IntakeState(0, 0);
 
   /** Intaking state. */
   public static final IntakeState INTAKING = new IntakeState(34.0, 34.0);

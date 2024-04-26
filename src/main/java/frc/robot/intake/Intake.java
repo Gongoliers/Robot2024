@@ -11,7 +11,7 @@ import frc.lib.config.MotorConfig;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 
-/** Subsystem class for the intake subsystem. */
+/** Intake subsystem. */
 public class Intake extends Subsystem {
 
   /** Intake singleton. */
@@ -83,8 +83,8 @@ public class Intake extends Subsystem {
 
     backRollerValues = new VelocityControllerIOValues();
 
-    setpoint = IntakeState.IDLE;
-    goal = IntakeState.IDLE;
+    setpoint = IntakeState.IDLING;
+    goal = IntakeState.IDLING;
   }
 
   /**

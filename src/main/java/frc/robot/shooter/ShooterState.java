@@ -1,44 +1,54 @@
 package frc.robot.shooter;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 import java.util.Objects;
 
+/** Shooter state. */
 public record ShooterState(
     double flywheelVelocityRotationsPerSecond, double serializerVelocityRotationsPerSecond) {
 
-  public static final ShooterState IDLE = new ShooterState(0, 0);
+  /** Idling state. */
+  public static final ShooterState IDLING = new ShooterState(0, 0);
 
-  public static final ShooterState INTAKE = new ShooterState(0, SerializerConstants.INTAKE_SPEED);
+  /** Intaking state. */
+  public static final ShooterState INTAKING = new ShooterState(0, 34);
 
-  public static final ShooterState PULL =
-      new ShooterState(FlywheelConstants.PULL_SPEED, SerializerConstants.PULL_SPEED);
+  /** Pulling state. */
+  public static final ShooterState PULLING = new ShooterState(-20, -10);
 
-  public static final ShooterState EJECT = new ShooterState(0, SerializerConstants.EJECT_SPEED);
+  /** Ejecting state. */
+  public static final ShooterState EJECTING = new ShooterState(0, -44);
 
-  public static final ShooterState SUBWOOFER =
-      new ShooterState(FlywheelConstants.SPEAKER_SPEED, SerializerConstants.FAST_FEED_SPEED);
+  /** Subwoofer shooting state. */
+  public static final ShooterState SUBWOOFER_SHOOTING = new ShooterState(60, 44);
 
-  public static final ShooterState SKIM =
-      new ShooterState(FlywheelConstants.SKIM_SPEED, SerializerConstants.FAST_FEED_SPEED);
+  /** Skim shooting state. */
+  public static final ShooterState SKIM_SHOOTING = new ShooterState(60, 44);
 
-  public static final ShooterState AMP =
-      new ShooterState(FlywheelConstants.AMP_SPEED, SerializerConstants.SLOW_FEED_SPEED);
+  /** Amp shooting state. */
+  public static final ShooterState AMPING = new ShooterState(10, 20);
 
+  /**
+   * Shooter state.
+   *
+   * @param flywheelVelocityRotationsPerSecond flywheel velocity in rotations per second.
+   * @param serializerVelocityRotationsPerSecond serializer velocity in rotations per second.
+   */
   public ShooterState {
     Objects.requireNonNull(flywheelVelocityRotationsPerSecond);
     Objects.requireNonNull(serializerVelocityRotationsPerSecond);
   }
 
+  /**
+   * Returns true if this shooter state is at another shooter state.
+   *
+   * @param other another shooter state.
+   * @return true if this shooter state is at another shooter state.
+   */
   public boolean at(ShooterState other) {
     return MathUtil.isNear(
-            flywheelVelocityRotationsPerSecond,
-            other.flywheelVelocityRotationsPerSecond,
-            FlywheelConstants.TOLERANCE)
+            flywheelVelocityRotationsPerSecond, other.flywheelVelocityRotationsPerSecond, 5.0)
         && MathUtil.isNear(
-            serializerVelocityRotationsPerSecond,
-            other.serializerVelocityRotationsPerSecond,
-            SerializerConstants.TOLERANCE);
+            serializerVelocityRotationsPerSecond, other.serializerVelocityRotationsPerSecond, 5.0);
   }
 }

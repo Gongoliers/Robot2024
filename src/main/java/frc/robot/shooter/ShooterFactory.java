@@ -1,39 +1,40 @@
 package frc.robot.shooter;
 
+import frc.lib.CAN;
+import frc.lib.config.MechanismConfig;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIOSim;
 import frc.lib.controller.VelocityControllerIOTalonFXPIDF;
 import frc.robot.Robot;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.Subsystem;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
-/** Helper class for creating hardware for the shooter subsystem. */
+/** Factory for creating shooter subsystem hardware. */
 public class ShooterFactory {
 
   /**
-   * Creates a serializer.
+   * Creates the serializer controller.
    *
-   * @return a serializer.
+   * @param config the serializer controller config.
+   * @return the serializer controller.
    */
-  public static VelocityControllerIO createSerializer() {
+  public static VelocityControllerIO createSerializer(MechanismConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER)) {
-      return new VelocityControllerIOTalonFXPIDF(
-          SerializerConstants.CAN, SerializerConstants.CONFIG);
+      return new VelocityControllerIOTalonFXPIDF(new CAN(42), config);
     }
 
     return new VelocityControllerIOSim();
   }
 
   /**
-   * Creates a flywheel.
+   * Creates the flywheel controller.
    *
-   * @return a flywheel.
+   * @param config the flywheel controller config.
+   * @return the flywheel controller.
    */
-  public static VelocityControllerIO createFlywheel() {
+  public static VelocityControllerIO createFlywheel(MechanismConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SHOOTER)) {
-      return new VelocityControllerIOTalonFXPIDF(FlywheelConstants.CAN, FlywheelConstants.CONFIG);
+      return new VelocityControllerIOTalonFXPIDF(new CAN(44), config);
     }
 
     return new VelocityControllerIOSim();
