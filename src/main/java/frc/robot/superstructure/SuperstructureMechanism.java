@@ -8,11 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.lib.InterpolatableColor;
 import frc.robot.RobotConstants;
-import frc.robot.intake.IntakeConstants.FrontRollerConstants;
-import frc.robot.shooter.ShooterConstants.FlywheelConstants;
-import frc.robot.shooter.ShooterConstants.SerializerConstants;
 
 /** Helper class for rendering superstructure mechanisms. */
 public class SuperstructureMechanism {
@@ -51,14 +47,11 @@ public class SuperstructureMechanism {
 
   private final Color8Bit DEFAULT_COLOR = new Color8Bit(Color.kLightGray);
 
-  private final InterpolatableColor FLYWHEEL_COLOR =
-      new InterpolatableColor(Color.kLightGray, Color.kSalmon);
+  private final Color8Bit FLYWHEEL_COLOR = new Color8Bit(Color.kSalmon);
 
-  private final InterpolatableColor SERIALIZER_COLOR =
-      new InterpolatableColor(Color.kLightGray, Color.kCornflowerBlue);
+  private final Color8Bit SERIALIZER_COLOR = new Color8Bit(Color.kCornflowerBlue);
 
-  private final InterpolatableColor ROLLERS_COLOR =
-      new InterpolatableColor(Color.kLightGray, Color.kSpringGreen);
+  private final Color8Bit ROLLERS_COLOR = new Color8Bit(Color.kSpringGreen);
 
   private SuperstructureMechanism() {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
@@ -139,28 +132,23 @@ public class SuperstructureMechanism {
 
     shoulder.setAngle(offsetShoulderRotation);
 
-    flywheel.setColor(
-        new Color8Bit(
-            FLYWHEEL_COLOR.sample(
-                Math.abs(state.shooterState().flywheelVelocityRotationsPerSecond()),
-                0,
-                FlywheelConstants.CONFIG.motionProfileConfig().maximumVelocity())));
+    if (state.shooterState().flywheelVelocityRotationsPerSecond() != 0.0) {
+      flywheel.setColor(FLYWHEEL_COLOR);
+    } else {
+      flywheel.setColor(DEFAULT_COLOR);
+    }
 
-    serializer.setColor(
-        new Color8Bit(
-            SERIALIZER_COLOR.sample(
-                Math.abs(state.shooterState().serializerVelocityRotationsPerSecond()),
-                0,
-                SerializerConstants.CONFIG.motionProfileConfig().maximumVelocity())));
+    if (state.shooterState().serializerVelocityRotationsPerSecond() != 0.0) {
+      serializer.setColor(SERIALIZER_COLOR);
+    } else {
+      serializer.setColor(DEFAULT_COLOR);
+    }
 
-    double averageRollerVelocity =
-        0.5
-            * (state.intakeState().frontRollerVelocityRotationsPerSecond()
-                + state.intakeState().backRollerVelocityRotationsPerSecond());
-
-    rollers.setColor(
-        new Color8Bit(
-            ROLLERS_COLOR.sample(
-                Math.abs(averageRollerVelocity), 0, FrontRollerConstants.MAXIMUM_SPEED)));
+    if (state.intakeState().frontRollerVelocityRotationsPerSecond() != 0.0
+        || state.intakeState().backRollerVelocityRotationsPerSecond() != 0) {
+      rollers.setColor(ROLLERS_COLOR);
+    } else {
+      rollers.setColor(DEFAULT_COLOR);
+    }
   }
 }
