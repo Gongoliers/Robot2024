@@ -50,7 +50,7 @@ public class MotorConfig {
    * @return this motor config.
    */
   public MotorConfig withMotorToMechanismRatio(double motorToMechanismRatio) {
-    this.currentLimitAmps = motorToMechanismRatio;
+    this.motorToMechanismRatio = motorToMechanismRatio;
     return this;
   }
 
