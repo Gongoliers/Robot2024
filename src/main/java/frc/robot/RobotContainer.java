@@ -17,25 +17,43 @@ import frc.robot.superstructure.SuperstructureMechanism;
 import frc.robot.superstructure.SuperstructureState;
 import frc.robot.swerve.Swerve;
 
-/** Initializes subsystems and commands. */
+/** Robot container. */
 public class RobotContainer {
 
-  /** Instance variable for the robot container singleton. */
+  /** Robot container singleton. */
   public static RobotContainer instance = null;
 
+  /** Arm subsystem reference. */
   private final Arm arm;
+
+  /** Auto subsystem reference. */
   private final Auto auto;
+
+  /** Intake subsystem reference. */
   private final Intake intake;
+
+  /** Odometry subsystem reference. */
   private final Odometry odometry;
+
+  /** Shooter subsystem reference. */
   private final Shooter shooter;
+
+  /** Superstructure subsystem reference. */
   private final Superstructure superstructure;
+
+  /** Swerve subsystem reference. */
   private final Swerve swerve;
 
-  private final CommandXboxController driverController, operatorController;
+  /** Driver controller. */
+  private final CommandXboxController driverController;
 
+  /** Operator controller. */
+  private final CommandXboxController operatorController;
+
+  /** Rumble controller. Use the same port as the operator controller to vibrate the operator controller. */
   private final XboxController rumbleController;
 
-  /** Creates a new instance of the robot container. */
+  /** Initializes the robot container. */
   private RobotContainer() {
     arm = Arm.getInstance();
     auto = Auto.getInstance();
@@ -46,6 +64,7 @@ public class RobotContainer {
     swerve = Swerve.getInstance();
 
     driverController = new CommandXboxController(0);
+
     operatorController = new CommandXboxController(1);
     rumbleController = new XboxController(1);
 
@@ -55,9 +74,9 @@ public class RobotContainer {
   }
 
   /**
-   * Gets the instance of the robot container.
+   * Returns the robot container.
    *
-   * @return the instance of the robot container.
+   * @return the robot container.
    */
   public static RobotContainer getInstance() {
     if (instance == null) {
@@ -101,6 +120,12 @@ public class RobotContainer {
     shooter.serializedNote().whileTrue(rumble(RumbleType.kRightRumble));
   }
 
+  /**
+   * Rumbles the controller.
+   * 
+   * @param side the side of the controller to rumble.
+   * @return a command that rumbles the controller.
+   */
   public Command rumble(RumbleType side) {
     return Commands.startEnd(
         () -> rumbleController.setRumble(side, 1), () -> rumbleController.setRumble(side, 0));
