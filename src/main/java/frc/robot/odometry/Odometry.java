@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 /** Odometry subsystem. */
 public class Odometry extends Subsystem {
 
-  /** Odometry singleton. */
+  /** Odometry subsystem singleton. */
   private static Odometry instance = null;
 
   /** Gyroscope. */

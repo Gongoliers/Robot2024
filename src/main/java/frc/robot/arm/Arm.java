@@ -19,7 +19,7 @@ import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 /** Arm subsystem. */
 public class Arm extends Subsystem {
 
-  /** Arm singleton. */
+  /** Arm subsystem singleton. */
   private static Arm instance = null;
 
   /** Shoulder controller config. */

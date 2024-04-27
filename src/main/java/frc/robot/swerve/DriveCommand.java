@@ -1,8 +1,6 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -11,29 +9,37 @@ import frc.robot.odometry.Odometry;
 
 /** Drives the swerve using driver input. */
 public class DriveCommand extends Command {
-  /* Swerve subsystem. */
+  /** Swerve subsystem. */
   private final Swerve swerve;
-  /* Odometry subsystem. */
+
+  /** Odometry subsystem. */
   private final Odometry odometry;
 
-  /* Xbox controller used to get driver input. */
+  /** Controller used to get driver input. */
   private final CommandXboxController driverController;
 
   /** Previous requested chassis speed. */
   private ChassisSpeeds previousChassisSpeeds;
 
-  /* Current and previous requests from the driver controller. */
+  /** Request from the driver controller. */
   private DriveRequest request;
 
+  /**
+   * Initializes the drive command.
+   *
+   * @param driverController controller to use as input.
+   */
   public DriveCommand(CommandXboxController driverController) {
     swerve = Swerve.getInstance();
     odometry = Odometry.getInstance();
+
+    this.driverController = driverController;
 
     addRequirements(swerve);
 
     previousChassisSpeeds = new ChassisSpeeds();
 
-    this.driverController = driverController;
+    request = DriveRequest.fromController(driverController);
   }
 
   @Override
@@ -43,22 +49,13 @@ public class DriveCommand extends Command {
   public void execute() {
     request = DriveRequest.fromController(driverController);
 
-    Translation2d translationVelocityMetersPerSecond =
-        request.translation().times(SwerveConstants.MAXIMUM_SPEED);
-
-    Rotation2d driverRelativeHeading = odometry.getDriverRelativeHeading();
-
-    Rotation2d omega = new Rotation2d();
-
-    omega = request.omega();
-
-    ChassisSpeeds chassisSpeeds =
+    final ChassisSpeeds chassisSpeeds =
         clampChassisSpeeds(
             ChassisSpeeds.fromFieldRelativeSpeeds(
-                translationVelocityMetersPerSecond.getX(),
-                translationVelocityMetersPerSecond.getY(),
-                omega.getRadians(),
-                driverRelativeHeading));
+                request.velocity().getX(),
+                request.velocity().getY(),
+                request.omega().getRadians(),
+                odometry.getDriverRelativeHeading()));
 
     swerve.setChassisSpeeds(chassisSpeeds);
 

@@ -5,35 +5,52 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+/** Drive request. */
 public record DriveRequest(
     DriveRequest.TranslationMode translationMode,
     DriveRequest.RotationMode rotationMode,
-    Translation2d translation,
-    Translation2d rotation) {
+    Translation2d translationAxis,
+    Translation2d rotationAxis) {
 
-  public enum TranslationMode {
+  /** Translation mode. */
+  private enum TranslationMode {
+    /** Field-centric driving. */
     FIELD_CENTRIC,
+    /** Robot-centric driving. */
     ROBOT_CENTRIC
   }
 
-  public enum RotationMode {
+  /** Rotation mode. */
+  private enum RotationMode {
+    /** Drifting (no rotation requested). */
     DRIFTING,
+    /** Spinning (velocity requested). */
     SPINNING,
-    SNAPPING
+    /** Aligning (heading requested). */
+    ALIGNING
   }
 
+  /**
+   * Returns true if no rotation is requested.
+   *
+   * @param heading the heading axis.
+   * @param aligning true if aligning is requested.
+   * @return
+   */
   private static boolean isDrifting(Translation2d heading, boolean aligning) {
     if (aligning) {
-      final double kMinHeadingDisplacement = 0.7;
-
-      return heading.getNorm() < kMinHeadingDisplacement;
+      return heading.getNorm() < 0.7;
     }
 
-    final double kOmegaDeadband = 0.1;
-
-    return Math.abs(heading.getY()) < kOmegaDeadband;
+    return Math.abs(heading.getY()) < 0.1;
   }
 
+  /**
+   * Creates a new driver request from controller inputs.
+   *
+   * @param controller the input controller.
+   * @return a new driver request from controller inputs.
+   */
   public static DriveRequest fromController(CommandXboxController controller) {
     boolean snipingRequested = Math.abs(controller.getLeftTriggerAxis()) > 0.5;
     boolean aligningRequested = Math.abs(controller.getRightTriggerAxis()) > 0.5;
@@ -55,8 +72,7 @@ public record DriveRequest(
 
     Translation2d translationVector = new Translation2d(translationMagnitude, translationDirection);
 
-    TranslationMode translationMode =
-        snipingRequested ? TranslationMode.ROBOT_CENTRIC : TranslationMode.FIELD_CENTRIC;
+    TranslationMode translationMode = TranslationMode.FIELD_CENTRIC;
 
     Translation2d rotationVector =
         new Translation2d(-controller.getRightY(), -controller.getRightX());
@@ -66,7 +82,7 @@ public record DriveRequest(
     if (isDrifting(rotationVector, aligningRequested)) {
       rotationMode = RotationMode.DRIFTING;
     } else if (aligningRequested) {
-      rotationMode = RotationMode.SNAPPING;
+      rotationMode = RotationMode.ALIGNING;
     } else {
       rotationMode = RotationMode.SPINNING;
     }
@@ -74,34 +90,23 @@ public record DriveRequest(
     return new DriveRequest(translationMode, rotationMode, translationVector, rotationVector);
   }
 
-  public static boolean startedDrifting(DriveRequest past, DriveRequest present) {
-    return past.rotationMode == RotationMode.SPINNING
-        && present.rotationMode == RotationMode.DRIFTING;
+  /**
+   * Returns the requested translation velocity in meters per second.
+   *
+   * @return the requested translation velocity in meters per second.
+   */
+  public Translation2d velocity() {
+    return translationAxis.times(SwerveConstants.MAXIMUM_SPEED);
   }
 
-  public boolean isRobotCentric() {
-    return translationMode == TranslationMode.ROBOT_CENTRIC;
-  }
-
-  public boolean isSpinning() {
-    return rotationMode == RotationMode.SPINNING;
-  }
-
-  public boolean isSnapping() {
-    return rotationMode == RotationMode.SNAPPING;
-  }
-
-  public boolean isDrifting() {
-    return rotationMode == RotationMode.DRIFTING;
-  }
-
+  /**
+   * Returns the requested rotation velocity.
+   *
+   * @return the requested rotation velocity.
+   */
   public Rotation2d omega() {
-    if (Math.abs(this.rotation().getY()) < 0.1) return new Rotation2d();
+    if (Math.abs(rotationAxis.getY()) < 0.1) return new Rotation2d();
 
-    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(this.rotation().getY());
-  }
-
-  public Rotation2d driverHeading() {
-    return rotation().getAngle();
+    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(rotationAxis.getY());
   }
 }

@@ -15,7 +15,7 @@ import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 /** Shooter subsystem. */
 public class Shooter extends Subsystem {
 
-  /** Shooter singleton. */
+  /** Shooter subsystem singleton. */
   private static Shooter instance = null;
 
   /** Flywheel controller config. */

@@ -21,7 +21,7 @@ import frc.robot.swerve.Swerve;
 public class RobotContainer {
 
   /** Robot container singleton. */
-  public static RobotContainer instance = null;
+  private static RobotContainer instance = null;
 
   /** Arm subsystem reference. */
   private final Arm arm;
@@ -129,7 +129,7 @@ public class RobotContainer {
    * @param side the side of the controller to rumble.
    * @return a command that rumbles the controller.
    */
-  public Command rumble(RumbleType side) {
+  private Command rumble(RumbleType side) {
     return Commands.startEnd(
         () -> rumbleController.setRumble(side, 1), () -> rumbleController.setRumble(side, 0));
   }

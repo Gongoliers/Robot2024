@@ -14,7 +14,7 @@ import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 /** Intake subsystem. */
 public class Intake extends Subsystem {
 
-  /** Intake singleton. */
+  /** Intake subsystem singleton. */
   private static Intake instance = null;
 
   /** Front roller controller config. */

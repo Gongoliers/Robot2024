@@ -13,19 +13,19 @@ import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.robot.RobotConstants;
 
-/** Subsystem class for the swerve subsystem. */
+/** Swerve subsystem. */
 public class Swerve extends Subsystem {
 
-  /** Instance variable for the swerve subsystem singleton. */
+  /** Swerve subsystem singleton. */
   private static Swerve instance = null;
 
-  /** Swerve modules controlled by the swerve subsystem. */
+  /** Swerve modules. */
   private final SwerveModuleIO[] swerveModules = new SwerveModuleIO[4];
 
   /** Swerve kinematics. */
   private final SwerveDriveKinematics swerveKinematics;
 
-  /** Creates a new instance of the swerve subsystem. */
+  /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
     swerveModules[0] = SwerveFactory.createModule(SwerveConstants.NORTH_WEST_MODULE_CONFIG);
     swerveModules[1] = SwerveFactory.createModule(SwerveConstants.NORTH_EAST_MODULE_CONFIG);
@@ -41,9 +41,9 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Gets the instance of the swerve subsystem.
+   * Returns the swerve subsystem instance.
    *
-   * @return the instance of the swerve subsystem.
+   * @return the swerve subsystem instance.
    */
   public static Swerve getInstance() {
     if (instance == null) {
@@ -89,18 +89,18 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Gets the swerve's kinematics.
+   * Returns the swerve kinematics.
    *
-   * @return the swerve's kinematics.
+   * @return the swerve kinematics.
    */
   public SwerveDriveKinematics getKinematics() {
     return swerveKinematics;
   }
 
   /**
-   * Gets the state of each of the swerve's modules.
+   * Returns the module states.
    *
-   * @return the state of each of the swerve's modules.
+   * @return the module states.
    */
   public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] moduleStates = new SwerveModuleState[4];
@@ -113,9 +113,9 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Gets the setpoint of each of the swerve's modules.
+   * Returns the module setpoints.
    *
-   * @return the setpoint of each of the swerve's modules.
+   * @return the module setpoints.
    */
   public SwerveModuleState[] getModuleSetpoints() {
     SwerveModuleState[] moduleSetpoints = new SwerveModuleState[4];
@@ -128,9 +128,9 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Gets the position of each of the swerve's modules.
+   * Returns the module positions.
    *
-   * @return the position of each of the swerve's modules.
+   * @return the module positions.
    */
   public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
@@ -143,18 +143,18 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Gets the swerve's speeds.
+   * Returns the chassis speeds.
    *
-   * @return the swerve's speeds.
+   * @return the chassis speeds.
    */
   public ChassisSpeeds getChassisSpeeds() {
     return swerveKinematics.toChassisSpeeds(getModuleStates());
   }
 
   /**
-   * Sets the swerve's speeds.
+   * Sets the swerve speeds.
    *
-   * @param speeds the swerve's speeds.
+   * @param speeds the swerve speeds.
    */
   public void setChassisSpeeds(ChassisSpeeds speeds) {
     speeds = ChassisSpeeds.discretize(speeds, RobotConstants.PERIODIC_DURATION);
@@ -165,10 +165,10 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Sets each of the swerve modules' setpoints.
+   * Sets the swerve module setpoints.
    *
-   * @param setpoints the setpoints for each of the swerve's modules.
-   * @param lazy if true, optimize the module setpoint.
+   * @param setpoints the setpoints.
+   * @param lazy if true, optimize the module setpoints.
    */
   public void setSetpoints(SwerveModuleState[] setpoints, boolean lazy) {
     SwerveDriveKinematics.desaturateWheelSpeeds(setpoints, SwerveConstants.MAXIMUM_SPEED);
@@ -179,7 +179,7 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Returns a command that drives the swerve using an Xbox controller.
+   * Drives the swerve using an Xbox controller.
    *
    * @param controller the Xbox controller to use.
    * @return a command that drives the swerve using an Xbox controller.
@@ -189,12 +189,12 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Set the steer motor setpoints for each of the swerve modules.
+   * Orients the swerve modules.
    *
-   * @param orientations orientations for each swerve modules.
-   * @return a command that orients all swerve modules.
+   * @param orientations swerve module orientations.
+   * @return a command that orients the swerve modules.
    */
-  public Command orientModules(Rotation2d[] orientations) {
+  private Command orientModules(Rotation2d[] orientations) {
     return run(
         () -> {
           setSetpoints(
@@ -208,6 +208,11 @@ public class Swerve extends Subsystem {
         });
   }
 
+  /**
+   * Orients the swerve modules forwards (+X).
+   *
+   * @return a command that orients the swerve modules forwards (+X).
+   */
   public Command forwards() {
     return orientModules(
         new Rotation2d[] {
@@ -218,6 +223,11 @@ public class Swerve extends Subsystem {
         });
   }
 
+  /**
+   * Orients the swerve modules sideways (+Y).
+   *
+   * @return a command that orients the swerve modules sideways (+Y).
+   */
   public Command sideways() {
     return orientModules(
         new Rotation2d[] {
@@ -228,6 +238,11 @@ public class Swerve extends Subsystem {
         });
   }
 
+  /**
+   * Orients the swerve modules in a cross.
+   *
+   * @return a command that orients the swerve modules in a cross.
+   */
   public Command cross() {
     return orientModules(
         new Rotation2d[] {

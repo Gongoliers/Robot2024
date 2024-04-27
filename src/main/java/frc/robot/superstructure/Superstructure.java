@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 /** Superstructure subsystem. */
 public class Superstructure extends Subsystem {
 
-  /** Superstructure singleton. */
+  /** Superstructure subsystem singleton. */
   private static Superstructure instance = null;
 
   /** Arm subsystem reference. */
