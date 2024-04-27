@@ -50,7 +50,10 @@ public class RobotContainer {
   /** Operator controller. */
   private final CommandXboxController operatorController;
 
-  /** Rumble controller. Use the same port as the operator controller to vibrate the operator controller. */
+  /**
+   * Rumble controller. Use the same port as the operator controller to vibrate the operator
+   * controller.
+   */
   private final XboxController rumbleController;
 
   /** Initializes the robot container. */
@@ -122,7 +125,7 @@ public class RobotContainer {
 
   /**
    * Rumbles the controller.
-   * 
+   *
    * @param side the side of the controller to rumble.
    * @return a command that rumbles the controller.
    */
