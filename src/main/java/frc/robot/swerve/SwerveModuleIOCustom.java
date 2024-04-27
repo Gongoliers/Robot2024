@@ -1,9 +1,9 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.lib.controller.VelocityControllerIO;
@@ -24,9 +24,6 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
 
   /** Drive motor values. */
   private final VelocityControllerIOValues driveMotorValues = new VelocityControllerIOValues();
-
-  /** Speeds below this speed are zeroed. */
-  private final double kSpeedDeadbandMetersPerSecond = 0.025;
 
   /** Module setpoint */
   private SwerveModuleState setpoint;
@@ -92,11 +89,11 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     // Since we are lazy, perform additional optimizations
 
     // Deadband the module speed
-    if (MathUtil.isNear(0.0, setpoint.speedMetersPerSecond, kSpeedDeadbandMetersPerSecond)) {
+    if (Math.abs(setpoint.speedMetersPerSecond) < Units.inchesToMeters(1)) {
       setpoint.speedMetersPerSecond = 0.0;
     }
 
-    // Keep previous angle if we aren't moving
+    // Keep previous angle if the module isn't moving
     if (setpoint.speedMetersPerSecond == 0.0) {
       setpoint.angle = state.angle;
     }
