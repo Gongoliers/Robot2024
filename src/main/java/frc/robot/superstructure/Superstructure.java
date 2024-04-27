@@ -63,7 +63,7 @@ public class Superstructure extends Subsystem {
   public void periodic() {
     measurement = new SuperstructureState(arm.getState(), intake.getState(), shooter.getState());
 
-    SuperstructureMechanism.getInstance().updateSuperstructure(measurement);
+    SuperstructureMechanism.getInstance().update(measurement);
   }
 
   @Override

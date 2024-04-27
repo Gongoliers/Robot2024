@@ -13,46 +13,64 @@ import frc.robot.RobotConstants;
 /** Superstructure mechanism renderer. */
 public class SuperstructureMechanism {
 
+  /** Superstructure mechanism renderer singleton. */
   private static SuperstructureMechanism instance = null;
 
+  /** Superstructure mechanism. */
   private final Mechanism2d mechanism;
 
+  /** Superstructure mechanism ligaments. */
   private MechanismLigament2d shoulder, flywheel, serializer, rollers;
 
+  /** Superstructure mechanism width. */
   private final double WIDTH =
       2
           * (RobotConstants.FRAME_PERIMETER_TO_ORIGIN_DISTANCE
               + RobotConstants.MAX_HORIZONTAL_EXTENSION_DISTANCE);
 
+  /** Superstructure mechanism height. */
   private final double HEIGHT = RobotConstants.MAX_VERTICAL_EXTENSION_DISTANCE;
 
+  /** Superstructure mechanism origin (horizontally centered). */
   private final Translation2d ORIGIN = new Translation2d(WIDTH / 2, 0);
 
+  /** Translation between the origin to shoulder base. */
   private final Translation2d ORIGIN_TO_SHOULDER_BASE =
       new Translation2d(Units.inchesToMeters(-7.5), Units.inchesToMeters(3.75));
 
+  /** Height of the shoulder member. */
   private final double SHOULDER_BASE_HEIGHT = Units.inchesToMeters(18);
 
+  /** Distance from top of the shoulder member to shoulder pivot. */
   private final double SHOULDER_BASE_TOP_TO_SHOULDER = Units.inchesToMeters(1.5);
 
+  /** Translation from shoulder base to shoulder pivot. */
   private final Translation2d SHOULDER_BASE_TO_SHOULDER =
       new Translation2d(0, SHOULDER_BASE_HEIGHT - SHOULDER_BASE_TOP_TO_SHOULDER);
 
+  /** Length of the flywheel segment of the shooter. */
   private final double SHOOTER_LENGTH = Units.inchesToMeters(12);
 
+  /** Length of the serializer segment of the shooter. */
   private final double SERIALIZER_LENGTH = Units.inchesToMeters(7.5);
 
+  /** Translation from origin to the intake rollers. */
   private final Translation2d ORIGIN_TO_ROLLERS =
       new Translation2d(Units.inchesToMeters(5.75), Units.inchesToMeters(2.5));
 
+  /** Superstructure mechanism default color. */
   private final Color8Bit DEFAULT_COLOR = new Color8Bit(Color.kLightGray);
 
+  /** Superstructure mechanism flywheel color. */
   private final Color8Bit FLYWHEEL_COLOR = new Color8Bit(Color.kSalmon);
 
+  /** Superstructure mechanism serializer color. */
   private final Color8Bit SERIALIZER_COLOR = new Color8Bit(Color.kCornflowerBlue);
 
+  /** Superstructure mechanism rollers color. */
   private final Color8Bit ROLLERS_COLOR = new Color8Bit(Color.kSpringGreen);
 
+  /** Initializes superstructure mechanism renderer. */
   private SuperstructureMechanism() {
     mechanism = new Mechanism2d(WIDTH, HEIGHT);
 
@@ -112,6 +130,11 @@ public class SuperstructureMechanism {
                 "framePerimeterRight_", HEIGHT, 90, framePerimeterThickness, DEFAULT_COLOR));
   }
 
+  /**
+   * Returns the superstructure mechanism renderer instance.
+   *
+   * @return the superstructure mechanism renderer instance.
+   */
   public static SuperstructureMechanism getInstance() {
     if (instance == null) {
       instance = new SuperstructureMechanism();
@@ -120,11 +143,21 @@ public class SuperstructureMechanism {
     return instance;
   }
 
+  /**
+   * Returns the superstructure mechanism renderer.
+   *
+   * @return the superstructure mechanism renderer.
+   */
   public Mechanism2d getMechanism() {
     return mechanism;
   }
 
-  public void updateSuperstructure(SuperstructureState state) {
+  /**
+   * Updates the superstructure mechanism renderer.
+   *
+   * @param state the state to render.
+   */
+  public void update(SuperstructureState state) {
     Rotation2d shoulderRotation =
         Rotation2d.fromRotations(state.armState().shoulderRotations().position);
 
