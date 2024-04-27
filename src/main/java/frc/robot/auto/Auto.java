@@ -57,8 +57,6 @@ public class Auto extends Subsystem {
     NamedCommands.registerCommand("stow", superstructure.stow());
     NamedCommands.registerCommand(
         "shoot", superstructure.subwoofer().withTimeout(1.5)); // 1 second could work
-    NamedCommands.registerCommand(
-        "shootNoPull", superstructure.subwooferNoPull().withTimeout(1.5)); // 1 second could work
     NamedCommands.registerCommand("intake", superstructure.intakeInstant());
 
     autoChooser = AutoBuilder.buildAutoChooser();

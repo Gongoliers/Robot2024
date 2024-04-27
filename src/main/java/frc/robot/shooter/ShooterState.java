@@ -11,22 +11,22 @@ public record ShooterState(
   public static final ShooterState IDLING = new ShooterState(0, 0);
 
   /** Intaking state. */
-  public static final ShooterState INTAKING = new ShooterState(0, 34);
+  public static final ShooterState INTAKE = new ShooterState(0, 34);
 
   /** Pulling state. */
-  public static final ShooterState PULLING = new ShooterState(-20, -10);
+  public static final ShooterState PULL = new ShooterState(-20, -10);
 
   /** Ejecting state. */
-  public static final ShooterState EJECTING = new ShooterState(0, -44);
+  public static final ShooterState EJECT = new ShooterState(0, -44);
 
   /** Subwoofer shooting state. */
-  public static final ShooterState SUBWOOFER_SHOOTING = new ShooterState(60, 44);
+  public static final ShooterState SUBWOOFER = new ShooterState(60, 44);
 
   /** Skim shooting state. */
-  public static final ShooterState SKIM_SHOOTING = new ShooterState(60, 44);
+  public static final ShooterState SKIM = new ShooterState(60, 44);
 
   /** Amp shooting state. */
-  public static final ShooterState AMPING = new ShooterState(10, 20);
+  public static final ShooterState AMP = new ShooterState(10, 20);
 
   /**
    * Shooter state.

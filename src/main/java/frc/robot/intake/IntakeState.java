@@ -8,10 +8,10 @@ public record IntakeState(
     double frontRollerVelocityRotationsPerSecond, double backRollerVelocityRotationsPerSecond) {
 
   /** Idling state. */
-  public static final IntakeState IDLING = new IntakeState(0, 0);
+  public static final IntakeState IDLE = new IntakeState(0, 0);
 
   /** Intaking state. */
-  public static final IntakeState INTAKING = new IntakeState(34.0, 34.0);
+  public static final IntakeState INTAKE = new IntakeState(34.0, 34.0);
 
   /** Ejecting state. */
   public static final IntakeState EJECTING = new IntakeState(-34.0, -34.0);

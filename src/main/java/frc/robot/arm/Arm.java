@@ -22,7 +22,7 @@ public class Arm extends Subsystem {
   /** Arm singleton. */
   private static Arm instance = null;
 
-  /** Shoulder config. */
+  /** Shoulder controller config. */
   private final MechanismConfig shoulderConfig =
       new MechanismConfig()
           .withAbsoluteEncoderConfig(
@@ -81,9 +81,8 @@ public class Arm extends Subsystem {
 
     previousTimeSeconds = Timer.getFPGATimestamp();
 
-    setPosition(ArmState.STOW_POSITION);
-    setpoint = ArmState.STOW_POSITION;
-    goal = ArmState.STOW_POSITION;
+    setpoint = ArmState.STOWED;
+    goal = ArmState.STOWED;
   }
 
   /**

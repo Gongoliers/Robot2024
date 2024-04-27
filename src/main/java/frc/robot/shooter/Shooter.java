@@ -18,6 +18,7 @@ public class Shooter extends Subsystem {
   /** Shooter singleton. */
   private static Shooter instance = null;
 
+  /** Flywheel controller config. */
   private final MechanismConfig flywheelConfig =
       new MechanismConfig()
           .withMotorConfig(
@@ -49,7 +50,7 @@ public class Shooter extends Subsystem {
   /** Flywheel controller acceleration limiter. */
   private final SlewRateLimiter flywheelAccelerationLimiter;
 
-  /** Serializer config. */
+  /** Serializer controller config. */
   private final MechanismConfig serializerConfig =
       new MechanismConfig()
           .withMotorConfig(

@@ -14,38 +14,42 @@ import frc.robot.shooter.Shooter;
 import frc.robot.shooter.ShooterState;
 import java.util.function.Supplier;
 
-/** Subsystem class for the superstructure subsystem. */
+/** Superstructure subsystem. */
 public class Superstructure extends Subsystem {
 
-  /** Instance variable for the superstructure subsystem singleton. */
+  /** Superstructure singleton. */
   private static Superstructure instance = null;
 
-  /** Reference to the arm subsystem. */
+  /** Arm subsystem reference. */
   private final Arm arm;
 
-  /** Reference to the intake subsystem. */
+  /** Intake subsystem reference. */
   private final Intake intake;
 
-  /** Reference to the shooter subsystem. */
+  /** Shooter subsystem reference. */
   private final Shooter shooter;
 
-  private SuperstructureState measurement, goal;
+  /** Superstructure measurement. Updated periodically. */
+  private SuperstructureState measurement;
 
-  /** Creates a new instance of the superstructure subsystem. */
+  /** Superstructure goal. */
+  private SuperstructureState goal;
+
+  /** Initializes the superstructure subsystem. */
   private Superstructure() {
     arm = Arm.getInstance();
     intake = Intake.getInstance();
     shooter = Shooter.getInstance();
 
-    setPosition(SuperstructureState.STOW);
+    arm.setPosition(SuperstructureState.STOWED.armState());
 
-    goal = SuperstructureState.STOW;
+    goal = SuperstructureState.STOWED;
   }
 
   /**
-   * Gets the instance of the superstructure subsystem.
+   * Returns the superstructure subsystem instance.
    *
-   * @return the instance of the superstructre subsystem.
+   * @return the superstructure subsystem instance.
    */
   public static Superstructure getInstance() {
     if (instance == null) {
@@ -75,6 +79,13 @@ public class Superstructure extends Subsystem {
     Telemetry.addColumn(tab, "At Goal?").addBoolean("At Goal?", this::atGoal);
   }
 
+  /**
+   * Adds a superstructure state to Shuffleboard.
+   *
+   * @param tab the Shuffleboard tab.
+   * @param name the name of the superstructure state.
+   * @param state the state to display on Shuffleboard.
+   */
   private void addStateToShuffleboard(
       ShuffleboardTab tab, String name, Supplier<SuperstructureState> state) {
     ShuffleboardLayout layout = Telemetry.addColumn(tab, name);
@@ -103,10 +114,11 @@ public class Superstructure extends Subsystem {
         () -> state.get().shooterState().serializerVelocityRotationsPerSecond());
   }
 
-  public void setPosition(SuperstructureState state) {
-    arm.setPosition(state.armState());
-  }
-
+  /**
+   * Sets the superstructure goal.
+   *
+   * @param goal the superstructure goal.
+   */
   public void setGoal(SuperstructureState goal) {
     this.goal = goal;
 
@@ -115,96 +127,170 @@ public class Superstructure extends Subsystem {
     shooter.setGoal(goal.shooterState());
   }
 
+  /**
+   * Returns true if the superstructure is at the goal state.
+   *
+   * @return true if the superstructure is at the goal state.
+   */
   public boolean atGoal() {
     return arm.atGoal() && intake.atGoal() && shooter.atGoal();
   }
 
+  /**
+   * Sets the superstructure goal and ends immediately.
+   *
+   * @param goal the superstructure goal.
+   * @return a command that sets the superstructure goal and ends immediately.
+   */
   private Command instant(SuperstructureState goal) {
     return runOnce(() -> setGoal(goal));
   }
 
-  private Command hold(SuperstructureState goal) {
-    return run(() -> setGoal(goal));
-  }
-
+  /**
+   * Sets the superstructure goal and ends when the goal is reached.
+   *
+   * @param goal the superstructure goal.
+   * @return a command that sets the superstructure goal and ends when the goal is reached.
+   */
   private Command to(SuperstructureState goal) {
     return run(() -> setGoal(goal)).until(this::atGoal);
   }
 
-  public Command stow() {
-    return hold(SuperstructureState.STOW).withName("STOW");
+  /**
+   * Sets the superstructure goal and ends when interrupted.
+   *
+   * @param goal the superstructure goal.
+   * @return a command that sets the superstructure goal and ends when interrupted.
+   */
+  private Command hold(SuperstructureState goal) {
+    return run(() -> setGoal(goal));
   }
 
+  /**
+   * Stows the superstructure. Ends when interrupted.
+   *
+   * @return a command that stows the superstructure.
+   */
+  public Command stow() {
+    return hold(SuperstructureState.STOWED).withName("STOWED");
+  }
+
+  /**
+   * Stows then intakes. Ends when interrupted.
+   *
+   * @return a command that stows then intakes.
+   */
   public Command intake() {
-    return to(SuperstructureState.STOW)
+    return to(SuperstructureState.STOWED)
         .andThen(hold(SuperstructureState.INTAKE))
         .withName("INTAKE");
   }
 
+  /**
+   * Intakes. Ends immediately.
+   *
+   * @return a command that intakes.
+   */
   public Command intakeInstant() {
     return instant(SuperstructureState.INTAKE).withName("INTAKE_IMMEDIATE");
   }
 
+  /**
+   * Pulls a note while moving to the shot position. Ends after a duration is elapsed.
+   *
+   * @param shot the shot position to move to.
+   * @return a command that pulls a note while moving to the shot position.
+   */
   private Command pull(SuperstructureState shot) {
     final SuperstructureState pull =
-        new SuperstructureState(shot.armState(), IntakeState.IDLING, ShooterState.PULLING);
+        new SuperstructureState(shot.armState(), IntakeState.IDLE, ShooterState.PULL);
 
-    return hold(pull).withTimeout(SuperstructureConstants.PULL_DURATION);
+    return hold(pull).withTimeout(0.2);
   }
 
+  /**
+   * Spins up and moves to a shot but does not fire it. Ends after the shot is spun up and in
+   * position or a duration is elapsed.
+   *
+   * @param shot the shot to spin up for.
+   * @return a commands that spins up and moves to a shot but does not fire it.
+   */
   private Command ready(SuperstructureState shot) {
     final ShooterState spin =
         new ShooterState(shot.shooterState().flywheelVelocityRotationsPerSecond(), 0);
 
     final SuperstructureState ready =
-        new SuperstructureState(shot.armState(), IntakeState.IDLING, spin);
+        new SuperstructureState(shot.armState(), IntakeState.IDLE, spin);
 
-    return to(ready).withTimeout(SuperstructureConstants.READY_DURATION);
+    return to(ready).withTimeout(1.0);
   }
 
-  private Command autoShoot(SuperstructureState shot) {
-    return pull(shot)
-        .andThen(ready(shot))
-        .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
-        .andThen(hold(shot));
-  }
-
-  private Command autoShootNoPull(SuperstructureState shot) {
-    return ready(shot)
-        .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
-        .andThen(hold(shot));
-  }
-
-  public Command subwooferNoPull() {
-    return autoShootNoPull(SuperstructureState.SUBWOOFER).withName("SUBWOOFER_NO_PULL");
-  }
-
-  public Command subwoofer() {
-    return autoShoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
-  }
-
-  public Command skim() {
-    return autoShoot(SuperstructureState.SKIM).withName("SKIM");
-  }
-
-  public Command amp() {
-    return autoShoot(SuperstructureState.AMP).withName("AMP");
-  }
-
-  public Command eject() {
-    return to(SuperstructureState.EJECT_POSITION)
-        .andThen(Commands.waitSeconds(SuperstructureConstants.EJECT_PAUSE_DURATION))
-        .andThen(hold(SuperstructureState.EJECT))
-        .withName("EJECT");
-  }
-
+  /**
+   * Prepares a shot. Ends after the shot is spun up and in position or a duration is elapsed.
+   *
+   * @param shot the shot.
+   * @return a command that prepares a shot.
+   */
   public Command prepare(SuperstructureState shot) {
     return pull(shot).andThen(ready(shot));
   }
 
+  /**
+   * Readies and shoots a shot. Ends when interrupted.
+   *
+   * @param shot the shot.
+   * @return a command that readies and shoots a shot.
+   */
   public Command shoot(SuperstructureState shot) {
-    return ready(shot)
-        .andThen(Commands.waitSeconds(SuperstructureConstants.READY_PAUSE_DURATION))
-        .andThen(hold(shot));
+    return ready(shot).andThen(Commands.waitSeconds(0.25)).andThen(hold(shot));
+  }
+
+  /**
+   * Pulls, readies, and shoots a shot. Ends when interrupted.
+   *
+   * @param shot the shot.
+   * @return a command that pulls, readies, and shoots a shot.
+   */
+  private Command autoShoot(SuperstructureState shot) {
+    return pull(shot).andThen(shoot(shot));
+  }
+
+  /**
+   * Automatically shoots a note into the speaker from the subwoofer. Ends when interrupted.
+   *
+   * @return a command that automatically shoots a note into the speaker from the subwoofer.
+   */
+  public Command subwoofer() {
+    return autoShoot(SuperstructureState.SUBWOOFER).withName("SUBWOOFER");
+  }
+
+  /**
+   * Automatically skims a note across the floor. Ends when interrupted.
+   *
+   * @return a command that automatically skims a note across the floor.
+   */
+  public Command skim() {
+    return autoShoot(SuperstructureState.SKIM).withName("SKIM");
+  }
+
+  /**
+   * Automatically drops a note into the amp. Ends when interrupted.
+   *
+   * @return a command that drops a note into the amp.
+   */
+  public Command amp() {
+    return autoShoot(SuperstructureState.AMP).withName("AMP");
+  }
+
+  /**
+   * Ejects a note. Ends when interrupted.
+   *
+   * @return a command that ejects a note.
+   */
+  public Command eject() {
+    return to(SuperstructureState.EJECT_POSITION)
+        .andThen(Commands.waitSeconds(0.25))
+        .andThen(hold(SuperstructureState.EJECT))
+        .withName("EJECTING");
   }
 }

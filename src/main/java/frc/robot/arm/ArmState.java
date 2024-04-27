@@ -10,19 +10,19 @@ import java.util.Objects;
 public record ArmState(State shoulderRotations) {
 
   /** Stow position. */
-  public static final ArmState STOW_POSITION = new ArmState(Rotation2d.fromDegrees(-26));
+  public static final ArmState STOWED = new ArmState(Rotation2d.fromDegrees(-26));
 
   /** Subwoofer shot position. */
-  public static final ArmState SUBWOOFER_POSITION = new ArmState(Rotation2d.fromDegrees(-26));
+  public static final ArmState SUBWOOFER = new ArmState(Rotation2d.fromDegrees(-26));
 
   /** Eject position. */
-  public static final ArmState EJECT_POSITION = new ArmState(Rotation2d.fromDegrees(30));
+  public static final ArmState EJECT = new ArmState(Rotation2d.fromDegrees(30));
 
   /** Skim shot position. */
-  public static final ArmState SKIM_POSITION = new ArmState(Rotation2d.fromDegrees(30));
+  public static final ArmState SKIM = new ArmState(Rotation2d.fromDegrees(30));
 
   /** Amp position. */
-  public static final ArmState AMP_POSITION = new ArmState(Rotation2d.fromDegrees(60));
+  public static final ArmState AMP = new ArmState(Rotation2d.fromDegrees(60));
 
   /**
    * Arm state.

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.RobotConstants;
 
-/** Helper class for rendering superstructure mechanisms. */
+/** Superstructure mechanism renderer. */
 public class SuperstructureMechanism {
 
   private static SuperstructureMechanism instance = null;

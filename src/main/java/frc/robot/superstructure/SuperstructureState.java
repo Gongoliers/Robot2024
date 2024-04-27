@@ -5,32 +5,37 @@ import frc.robot.intake.IntakeState;
 import frc.robot.shooter.ShooterState;
 import java.util.Objects;
 
-/** Represents the state of the superstructure. */
+/** Superstructure state. */
 public record SuperstructureState(
     ArmState armState, IntakeState intakeState, ShooterState shooterState) {
 
-  public static final SuperstructureState STOW =
-      new SuperstructureState(ArmState.STOW_POSITION, IntakeState.IDLING, ShooterState.IDLING);
+  /** Stowed state. */
+  public static final SuperstructureState STOWED =
+      new SuperstructureState(ArmState.STOWED, IntakeState.IDLE, ShooterState.IDLING);
 
+  /** Intaking state. */
   public static final SuperstructureState INTAKE =
-      new SuperstructureState(ArmState.STOW_POSITION, IntakeState.INTAKING, ShooterState.INTAKING);
+      new SuperstructureState(ArmState.STOWED, IntakeState.INTAKE, ShooterState.INTAKE);
 
+  /** Ready ejecting state. */
   public static final SuperstructureState EJECT_POSITION =
-      new SuperstructureState(ArmState.EJECT_POSITION, IntakeState.EJECTING, ShooterState.IDLING);
+      new SuperstructureState(ArmState.EJECT, IntakeState.EJECTING, ShooterState.IDLING);
 
+  /** Ejecting state. */
   public static final SuperstructureState EJECT =
-      new SuperstructureState(ArmState.EJECT_POSITION, IntakeState.EJECTING, ShooterState.EJECTING);
+      new SuperstructureState(ArmState.EJECT, IntakeState.EJECTING, ShooterState.EJECT);
 
+  /** Subwoofer shooting state. */
   public static final SuperstructureState SUBWOOFER =
-      new SuperstructureState(
-          ArmState.SUBWOOFER_POSITION, IntakeState.IDLING, ShooterState.SUBWOOFER_SHOOTING);
+      new SuperstructureState(ArmState.SUBWOOFER, IntakeState.IDLE, ShooterState.SUBWOOFER);
 
+  /** Skim shooting state. */
   public static final SuperstructureState SKIM =
-      new SuperstructureState(
-          ArmState.SKIM_POSITION, IntakeState.IDLING, ShooterState.SKIM_SHOOTING);
+      new SuperstructureState(ArmState.SKIM, IntakeState.IDLE, ShooterState.SKIM);
 
+  /** Amp shooting state. */
   public static final SuperstructureState AMP =
-      new SuperstructureState(ArmState.AMP_POSITION, IntakeState.IDLING, ShooterState.AMPING);
+      new SuperstructureState(ArmState.AMP, IntakeState.IDLE, ShooterState.AMP);
 
   /**
    * Creates a new superstructure state.

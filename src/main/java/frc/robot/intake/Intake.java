@@ -17,7 +17,7 @@ public class Intake extends Subsystem {
   /** Intake singleton. */
   private static Intake instance = null;
 
-  /** Front roller config. */
+  /** Front roller controller config. */
   private final MechanismConfig frontRollerConfig =
       new MechanismConfig()
           .withMotorConfig(
@@ -38,7 +38,7 @@ public class Intake extends Subsystem {
                   .withProportionalGain(0.1) // volts per rotation per second
               );
 
-  /** Back roller config. */
+  /** Back roller controller config. */
   private final MechanismConfig backRollerConfig =
       new MechanismConfig()
           .withMotorConfig(
@@ -83,8 +83,8 @@ public class Intake extends Subsystem {
 
     backRollerValues = new VelocityControllerIOValues();
 
-    setpoint = IntakeState.IDLING;
-    goal = IntakeState.IDLING;
+    setpoint = IntakeState.IDLE;
+    goal = IntakeState.IDLE;
   }
 
   /**
