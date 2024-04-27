@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -13,22 +12,7 @@ public class RobotConstants {
   /** Duration of each robot periodic call in seconds. */
   public static final double PERIODIC_DURATION = 1.0 / PERIODIC_RATE;
 
-  /** Voltage of the robot's battery, */
-  public static final double BATTERY_VOLTAGE = 12.0;
-
-  /** Distance from the frame perimeter to the origin in meters. */
-  public static final double FRAME_PERIMETER_TO_ORIGIN_DISTANCE = Units.inchesToMeters(14);
-
-  /** Maximum horizontal extension distance in meters. */
-  public static final double MAX_HORIZONTAL_EXTENSION_DISTANCE = Units.feetToMeters(1);
-
-  /** Maximum vertical extension distance in meters. */
-  public static final double MAX_VERTICAL_EXTENSION_DISTANCE = Units.inchesToMeters(48);
-
-  /** If true, provide additional information using telemetry. */
-  public static final boolean USE_TELEMETRY = true;
-
-  /** Robot subsystems. */
+  /** Subsystems. */
   public enum Subsystem {
     ARM,
     INTAKE,
@@ -37,9 +21,8 @@ public class RobotConstants {
     SWERVE,
   }
 
-  public static final Set<Subsystem> ALL_SUBSYSTEMS =
+  /** Real subsystems. */
+  public static final Set<Subsystem> REAL_SUBSYSTEMS =
       EnumSet.of(
           Subsystem.ARM, Subsystem.INTAKE, Subsystem.ODOMETRY, Subsystem.SHOOTER, Subsystem.SWERVE);
-
-  public static final Set<Subsystem> REAL_SUBSYSTEMS = ALL_SUBSYSTEMS;
 }

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.RobotConstants;
 
 /** Superstructure mechanism renderer. */
 public class SuperstructureMechanism {
@@ -22,14 +21,21 @@ public class SuperstructureMechanism {
   /** Superstructure mechanism ligaments. */
   private MechanismLigament2d shoulder, flywheel, serializer, rollers;
 
+  /** Distance from the frame perimeter to the origin in meters. */
+  public static final double FRAME_PERIMETER_TO_ORIGIN_DISTANCE = Units.inchesToMeters(14);
+
+  /** Maximum horizontal extension distance in meters. */
+  public static final double MAX_HORIZONTAL_EXTENSION_DISTANCE = Units.feetToMeters(1);
+
+  /** Maximum vertical extension distance in meters. */
+  public static final double MAX_VERTICAL_EXTENSION_DISTANCE = Units.inchesToMeters(48);
+
   /** Superstructure mechanism width. */
   private final double WIDTH =
-      2
-          * (RobotConstants.FRAME_PERIMETER_TO_ORIGIN_DISTANCE
-              + RobotConstants.MAX_HORIZONTAL_EXTENSION_DISTANCE);
+      2 * (FRAME_PERIMETER_TO_ORIGIN_DISTANCE + MAX_HORIZONTAL_EXTENSION_DISTANCE);
 
   /** Superstructure mechanism height. */
-  private final double HEIGHT = RobotConstants.MAX_VERTICAL_EXTENSION_DISTANCE;
+  private final double HEIGHT = MAX_VERTICAL_EXTENSION_DISTANCE;
 
   /** Superstructure mechanism origin (horizontally centered). */
   private final Translation2d ORIGIN = new Translation2d(WIDTH / 2, 0);
@@ -112,19 +118,13 @@ public class SuperstructureMechanism {
     double framePerimeterThickness = Units.inchesToMeters(1) * 10;
 
     mechanism
-        .getRoot(
-            "framePerimeterLeft",
-            ORIGIN.getX() - RobotConstants.FRAME_PERIMETER_TO_ORIGIN_DISTANCE,
-            0)
+        .getRoot("framePerimeterLeft", ORIGIN.getX() - FRAME_PERIMETER_TO_ORIGIN_DISTANCE, 0)
         .append(
             new MechanismLigament2d(
                 "framePerimeterLeft_", HEIGHT, 90, framePerimeterThickness, DEFAULT_COLOR));
 
     mechanism
-        .getRoot(
-            "framePerimeterRight",
-            ORIGIN.getX() + RobotConstants.FRAME_PERIMETER_TO_ORIGIN_DISTANCE,
-            0)
+        .getRoot("framePerimeterRight", ORIGIN.getX() + FRAME_PERIMETER_TO_ORIGIN_DISTANCE, 0)
         .append(
             new MechanismLigament2d(
                 "framePerimeterRight_", HEIGHT, 90, framePerimeterThickness, DEFAULT_COLOR));
