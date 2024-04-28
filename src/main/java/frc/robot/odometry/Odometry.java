@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
 import frc.lib.sensor.GyroscopeIO;
@@ -91,10 +90,6 @@ public class Odometry extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout shouldFlip = Telemetry.addColumn(tab, "Should Flip?");
-
-    shouldFlip.addBoolean("Should Flip?", () -> AllianceFlipHelper.shouldFlip());
-
     ShuffleboardLayout position = Telemetry.addColumn(tab, "Position");
 
     position.addDouble("X (m)", () -> getPosition().getX());

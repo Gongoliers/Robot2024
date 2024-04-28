@@ -1,13 +1,28 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
+
+  /** Robot container. */
+  private RobotContainer robotContainer;
+
+  /** Command to run during autonomous. */
   private Command autonomousCommand;
 
-  private RobotContainer robotContainer;
+  /**
+   * Returns true if on red alliance.
+   *
+   * @return true if on red alliance.
+   */
+  public static boolean isRedAlliance() {
+    return DriverStation.getAlliance().isPresent()
+        && DriverStation.getAlliance().get() == Alliance.Red;
+  }
 
   @Override
   public void robotInit() {

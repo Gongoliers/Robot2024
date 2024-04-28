@@ -8,9 +8,9 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.lib.AllianceFlipHelper;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.robot.Robot;
 import frc.robot.odometry.Odometry;
 import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
@@ -50,7 +50,7 @@ public class Auto extends Subsystem {
             swerve.maximumTranslationVelocity(),
             swerve.driveRadius(),
             new ReplanningConfig()),
-        AllianceFlipHelper::shouldFlip,
+        Robot::isRedAlliance,
         swerve);
 
     NamedCommands.registerCommand("stow", superstructure.stow());
