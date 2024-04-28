@@ -90,8 +90,8 @@ public class DriveCommand extends Command {
     double vyMetersPerSecond =
         yAccelerationLimiter.calculate(desiredChassisSpeeds.vyMetersPerSecond);
     double omegaRadiansPerSecond =
-        rotationVelocityClamper.apply(
-            Units.radiansToRotations(desiredChassisSpeeds.omegaRadiansPerSecond));
+        Units.rotationsToRadians(rotationVelocityClamper.apply(
+            Units.radiansToRotations(desiredChassisSpeeds.omegaRadiansPerSecond)));
 
     return new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
   }

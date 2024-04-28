@@ -34,8 +34,9 @@ public class Swerve extends Subsystem {
         .withMaximumAcceleration(18); // meters per second per second
 
   /** Rotation motion profile config. */
+  // TODO Verify
   private final MotionProfileConfig rotationMotionProfileConfig =
-      new MotionProfileConfig().withMaximumVelocity(0.25); // rotations per second
+      new MotionProfileConfig().withMaximumVelocity(1); // rotations per second
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
