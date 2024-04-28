@@ -37,7 +37,8 @@ public class Arm extends Subsystem {
           .withMotionProfileConfig(
               new MotionProfileConfig()
                   .withMaximumVelocity(Units.degreesToRotations(240.0)) // rotations per second
-                  .withMaximumAcceleration(Units.degreesToRadians(240.0)) // rotations per second per second
+                  .withMaximumAcceleration(
+                      Units.degreesToRadians(240.0)) // rotations per second per second
               )
           .withFeedforwardConfig(
               new FeedforwardControllerConfig()
