@@ -97,7 +97,7 @@ public class RobotContainer {
 
   /** Configures subsystem default commands. */
   private void configureDefaultCommands() {
-    swerve.setDefaultCommand(swerve.driveWithController(driverController));
+    swerve.setDefaultCommand(swerve.teleopDrive(driverController));
   }
 
   /** Configures controller bindings. */
