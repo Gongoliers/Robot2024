@@ -73,6 +73,9 @@ public class Swerve extends Subsystem {
                   .withProportionalGain(0.75) // volts per rotation per second
               );
 
+  /** Wheel circumference. */
+  private final double wheelCircumference = Units.inchesToMeters(4.0) * Math.PI;
+
   /** Translation motion profile config. */
   private final MotionProfileConfig translationMotionProfileConfig =
       new MotionProfileConfig()
@@ -85,10 +88,14 @@ public class Swerve extends Subsystem {
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
-    swerveModules[0] = SwerveFactory.createNorthWestModule(steerConfig, driveConfig);
-    swerveModules[1] = SwerveFactory.createNorthEastModule(steerConfig, driveConfig);
-    swerveModules[2] = SwerveFactory.createSouthEastModule(steerConfig, driveConfig);
-    swerveModules[3] = SwerveFactory.createSouthWestModule(steerConfig, driveConfig);
+    swerveModules[0] =
+        SwerveFactory.createNorthWestModule(steerConfig, driveConfig, wheelCircumference);
+    swerveModules[1] =
+        SwerveFactory.createNorthEastModule(steerConfig, driveConfig, wheelCircumference);
+    swerveModules[2] =
+        SwerveFactory.createSouthEastModule(steerConfig, driveConfig, wheelCircumference);
+    swerveModules[3] =
+        SwerveFactory.createSouthWestModule(steerConfig, driveConfig, wheelCircumference);
 
     swerveKinematics =
         new SwerveDriveKinematics(
@@ -116,16 +123,6 @@ public class Swerve extends Subsystem {
 
   @Override
   public void addToShuffleboard(ShuffleboardTab tab) {
-    ShuffleboardLayout translationConstants = Telemetry.addColumn(tab, "Translation Constants");
-
-    translationConstants.addDouble("Maximum Velocity (mps)", this::maximumTranslationVelocity);
-    translationConstants.addDouble(
-        "Maximum Accleration (mpsps)", this::maximumTranslationAcceleration);
-
-    ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
-    rotationConstants.addDouble(
-        "Maximum Velocity (rps)", () -> maximumRotationVelocity().getRotations());
-
     Telemetry.addSwerveModuleStates(tab, "Swerve Module States", this::getModuleStates);
     Telemetry.addSwerveModuleStates(tab, "Swerve Module Setpoints", this::getModuleSetpoints);
 
@@ -235,15 +232,6 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Returns the motion profile config.
-   *
-   * @return the motion profile config.
-   */
-  public MotionProfileConfig translationMotionProfileConfig() {
-    return translationMotionProfileConfig;
-  }
-
-  /**
    * Returns the maximum translation velocity.
    *
    * @return the maximum translation velocity.
@@ -253,30 +241,12 @@ public class Swerve extends Subsystem {
   }
 
   /**
-   * Returns the maximum translation acceleration.
+   * Returns the drive radius (distance to the farthest module).
    *
-   * @return the maximum translation acceleration.
+   * @return the drive readius (distance to the farthest module).
    */
-  public double maximumTranslationAcceleration() {
-    return translationMotionProfileConfig.maximumAcceleration();
-  }
-
-  /**
-   * Returns the rotation motion profile config.
-   *
-   * @return the rotation motion profile config.
-   */
-  public MotionProfileConfig rotationMotionProfileConfig() {
-    return rotationMotionProfileConfig;
-  }
-
-  /**
-   * Returns the maximum rotation velocity.
-   *
-   * @return the maximum rotation velocity.
-   */
-  public Rotation2d maximumRotationVelocity() {
-    return Rotation2d.fromRotations(rotationMotionProfileConfig.maximumVelocity());
+  public double driveRadius() {
+    return SwerveFactory.createNorthEastModuleTranslation().getNorm();
   }
 
   /**

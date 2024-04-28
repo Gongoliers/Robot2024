@@ -4,11 +4,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import frc.lib.CAN;
-import frc.lib.config.MechanismConfig;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
-import frc.robot.swerve.SwerveFactory;
 
 /** Custom swerve module. */
 public class SwerveModuleIOCustom implements SwerveModuleIO {
@@ -25,18 +22,21 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   /** Drive motor values. */
   private final VelocityControllerIOValues driveMotorValues = new VelocityControllerIOValues();
 
-  private final double wheelCircumference = Units.inchesToMeters(4.0) * Math.PI;
+  /** Wheel circumference. */
+  private final double wheelCircumference;
 
   /** Module setpoint */
   private SwerveModuleState setpoint;
 
   public SwerveModuleIOCustom(
-      CAN steer, CAN azimuth, CAN drive, MechanismConfig steerConfig, MechanismConfig driveConfig) {
-    steerMotor = SwerveFactory.createSteerMotor(steer, azimuth, steerConfig);
-    steerMotor.configure();
+      PositionControllerIO steerMotor, VelocityControllerIO driveMotor, double wheelCircumference) {
+    this.steerMotor = steerMotor;
+    this.steerMotor.configure();
 
-    driveMotor = SwerveFactory.createDriveMotor(drive, driveConfig);
-    driveMotor.configure();
+    this.driveMotor = driveMotor;
+    this.driveMotor.configure();
+
+    this.wheelCircumference = wheelCircumference;
 
     setpoint = new SwerveModuleState();
   }

@@ -27,8 +27,16 @@ public class SwerveFactory {
    * @return a swerve module.
    */
   private static SwerveModuleIO createModule(
-      CAN steer, CAN azimuth, CAN drive, MechanismConfig steerConfig, MechanismConfig driveConfig) {
-    return new SwerveModuleIOCustom(steer, azimuth, drive, steerConfig, driveConfig);
+      CAN steer,
+      CAN azimuth,
+      CAN drive,
+      MechanismConfig steerConfig,
+      MechanismConfig driveConfig,
+      double wheelCircumference) {
+    return new SwerveModuleIOCustom(
+        createSteerMotor(steer, azimuth, steerConfig),
+        createDriveMotor(drive, driveConfig),
+        wheelCircumference);
   }
 
   /**
@@ -37,7 +45,7 @@ public class SwerveFactory {
    * @return the north west swerve module.
    */
   public static SwerveModuleIO createNorthWestModule(
-      MechanismConfig steerConfig, MechanismConfig driveConfig) {
+      MechanismConfig steerConfig, MechanismConfig driveConfig, double wheelCircumference) {
     return createModule(
         new CAN(8, "swerve"),
         new CAN(16, "swerve"),
@@ -45,7 +53,8 @@ public class SwerveFactory {
         steerConfig.withAbsoluteEncoderConfig(
             new AbsoluteEncoderConfig()
                 .withOffset(Rotation2d.fromRotations(-0.084717).unaryMinus())),
-        driveConfig);
+        driveConfig,
+        wheelCircumference);
   }
 
   /**
@@ -63,7 +72,7 @@ public class SwerveFactory {
    * @return the north east swerve module.
    */
   public static SwerveModuleIO createNorthEastModule(
-      MechanismConfig steerConfig, MechanismConfig driveConfig) {
+      MechanismConfig steerConfig, MechanismConfig driveConfig, double wheelCircumference) {
     return createModule(
         new CAN(16, "swerve"),
         new CAN(18, "swerve"),
@@ -71,7 +80,8 @@ public class SwerveFactory {
         steerConfig.withAbsoluteEncoderConfig(
             new AbsoluteEncoderConfig()
                 .withOffset(Rotation2d.fromRotations(0.196777).unaryMinus())),
-        driveConfig);
+        driveConfig,
+        wheelCircumference);
   }
 
   /**
@@ -89,7 +99,7 @@ public class SwerveFactory {
    * @return the south east swerve module.
    */
   public static SwerveModuleIO createSouthEastModule(
-      MechanismConfig steerConfig, MechanismConfig driveConfig) {
+      MechanismConfig steerConfig, MechanismConfig driveConfig, double wheelCircumference) {
     return createModule(
         new CAN(12, "swerve"),
         new CAN(22, "swerve"),
@@ -97,7 +107,8 @@ public class SwerveFactory {
         steerConfig.withAbsoluteEncoderConfig(
             new AbsoluteEncoderConfig()
                 .withOffset(Rotation2d.fromRotations(0.276611).unaryMinus())),
-        driveConfig);
+        driveConfig,
+        wheelCircumference);
   }
 
   /**
@@ -115,7 +126,7 @@ public class SwerveFactory {
    * @return the south west swerve module.
    */
   public static SwerveModuleIO createSouthWestModule(
-      MechanismConfig steerConfig, MechanismConfig driveConfig) {
+      MechanismConfig steerConfig, MechanismConfig driveConfig, double wheelCircumference) {
     return createModule(
         new CAN(10, "swerve"),
         new CAN(20, "swerve"),
@@ -123,7 +134,8 @@ public class SwerveFactory {
         steerConfig.withAbsoluteEncoderConfig(
             new AbsoluteEncoderConfig()
                 .withOffset(Rotation2d.fromRotations(0.223145).unaryMinus())),
-        driveConfig);
+        driveConfig,
+        wheelCircumference);
   }
 
   /**
