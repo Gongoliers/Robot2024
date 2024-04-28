@@ -1,5 +1,8 @@
 package frc.robot.swerve;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.CAN;
+import frc.lib.config.AbsoluteEncoderConfig;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIOSim;
 import frc.lib.controller.PositionControllerIOTalonFXSteer;
@@ -27,13 +30,13 @@ public class SwerveFactory {
    *
    * @return a steer motor.
    */
-  public static PositionControllerIO createSteerMotor(SwerveModuleConfig config) {
+  public static PositionControllerIO createSteerMotor(CAN steer, CAN azimuth, Rotation2d offset) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
       return new PositionControllerIOTalonFXSteer(
-          config.moduleCAN().steer(),
-          config.moduleCAN().azimuth(),
+          steer,
+          azimuth,
           SwerveConstants.STEER_CONFIG.withAbsoluteEncoderConfig(
-              SwerveConstants.STEER_CONFIG.absoluteEncoderConfig().withOffset(config.offset())),
+              new AbsoluteEncoderConfig().withOffset(offset)),
           false);
 
     return new PositionControllerIOSim();
@@ -44,10 +47,10 @@ public class SwerveFactory {
    *
    * @return a drive motor.
    */
-  public static VelocityControllerIO createDriveMotor(SwerveModuleConfig config) {
+  public static VelocityControllerIO createDriveMotor(CAN drive) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
       return new VelocityControllerIOTalonFXPIDF(
-          config.moduleCAN().drive(), SwerveConstants.DRIVE_CONFIG, false);
+          drive, SwerveConstants.DRIVE_CONFIG, false);
 
     return new VelocityControllerIOSim();
   }

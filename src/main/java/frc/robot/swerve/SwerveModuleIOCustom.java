@@ -34,10 +34,10 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
    * @param config the swerve module's configuration.
    */
   public SwerveModuleIOCustom(SwerveModuleConfig config) {
-    steerMotor = SwerveFactory.createSteerMotor(config);
+    steerMotor = SwerveFactory.createSteerMotor(config.moduleCAN().steer(), config.moduleCAN().azimuth(), config.offset());
     steerMotor.configure();
 
-    driveMotor = SwerveFactory.createDriveMotor(config);
+    driveMotor = SwerveFactory.createDriveMotor(config.moduleCAN().drive());
     driveMotor.configure();
 
     setpoint = new SwerveModuleState();
