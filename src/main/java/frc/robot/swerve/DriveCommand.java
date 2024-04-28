@@ -1,13 +1,12 @@
 package frc.robot.swerve;
 
-import java.util.function.Function;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.odometry.Odometry;
+import java.util.function.Function;
 
 /** Drives the swerve using driver input. */
 public class DriveCommand extends Command {
@@ -22,7 +21,7 @@ public class DriveCommand extends Command {
 
   /** Translation acceleration limiter. */
   private final SlewRateLimiter xAccelerationLimiter;
-  
+
   /** Translation acceleration limiter. */
   private final SlewRateLimiter yAccelerationLimiter;
 
@@ -86,9 +85,13 @@ public class DriveCommand extends Command {
    * @return the clamped chassis speeds.
    */
   private ChassisSpeeds clampChassisSpeeds(ChassisSpeeds desiredChassisSpeeds) {
-    double vxMetersPerSecond = xAccelerationLimiter.calculate(desiredChassisSpeeds.vxMetersPerSecond);
-    double vyMetersPerSecond = yAccelerationLimiter.calculate(desiredChassisSpeeds.vyMetersPerSecond);
-    double omegaRadiansPerSecond = rotationVelocityClamper.apply(Units.radiansToRotations(desiredChassisSpeeds.omegaRadiansPerSecond));
+    double vxMetersPerSecond =
+        xAccelerationLimiter.calculate(desiredChassisSpeeds.vxMetersPerSecond);
+    double vyMetersPerSecond =
+        yAccelerationLimiter.calculate(desiredChassisSpeeds.vyMetersPerSecond);
+    double omegaRadiansPerSecond =
+        rotationVelocityClamper.apply(
+            Units.radiansToRotations(desiredChassisSpeeds.omegaRadiansPerSecond));
 
     return new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
   }

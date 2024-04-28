@@ -28,10 +28,14 @@ public class Swerve extends Subsystem {
   private final SwerveDriveKinematics swerveKinematics;
 
   /** Translation motion profile config. */
-  private final MotionProfileConfig translationMotionProfileConfig = new MotionProfileConfig().withMaximumVelocity(4.5).withMaximumAcceleration(18);
+  private final MotionProfileConfig translationMotionProfileConfig =
+      new MotionProfileConfig()
+        .withMaximumVelocity(4.5) // meters per second
+        .withMaximumAcceleration(18); // meters per second per second
 
   /** Rotation motion profile config. */
-  private final MotionProfileConfig rotationMotionProfileConfig = new MotionProfileConfig().withMaximumVelocity(0.25);
+  private final MotionProfileConfig rotationMotionProfileConfig =
+      new MotionProfileConfig().withMaximumVelocity(0.25); // rotations per second
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
@@ -188,7 +192,7 @@ public class Swerve extends Subsystem {
 
   /**
    * Returns the motion profile config.
-   * 
+   *
    * @return the motion profile config.
    */
   public MotionProfileConfig translationMotionProfileConfig() {
@@ -197,7 +201,7 @@ public class Swerve extends Subsystem {
 
   /**
    * Returns the maximum translation velocity.
-   * 
+   *
    * @return the maximum translation velocity.
    */
   public double maximumTranslationVelocity() {
@@ -206,7 +210,7 @@ public class Swerve extends Subsystem {
 
   /**
    * Returns the maximum translation acceleration.
-   * 
+   *
    * @return the maximum translation acceleration.
    */
   public double maximumTranslationAcceleration() {
@@ -215,7 +219,7 @@ public class Swerve extends Subsystem {
 
   /**
    * Returns the rotation motion profile config.
-   * 
+   *
    * @return the rotation motion profile config.
    */
   public MotionProfileConfig rotationMotionProfileConfig() {
@@ -224,7 +228,7 @@ public class Swerve extends Subsystem {
 
   /**
    * Returns the maximum rotation velocity.
-   * 
+   *
    * @return the maximum rotation velocity.
    */
   public Rotation2d maximumRotationVelocity() {

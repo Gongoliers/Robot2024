@@ -98,7 +98,8 @@ public class Shooter extends Subsystem {
 
     serializerValues = new VelocityControllerIOValues();
 
-    serializerAccelerationLimiter = serializerConfig.motionProfileConfig().createAccelerationLimiter();
+    serializerAccelerationLimiter =
+        serializerConfig.motionProfileConfig().createAccelerationLimiter();
 
     setpoint = ShooterState.IDLING;
     goal = ShooterState.IDLING;

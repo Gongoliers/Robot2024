@@ -75,8 +75,7 @@ public record DriveRequest(
 
     TranslationMode translationMode = TranslationMode.FIELD_CENTRIC;
 
-    Translation2d headingAxis =
-        new Translation2d(-controller.getRightY(), -controller.getRightX());
+    Translation2d headingAxis = new Translation2d(-controller.getRightY(), -controller.getRightX());
 
     RotationMode rotationMode;
 
@@ -94,6 +93,7 @@ public record DriveRequest(
       rotationVelocityAxis = headingAxis.getY();
     }
 
-    return new DriveRequest(translationMode, rotationMode, translationAxis, headingAxis, rotationVelocityAxis);
+    return new DriveRequest(
+        translationMode, rotationMode, translationAxis, headingAxis, rotationVelocityAxis);
   }
 }

@@ -1,11 +1,10 @@
 package frc.lib.config;
 
-import java.util.function.Function;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import java.util.function.Function;
 
 /** Motion profile config. */
 public class MotionProfileConfig {
@@ -70,7 +69,7 @@ public class MotionProfileConfig {
 
   /**
    * Creates a new velocity clamper using this motion profile config.
-   * 
+   *
    * @return a new velocity clamper using this motion profile config.
    */
   public Function<Double, Double> createVelocityClamper() {
