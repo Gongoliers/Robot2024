@@ -1,22 +1,22 @@
-package frc.robot.swerve;
+package frc.lib.controller;
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-/** Swerve module hardware interface. */
+/** Swerve module interface. */
 public interface SwerveModuleIO {
 
   /**
-   * Gets the state of the swerve module.
+   * Returns the swerve module state.
    *
-   * @return the state of the swerve module.
+   * @return the swerve module state.
    */
   public SwerveModuleState getState();
 
   /**
-   * Gets the setpoint of the swerve module.
+   * Returns the swerve module setpoint.
    *
-   * @return the setpoint of the swerve module.
+   * @return the swerve module setpoint.
    */
   public SwerveModuleState getSetpoint();
 
@@ -29,9 +29,9 @@ public interface SwerveModuleIO {
   public void setSetpoint(SwerveModuleState setpoint, boolean lazy);
 
   /**
-   * Gets the position of the swerve module.
+   * Returns the swerve module position.
    *
-   * @return the position of the swerve module.
+   * @return the swerve module position.
    */
   public SwerveModulePosition getPosition();
 }

@@ -8,6 +8,8 @@ import frc.lib.config.AbsoluteEncoderConfig;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIOSim;
 import frc.lib.controller.PositionControllerIOTalonFXSteer;
+import frc.lib.controller.SwerveModuleIO;
+import frc.lib.controller.SwerveModuleIOCustom;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIOSim;
 import frc.lib.controller.VelocityControllerIOTalonFXPIDF;
@@ -102,7 +104,7 @@ public class SwerveFactory {
     return createModule(
         new CAN(10, "swerve"),
         new CAN(20, "swerve"),
-        new CAN(28, "drive"),
+        new CAN(28, "swerve"),
         Rotation2d.fromRotations(0.223145).unaryMinus());
   }
 

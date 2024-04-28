@@ -1,15 +1,14 @@
-package frc.robot.swerve;
+package frc.lib.controller;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
-import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 import frc.robot.swerve.SwerveConstants.MK4iConstants;
+import frc.robot.swerve.SwerveFactory;
 
 /** Custom swerve module. */
 public class SwerveModuleIOCustom implements SwerveModuleIO {
@@ -65,7 +64,7 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   }
 
   /**
-   * Optimizes a swerve module's setpoint.
+   * Optimizes a swerve module setpoint.
    *
    * @param setpoint the setpoint to optimize.
    * @param state the state of the module.

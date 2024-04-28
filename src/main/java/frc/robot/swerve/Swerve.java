@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.controller.SwerveModuleIO;
 import frc.robot.RobotConstants;
 
 /** Swerve subsystem. */
