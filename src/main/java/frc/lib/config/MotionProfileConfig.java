@@ -1,5 +1,8 @@
 package frc.lib.config;
 
+import java.util.function.Function;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -66,11 +69,20 @@ public class MotionProfileConfig {
   }
 
   /**
-   * Creates a new rate limiter using this motion profile config.
-   *
-   * @return a new rate limiter using this motion profile config.
+   * Creates a new velocity clamper using this motion profile config.
+   * 
+   * @return a new velocity clamper using this motion profile config.
    */
-  public SlewRateLimiter createRateLimiter() {
+  public Function<Double, Double> createVelocityClamper() {
+    return velocity -> MathUtil.clamp(velocity, -maximumVelocity, maximumVelocity);
+  }
+
+  /**
+   * Creates a new acceleration limiter using this motion profile config.
+   *
+   * @return a new acceleration limiter using this motion profile config.
+   */
+  public SlewRateLimiter createAccelerationLimiter() {
     return new SlewRateLimiter(maximumAcceleration);
   }
 

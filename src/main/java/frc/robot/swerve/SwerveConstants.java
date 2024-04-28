@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
@@ -24,21 +23,6 @@ public class SwerveConstants {
     /** Conversion between wheel rotations and distances in meters. */
     public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
   }
-
-  /** Module X offset in meters. */
-  public static final double X_OFFSET = Units.inchesToMeters(10.375);
-
-  /** Module Y offset in meters. */
-  public static final double Y_OFFSET = Units.inchesToMeters(10.375);
-
-  /** Maximum speed in meters per second. */
-  public static final double MAXIMUM_SPEED = 4.5;
-
-  /** Maximum acceleration in meters per second per second. */
-  public static final double MAXIMUM_ACCELERATION = 18;
-
-  /** Maximum rotational speed. */
-  public static final Rotation2d MAXIMUM_ROTATION_SPEED = Rotation2d.fromRotations(0.25);
 
   /** Drive motor config. */
   public static final MechanismConfig DRIVE_CONFIG =

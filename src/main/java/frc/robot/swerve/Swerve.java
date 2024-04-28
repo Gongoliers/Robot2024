@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.config.MotionProfileConfig;
 import frc.lib.controller.SwerveModuleIO;
 import frc.robot.RobotConstants;
 
@@ -25,6 +26,12 @@ public class Swerve extends Subsystem {
 
   /** Swerve kinematics. */
   private final SwerveDriveKinematics swerveKinematics;
+
+  /** Translation motion profile config. */
+  private final MotionProfileConfig translationMotionProfileConfig = new MotionProfileConfig().withMaximumVelocity(4.5).withMaximumAcceleration(18);
+
+  /** Rotation motion profile config. */
+  private final MotionProfileConfig rotationMotionProfileConfig = new MotionProfileConfig().withMaximumVelocity(0.25);
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
@@ -61,15 +68,15 @@ public class Swerve extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     ShuffleboardLayout translationConstants = Telemetry.addColumn(tab, "Translation Constants");
 
-    translationConstants.addDouble("Maximum Velocity (mps)", () -> SwerveConstants.MAXIMUM_SPEED);
+    translationConstants.addDouble("Maximum Velocity (mps)", this::maximumTranslationVelocity);
     translationConstants.addDouble(
-        "Maximum Accleration (mpsps)", () -> SwerveConstants.MAXIMUM_ACCELERATION);
+        "Maximum Accleration (mpsps)", this::maximumTranslationAcceleration);
     translationConstants.addDouble(
         "Wheel Circumference (m)", () -> SwerveConstants.MK4iConstants.WHEEL_CIRCUMFERENCE);
 
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
     rotationConstants.addDouble(
-        "Maximum Velocity (rps)", () -> SwerveConstants.MAXIMUM_ROTATION_SPEED.getRotations());
+        "Maximum Velocity (rps)", () -> maximumRotationVelocity().getRotations());
 
     Telemetry.addSwerveModuleStates(tab, "Swerve Module States", this::getModuleStates);
     Telemetry.addSwerveModuleStates(tab, "Swerve Module Setpoints", this::getModuleSetpoints);
@@ -172,11 +179,56 @@ public class Swerve extends Subsystem {
    * @param lazy if true, optimize the module setpoints.
    */
   public void setSetpoints(SwerveModuleState[] setpoints, boolean lazy) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpoints, SwerveConstants.MAXIMUM_SPEED);
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpoints, maximumTranslationVelocity());
 
     for (int i = 0; i < 4; i++) {
       swerveModules[i].setSetpoint(setpoints[i], lazy);
     }
+  }
+
+  /**
+   * Returns the motion profile config.
+   * 
+   * @return the motion profile config.
+   */
+  public MotionProfileConfig translationMotionProfileConfig() {
+    return translationMotionProfileConfig;
+  }
+
+  /**
+   * Returns the maximum translation velocity.
+   * 
+   * @return the maximum translation velocity.
+   */
+  public double maximumTranslationVelocity() {
+    return translationMotionProfileConfig.maximumVelocity();
+  }
+
+  /**
+   * Returns the maximum translation acceleration.
+   * 
+   * @return the maximum translation acceleration.
+   */
+  public double maximumTranslationAcceleration() {
+    return translationMotionProfileConfig.maximumAcceleration();
+  }
+
+  /**
+   * Returns the rotation motion profile config.
+   * 
+   * @return the rotation motion profile config.
+   */
+  public MotionProfileConfig rotationMotionProfileConfig() {
+    return rotationMotionProfileConfig;
+  }
+
+  /**
+   * Returns the maximum rotation velocity.
+   * 
+   * @return the maximum rotation velocity.
+   */
+  public Rotation2d maximumRotationVelocity() {
+    return Rotation2d.fromRotations(rotationMotionProfileConfig.maximumVelocity());
   }
 
   /**

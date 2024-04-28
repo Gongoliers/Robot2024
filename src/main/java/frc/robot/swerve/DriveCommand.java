@@ -1,10 +1,12 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.MathUtil;
+import java.util.function.Function;
+
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
 
 /** Drives the swerve using driver input. */
@@ -18,8 +20,14 @@ public class DriveCommand extends Command {
   /** Controller used to get driver input. */
   private final CommandXboxController driverController;
 
-  /** Previous requested chassis speed. */
-  private ChassisSpeeds previousChassisSpeeds;
+  /** Translation acceleration limiter. */
+  private final SlewRateLimiter xAccelerationLimiter;
+  
+  /** Translation acceleration limiter. */
+  private final SlewRateLimiter yAccelerationLimiter;
+
+  /** Rotation velocity clamper. */
+  private final Function<Double, Double> rotationVelocityClamper;
 
   /** Request from the driver controller. */
   private DriveRequest request;
@@ -37,7 +45,10 @@ public class DriveCommand extends Command {
 
     addRequirements(swerve);
 
-    previousChassisSpeeds = new ChassisSpeeds();
+    xAccelerationLimiter = swerve.translationMotionProfileConfig().createAccelerationLimiter();
+    yAccelerationLimiter = swerve.translationMotionProfileConfig().createAccelerationLimiter();
+
+    rotationVelocityClamper = swerve.rotationMotionProfileConfig().createVelocityClamper();
 
     request = DriveRequest.fromController(driverController);
   }
@@ -52,14 +63,12 @@ public class DriveCommand extends Command {
     final ChassisSpeeds chassisSpeeds =
         clampChassisSpeeds(
             ChassisSpeeds.fromFieldRelativeSpeeds(
-                request.velocity().getX(),
-                request.velocity().getY(),
-                request.omega().getRadians(),
+                request.translationAxis().getX() * swerve.maximumTranslationVelocity(),
+                request.translationAxis().getY() * swerve.maximumTranslationVelocity(),
+                swerve.maximumRotationVelocity().times(request.rotationVelocityAxis()).getRadians(),
                 odometry.getDriverRelativeHeading()));
 
     swerve.setChassisSpeeds(chassisSpeeds);
-
-    previousChassisSpeeds = chassisSpeeds;
   }
 
   @Override
@@ -77,27 +86,9 @@ public class DriveCommand extends Command {
    * @return the clamped chassis speeds.
    */
   private ChassisSpeeds clampChassisSpeeds(ChassisSpeeds desiredChassisSpeeds) {
-    double vxMetersPerSecond =
-        MathUtil.clamp(
-            desiredChassisSpeeds.vxMetersPerSecond,
-            previousChassisSpeeds.vxMetersPerSecond
-                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
-            previousChassisSpeeds.vxMetersPerSecond
-                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
-
-    double vyMetersPerSecond =
-        MathUtil.clamp(
-            desiredChassisSpeeds.vyMetersPerSecond,
-            previousChassisSpeeds.vyMetersPerSecond
-                - SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION,
-            previousChassisSpeeds.vyMetersPerSecond
-                + SwerveConstants.MAXIMUM_ACCELERATION * RobotConstants.PERIODIC_DURATION);
-
-    double omegaRadiansPerSecond =
-        MathUtil.clamp(
-            desiredChassisSpeeds.omegaRadiansPerSecond,
-            -SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians(),
-            SwerveConstants.MAXIMUM_ROTATION_SPEED.getRadians());
+    double vxMetersPerSecond = xAccelerationLimiter.calculate(desiredChassisSpeeds.vxMetersPerSecond);
+    double vyMetersPerSecond = yAccelerationLimiter.calculate(desiredChassisSpeeds.vyMetersPerSecond);
+    double omegaRadiansPerSecond = rotationVelocityClamper.apply(Units.radiansToRotations(desiredChassisSpeeds.omegaRadiansPerSecond));
 
     return new ChassisSpeeds(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
   }

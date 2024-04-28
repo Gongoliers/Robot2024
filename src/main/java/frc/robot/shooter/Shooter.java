@@ -91,14 +91,14 @@ public class Shooter extends Subsystem {
 
     flywheelValues = new VelocityControllerIOValues();
 
-    flywheelAccelerationLimiter = flywheelConfig.motionProfileConfig().createRateLimiter();
+    flywheelAccelerationLimiter = flywheelConfig.motionProfileConfig().createAccelerationLimiter();
 
     serializer = ShooterFactory.createSerializer(serializerConfig);
     serializer.configure();
 
     serializerValues = new VelocityControllerIOValues();
 
-    serializerAccelerationLimiter = serializerConfig.motionProfileConfig().createRateLimiter();
+    serializerAccelerationLimiter = serializerConfig.motionProfileConfig().createAccelerationLimiter();
 
     setpoint = ShooterState.IDLING;
     goal = ShooterState.IDLING;

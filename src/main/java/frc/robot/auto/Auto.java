@@ -14,7 +14,6 @@ import frc.lib.Telemetry;
 import frc.robot.odometry.Odometry;
 import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
-import frc.robot.swerve.SwerveConstants;
 import frc.robot.swerve.SwerveFactory;
 
 /** Auto subsystem. */
@@ -49,7 +48,7 @@ public class Auto extends Subsystem {
         new HolonomicPathFollowerConfig(
             new PIDConstants(1.0),
             new PIDConstants(1.0),
-            SwerveConstants.MAXIMUM_SPEED,
+            swerve.maximumTranslationVelocity(),
             SwerveFactory.createNorthEastModuleTranslation().getNorm(), // TODO
             new ReplanningConfig()),
         AllianceFlipHelper::shouldFlip,

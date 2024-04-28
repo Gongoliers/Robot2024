@@ -10,7 +10,8 @@ public record DriveRequest(
     DriveRequest.TranslationMode translationMode,
     DriveRequest.RotationMode rotationMode,
     Translation2d translationAxis,
-    Translation2d rotationAxis) {
+    Translation2d headingAxis,
+    double rotationVelocityAxis) {
 
   /** Translation mode. */
   private enum TranslationMode {
@@ -33,16 +34,16 @@ public record DriveRequest(
   /**
    * Returns true if no rotation is requested.
    *
-   * @param heading the heading axis.
+   * @param headingAxis the heading axis.
    * @param aligning true if aligning is requested.
-   * @return
+   * @return true if no rotation is requested.
    */
-  private static boolean isDrifting(Translation2d heading, boolean aligning) {
+  private static boolean isDrifting(Translation2d headingAxis, boolean aligning) {
     if (aligning) {
-      return heading.getNorm() < 0.7;
+      return headingAxis.getNorm() < 0.7;
     }
 
-    return Math.abs(heading.getY()) < 0.1;
+    return Math.abs(headingAxis.getY()) < 0.1;
   }
 
   /**
@@ -70,16 +71,16 @@ public record DriveRequest(
       translationMagnitude *= 0.25;
     }
 
-    Translation2d translationVector = new Translation2d(translationMagnitude, translationDirection);
+    Translation2d translationAxis = new Translation2d(translationMagnitude, translationDirection);
 
     TranslationMode translationMode = TranslationMode.FIELD_CENTRIC;
 
-    Translation2d rotationVector =
+    Translation2d headingAxis =
         new Translation2d(-controller.getRightY(), -controller.getRightX());
 
     RotationMode rotationMode;
 
-    if (isDrifting(rotationVector, aligningRequested)) {
+    if (isDrifting(headingAxis, aligningRequested)) {
       rotationMode = RotationMode.DRIFTING;
     } else if (aligningRequested) {
       rotationMode = RotationMode.ALIGNING;
@@ -87,26 +88,12 @@ public record DriveRequest(
       rotationMode = RotationMode.SPINNING;
     }
 
-    return new DriveRequest(translationMode, rotationMode, translationVector, rotationVector);
-  }
+    double rotationVelocityAxis = 0.0;
 
-  /**
-   * Returns the requested translation velocity in meters per second.
-   *
-   * @return the requested translation velocity in meters per second.
-   */
-  public Translation2d velocity() {
-    return translationAxis.times(SwerveConstants.MAXIMUM_SPEED);
-  }
+    if (rotationMode == RotationMode.SPINNING) {
+      rotationVelocityAxis = headingAxis.getY();
+    }
 
-  /**
-   * Returns the requested rotation velocity.
-   *
-   * @return the requested rotation velocity.
-   */
-  public Rotation2d omega() {
-    if (Math.abs(rotationAxis.getY()) < 0.1) return new Rotation2d();
-
-    return SwerveConstants.MAXIMUM_ROTATION_SPEED.times(rotationAxis.getY());
+    return new DriveRequest(translationMode, rotationMode, translationAxis, headingAxis, rotationVelocityAxis);
   }
 }
