@@ -1,7 +1,6 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.config.FeedbackControllerConfig;
 import frc.lib.config.FeedforwardControllerConfig;
@@ -31,37 +30,6 @@ public class SwerveConstants {
 
   /** Module Y offset in meters. */
   public static final double Y_OFFSET = Units.inchesToMeters(10.375);
-
-  /** Swerve's CAN bus. */
-  public static final String SWERVE_BUS = "swerve";
-
-  /** Module configuration for the north west swerve module. */
-  public static final SwerveModuleConfig NORTH_WEST_MODULE_CONFIG =
-      new SwerveModuleConfig(
-          new SwerveModuleCAN(16, 8, 24, SWERVE_BUS),
-          new Translation2d(X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.084717).unaryMinus());
-
-  /** Module configuration for the north east swerve module. */
-  public static final SwerveModuleConfig NORTH_EAST_MODULE_CONFIG =
-      new SwerveModuleConfig(
-          new SwerveModuleCAN(18, 16, 30, SWERVE_BUS),
-          new Translation2d(X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.196777).unaryMinus());
-
-  /** Module configuration for the south east swerve module. */
-  public static final SwerveModuleConfig SOUTH_EAST_MODULE_CONFIG =
-      new SwerveModuleConfig(
-          new SwerveModuleCAN(22, 12, 26, SWERVE_BUS),
-          new Translation2d(-X_OFFSET, -Y_OFFSET),
-          Rotation2d.fromRotations(0.276611).unaryMinus());
-
-  /** Module configuration for the south west swerve module. */
-  public static final SwerveModuleConfig SOUTH_WEST_MODULE_CONFIG =
-      new SwerveModuleConfig(
-          new SwerveModuleCAN(20, 10, 28, SWERVE_BUS),
-          new Translation2d(-X_OFFSET, Y_OFFSET),
-          Rotation2d.fromRotations(-0.276855).plus(Rotation2d.fromDegrees(180)).unaryMinus());
 
   /** Maximum speed in meters per second. */
   public static final double MAXIMUM_SPEED = 4.5;

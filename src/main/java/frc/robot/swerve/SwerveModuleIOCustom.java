@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import frc.lib.CAN;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.lib.controller.VelocityControllerIO;
@@ -28,16 +29,11 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
   /** Module setpoint */
   private SwerveModuleState setpoint;
 
-  /**
-   * Creates a custom swerve module.
-   *
-   * @param config the swerve module's configuration.
-   */
-  public SwerveModuleIOCustom(SwerveModuleConfig config) {
-    steerMotor = SwerveFactory.createSteerMotor(config.moduleCAN().steer(), config.moduleCAN().azimuth(), config.offset());
+  public SwerveModuleIOCustom(CAN steer, CAN azimuth, CAN drive, Rotation2d offset) {
+    steerMotor = SwerveFactory.createSteerMotor(steer, azimuth, offset);
     steerMotor.configure();
 
-    driveMotor = SwerveFactory.createDriveMotor(config.moduleCAN().drive());
+    driveMotor = SwerveFactory.createDriveMotor(drive);
     driveMotor.configure();
 
     setpoint = new SwerveModuleState();

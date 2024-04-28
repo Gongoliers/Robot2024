@@ -15,6 +15,7 @@ import frc.robot.odometry.Odometry;
 import frc.robot.superstructure.Superstructure;
 import frc.robot.swerve.Swerve;
 import frc.robot.swerve.SwerveConstants;
+import frc.robot.swerve.SwerveFactory;
 
 /** Auto subsystem. */
 public class Auto extends Subsystem {
@@ -49,7 +50,7 @@ public class Auto extends Subsystem {
             new PIDConstants(1.0),
             new PIDConstants(1.0),
             SwerveConstants.MAXIMUM_SPEED,
-            SwerveConstants.NORTH_EAST_MODULE_CONFIG.position().getNorm(),
+            SwerveFactory.createNorthEastModuleTranslation().getNorm(), // TODO
             new ReplanningConfig()),
         AllianceFlipHelper::shouldFlip,
         swerve);

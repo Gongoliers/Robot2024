@@ -27,17 +27,17 @@ public class Swerve extends Subsystem {
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
-    swerveModules[0] = SwerveFactory.createModule(SwerveConstants.NORTH_WEST_MODULE_CONFIG);
-    swerveModules[1] = SwerveFactory.createModule(SwerveConstants.NORTH_EAST_MODULE_CONFIG);
-    swerveModules[2] = SwerveFactory.createModule(SwerveConstants.SOUTH_EAST_MODULE_CONFIG);
-    swerveModules[3] = SwerveFactory.createModule(SwerveConstants.SOUTH_WEST_MODULE_CONFIG);
+    swerveModules[0] = SwerveFactory.createNorthWestModule();
+    swerveModules[1] = SwerveFactory.createNorthEastModule();
+    swerveModules[2] = SwerveFactory.createSouthEastModule();
+    swerveModules[3] = SwerveFactory.createSouthWestModule();
 
     swerveKinematics =
         new SwerveDriveKinematics(
-            SwerveConstants.NORTH_WEST_MODULE_CONFIG.position(),
-            SwerveConstants.NORTH_EAST_MODULE_CONFIG.position(),
-            SwerveConstants.SOUTH_EAST_MODULE_CONFIG.position(),
-            SwerveConstants.SOUTH_WEST_MODULE_CONFIG.position());
+            SwerveFactory.createNorthWestModuleTranslation(),
+            SwerveFactory.createNorthEastModuleTranslation(),
+            SwerveFactory.createSouthEastModuleTranslation(),
+            SwerveFactory.createSouthWestModuleTranslation());
   }
 
   /**
