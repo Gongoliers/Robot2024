@@ -1,7 +1,5 @@
 package frc.robot.swerve;
 
-import java.util.function.Function;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -16,10 +14,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.DriveRequest;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
+import frc.lib.config.FeedbackControllerConfig;
+import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.MechanismConfig;
 import frc.lib.config.MotionProfileConfig;
+import frc.lib.config.MotorConfig;
 import frc.lib.controller.SwerveModuleIO;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
+import java.util.function.Function;
 
 /** Swerve subsystem. */
 public class Swerve extends Subsystem {
@@ -33,23 +36,59 @@ public class Swerve extends Subsystem {
   /** Swerve kinematics. */
   private final SwerveDriveKinematics swerveKinematics;
 
+  /** Steer motor config. */
+  private final MechanismConfig steerConfig =
+      new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withCurrentLimit(20)
+                  .withMotorToMechanismRatio(150.0 / 7.0))
+          .withFeedforwardConfig(
+              new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
+              )
+          .withFeedbackConfig(
+              new FeedbackControllerConfig()
+                  .withContinuousInput(true)
+                  .withProportionalGain(54.0) // volts per rotation
+                  .withDerivativeGain(0.16) // volts per rotation per second
+                  .withPositionTolerance(Units.degreesToRotations(1)) // rotations
+              );
+
+  /** Drive motor config. */
+  private final MechanismConfig driveConfig =
+      new MechanismConfig()
+          .withMotorConfig(
+              new MotorConfig()
+                  .withCCWPositive(false)
+                  .withCurrentLimit(40)
+                  .withMotorToMechanismRatio(6.75))
+          .withFeedforwardConfig(
+              new FeedforwardControllerConfig()
+                  .withStaticFeedforward(0.14) // volts
+                  .withVelocityFeedforward(0.725) // volts per rotation per second
+              )
+          .withFeedbackConfig(
+              new FeedbackControllerConfig()
+                  .withProportionalGain(0.75) // volts per rotation per second
+              );
+
   /** Translation motion profile config. */
   private final MotionProfileConfig translationMotionProfileConfig =
       new MotionProfileConfig()
-        .withMaximumVelocity(4.5) // meters per second
-        .withMaximumAcceleration(18); // meters per second per second
+          .withMaximumVelocity(4.5) // meters per second
+          .withMaximumAcceleration(18); // meters per second per second
 
   /** Rotation motion profile config. */
-  // TODO Verify
   private final MotionProfileConfig rotationMotionProfileConfig =
       new MotionProfileConfig().withMaximumVelocity(1); // rotations per second
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {
-    swerveModules[0] = SwerveFactory.createNorthWestModule();
-    swerveModules[1] = SwerveFactory.createNorthEastModule();
-    swerveModules[2] = SwerveFactory.createSouthEastModule();
-    swerveModules[3] = SwerveFactory.createSouthWestModule();
+    swerveModules[0] = SwerveFactory.createNorthWestModule(steerConfig, driveConfig);
+    swerveModules[1] = SwerveFactory.createNorthEastModule(steerConfig, driveConfig);
+    swerveModules[2] = SwerveFactory.createSouthEastModule(steerConfig, driveConfig);
+    swerveModules[3] = SwerveFactory.createSouthWestModule(steerConfig, driveConfig);
 
     swerveKinematics =
         new SwerveDriveKinematics(
@@ -82,8 +121,6 @@ public class Swerve extends Subsystem {
     translationConstants.addDouble("Maximum Velocity (mps)", this::maximumTranslationVelocity);
     translationConstants.addDouble(
         "Maximum Accleration (mpsps)", this::maximumTranslationAcceleration);
-    translationConstants.addDouble(
-        "Wheel Circumference (m)", () -> SwerveConstants.MK4iConstants.WHEEL_CIRCUMFERENCE);
 
     ShuffleboardLayout rotationConstants = Telemetry.addColumn(tab, "Rotation Constants");
     rotationConstants.addDouble(
@@ -249,30 +286,40 @@ public class Swerve extends Subsystem {
    * @return a command that drives the swerve using an Xbox controller.
    */
   public Command teleopDrive(CommandXboxController controller) {
-    final SlewRateLimiter xAccelerationLimiter = translationMotionProfileConfig.createAccelerationLimiter();
-    final SlewRateLimiter yAccelerationLimiter = translationMotionProfileConfig.createAccelerationLimiter();
+    final SlewRateLimiter xAccelerationLimiter =
+        translationMotionProfileConfig.createAccelerationLimiter();
+    final SlewRateLimiter yAccelerationLimiter =
+        translationMotionProfileConfig.createAccelerationLimiter();
 
-    final Function<Double, Double> rotationVelocityLimiter = rotationMotionProfileConfig.createVelocityClamper();
+    final Function<Double, Double> rotationVelocityLimiter =
+        rotationMotionProfileConfig.createVelocityClamper();
 
-    final Function<ChassisSpeeds, ChassisSpeeds> chassisSpeedsLimiter = chassisSpeeds -> {
-      return new ChassisSpeeds(
-        xAccelerationLimiter.calculate(chassisSpeeds.vxMetersPerSecond),
-        yAccelerationLimiter.calculate(chassisSpeeds.vyMetersPerSecond),
-        Units.rotationsToRadians(rotationVelocityLimiter.apply(Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond)))
-      );
-    };
+    final Function<ChassisSpeeds, ChassisSpeeds> chassisSpeedsLimiter =
+        chassisSpeeds -> {
+          return new ChassisSpeeds(
+              xAccelerationLimiter.calculate(chassisSpeeds.vxMetersPerSecond),
+              yAccelerationLimiter.calculate(chassisSpeeds.vyMetersPerSecond),
+              Units.rotationsToRadians(
+                  rotationVelocityLimiter.apply(
+                      Units.radiansToRotations(chassisSpeeds.omegaRadiansPerSecond))));
+        };
 
-    final Function<DriveRequest, ChassisSpeeds> chassisSpeedsGetter = request -> {
-      return ChassisSpeeds.fromFieldRelativeSpeeds(
-          request.translationAxis().getX() * translationMotionProfileConfig.maximumVelocity(),
-          request.translationAxis().getY() * translationMotionProfileConfig.maximumVelocity(),
-          request.rotationVelocityAxis() * Units.rotationsToRadians(rotationMotionProfileConfig.maximumVelocity()),
-          Odometry.getInstance().getDriverRelativeHeading());
-    };
+    final Function<DriveRequest, ChassisSpeeds> chassisSpeedsGetter =
+        request -> {
+          return ChassisSpeeds.fromFieldRelativeSpeeds(
+              request.translationAxis().getX() * translationMotionProfileConfig.maximumVelocity(),
+              request.translationAxis().getY() * translationMotionProfileConfig.maximumVelocity(),
+              request.rotationVelocityAxis()
+                  * Units.rotationsToRadians(rotationMotionProfileConfig.maximumVelocity()),
+              Odometry.getInstance().getDriverRelativeHeading());
+        };
 
-    return run(() -> {
-      setChassisSpeeds(chassisSpeedsLimiter.apply(chassisSpeedsGetter.apply(DriveRequest.fromController(controller))));
-    });
+    return run(
+        () -> {
+          setChassisSpeeds(
+              chassisSpeedsLimiter.apply(
+                  chassisSpeedsGetter.apply(DriveRequest.fromController(controller))));
+        });
   }
 
   /**

@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
 import frc.lib.config.AbsoluteEncoderConfig;
+import frc.lib.config.MechanismConfig;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIOSim;
 import frc.lib.controller.PositionControllerIOTalonFXSteer;
@@ -25,8 +26,9 @@ public class SwerveFactory {
    *
    * @return a swerve module.
    */
-  private static SwerveModuleIO createModule(CAN steer, CAN azimuth, CAN drive, Rotation2d offset) {
-    return new SwerveModuleIOCustom(steer, azimuth, drive, offset);
+  private static SwerveModuleIO createModule(
+      CAN steer, CAN azimuth, CAN drive, MechanismConfig steerConfig, MechanismConfig driveConfig) {
+    return new SwerveModuleIOCustom(steer, azimuth, drive, steerConfig, driveConfig);
   }
 
   /**
@@ -34,12 +36,16 @@ public class SwerveFactory {
    *
    * @return the north west swerve module.
    */
-  public static SwerveModuleIO createNorthWestModule() {
+  public static SwerveModuleIO createNorthWestModule(
+      MechanismConfig steerConfig, MechanismConfig driveConfig) {
     return createModule(
         new CAN(8, "swerve"),
         new CAN(16, "swerve"),
         new CAN(24, "swerve"),
-        Rotation2d.fromRotations(-0.084717).unaryMinus());
+        steerConfig.withAbsoluteEncoderConfig(
+            new AbsoluteEncoderConfig()
+                .withOffset(Rotation2d.fromRotations(-0.084717).unaryMinus())),
+        driveConfig);
   }
 
   /**
@@ -56,12 +62,16 @@ public class SwerveFactory {
    *
    * @return the north east swerve module.
    */
-  public static SwerveModuleIO createNorthEastModule() {
+  public static SwerveModuleIO createNorthEastModule(
+      MechanismConfig steerConfig, MechanismConfig driveConfig) {
     return createModule(
         new CAN(16, "swerve"),
         new CAN(18, "swerve"),
         new CAN(30, "swerve"),
-        Rotation2d.fromRotations(0.196777).unaryMinus());
+        steerConfig.withAbsoluteEncoderConfig(
+            new AbsoluteEncoderConfig()
+                .withOffset(Rotation2d.fromRotations(0.196777).unaryMinus())),
+        driveConfig);
   }
 
   /**
@@ -78,12 +88,16 @@ public class SwerveFactory {
    *
    * @return the south east swerve module.
    */
-  public static SwerveModuleIO createSouthEastModule() {
+  public static SwerveModuleIO createSouthEastModule(
+      MechanismConfig steerConfig, MechanismConfig driveConfig) {
     return createModule(
         new CAN(12, "swerve"),
         new CAN(22, "swerve"),
         new CAN(26, "swerve"),
-        Rotation2d.fromRotations(0.276611).unaryMinus());
+        steerConfig.withAbsoluteEncoderConfig(
+            new AbsoluteEncoderConfig()
+                .withOffset(Rotation2d.fromRotations(0.276611).unaryMinus())),
+        driveConfig);
   }
 
   /**
@@ -100,12 +114,16 @@ public class SwerveFactory {
    *
    * @return the south west swerve module.
    */
-  public static SwerveModuleIO createSouthWestModule() {
+  public static SwerveModuleIO createSouthWestModule(
+      MechanismConfig steerConfig, MechanismConfig driveConfig) {
     return createModule(
         new CAN(10, "swerve"),
         new CAN(20, "swerve"),
         new CAN(28, "swerve"),
-        Rotation2d.fromRotations(0.223145).unaryMinus());
+        steerConfig.withAbsoluteEncoderConfig(
+            new AbsoluteEncoderConfig()
+                .withOffset(Rotation2d.fromRotations(0.223145).unaryMinus())),
+        driveConfig);
   }
 
   /**
@@ -122,14 +140,10 @@ public class SwerveFactory {
    *
    * @return a steer motor.
    */
-  public static PositionControllerIO createSteerMotor(CAN steer, CAN azimuth, Rotation2d offset) {
+  public static PositionControllerIO createSteerMotor(
+      CAN steer, CAN azimuth, MechanismConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
-      return new PositionControllerIOTalonFXSteer(
-          steer,
-          azimuth,
-          SwerveConstants.STEER_CONFIG.withAbsoluteEncoderConfig(
-              new AbsoluteEncoderConfig().withOffset(offset)),
-          false);
+      return new PositionControllerIOTalonFXSteer(steer, azimuth, config, false);
 
     return new PositionControllerIOSim();
   }
@@ -139,9 +153,9 @@ public class SwerveFactory {
    *
    * @return a drive motor.
    */
-  public static VelocityControllerIO createDriveMotor(CAN drive) {
+  public static VelocityControllerIO createDriveMotor(CAN drive, MechanismConfig config) {
     if (Robot.isReal() && RobotConstants.REAL_SUBSYSTEMS.contains(Subsystem.SWERVE))
-      return new VelocityControllerIOTalonFXPIDF(drive, SwerveConstants.DRIVE_CONFIG, false);
+      return new VelocityControllerIOTalonFXPIDF(drive, config, false);
 
     return new VelocityControllerIOSim();
   }
