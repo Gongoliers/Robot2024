@@ -125,8 +125,8 @@ public class Arm extends Subsystem {
 
     Telemetry.addColumn(tab, "Setpoint")
         .addDouble(
-            "Setpoint (deg)",
-            () -> Units.rotationsToDegrees(setpoint.shoulderRotations().position));
+            "Setpoint (rot)",
+            () -> setpoint.shoulderRotations().position);
   }
 
   /**
