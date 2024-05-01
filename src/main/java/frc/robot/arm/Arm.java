@@ -124,9 +124,7 @@ public class Arm extends Subsystem {
     PositionControllerIO.addToShuffleboard(tab, "Shoulder", shoulderValues);
 
     Telemetry.addColumn(tab, "Setpoint")
-        .addDouble(
-            "Setpoint (rot)",
-            () -> setpoint.shoulderRotations().position);
+        .addDouble("Setpoint (rot)", () -> setpoint.shoulderRotations().position);
   }
 
   /**
