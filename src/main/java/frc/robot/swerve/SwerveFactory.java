@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.config.AbsoluteEncoderConfig.AbsoluteEncoderConfigBuilder;
 import frc.lib.config.MechanismConfig;
 import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
 import frc.lib.controller.PositionControllerIO;
@@ -53,8 +52,8 @@ public class SwerveFactory {
         new CAN(24, "swerve"),
         MechanismConfigBuilder.from(steerConfig)
             .absoluteEncoderConfig(
-                AbsoluteEncoderConfigBuilder.defaults()
-                    .offset(Rotation2d.fromRotations(-0.084716).unaryMinus()))
+                absoluteEncoderConfig ->
+                    absoluteEncoderConfig.offset(Rotation2d.fromRotations(-0.084716).unaryMinus()))
             .build(),
         driveConfig,
         wheelCircumference);
@@ -82,8 +81,8 @@ public class SwerveFactory {
         new CAN(30, "swerve"),
         MechanismConfigBuilder.from(steerConfig)
             .absoluteEncoderConfig(
-                AbsoluteEncoderConfigBuilder.defaults()
-                    .offset(Rotation2d.fromRotations(0.196777).unaryMinus()))
+                absoluteEncoderConfig ->
+                    absoluteEncoderConfig.offset(Rotation2d.fromRotations(0.196777).unaryMinus()))
             .build(),
         driveConfig,
         wheelCircumference);
@@ -111,8 +110,8 @@ public class SwerveFactory {
         new CAN(26, "swerve"),
         MechanismConfigBuilder.from(steerConfig)
             .absoluteEncoderConfig(
-                AbsoluteEncoderConfigBuilder.defaults()
-                    .offset(Rotation2d.fromRotations(0.276611).unaryMinus()))
+                absoluteEncoderConfig ->
+                    absoluteEncoderConfig.offset(Rotation2d.fromRotations(0.276611).unaryMinus()))
             .build(),
         driveConfig,
         wheelCircumference);
@@ -140,8 +139,8 @@ public class SwerveFactory {
         new CAN(28, "swerve"),
         MechanismConfigBuilder.from(steerConfig)
             .absoluteEncoderConfig(
-                AbsoluteEncoderConfigBuilder.defaults()
-                    .offset(Rotation2d.fromRotations(0.223145).unaryMinus()))
+                absoluteEncoderConfig ->
+                    absoluteEncoderConfig.offset(Rotation2d.fromRotations(0.223145).unaryMinus()))
             .build(),
         driveConfig,
         wheelCircumference);

@@ -14,13 +14,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.DriveRequest;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
-import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
 import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
 import frc.lib.config.MotionProfileConfig;
 import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
-import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.SwerveModuleIO;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
@@ -42,30 +39,25 @@ public class Swerve extends Subsystem {
   private final MechanismConfig steerConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(false)
-                  .currentLimitAmps(20)
-                  .motorToMechanismRatio(150.0 / 7.0))
-          .feedforwardControllerConfig(FeedforwardControllerConfigBuilder.defaults().kS(0.205))
+              motor ->
+                  motor.ccwPositive(false).currentLimitAmps(20).motorToMechanismRatio(150.0 / 7.0))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.205))
           .feedbackControllerConfig(
-              FeedbackControllerConfigBuilder.defaults()
-                  .continuous(true)
-                  .kP(54.0)
-                  .kD(0.16)
-                  .positionTolerance(Units.degreesToRotations(1.0)))
+              feedback ->
+                  feedback
+                      .continuous(true)
+                      .kP(54.0)
+                      .kD(0.16)
+                      .positionTolerance(Units.degreesToRotations(1.0)))
           .build();
 
   /** Drive motor config. */
   private final MechanismConfig driveConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(false)
-                  .currentLimitAmps(40.0)
-                  .motorToMechanismRatio(6.75))
-          .feedforwardControllerConfig(
-              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kV(0.725))
-          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(0.75))
+              motor -> motor.ccwPositive(false).currentLimitAmps(40.0).motorToMechanismRatio(6.75))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kV(0.725))
+          .feedbackControllerConfig(feedback -> feedback.kP(0.75))
           .build();
 
   /** Wheel circumference. */

@@ -4,12 +4,8 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
-import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
-import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
 import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
-import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
-import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 
@@ -23,15 +19,12 @@ public class Shooter extends Subsystem {
   private final MechanismConfig flywheelConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(false)
-                  .neutralBrake(true)
-                  .motorToMechanismRatio(28.0 / 16.0))
+              motor ->
+                  motor.ccwPositive(false).neutralBrake(true).motorToMechanismRatio(28.0 / 16.0))
           .motionProfileConfig(
-              MotionProfileConfigBuilder.defaults().maximumVelocity(60).maximumAcceleration(200))
-          .feedforwardControllerConfig(
-              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kV(0.2))
-          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(0.14))
+              motionProfile -> motionProfile.maximumVelocity(60).maximumAcceleration(200))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kV(0.2))
+          .feedbackControllerConfig(feedback -> feedback.kP(0.14))
           .build();
 
   /** Flywheel controller. */
@@ -47,14 +40,15 @@ public class Shooter extends Subsystem {
   private final MechanismConfig serializerConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(true)
-                  .neutralBrake(false)
-                  .motorToMechanismRatio(36.0 / 16.0))
+              motorConfig ->
+                  motorConfig
+                      .ccwPositive(true)
+                      .neutralBrake(false)
+                      .motorToMechanismRatio(36.0 / 16.0))
           .motionProfileConfig(
-              MotionProfileConfigBuilder.defaults().maximumVelocity(45).maximumAcceleration(450))
-          .feedforwardControllerConfig(
-              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kV(0.2617))
+              motionProfileConfig ->
+                  motionProfileConfig.maximumVelocity(45).maximumAcceleration(450))
+          .feedforwardControllerConfig(feedforwardConfig -> feedforwardConfig.kS(0.14).kV(0.2617))
           .build();
 
   /** Serializer controller. */

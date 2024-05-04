@@ -3,12 +3,8 @@ package frc.robot.intake;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
-import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
-import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
 import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
-import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
-import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 
@@ -22,28 +18,22 @@ public class Intake extends Subsystem {
   private final MechanismConfig frontRollerConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(false)
-                  .neutralBrake(false)
-                  .motorToMechanismRatio(24.0 / 16.0))
-          .motionProfileConfig(MotionProfileConfigBuilder.defaults().maximumVelocity(66))
-          .feedforwardControllerConfig(
-              FeedforwardControllerConfigBuilder.defaults().kS(0.13).kV(0.1683))
-          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(0.1))
+              motor ->
+                  motor.ccwPositive(false).neutralBrake(false).motorToMechanismRatio(24.0 / 16.0))
+          .motionProfileConfig(motionProfile -> motionProfile.maximumVelocity(66))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.13).kV(0.1683))
+          .feedbackControllerConfig(feedback -> feedback.kP(0.1))
           .build();
 
   /** Back roller controller config. */
   private final MechanismConfig backRollerConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(false)
-                  .neutralBrake(false)
-                  .motorToMechanismRatio(24.0 / 16.0))
-          .motionProfileConfig(MotionProfileConfigBuilder.defaults().maximumVelocity(66))
-          .feedforwardControllerConfig(
-              FeedforwardControllerConfigBuilder.defaults().kS(0.13).kV(0.1759))
-          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(0.1))
+              motor ->
+                  motor.ccwPositive(false).neutralBrake(false).motorToMechanismRatio(24.0 / 16.0))
+          .motionProfileConfig(motionProfile -> motionProfile.maximumVelocity(66))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.13).kV(0.1759))
+          .feedbackControllerConfig(feedback -> feedback.kP(0.1))
           .build();
 
   /** Rollers. */

@@ -7,13 +7,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.lib.config.AbsoluteEncoderConfig.AbsoluteEncoderConfigBuilder;
-import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
-import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
 import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
-import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
-import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 
@@ -27,21 +22,18 @@ public class Arm extends Subsystem {
   private final MechanismConfig shoulderConfig =
       MechanismConfigBuilder.defaults()
           .absoluteEncoderConfig(
-              AbsoluteEncoderConfigBuilder.defaults()
-                  .ccwPositive(false)
-                  .offset(Rotation2d.fromDegrees(-173.135)))
+              absoluteEncoder ->
+                  absoluteEncoder.ccwPositive(false).offset(Rotation2d.fromDegrees(-173.135)))
           .motorConfig(
-              MotorConfigBuilder.defaults()
-                  .ccwPositive(true)
-                  .neutralBrake(true)
-                  .motorToMechanismRatio(39.771428571))
+              motor ->
+                  motor.ccwPositive(true).neutralBrake(true).motorToMechanismRatio(39.771428571))
           .motionProfileConfig(
-              MotionProfileConfigBuilder.defaults()
-                  .maximumVelocity(Units.degreesToRotations(240.0))
-                  .maximumAcceleration(Units.degreesToRotations(240.0)))
-          .feedforwardControllerConfig(
-              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kG(0.5125).kV(4.0))
-          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(4.0))
+              motionProfile ->
+                  motionProfile
+                      .maximumVelocity(Units.degreesToRotations(240.0))
+                      .maximumAcceleration(Units.degreesToRotations(240.0)))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kG(0.5125).kV(4.0))
+          .feedbackControllerConfig(feedback -> feedback.kP(4.0))
           .build();
 
   /** Shoulder controller. */

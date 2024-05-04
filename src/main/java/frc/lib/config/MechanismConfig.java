@@ -6,6 +6,7 @@ import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBui
 import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
 import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import java.util.Objects;
+import java.util.function.Function;
 
 /** Mechanism config. */
 public record MechanismConfig(
@@ -68,31 +69,32 @@ public record MechanismConfig(
     }
 
     public MechanismConfigBuilder absoluteEncoderConfig(
-        AbsoluteEncoderConfigBuilder absoluteEncoderConfigBuilder) {
-      this.absoluteEncoderConfigBuilder = absoluteEncoderConfigBuilder;
+        Function<AbsoluteEncoderConfigBuilder, AbsoluteEncoderConfigBuilder> modifier) {
+      this.absoluteEncoderConfigBuilder = modifier.apply(absoluteEncoderConfigBuilder);
       return this;
     }
 
     public MechanismConfigBuilder feedbackControllerConfig(
-        FeedbackControllerConfigBuilder feedbackControllerConfigBuilder) {
-      this.feedbackControllerConfigBuilder = feedbackControllerConfigBuilder;
+        Function<FeedbackControllerConfigBuilder, FeedbackControllerConfigBuilder> modifier) {
+      this.feedbackControllerConfigBuilder = modifier.apply(feedbackControllerConfigBuilder);
       return this;
     }
 
     public MechanismConfigBuilder feedforwardControllerConfig(
-        FeedforwardControllerConfigBuilder feedforwardControllerConfigBuilder) {
-      this.feedforwardControllerConfigBuilder = feedforwardControllerConfigBuilder;
+        Function<FeedforwardControllerConfigBuilder, FeedforwardControllerConfigBuilder> modifier) {
+      this.feedforwardControllerConfigBuilder = modifier.apply(feedforwardControllerConfigBuilder);
       return this;
     }
 
     public MechanismConfigBuilder motionProfileConfig(
-        MotionProfileConfigBuilder motionProfileConfigBuilder) {
-      this.motionProfileConfigBuilder = motionProfileConfigBuilder;
+        Function<MotionProfileConfigBuilder, MotionProfileConfigBuilder> modifier) {
+      this.motionProfileConfigBuilder = modifier.apply(motionProfileConfigBuilder);
       return this;
     }
 
-    public MechanismConfigBuilder motorConfig(MotorConfigBuilder motorConfigBuilder) {
-      this.motorConfigBuilder = motorConfigBuilder;
+    public MechanismConfigBuilder motorConfig(
+        Function<MotorConfigBuilder, MotorConfigBuilder> modifier) {
+      this.motorConfigBuilder = modifier.apply(motorConfigBuilder);
       return this;
     }
 
