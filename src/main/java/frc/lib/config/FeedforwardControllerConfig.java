@@ -2,63 +2,70 @@ package frc.lib.config;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import java.util.Objects;
 
 /** Feedforward controller config. */
-public class FeedforwardControllerConfig {
-  /** Feedforward controller static gain. */
-  private double kS = 0.0;
+public record FeedforwardControllerConfig(double kS, double kG, double kV, double kA) {
 
-  /** Feedforward controller gravity gain. */
-  private double kG = 0.0;
-
-  /** Feedforward controller velocity gain. */
-  private double kV = 0.0;
-
-  /** Feedforward controller acceleration gain. */
-  private double kA = 0.0;
-
-  /**
-   * Modifies this controller config's static feedforward.
-   *
-   * @param kS the static feedforward.
-   * @return this controller config.
-   */
-  public FeedforwardControllerConfig withStaticFeedforward(double kS) {
-    this.kS = kS;
-    return this;
+  public FeedforwardControllerConfig {
+    Objects.requireNonNull(kS);
+    Objects.requireNonNull(kG);
+    Objects.requireNonNull(kV);
+    Objects.requireNonNull(kA);
   }
 
-  /**
-   * Modifies this controller config's gravity feedforward.
-   *
-   * @param kG the gravity feedforward.
-   * @return this controller config.
-   */
-  public FeedforwardControllerConfig withGravityFeedforward(double kG) {
-    this.kG = kG;
-    return this;
-  }
+  public static final class FeedforwardControllerConfigBuilder {
+    private double kS;
 
-  /**
-   * Modifies this controller config's velocity feedforward.
-   *
-   * @param kV the velocity feedforward.
-   * @return this controller config.
-   */
-  public FeedforwardControllerConfig withVelocityFeedforward(double kV) {
-    this.kV = kV;
-    return this;
-  }
+    private double kG;
 
-  /**
-   * Modifies this controller config's acceleration feedforward.
-   *
-   * @param kA the acceleration feedforward.
-   * @return this controller config.
-   */
-  public FeedforwardControllerConfig withAccelerationFeedfoward(double kA) {
-    this.kA = kA;
-    return this;
+    private double kV;
+
+    private double kA;
+
+    public static FeedforwardControllerConfigBuilder defaults() {
+      return new FeedforwardControllerConfigBuilder(0.0, 0.0, 0.0, 0.0);
+    }
+
+    public static FeedforwardControllerConfigBuilder from(
+        FeedforwardControllerConfig feedforwardControllerConfig) {
+      return new FeedforwardControllerConfigBuilder(
+          feedforwardControllerConfig.kS,
+          feedforwardControllerConfig.kG,
+          feedforwardControllerConfig.kV,
+          feedforwardControllerConfig.kA);
+    }
+
+    private FeedforwardControllerConfigBuilder(double kS, double kG, double kV, double kA) {
+      this.kS = kS;
+      this.kG = kG;
+      this.kV = kV;
+      this.kA = kA;
+    }
+
+    public FeedforwardControllerConfigBuilder kS(double kS) {
+      this.kS = kS;
+      return this;
+    }
+
+    public FeedforwardControllerConfigBuilder kG(double kG) {
+      this.kG = kG;
+      return this;
+    }
+
+    public FeedforwardControllerConfigBuilder kV(double kV) {
+      this.kV = kV;
+      return this;
+    }
+
+    public FeedforwardControllerConfigBuilder kA(double kA) {
+      this.kA = kA;
+      return this;
+    }
+
+    public FeedforwardControllerConfig build() {
+      return new FeedforwardControllerConfig(kS, kG, kV, kA);
+    }
   }
 
   /**
@@ -81,41 +88,5 @@ public class FeedforwardControllerConfig {
    */
   public ArmFeedforward createArmFeedforward() {
     return new ArmFeedforward(kS, kG, kV, kA);
-  }
-
-  /**
-   * Returns the feedforward controller static gain.
-   *
-   * @return the feedforward controller static gain.
-   */
-  public double kS() {
-    return kS;
-  }
-
-  /**
-   * Returns the feedforward controller gravity gain.
-   *
-   * @return the feedforward controller gravity gain.
-   */
-  public double kG() {
-    return kG;
-  }
-
-  /**
-   * Returns the feedforward controller velocity gain.
-   *
-   * @return the feedforward controller velocity gain.
-   */
-  public double kV() {
-    return kV;
-  }
-
-  /**
-   * Returns the feedforward controller acceleration gain.
-   *
-   * @return the feedforward controller acceleration gain.
-   */
-  public double kA() {
-    return kA;
   }
 }

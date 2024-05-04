@@ -5,100 +5,77 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import java.util.Objects;
 
 /** Motor config. */
-public class MotorConfig {
+public record MotorConfig(
+    boolean neutralBrake,
+    boolean ccwPositive,
+    double motorToMechanismRatio,
+    double currentLimitAmps) {
 
-  /** Use the motor to brake the controller mechanism on neutral output. */
-  private boolean neutralBrake = false;
-
-  /** Interpret counterclockwise rotation on the motor face as having positive velocity. */
-  private boolean ccwPositive = true;
-
-  /** Ratio between the motor and the mechanism. */
-  private double motorToMechanismRatio = 1.0;
-
-  /** Maximum amount of current, in amps, to provide to the motor. */
-  private double currentLimitAmps = 40.0;
-
-  /**
-   * Modifies this motor config's neutral brake.
-   *
-   * @param neutralBrake the neutral brake.
-   * @return this motor config.
-   */
-  public MotorConfig withNeutralBrake(boolean neutralBrake) {
-    this.neutralBrake = neutralBrake;
-    return this;
+  public MotorConfig {
+    Objects.requireNonNull(neutralBrake);
+    Objects.requireNonNull(ccwPositive);
+    Objects.requireNonNull(motorToMechanismRatio);
+    Objects.requireNonNull(currentLimitAmps);
   }
 
-  /**
-   * Modifies this motor config's counterclockwise positive.
-   *
-   * @param ccwPositive the counterclockwise positive.
-   * @return this motor config.
-   */
-  public MotorConfig withCCWPositive(boolean ccwPositive) {
-    this.ccwPositive = ccwPositive;
-    return this;
-  }
+  public static final class MotorConfigBuilder {
+    private boolean neutralBrake;
 
-  /**
-   * Modifies this motor config's motor to mechanism ratio.
-   *
-   * @param motorToMechanismRatio the motor to mechanism ratio.
-   * @return this motor config.
-   */
-  public MotorConfig withMotorToMechanismRatio(double motorToMechanismRatio) {
-    this.motorToMechanismRatio = motorToMechanismRatio;
-    return this;
-  }
+    private boolean ccwPositive;
 
-  /**
-   * Modifies this motor config's current limit.
-   *
-   * @param currentLimitAmps the current limit.
-   * @return this motor config.
-   */
-  public MotorConfig withCurrentLimit(double currentLimitAmps) {
-    this.currentLimitAmps = currentLimitAmps;
-    return this;
-  }
+    private double motorToMechanismRatio;
 
-  /**
-   * Returns true if motor should neutral brake.
-   *
-   * @return true if motor should neutral brake.
-   */
-  public boolean neutralBrake() {
-    return neutralBrake;
-  }
+    private double currentLimitAmps;
 
-  /**
-   * Returns true if the motor is counterclockwise positive.
-   *
-   * @return true if the motor is counterclockwise positive.
-   */
-  public boolean ccwPositive() {
-    return ccwPositive;
-  }
+    public static MotorConfigBuilder defaults() {
+      return new MotorConfigBuilder(false, true, 1.0, 40.0);
+    }
 
-  /**
-   * Returns the motor to mechanism ratio.
-   *
-   * @return the motor to mechansim ratio.
-   */
-  public double motorToMechanismRatio() {
-    return motorToMechanismRatio;
-  }
+    public static MotorConfigBuilder from(MotorConfig motorConfig) {
+      return new MotorConfigBuilder(
+          motorConfig.neutralBrake,
+          motorConfig.ccwPositive,
+          motorConfig.motorToMechanismRatio,
+          motorConfig.currentLimitAmps);
+    }
 
-  /**
-   * Returns the motor current limit, in amps.
-   *
-   * @return the motor current limit, in amps.
-   */
-  public double currentLimitAmps() {
-    return currentLimitAmps;
+    private MotorConfigBuilder(
+        boolean neutralBrake,
+        boolean ccwPositive,
+        double motorToMechanismRatio,
+        double currentLimitAmps) {
+      this.neutralBrake = neutralBrake;
+      this.ccwPositive = ccwPositive;
+      this.motorToMechanismRatio = motorToMechanismRatio;
+      this.currentLimitAmps = currentLimitAmps;
+    }
+
+    public MotorConfigBuilder neutralBrake(boolean neutralBrake) {
+      this.neutralBrake = neutralBrake;
+      return this;
+    }
+
+    public MotorConfigBuilder ccwPositive(boolean ccwPositive) {
+      this.ccwPositive = ccwPositive;
+      return this;
+    }
+
+    public MotorConfigBuilder motorToMechanismRatio(double motorToMechanismRatio) {
+      this.motorToMechanismRatio = motorToMechanismRatio;
+      return this;
+    }
+
+    public MotorConfigBuilder currentLimitAmps(double currentLimitAmps) {
+      this.currentLimitAmps = currentLimitAmps;
+      return this;
+    }
+
+    public MotorConfig build() {
+      return new MotorConfig(neutralBrake, ccwPositive, motorToMechanismRatio, currentLimitAmps);
+    }
   }
 
   /**

@@ -7,12 +7,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.lib.config.AbsoluteEncoderConfig;
-import frc.lib.config.FeedbackControllerConfig;
-import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.AbsoluteEncoderConfig.AbsoluteEncoderConfigBuilder;
+import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
+import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
-import frc.lib.config.MotionProfileConfig;
-import frc.lib.config.MotorConfig;
+import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
+import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
+import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 
@@ -24,31 +25,24 @@ public class Arm extends Subsystem {
 
   /** Shoulder controller config. */
   private final MechanismConfig shoulderConfig =
-      new MechanismConfig()
-          .withAbsoluteEncoderConfig(
-              new AbsoluteEncoderConfig()
-                  .withCCWPositive(false)
-                  .withOffset(Rotation2d.fromDegrees(-173.135)))
-          .withMotorConfig(
-              new MotorConfig()
-                  .withCCWPositive(true)
-                  .withNeutralBrake(true)
-                  .withMotorToMechanismRatio(39.771428571))
-          .withMotionProfileConfig(
-              new MotionProfileConfig()
-                  .withMaximumVelocity(Units.degreesToRotations(240.0)) // rotations per second
-                  .withMaximumAcceleration(
-                      Units.degreesToRadians(240.0)) // rotations per second per second
-              )
-          .withFeedforwardConfig(
-              new FeedforwardControllerConfig()
-                  .withStaticFeedforward(0.14) // volts
-                  .withGravityFeedforward(0.5125) // volts
-                  .withVelocityFeedforward(4.0) // volts per rotation per second
-              )
-          .withFeedbackConfig(
-              new FeedbackControllerConfig().withProportionalGain(4.0) // volts per rotation
-              );
+      MechanismConfigBuilder.defaults()
+          .absoluteEncoderConfig(
+              AbsoluteEncoderConfigBuilder.defaults()
+                  .ccwPositive(false)
+                  .offset(Rotation2d.fromDegrees(-173.135)))
+          .motorConfig(
+              MotorConfigBuilder.defaults()
+                  .ccwPositive(true)
+                  .neutralBrake(true)
+                  .motorToMechanismRatio(39.771428571))
+          .motionProfileConfig(
+              MotionProfileConfigBuilder.defaults()
+                  .maximumVelocity(Units.degreesToRotations(240.0))
+                  .maximumAcceleration(Units.degreesToRotations(240.0)))
+          .feedforwardControllerConfig(
+              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kG(0.5125).kV(4.0))
+          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(4.0))
+          .build();
 
   /** Shoulder controller. */
   private final PositionControllerIO shoulder;

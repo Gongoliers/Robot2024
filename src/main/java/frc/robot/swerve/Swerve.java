@@ -14,11 +14,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.DriveRequest;
 import frc.lib.Subsystem;
 import frc.lib.Telemetry;
-import frc.lib.config.FeedbackControllerConfig;
-import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
+import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
+import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
 import frc.lib.config.MotionProfileConfig;
-import frc.lib.config.MotorConfig;
+import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
+import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.SwerveModuleIO;
 import frc.robot.RobotConstants;
 import frc.robot.odometry.Odometry;
@@ -38,53 +40,44 @@ public class Swerve extends Subsystem {
 
   /** Steer motor config. */
   private final MechanismConfig steerConfig =
-      new MechanismConfig()
-          .withMotorConfig(
-              new MotorConfig()
-                  .withCCWPositive(false)
-                  .withCurrentLimit(20)
-                  .withMotorToMechanismRatio(150.0 / 7.0))
-          .withFeedforwardConfig(
-              new FeedforwardControllerConfig().withStaticFeedforward(0.205) // volts
-              )
-          .withFeedbackConfig(
-              new FeedbackControllerConfig()
-                  .withContinuousInput(true)
-                  .withProportionalGain(54.0) // volts per rotation
-                  .withDerivativeGain(0.16) // volts per rotation per second
-                  .withPositionTolerance(Units.degreesToRotations(1)) // rotations
-              );
+      MechanismConfigBuilder.defaults()
+          .motorConfig(
+              MotorConfigBuilder.defaults()
+                  .ccwPositive(false)
+                  .currentLimitAmps(20)
+                  .motorToMechanismRatio(150.0 / 7.0))
+          .feedforwardControllerConfig(FeedforwardControllerConfigBuilder.defaults().kS(0.205))
+          .feedbackControllerConfig(
+              FeedbackControllerConfigBuilder.defaults()
+                  .continuous(true)
+                  .kP(54.0)
+                  .kD(0.16)
+                  .positionTolerance(Units.degreesToRotations(1.0)))
+          .build();
 
   /** Drive motor config. */
   private final MechanismConfig driveConfig =
-      new MechanismConfig()
-          .withMotorConfig(
-              new MotorConfig()
-                  .withCCWPositive(false)
-                  .withCurrentLimit(40)
-                  .withMotorToMechanismRatio(6.75))
-          .withFeedforwardConfig(
-              new FeedforwardControllerConfig()
-                  .withStaticFeedforward(0.14) // volts
-                  .withVelocityFeedforward(0.725) // volts per rotation per second
-              )
-          .withFeedbackConfig(
-              new FeedbackControllerConfig()
-                  .withProportionalGain(0.75) // volts per rotation per second
-              );
+      MechanismConfigBuilder.defaults()
+          .motorConfig(
+              MotorConfigBuilder.defaults()
+                  .ccwPositive(false)
+                  .currentLimitAmps(40.0)
+                  .motorToMechanismRatio(6.75))
+          .feedforwardControllerConfig(
+              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kV(0.725))
+          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(0.75))
+          .build();
 
   /** Wheel circumference. */
   private final double wheelCircumference = Units.inchesToMeters(4.0) * Math.PI;
 
   /** Translation motion profile config. */
   private final MotionProfileConfig translationMotionProfileConfig =
-      new MotionProfileConfig()
-          .withMaximumVelocity(4.5) // meters per second
-          .withMaximumAcceleration(18); // meters per second per second
+      MotionProfileConfigBuilder.defaults().maximumVelocity(4.5).maximumAcceleration(18).build();
 
   /** Rotation motion profile config. */
   private final MotionProfileConfig rotationMotionProfileConfig =
-      new MotionProfileConfig().withMaximumVelocity(1); // rotations per second
+      MotionProfileConfigBuilder.defaults().maximumVelocity(1.0).build();
 
   /** Initializes the swerve subsystem and configures swerve hardware. */
   private Swerve() {

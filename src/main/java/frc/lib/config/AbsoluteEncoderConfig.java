@@ -4,77 +4,64 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Rotation2d;
+import java.util.Objects;
 
 /** Absolute encoder config. */
-public class AbsoluteEncoderConfig {
+public record AbsoluteEncoderConfig(
+    boolean ccwPositive, double sensorToMechanismRatio, Rotation2d offset) {
 
-  /** Interpret counterclockwise rotation on the encoder as having positive velocity. */
-  private boolean ccwPositive = true;
-
-  /** Ratio between the absolute encoder and the mechanism. */
-  private double sensorToMechanismRatio = 1.0;
-
-  /** Offset between absolute encoder reading and mechanism position. */
-  private Rotation2d offset = new Rotation2d();
-
-  /**
-   * Modifies this absolute encoder config's counterclockwise positive.
-   *
-   * @param ccwPositive the counterclockwise positive.
-   * @return this absolute encoder config.
-   */
-  public AbsoluteEncoderConfig withCCWPositive(boolean ccwPositive) {
-    this.ccwPositive = ccwPositive;
-    return this;
+  public AbsoluteEncoderConfig {
+    Objects.requireNonNull(ccwPositive);
+    Objects.requireNonNull(sensorToMechanismRatio);
+    Objects.requireNonNull(offset);
   }
 
-  /**
-   * Modifies this absolute encoder config's sensor to mechanism ratio.
-   *
-   * @param sensorToMechanismRatio the sensor to mechanism ratio.
-   * @return this absolute encoder config.
-   */
-  public AbsoluteEncoderConfig withSensorToMechanismRatio(double sensorToMechanismRatio) {
-    this.sensorToMechanismRatio = sensorToMechanismRatio;
-    return this;
-  }
+  public static final class AbsoluteEncoderConfigBuilder {
+    /** Interpret counterclockwise rotation on the encoder as having positive velocity. */
+    private boolean ccwPositive;
 
-  /**
-   * Modifies this absolute encoder config's offset.
-   *
-   * @param offset the offset.
-   * @return this absolute encoder config.
-   */
-  public AbsoluteEncoderConfig withOffset(Rotation2d offset) {
-    this.offset = offset;
-    return this;
-  }
+    /** Ratio between the absolute encoder and the mechanism. */
+    private double sensorToMechanismRatio;
 
-  /**
-   * Returns true if the absolute encoder is counterclockwise positive.
-   *
-   * @return true if the absolute encoder is counterclockwise positive.
-   */
-  public boolean ccwPositive() {
-    return ccwPositive;
-  }
+    /** Offset between absolute encoder reading and mechanism position. */
+    private Rotation2d offset;
 
-  /**
-   * Returns the absolute encoder sensor to mechanism ratio.
-   *
-   * @return the absolute encoder sensor to mechanism ratio.
-   */
-  public double sensorToMechanismRatio() {
-    return sensorToMechanismRatio;
-  }
+    public static AbsoluteEncoderConfigBuilder defaults() {
+      return new AbsoluteEncoderConfigBuilder(true, 1.0, new Rotation2d());
+    }
 
-  /**
-   * Returns the absolute encoder offset.
-   *
-   * @return the absolute encoder offset.
-   */
-  public Rotation2d offset() {
-    return offset;
+    public static AbsoluteEncoderConfigBuilder from(AbsoluteEncoderConfig absoluteEncoderConfig) {
+      return new AbsoluteEncoderConfigBuilder(
+          absoluteEncoderConfig.ccwPositive,
+          absoluteEncoderConfig.sensorToMechanismRatio,
+          absoluteEncoderConfig.offset);
+    }
+
+    private AbsoluteEncoderConfigBuilder(
+        boolean ccwPositive, double sensorToMechanismRatio, Rotation2d offset) {
+      this.ccwPositive = ccwPositive;
+      this.sensorToMechanismRatio = sensorToMechanismRatio;
+      this.offset = offset;
+    }
+
+    public AbsoluteEncoderConfigBuilder ccwPositive(boolean ccwPositive) {
+      this.ccwPositive = ccwPositive;
+      return this;
+    }
+
+    public AbsoluteEncoderConfigBuilder sensorToMechanismRatio(double sensorToMechanismRatio) {
+      this.sensorToMechanismRatio = sensorToMechanismRatio;
+      return this;
+    }
+
+    public AbsoluteEncoderConfigBuilder offset(Rotation2d offset) {
+      this.offset = offset;
+      return this;
+    }
+
+    public AbsoluteEncoderConfig build() {
+      return new AbsoluteEncoderConfig(ccwPositive, sensorToMechanismRatio, offset);
+    }
   }
 
   /**

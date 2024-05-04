@@ -4,16 +4,51 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import java.util.Objects;
 import java.util.function.Function;
 
 /** Motion profile config. */
-public class MotionProfileConfig {
+public record MotionProfileConfig(double maximumVelocity, double maximumAcceleration) {
 
-  /** Maximum velocity. */
-  private double maximumVelocity = 0.0;
+  public MotionProfileConfig {
+    Objects.requireNonNull(maximumVelocity);
+    Objects.requireNonNull(maximumAcceleration);
+  }
 
-  /** Maximum acceleration. */
-  private double maximumAcceleration = 0.0;
+  public static final class MotionProfileConfigBuilder {
+
+    private double maximumVelocity;
+
+    private double maximumAcceleration;
+
+    public static MotionProfileConfigBuilder defaults() {
+      return new MotionProfileConfigBuilder(0.0, 0.0);
+    }
+
+    public static MotionProfileConfigBuilder from(MotionProfileConfig motionProfileConfig) {
+      return new MotionProfileConfigBuilder(
+          motionProfileConfig.maximumVelocity, motionProfileConfig.maximumAcceleration);
+    }
+
+    private MotionProfileConfigBuilder(double maximumVelocity, double maximumAcceleration) {
+      this.maximumVelocity = maximumVelocity;
+      this.maximumAcceleration = maximumAcceleration;
+    }
+
+    public MotionProfileConfigBuilder maximumVelocity(double maximumVelocity) {
+      this.maximumVelocity = maximumVelocity;
+      return this;
+    }
+
+    public MotionProfileConfigBuilder maximumAcceleration(double maximumAcceleration) {
+      this.maximumAcceleration = maximumAcceleration;
+      return this;
+    }
+
+    public MotionProfileConfig build() {
+      return new MotionProfileConfig(maximumVelocity, maximumAcceleration);
+    }
+  }
 
   /**
    * Calculates an acceleration using a ramp duration.
@@ -25,46 +60,6 @@ public class MotionProfileConfig {
   public static double calculateAcceleration(
       double maximumSpeed, double desiredRampDurationSeconds) {
     return maximumSpeed / desiredRampDurationSeconds;
-  }
-
-  /**
-   * Modifies this motion profile config's maximum velocity.
-   *
-   * @param maximumVelocity the maximum velocity.
-   * @return this motion profile config.
-   */
-  public MotionProfileConfig withMaximumVelocity(double maximumVelocity) {
-    this.maximumVelocity = maximumVelocity;
-    return this;
-  }
-
-  /**
-   * Modifies this motion profile config's maximum acceleration.
-   *
-   * @param maximumAcceleration the maximum acceleration.
-   * @return this motion profile config.
-   */
-  public MotionProfileConfig withMaximumAcceleration(double maximumAcceleration) {
-    this.maximumAcceleration = maximumAcceleration;
-    return this;
-  }
-
-  /**
-   * Returns the motion profile maximum velocity.
-   *
-   * @return the motion profile maximum velocity.
-   */
-  public double maximumVelocity() {
-    return maximumVelocity;
-  }
-
-  /**
-   * Returns the motion profile maximum acceleration.
-   *
-   * @return the motion profile maximum acceleration.
-   */
-  public double maximumAcceleration() {
-    return maximumAcceleration;
   }
 
   /**

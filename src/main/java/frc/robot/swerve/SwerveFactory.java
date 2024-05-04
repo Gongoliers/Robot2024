@@ -4,8 +4,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.config.AbsoluteEncoderConfig;
+import frc.lib.config.AbsoluteEncoderConfig.AbsoluteEncoderConfigBuilder;
 import frc.lib.config.MechanismConfig;
+import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
 import frc.lib.controller.PositionControllerIO;
 import frc.lib.controller.PositionControllerIOSim;
 import frc.lib.controller.PositionControllerIOTalonFXSteer;
@@ -50,9 +51,11 @@ public class SwerveFactory {
         new CAN(8, "swerve"),
         new CAN(16, "swerve"),
         new CAN(24, "swerve"),
-        steerConfig.withAbsoluteEncoderConfig(
-            new AbsoluteEncoderConfig()
-                .withOffset(Rotation2d.fromRotations(-0.084717).unaryMinus())),
+        MechanismConfigBuilder.from(steerConfig)
+            .absoluteEncoderConfig(
+                AbsoluteEncoderConfigBuilder.defaults()
+                    .offset(Rotation2d.fromRotations(-0.084716).unaryMinus()))
+            .build(),
         driveConfig,
         wheelCircumference);
   }
@@ -77,9 +80,11 @@ public class SwerveFactory {
         new CAN(16, "swerve"),
         new CAN(18, "swerve"),
         new CAN(30, "swerve"),
-        steerConfig.withAbsoluteEncoderConfig(
-            new AbsoluteEncoderConfig()
-                .withOffset(Rotation2d.fromRotations(0.196777).unaryMinus())),
+        MechanismConfigBuilder.from(steerConfig)
+            .absoluteEncoderConfig(
+                AbsoluteEncoderConfigBuilder.defaults()
+                    .offset(Rotation2d.fromRotations(0.196777).unaryMinus()))
+            .build(),
         driveConfig,
         wheelCircumference);
   }
@@ -104,9 +109,11 @@ public class SwerveFactory {
         new CAN(12, "swerve"),
         new CAN(22, "swerve"),
         new CAN(26, "swerve"),
-        steerConfig.withAbsoluteEncoderConfig(
-            new AbsoluteEncoderConfig()
-                .withOffset(Rotation2d.fromRotations(0.276611).unaryMinus())),
+        MechanismConfigBuilder.from(steerConfig)
+            .absoluteEncoderConfig(
+                AbsoluteEncoderConfigBuilder.defaults()
+                    .offset(Rotation2d.fromRotations(0.276611).unaryMinus()))
+            .build(),
         driveConfig,
         wheelCircumference);
   }
@@ -131,9 +138,11 @@ public class SwerveFactory {
         new CAN(10, "swerve"),
         new CAN(20, "swerve"),
         new CAN(28, "swerve"),
-        steerConfig.withAbsoluteEncoderConfig(
-            new AbsoluteEncoderConfig()
-                .withOffset(Rotation2d.fromRotations(0.223145).unaryMinus())),
+        MechanismConfigBuilder.from(steerConfig)
+            .absoluteEncoderConfig(
+                AbsoluteEncoderConfigBuilder.defaults()
+                    .offset(Rotation2d.fromRotations(0.223145).unaryMinus()))
+            .build(),
         driveConfig,
         wheelCircumference);
   }

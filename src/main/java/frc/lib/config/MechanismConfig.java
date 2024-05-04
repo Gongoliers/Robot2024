@@ -1,122 +1,113 @@
 package frc.lib.config;
 
+import frc.lib.config.AbsoluteEncoderConfig.AbsoluteEncoderConfigBuilder;
+import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
+import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
+import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
+import frc.lib.config.MotorConfig.MotorConfigBuilder;
+import java.util.Objects;
+
 /** Mechanism config. */
-public class MechanismConfig {
+public record MechanismConfig(
+    AbsoluteEncoderConfig absoluteEncoderConfig,
+    FeedbackControllerConfig feedbackControllerConfig,
+    FeedforwardControllerConfig feedforwardControllerConfig,
+    MotionProfileConfig motionProfileConfig,
+    MotorConfig motorConfig) {
 
-  /** Absolute encoder config. */
-  private AbsoluteEncoderConfig absoluteEncoderConfig = new AbsoluteEncoderConfig();
-
-  /** Feedback controller config. */
-  private FeedbackControllerConfig feedbackControllerConfig = new FeedbackControllerConfig();
-
-  /** Feedforward controller config. */
-  private FeedforwardControllerConfig feedforwardControllerConfig =
-      new FeedforwardControllerConfig();
-
-  /** Motion profile config. */
-  private MotionProfileConfig motionProfileConfig = new MotionProfileConfig();
-
-  /** Motor config. */
-  private MotorConfig motorConfig = new MotorConfig();
-
-  /**
-   * Modifies this mechanism config to use the absolute encoder config.
-   *
-   * @param absoluteEncoderConfig the absolute encoder config.
-   * @return this mechanism config.
-   */
-  public MechanismConfig withAbsoluteEncoderConfig(AbsoluteEncoderConfig absoluteEncoderConfig) {
-    this.absoluteEncoderConfig = absoluteEncoderConfig;
-    return this;
+  public MechanismConfig {
+    Objects.requireNonNull(absoluteEncoderConfig);
+    Objects.requireNonNull(feedbackControllerConfig);
+    Objects.requireNonNull(feedforwardControllerConfig);
+    Objects.requireNonNull(motionProfileConfig);
+    Objects.requireNonNull(motorConfig);
   }
 
-  /**
-   * Modifies this mechanism config to use the feedback controller config.
-   *
-   * @param feedbackControllerConfig the feedback controller config.
-   * @return this mechanism config.
-   */
-  public MechanismConfig withFeedbackConfig(FeedbackControllerConfig feedbackControllerConfig) {
-    this.feedbackControllerConfig = feedbackControllerConfig;
-    return this;
-  }
+  /** Mechanism config builder. */
+  public static final class MechanismConfigBuilder {
 
-  /**
-   * Modifies this mechanism config to use the feedforward controller config.
-   *
-   * @param feedforwardControllerConfig the feedforward controller config.
-   * @return this mechanism config.
-   */
-  public MechanismConfig withFeedforwardConfig(
-      FeedforwardControllerConfig feedforwardControllerConfig) {
-    this.feedforwardControllerConfig = feedforwardControllerConfig;
-    return this;
-  }
+    private AbsoluteEncoderConfigBuilder absoluteEncoderConfigBuilder;
 
-  /**
-   * Modifies this mechanism config to use the motion profile config.
-   *
-   * @param motionProfileConfig the motion profile config.
-   * @return this mechanism config.
-   */
-  public MechanismConfig withMotionProfileConfig(MotionProfileConfig motionProfileConfig) {
-    this.motionProfileConfig = motionProfileConfig;
-    return this;
-  }
+    private FeedbackControllerConfigBuilder feedbackControllerConfigBuilder;
 
-  /**
-   * Modifies this mechanism config to use the motor config.
-   *
-   * @param motorConfig the motor config.
-   * @return this mechanism config.
-   */
-  public MechanismConfig withMotorConfig(MotorConfig motorConfig) {
-    this.motorConfig = motorConfig;
-    return this;
-  }
+    private FeedforwardControllerConfigBuilder feedforwardControllerConfigBuilder;
 
-  /**
-   * Returns the absolute encoder config.
-   *
-   * @return the absolute encoder config.
-   */
-  public AbsoluteEncoderConfig absoluteEncoderConfig() {
-    return absoluteEncoderConfig;
-  }
+    private MotionProfileConfigBuilder motionProfileConfigBuilder;
 
-  /**
-   * Returns the feedback controller config.
-   *
-   * @return the feedback controller config.
-   */
-  public FeedbackControllerConfig feedbackControllerConfig() {
-    return feedbackControllerConfig;
-  }
+    private MotorConfigBuilder motorConfigBuilder;
 
-  /**
-   * Returns the feedforward controller config.
-   *
-   * @return the feedforward controller config.
-   */
-  public FeedforwardControllerConfig feedforwardControllerConfig() {
-    return feedforwardControllerConfig;
-  }
+    public static MechanismConfigBuilder defaults() {
+      return new MechanismConfigBuilder(
+          AbsoluteEncoderConfigBuilder.defaults(),
+          FeedbackControllerConfigBuilder.defaults(),
+          FeedforwardControllerConfigBuilder.defaults(),
+          MotionProfileConfigBuilder.defaults(),
+          MotorConfigBuilder.defaults());
+    }
 
-  /**
-   * Returns the motion profile config.
-   *
-   * @return the motion profile config.
-   */
-  public MotionProfileConfig motionProfileConfig() {
-    return motionProfileConfig;
-  }
+    public static MechanismConfigBuilder from(MechanismConfig mechanismConfig) {
+      return new MechanismConfigBuilder(
+          AbsoluteEncoderConfigBuilder.from(mechanismConfig.absoluteEncoderConfig),
+          FeedbackControllerConfigBuilder.from(mechanismConfig.feedbackControllerConfig),
+          FeedforwardControllerConfigBuilder.from(mechanismConfig.feedforwardControllerConfig),
+          MotionProfileConfigBuilder.from(mechanismConfig.motionProfileConfig),
+          MotorConfigBuilder.from(mechanismConfig.motorConfig));
+    }
 
-  /**
-   * Returns the motor config.
-   *
-   * @return the motor config.
-   */
-  public MotorConfig motorConfig() {
-    return motorConfig;
+    private MechanismConfigBuilder(
+        AbsoluteEncoderConfigBuilder absoluteEncoderConfigBuilder,
+        FeedbackControllerConfigBuilder feedbackControllerConfigBuilder,
+        FeedforwardControllerConfigBuilder feedforwardControllerConfigBuilder,
+        MotionProfileConfigBuilder motionProfileConfigBuilder,
+        MotorConfigBuilder motorConfigBuilder) {
+      this.absoluteEncoderConfigBuilder = absoluteEncoderConfigBuilder;
+      this.feedbackControllerConfigBuilder = feedbackControllerConfigBuilder;
+      this.feedforwardControllerConfigBuilder = feedforwardControllerConfigBuilder;
+      this.motionProfileConfigBuilder = motionProfileConfigBuilder;
+      this.motorConfigBuilder = motorConfigBuilder;
+    }
+
+    public MechanismConfigBuilder absoluteEncoderConfig(
+        AbsoluteEncoderConfigBuilder absoluteEncoderConfigBuilder) {
+      this.absoluteEncoderConfigBuilder = absoluteEncoderConfigBuilder;
+      return this;
+    }
+
+    public MechanismConfigBuilder feedbackControllerConfig(
+        FeedbackControllerConfigBuilder feedbackControllerConfigBuilder) {
+      this.feedbackControllerConfigBuilder = feedbackControllerConfigBuilder;
+      return this;
+    }
+
+    public MechanismConfigBuilder feedforwardControllerConfig(
+        FeedforwardControllerConfigBuilder feedforwardControllerConfigBuilder) {
+      this.feedforwardControllerConfigBuilder = feedforwardControllerConfigBuilder;
+      return this;
+    }
+
+    public MechanismConfigBuilder motionProfileConfig(
+        MotionProfileConfigBuilder motionProfileConfigBuilder) {
+      this.motionProfileConfigBuilder = motionProfileConfigBuilder;
+      return this;
+    }
+
+    public MechanismConfigBuilder motorConfig(MotorConfigBuilder motorConfigBuilder) {
+      this.motorConfigBuilder = motorConfigBuilder;
+      return this;
+    }
+
+    /**
+     * Returns the built mechanism config.
+     *
+     * @return the built mechanism config.
+     */
+    public MechanismConfig build() {
+      return new MechanismConfig(
+          absoluteEncoderConfigBuilder.build(),
+          feedbackControllerConfigBuilder.build(),
+          feedforwardControllerConfigBuilder.build(),
+          motionProfileConfigBuilder.build(),
+          motorConfigBuilder.build());
+    }
   }
 }

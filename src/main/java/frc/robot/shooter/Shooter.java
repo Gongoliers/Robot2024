@@ -4,11 +4,12 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
-import frc.lib.config.FeedbackControllerConfig;
-import frc.lib.config.FeedforwardControllerConfig;
+import frc.lib.config.FeedbackControllerConfig.FeedbackControllerConfigBuilder;
+import frc.lib.config.FeedforwardControllerConfig.FeedforwardControllerConfigBuilder;
 import frc.lib.config.MechanismConfig;
-import frc.lib.config.MotionProfileConfig;
-import frc.lib.config.MotorConfig;
+import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
+import frc.lib.config.MotionProfileConfig.MotionProfileConfigBuilder;
+import frc.lib.config.MotorConfig.MotorConfigBuilder;
 import frc.lib.controller.VelocityControllerIO;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 
@@ -20,26 +21,18 @@ public class Shooter extends Subsystem {
 
   /** Flywheel controller config. */
   private final MechanismConfig flywheelConfig =
-      new MechanismConfig()
-          .withMotorConfig(
-              new MotorConfig()
-                  .withCCWPositive(false)
-                  .withNeutralBrake(true)
-                  .withMotorToMechanismRatio(28.0 / 16.0))
-          .withMotionProfileConfig(
-              new MotionProfileConfig()
-                  .withMaximumVelocity(60) // rotations per second
-                  .withMaximumAcceleration(200) // rotations per second per second
-              )
-          .withFeedforwardConfig(
-              new FeedforwardControllerConfig()
-                  .withStaticFeedforward(0.14) // volts
-                  .withVelocityFeedforward(0.2) // volts per rotation per second
-              )
-          .withFeedbackConfig(
-              new FeedbackControllerConfig()
-                  .withProportionalGain(0.14) // volts per rotation per second
-              );
+      MechanismConfigBuilder.defaults()
+          .motorConfig(
+              MotorConfigBuilder.defaults()
+                  .ccwPositive(false)
+                  .neutralBrake(true)
+                  .motorToMechanismRatio(28.0 / 16.0))
+          .motionProfileConfig(
+              MotionProfileConfigBuilder.defaults().maximumVelocity(60).maximumAcceleration(200))
+          .feedforwardControllerConfig(
+              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kV(0.2))
+          .feedbackControllerConfig(FeedbackControllerConfigBuilder.defaults().kP(0.14))
+          .build();
 
   /** Flywheel controller. */
   private final VelocityControllerIO flywheel;
@@ -52,22 +45,17 @@ public class Shooter extends Subsystem {
 
   /** Serializer controller config. */
   private final MechanismConfig serializerConfig =
-      new MechanismConfig()
-          .withMotorConfig(
-              new MotorConfig()
-                  .withCCWPositive(true)
-                  .withNeutralBrake(false)
-                  .withMotorToMechanismRatio(36.0 / 16.0))
-          .withMotionProfileConfig(
-              new MotionProfileConfig()
-                  .withMaximumVelocity(45) // rotations per second
-                  .withMaximumAcceleration(450) // rotations per second per second
-              )
-          .withFeedforwardConfig(
-              new FeedforwardControllerConfig()
-                  .withStaticFeedforward(0.14) // volts
-                  .withVelocityFeedforward(0.2617) // volts per rotation per second
-              );
+      MechanismConfigBuilder.defaults()
+          .motorConfig(
+              MotorConfigBuilder.defaults()
+                  .ccwPositive(true)
+                  .neutralBrake(false)
+                  .motorToMechanismRatio(36.0 / 16.0))
+          .motionProfileConfig(
+              MotionProfileConfigBuilder.defaults().maximumVelocity(45).maximumAcceleration(450))
+          .feedforwardControllerConfig(
+              FeedforwardControllerConfigBuilder.defaults().kS(0.14).kV(0.2617))
+          .build();
 
   /** Serializer controller. */
   private final VelocityControllerIO serializer;

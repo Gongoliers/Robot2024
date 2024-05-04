@@ -1,146 +1,103 @@
 package frc.lib.config;
 
 import edu.wpi.first.math.controller.PIDController;
+import java.util.Objects;
 
 /** Feedback controller config. */
-public class FeedbackControllerConfig {
+public record FeedbackControllerConfig(
+    double kP,
+    double kI,
+    double kD,
+    boolean continuous,
+    double positionTolerance,
+    double velocityTolerance) {
 
-  /** Feedback controller proportional gain. */
-  private double kP = 0.0;
-
-  /** Feedback controller integral gain. */
-  private double kI = 0.0;
-
-  /** Feedback controller derivative gain. */
-  private double kD = 0.0;
-
-  /** Feedback controller continuous input. */
-  private boolean continuousInput = false;
-
-  /** Feedback controller position tolerance. */
-  private double positionTolerance = 0.0;
-
-  /** Feedback controller velocity tolerance. */
-  private double velocityTolerance = 0.0;
-
-  /**
-   * Modifies this controller config's proportional gain.
-   *
-   * @param kP the proportional gain.
-   * @return this controller config.
-   */
-  public FeedbackControllerConfig withProportionalGain(double kP) {
-    this.kP = kP;
-    return this;
+  public FeedbackControllerConfig {
+    Objects.requireNonNull(kP);
+    Objects.requireNonNull(kI);
+    Objects.requireNonNull(kD);
+    Objects.requireNonNull(continuous);
+    Objects.requireNonNull(positionTolerance);
+    Objects.requireNonNull(velocityTolerance);
   }
 
-  /**
-   * Modifies this controller config's integral gain.
-   *
-   * @param kI the integral gain.
-   * @return this controller config.
-   */
-  public FeedbackControllerConfig withIntegralGain(double kI) {
-    this.kI = kI;
-    return this;
-  }
+  public static final class FeedbackControllerConfigBuilder {
+    private double kP;
 
-  /**
-   * Modifies this controller config's derivative gain.
-   *
-   * @param kD the derivative gain.
-   * @return this controller config.
-   */
-  public FeedbackControllerConfig withDerivativeGain(double kD) {
-    this.kD = kD;
-    return this;
-  }
+    private double kI;
 
-  /**
-   * Modifies this controller config's continuous input.
-   *
-   * @param continuousInput the continuous input.
-   * @return this controller config.
-   */
-  public FeedbackControllerConfig withContinuousInput(boolean continuousInput) {
-    this.continuousInput = continuousInput;
-    return this;
-  }
+    private double kD;
 
-  /**
-   * Modifies this controller config's position tolerance.
-   *
-   * @param positionTolerance the position tolerance.
-   * @return this controller config.
-   */
-  public FeedbackControllerConfig withPositionTolerance(double positionTolerance) {
-    this.positionTolerance = positionTolerance;
-    return this;
-  }
+    private boolean continuous;
 
-  /**
-   * Modifies this controller config's velocity tolerance.
-   *
-   * @param velocityTolerance the velocity tolerance.
-   * @return this controller config.
-   */
-  public FeedbackControllerConfig withVelocityTolerance(double velocityTolerance) {
-    this.velocityTolerance = velocityTolerance;
-    return this;
-  }
+    private double positionTolerance;
 
-  /**
-   * Returns the feedback controller proportional gain.
-   *
-   * @return the feedback controller proportional gain.
-   */
-  public double kP() {
-    return kP;
-  }
+    private double velocityTolerance;
 
-  /**
-   * Returns the feedback controller integral gain.
-   *
-   * @return the feedback controller integral gain.
-   */
-  public double kI() {
-    return kI;
-  }
+    public static FeedbackControllerConfigBuilder defaults() {
+      return new FeedbackControllerConfigBuilder(0.0, 0.0, 0.0, false, 0.0, 0.0);
+    }
 
-  /**
-   * Returns the feedback controller derivative gain.
-   *
-   * @return the feedback controller derivative gain.
-   */
-  public double kD() {
-    return kD;
-  }
+    public static FeedbackControllerConfigBuilder from(
+        FeedbackControllerConfig feedbackControllerConfig) {
+      return new FeedbackControllerConfigBuilder(
+          feedbackControllerConfig.kP,
+          feedbackControllerConfig.kI,
+          feedbackControllerConfig.kD,
+          feedbackControllerConfig.continuous,
+          feedbackControllerConfig.positionTolerance,
+          feedbackControllerConfig.velocityTolerance);
+    }
 
-  /**
-   * Returns the feedback controller continuous input.
-   *
-   * @return the feedback controller continuous input.
-   */
-  public boolean continuousInput() {
-    return continuousInput;
-  }
+    private FeedbackControllerConfigBuilder(
+        double kP,
+        double kI,
+        double kD,
+        boolean continuous,
+        double positionTolerance,
+        double velocityTolerance) {
+      this.kP = kP;
+      this.kI = kI;
+      this.kD = kD;
+      this.continuous = continuous;
+      this.positionTolerance = positionTolerance;
+      this.velocityTolerance = velocityTolerance;
+    }
 
-  /**
-   * Returns the feedback controller position tolerance.
-   *
-   * @return the feedback controller position tolerance.
-   */
-  public double positionTolerance() {
-    return positionTolerance;
-  }
+    public FeedbackControllerConfigBuilder kP(double kP) {
+      this.kP = kP;
+      return this;
+    }
 
-  /**
-   * Returns the feedback controller velocity tolerance.
-   *
-   * @return the feedback controller velocity tolerance.
-   */
-  public double velocityTolerance() {
-    return velocityTolerance;
+    public FeedbackControllerConfigBuilder kI(double kI) {
+      this.kI = kI;
+      return this;
+    }
+
+    public FeedbackControllerConfigBuilder kD(double kD) {
+      this.kD = kD;
+      return this;
+    }
+
+    public FeedbackControllerConfigBuilder continuous(boolean continuous) {
+      this.continuous = continuous;
+      return this;
+    }
+
+    public FeedbackControllerConfigBuilder positionTolerance(double positionTolerance) {
+      this.positionTolerance = positionTolerance;
+      return this;
+    }
+
+    public FeedbackControllerConfigBuilder velocityTolerance(double velocityTolerance) {
+      this.velocityTolerance = velocityTolerance;
+      return this;
+    }
+
+    public FeedbackControllerConfig build() {
+      return new FeedbackControllerConfig(
+          kP, kI, kD, continuous, positionTolerance, velocityTolerance);
+    }
   }
 
   /**
@@ -153,7 +110,7 @@ public class FeedbackControllerConfig {
 
     pidController.setTolerance(positionTolerance, velocityTolerance);
 
-    if (continuousInput) {
+    if (continuous) {
       pidController.enableContinuousInput(-0.5, 0.5);
     }
 
