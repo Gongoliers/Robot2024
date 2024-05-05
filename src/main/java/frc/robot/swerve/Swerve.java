@@ -40,7 +40,10 @@ public class Swerve extends Subsystem {
       MechanismConfigBuilder.defaults()
           .motorConfig(
               motor ->
-                  motor.ccwPositive(false).currentLimitAmps(20).motorToMechanismRatio(150.0 / 7.0))
+                  motor
+                      .ccwPositive(false)
+                      .motorToMechanismRatio(150.0 / 7.0)
+                      .statorCurrentLimit(20.0))
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.205))
           .feedbackControllerConfig(
               feedback ->
@@ -55,7 +58,11 @@ public class Swerve extends Subsystem {
   private final MechanismConfig driveConfig =
       MechanismConfigBuilder.defaults()
           .motorConfig(
-              motor -> motor.ccwPositive(false).currentLimitAmps(40.0).motorToMechanismRatio(6.75))
+              motor ->
+                  motor
+                      .ccwPositive(false)
+                      .motorToMechanismRatio(6.75)
+                      .statorCurrentLimit(60.0)) // TODO Test, 80A -> 60A -> 50A?
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kV(0.725))
           .feedbackControllerConfig(feedback -> feedback.kP(0.75))
           .build();

@@ -20,7 +20,10 @@ public class Shooter extends Subsystem {
       MechanismConfigBuilder.defaults()
           .motorConfig(
               motor ->
-                  motor.ccwPositive(false).neutralBrake(true).motorToMechanismRatio(28.0 / 16.0))
+                  motor
+                      .ccwPositive(false)
+                      .motorToMechanismRatio(28.0 / 16.0)
+                      .statorCurrentLimit(40.0)) // TODO Test, 40A -> 80A?
           .motionProfileConfig(
               motionProfile -> motionProfile.maximumVelocity(60).maximumAcceleration(200))
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kV(0.2))
@@ -43,8 +46,8 @@ public class Shooter extends Subsystem {
               motorConfig ->
                   motorConfig
                       .ccwPositive(true)
-                      .neutralBrake(false)
-                      .motorToMechanismRatio(36.0 / 16.0))
+                      .motorToMechanismRatio(36.0 / 16.0)
+                      .statorCurrentLimit(40.0))
           .motionProfileConfig(
               motionProfileConfig ->
                   motionProfileConfig.maximumVelocity(45).maximumAcceleration(450))

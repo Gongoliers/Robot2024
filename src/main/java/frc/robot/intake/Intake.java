@@ -19,7 +19,10 @@ public class Intake extends Subsystem {
       MechanismConfigBuilder.defaults()
           .motorConfig(
               motor ->
-                  motor.ccwPositive(false).neutralBrake(false).motorToMechanismRatio(24.0 / 16.0))
+                  motor
+                      .ccwPositive(false)
+                      .motorToMechanismRatio(24.0 / 16.0)
+                      .statorCurrentLimit(80.0))
           .motionProfileConfig(motionProfile -> motionProfile.maximumVelocity(66))
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.13).kV(0.1683))
           .feedbackControllerConfig(feedback -> feedback.kP(0.1))
@@ -30,7 +33,10 @@ public class Intake extends Subsystem {
       MechanismConfigBuilder.defaults()
           .motorConfig(
               motor ->
-                  motor.ccwPositive(false).neutralBrake(false).motorToMechanismRatio(24.0 / 16.0))
+                  motor
+                      .ccwPositive(false)
+                      .motorToMechanismRatio(24.0 / 16.0)
+                      .statorCurrentLimit(80.0))
           .motionProfileConfig(motionProfile -> motionProfile.maximumVelocity(66))
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.13).kV(0.1759))
           .feedbackControllerConfig(feedback -> feedback.kP(0.1))

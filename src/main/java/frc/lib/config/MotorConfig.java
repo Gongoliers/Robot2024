@@ -12,13 +12,15 @@ public record MotorConfig(
     boolean neutralBrake,
     boolean ccwPositive,
     double motorToMechanismRatio,
-    double currentLimitAmps) {
+    double statorCurrentLimit,
+    double supplyCurrentLimit) {
 
   public MotorConfig {
     Objects.requireNonNull(neutralBrake);
     Objects.requireNonNull(ccwPositive);
     Objects.requireNonNull(motorToMechanismRatio);
-    Objects.requireNonNull(currentLimitAmps);
+    Objects.requireNonNull(statorCurrentLimit);
+    Objects.requireNonNull(supplyCurrentLimit);
   }
 
   public static final class MotorConfigBuilder {
@@ -28,10 +30,12 @@ public record MotorConfig(
 
     private double motorToMechanismRatio;
 
-    private double currentLimitAmps;
+    private double statorCurrentLimit;
+
+    private double supplyCurrentLimit;
 
     public static MotorConfigBuilder defaults() {
-      return new MotorConfigBuilder(false, true, 1.0, 40.0);
+      return new MotorConfigBuilder(false, true, 1.0, 80.0, 40.0);
     }
 
     public static MotorConfigBuilder from(MotorConfig motorConfig) {
@@ -39,18 +43,21 @@ public record MotorConfig(
           motorConfig.neutralBrake,
           motorConfig.ccwPositive,
           motorConfig.motorToMechanismRatio,
-          motorConfig.currentLimitAmps);
+          motorConfig.statorCurrentLimit,
+          motorConfig.supplyCurrentLimit);
     }
 
     private MotorConfigBuilder(
         boolean neutralBrake,
         boolean ccwPositive,
         double motorToMechanismRatio,
-        double currentLimitAmps) {
+        double statorCurrentLimit,
+        double supplyCurrentLimit) {
       this.neutralBrake = neutralBrake;
       this.ccwPositive = ccwPositive;
       this.motorToMechanismRatio = motorToMechanismRatio;
-      this.currentLimitAmps = currentLimitAmps;
+      this.statorCurrentLimit = statorCurrentLimit;
+      this.supplyCurrentLimit = supplyCurrentLimit;
     }
 
     public MotorConfigBuilder neutralBrake(boolean neutralBrake) {
@@ -68,13 +75,19 @@ public record MotorConfig(
       return this;
     }
 
-    public MotorConfigBuilder currentLimitAmps(double currentLimitAmps) {
-      this.currentLimitAmps = currentLimitAmps;
+    public MotorConfigBuilder statorCurrentLimit(double statorCurrentLimit) {
+      this.statorCurrentLimit = statorCurrentLimit;
+      return this;
+    }
+
+    public MotorConfigBuilder supplyCurrentLimit(double supplyCurrentLimit) {
+      this.supplyCurrentLimit = supplyCurrentLimit;
       return this;
     }
 
     public MotorConfig build() {
-      return new MotorConfig(neutralBrake, ccwPositive, motorToMechanismRatio, currentLimitAmps);
+      return new MotorConfig(
+          neutralBrake, ccwPositive, motorToMechanismRatio, statorCurrentLimit, supplyCurrentLimit);
     }
   }
 
@@ -88,14 +101,14 @@ public record MotorConfig(
 
     // Stator current is a measure of the current inside of the motor and is typically higher than
     // supply (breaker) current
-    currentLimitsConfigs.StatorCurrentLimit = currentLimitAmps() * 2.0;
+    currentLimitsConfigs.StatorCurrentLimit = statorCurrentLimit;
     currentLimitsConfigs.StatorCurrentLimitEnable = true;
 
-    currentLimitsConfigs.SupplyCurrentLimit = currentLimitAmps();
-    // Allow higher current spikes (150%) for a brief duration (one second)
-    // REV 40A auto-resetting breakers typically trip when current exceeds 300% for one second
-    currentLimitsConfigs.SupplyCurrentThreshold = currentLimitAmps() * 1.5;
-    currentLimitsConfigs.SupplyTimeThreshold = 1;
+    currentLimitsConfigs.SupplyCurrentLimit = supplyCurrentLimit;
+    // TODO Determine if spikes should be eliminated to preserve battery
+    // Allow higher current spikes (150%) for a very brief duration (tenth second)
+    currentLimitsConfigs.SupplyCurrentThreshold = supplyCurrentLimit * 1.5;
+    currentLimitsConfigs.SupplyTimeThreshold = 0.1;
     currentLimitsConfigs.SupplyCurrentLimitEnable = true;
 
     return currentLimitsConfigs;

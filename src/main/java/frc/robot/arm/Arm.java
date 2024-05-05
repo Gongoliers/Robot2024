@@ -26,7 +26,11 @@ public class Arm extends Subsystem {
                   absoluteEncoder.ccwPositive(false).offset(Rotation2d.fromDegrees(-173.135)))
           .motorConfig(
               motor ->
-                  motor.ccwPositive(true).neutralBrake(true).motorToMechanismRatio(39.771428571))
+                  motor
+                      .ccwPositive(true)
+                      .neutralBrake(true)
+                      .motorToMechanismRatio(39.771428571)
+                      .statorCurrentLimit(40.0))
           .motionProfileConfig(
               motionProfile ->
                   motionProfile
