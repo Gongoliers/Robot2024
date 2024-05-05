@@ -5,20 +5,15 @@ import java.util.Objects;
 
 /** Feedback controller config. */
 public record FeedbackControllerConfig(
-    double kP,
-    double kI,
-    double kD,
-    boolean continuous,
-    double positionTolerance,
-    double velocityTolerance) {
+    double kP, double kI, double kD, boolean continuous, double tolerance, double rateTolerance) {
 
   public FeedbackControllerConfig {
     Objects.requireNonNull(kP);
     Objects.requireNonNull(kI);
     Objects.requireNonNull(kD);
     Objects.requireNonNull(continuous);
-    Objects.requireNonNull(positionTolerance);
-    Objects.requireNonNull(velocityTolerance);
+    Objects.requireNonNull(tolerance);
+    Objects.requireNonNull(rateTolerance);
   }
 
   public static final class FeedbackControllerConfigBuilder {
@@ -30,9 +25,9 @@ public record FeedbackControllerConfig(
 
     private boolean continuous;
 
-    private double positionTolerance;
+    private double tolerance;
 
-    private double velocityTolerance;
+    private double rateTolerance;
 
     public static FeedbackControllerConfigBuilder defaults() {
       return new FeedbackControllerConfigBuilder(0.0, 0.0, 0.0, false, 0.0, 0.0);
@@ -45,8 +40,8 @@ public record FeedbackControllerConfig(
           feedbackControllerConfig.kI,
           feedbackControllerConfig.kD,
           feedbackControllerConfig.continuous,
-          feedbackControllerConfig.positionTolerance,
-          feedbackControllerConfig.velocityTolerance);
+          feedbackControllerConfig.tolerance,
+          feedbackControllerConfig.rateTolerance);
     }
 
     private FeedbackControllerConfigBuilder(
@@ -54,14 +49,14 @@ public record FeedbackControllerConfig(
         double kI,
         double kD,
         boolean continuous,
-        double positionTolerance,
-        double velocityTolerance) {
+        double tolerance,
+        double rateTolerance) {
       this.kP = kP;
       this.kI = kI;
       this.kD = kD;
       this.continuous = continuous;
-      this.positionTolerance = positionTolerance;
-      this.velocityTolerance = velocityTolerance;
+      this.tolerance = tolerance;
+      this.rateTolerance = rateTolerance;
     }
 
     public FeedbackControllerConfigBuilder kP(double kP) {
@@ -84,19 +79,18 @@ public record FeedbackControllerConfig(
       return this;
     }
 
-    public FeedbackControllerConfigBuilder positionTolerance(double positionTolerance) {
-      this.positionTolerance = positionTolerance;
+    public FeedbackControllerConfigBuilder tolerance(double tolerance) {
+      this.tolerance = tolerance;
       return this;
     }
 
-    public FeedbackControllerConfigBuilder velocityTolerance(double velocityTolerance) {
-      this.velocityTolerance = velocityTolerance;
+    public FeedbackControllerConfigBuilder rateTolerance(double rateTolerance) {
+      this.rateTolerance = rateTolerance;
       return this;
     }
 
     public FeedbackControllerConfig build() {
-      return new FeedbackControllerConfig(
-          kP, kI, kD, continuous, positionTolerance, velocityTolerance);
+      return new FeedbackControllerConfig(kP, kI, kD, continuous, tolerance, rateTolerance);
     }
   }
 
@@ -108,7 +102,7 @@ public record FeedbackControllerConfig(
   public PIDController createPIDController() {
     final PIDController pidController = new PIDController(kP, kI, kD);
 
-    pidController.setTolerance(positionTolerance, velocityTolerance);
+    pidController.setTolerance(tolerance, rateTolerance);
 
     if (continuous) {
       pidController.enableContinuousInput(-0.5, 0.5);

@@ -48,7 +48,7 @@ public class Swerve extends Subsystem {
                       .continuous(true)
                       .kP(54.0)
                       .kD(0.16)
-                      .positionTolerance(Units.degreesToRotations(1.0)))
+                      .tolerance(Units.degreesToRotations(1.0)))
           .build();
 
   /** Drive motor config. */
