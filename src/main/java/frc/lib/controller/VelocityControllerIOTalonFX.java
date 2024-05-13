@@ -40,6 +40,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
 
     ParentDevice.optimizeBusUtilizationForAll(motor);
 
+    TalonFXConfigApplier.applyFactoryDefault(motor);
     TalonFXConfigApplier.apply(motor, config.motorConfig());
   }
 
