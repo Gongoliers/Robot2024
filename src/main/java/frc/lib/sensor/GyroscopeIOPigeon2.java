@@ -30,7 +30,7 @@ public class GyroscopeIOPigeon2 implements GyroscopeIO {
 
   @Override
   public void configure() {
-    ConfigApplier.configurePigeon2(gyroscope.getConfigurator(), new Pigeon2Configuration());
+    ConfigApplier.applyPigeon2Config(gyroscope, new Pigeon2Configuration());
   }
 
   @Override

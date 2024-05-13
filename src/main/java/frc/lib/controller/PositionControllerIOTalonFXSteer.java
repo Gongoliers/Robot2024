@@ -59,11 +59,10 @@ public class PositionControllerIOTalonFXSteer implements PositionControllerIO {
 
     ParentDevice.optimizeBusUtilizationForAll(steer, azimuth);
 
-    ConfigApplier.configureTalonFX(
-        steer.getConfigurator(), config.motorConfig().createTalonFXConfig());
+    ConfigApplier.applyTalonFXConfig(steer, config.motorConfig().createTalonFXConfig());
 
-    ConfigApplier.configureCANcoder(
-        azimuth.getConfigurator(), config.absoluteEncoderConfig().createCANcoderConfig());
+    ConfigApplier.applyCANcoderConfig(
+        azimuth, config.absoluteEncoderConfig().createCANcoderConfig());
   }
 
   @Override

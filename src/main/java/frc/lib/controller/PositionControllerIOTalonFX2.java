@@ -79,13 +79,11 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
 
     ParentDevice.optimizeBusUtilizationForAll(leaderMotor, followerMotor, encoder);
 
-    ConfigApplier.configureTalonFX(
-        leaderMotor.getConfigurator(), config.motorConfig().createTalonFXConfig());
-    ConfigApplier.configureTalonFX(
-        followerMotor.getConfigurator(), config.motorConfig().createTalonFXConfig());
+    ConfigApplier.applyTalonFXConfig(leaderMotor, config.motorConfig().createTalonFXConfig());
+    ConfigApplier.applyTalonFXConfig(followerMotor, config.motorConfig().createTalonFXConfig());
 
-    ConfigApplier.configureCANcoder(
-        encoder.getConfigurator(), config.absoluteEncoderConfig().createCANcoderConfig());
+    ConfigApplier.applyCANcoderConfig(
+        encoder, config.absoluteEncoderConfig().createCANcoderConfig());
   }
 
   @Override

@@ -7,6 +7,10 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Pigeon2Configurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj.DriverStation;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -15,13 +19,15 @@ public class ConfigApplier {
 
   /**
    * Attempts to apply a config. Returns true if successful.
-   * 
-   * @param applier a function that attempts to apply a config. Returns the result of the application.
+   *
+   * @param applier a function that attempts to apply a config. Returns the result of the
+   *     application.
    * @param isSuccess a function that returns true if the result of an application is a success.
    * @param retries the number of unsuccessful attempts before failing.
    * @return true if successful.
    */
-  private static <Result> boolean apply(Supplier<Result> applier, Function<Result, Boolean> isSuccess, int retries) {
+  private static <Result> boolean attempt(
+      Supplier<Result> applier, Function<Result, Boolean> isSuccess, int retries) {
     for (int i = 0; i < retries; i++) {
       Result result = applier.get();
 
@@ -35,45 +41,72 @@ public class ConfigApplier {
 
   /**
    * Attempts to apply a Phoenix 6 config. Returns true if successful.
-   * 
-   * @param applier a function that attempts to apply a config. Returns the result of the application.
+   *
+   * @param applier a function that attempts to apply a config. Returns the result of the
+   *     application.
    * @return true if successful.
    */
-  private static boolean apply(Supplier<StatusCode> applier) {
-    return apply(() -> applier.get(), StatusCode::isOK, 10);
+  private static boolean attempt(Supplier<StatusCode> applier) {
+    return attempt(() -> applier.get(), StatusCode::isOK, 10);
   }
 
   /**
-   * Configures a CANcoder.
+   * Attempts to apply a CANcoder config. Warns on failure.
    *
-   * @param configurator the CANcoder's configurator.
+   * @param cancoder the CANcoder to configure.
    * @param config the config to apply.
+   * @return true if successful.
    */
-  public static void configureCANcoder(
-      CANcoderConfigurator configurator, CANcoderConfiguration config) {
-    apply(() -> configurator.apply(config));
+  public static boolean applyCANcoderConfig(CANcoder cancoder, CANcoderConfiguration config) {
+    CANcoderConfigurator configurator = cancoder.getConfigurator();
+
+    boolean success = attempt(() -> configurator.apply(config));
+
+    if (!success) {
+      DriverStation.reportWarning(
+          "Failed to apply config for CANcoder ID: " + cancoder.getDeviceID(), false);
+    }
+
+    return success;
   }
 
   /**
-   * Configures a TalonFX.
+   * Attempts to apply a TalonFX config. Warns on failure.
    *
-   * @param configurator the TalonFX's configurator.
+   * @param talonFX the TalonFX to configure.
    * @param config the config to apply.
+   * @return true if successful.
    */
-  public static void configureTalonFX(
-      TalonFXConfigurator configurator, TalonFXConfiguration config) {
-    apply(() -> configurator.apply(config));
+  public static boolean applyTalonFXConfig(TalonFX talonFX, TalonFXConfiguration config) {
+    TalonFXConfigurator configurator = talonFX.getConfigurator();
+
+    boolean success = attempt(() -> configurator.apply(config));
+
+    if (!success) {
+      DriverStation.reportWarning(
+          "Failed to apply config for TalonFX ID: " + talonFX.getDeviceID(), false);
+    }
+
+    return success;
   }
 
   /**
-   * Configures a Pigeon 2.
+   * Attempts to apply a Pigeon 2 config. Warns on failure.
    *
-   * @param configurator the Pigeon 2's configurator.
+   * @param pigeon2 the Pigeon 2 to configure.
    * @param config the config to apply.
+   * @return true if successful.
    */
-  public static void configurePigeon2(
-      Pigeon2Configurator configurator, Pigeon2Configuration config) {
-    apply(() -> configurator.apply(config));
-  }
+  public static boolean applyPigeon2Config(Pigeon2 pigeon2, Pigeon2Configuration config) {
+    Pigeon2Configurator configurator = pigeon2.getConfigurator();
 
+    boolean success = attempt(() -> configurator.apply(config));
+
+    if (!success) {
+      DriverStation.reportWarning(
+          "Failed to apply config for Pigeon 2 ID: " + pigeon2.getDeviceID(), false);
+    }
+
+    return success;
+  }
 }
