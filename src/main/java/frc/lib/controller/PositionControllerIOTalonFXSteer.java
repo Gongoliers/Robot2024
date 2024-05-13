@@ -9,7 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.CAN;
-import frc.lib.config.Configurator;
+import frc.lib.config.ConfigApplier;
 import frc.lib.config.MechanismConfig;
 
 /** Creates a new position controller using a steer TalonFX and azimuth CANcoder. */
@@ -59,10 +59,10 @@ public class PositionControllerIOTalonFXSteer implements PositionControllerIO {
 
     ParentDevice.optimizeBusUtilizationForAll(steer, azimuth);
 
-    Configurator.configureTalonFX(
+    ConfigApplier.configureTalonFX(
         steer.getConfigurator(), config.motorConfig().createTalonFXConfig());
 
-    Configurator.configureCANcoder(
+    ConfigApplier.configureCANcoder(
         azimuth.getConfigurator(), config.absoluteEncoderConfig().createCANcoderConfig());
   }
 

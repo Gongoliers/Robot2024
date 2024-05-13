@@ -11,7 +11,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import frc.lib.CAN;
-import frc.lib.config.Configurator;
+import frc.lib.config.ConfigApplier;
 import frc.lib.config.MechanismConfig;
 
 /** Position controller using two TalonFXs and a CANcoder and an external PIDF for an arm. */
@@ -79,12 +79,12 @@ public class PositionControllerIOTalonFX2 implements PositionControllerIO {
 
     ParentDevice.optimizeBusUtilizationForAll(leaderMotor, followerMotor, encoder);
 
-    Configurator.configureTalonFX(
+    ConfigApplier.configureTalonFX(
         leaderMotor.getConfigurator(), config.motorConfig().createTalonFXConfig());
-    Configurator.configureTalonFX(
+    ConfigApplier.configureTalonFX(
         followerMotor.getConfigurator(), config.motorConfig().createTalonFXConfig());
 
-    Configurator.configureCANcoder(
+    ConfigApplier.configureCANcoder(
         encoder.getConfigurator(), config.absoluteEncoderConfig().createCANcoderConfig());
   }
 

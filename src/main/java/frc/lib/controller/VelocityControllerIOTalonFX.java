@@ -5,7 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.lib.CAN;
-import frc.lib.config.Configurator;
+import frc.lib.config.ConfigApplier;
 import frc.lib.config.MechanismConfig;
 
 /** Velocity controller using TalonFX. */
@@ -40,7 +40,7 @@ public abstract class VelocityControllerIOTalonFX implements VelocityControllerI
 
     ParentDevice.optimizeBusUtilizationForAll(motor);
 
-    Configurator.configureTalonFX(
+    ConfigApplier.configureTalonFX(
         motor.getConfigurator(), config.motorConfig().createTalonFXConfig());
   }
 

@@ -5,7 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.util.Units;
-import frc.lib.config.Configurator;
+import frc.lib.config.ConfigApplier;
 
 /** Pigeon 2 gyroscope. */
 public class GyroscopeIOPigeon2 implements GyroscopeIO {
@@ -30,7 +30,7 @@ public class GyroscopeIOPigeon2 implements GyroscopeIO {
 
   @Override
   public void configure() {
-    Configurator.configurePigeon2(gyroscope.getConfigurator(), new Pigeon2Configuration());
+    ConfigApplier.configurePigeon2(gyroscope.getConfigurator(), new Pigeon2Configuration());
   }
 
   @Override
