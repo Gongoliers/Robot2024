@@ -1,8 +1,5 @@
 package frc.lib.config;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.Objects;
 
@@ -62,35 +59,5 @@ public record AbsoluteEncoderConfig(
     public AbsoluteEncoderConfig build() {
       return new AbsoluteEncoderConfig(ccwPositive, sensorToMechanismRatio, offset);
     }
-  }
-
-  /**
-   * Creates Phoenix 6 magnet sensor configs.
-   *
-   * @return Phoenix 6 magnet sensor configs.
-   */
-  private MagnetSensorConfigs createMagnetSensorConfigs() {
-    final MagnetSensorConfigs magnetSensorConfigs = new MagnetSensorConfigs();
-
-    magnetSensorConfigs.MagnetOffset = offset().getRotations();
-    magnetSensorConfigs.SensorDirection =
-        ccwPositive()
-            ? SensorDirectionValue.CounterClockwise_Positive
-            : SensorDirectionValue.Clockwise_Positive;
-
-    return magnetSensorConfigs;
-  }
-
-  /**
-   * Creates a Phoenix 6 CANcoder config.
-   *
-   * @return a Phoenix 6 CANcoder config.
-   */
-  public CANcoderConfiguration createCANcoderConfig() {
-    final CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-
-    cancoderConfig.MagnetSensor = createMagnetSensorConfigs();
-
-    return cancoderConfig;
   }
 }

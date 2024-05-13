@@ -2,10 +2,9 @@ package frc.lib.sensor;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.util.Units;
-import frc.lib.config.ConfigApplier;
+import frc.lib.config.applier.Pigeon2ConfigApplier;
 
 /** Pigeon 2 gyroscope. */
 public class GyroscopeIOPigeon2 implements GyroscopeIO {
@@ -30,7 +29,7 @@ public class GyroscopeIOPigeon2 implements GyroscopeIO {
 
   @Override
   public void configure() {
-    ConfigApplier.applyPigeon2Config(gyroscope, new Pigeon2Configuration());
+    Pigeon2ConfigApplier.applyFactoryDefault(gyroscope);
   }
 
   @Override

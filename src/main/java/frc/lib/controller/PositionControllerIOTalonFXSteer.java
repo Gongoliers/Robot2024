@@ -9,17 +9,18 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.lib.CAN;
-import frc.lib.config.ConfigApplier;
 import frc.lib.config.MechanismConfig;
+import frc.lib.config.applier.CANcoderConfigApplier;
+import frc.lib.config.applier.TalonFXConfigApplier;
 
 /** Creates a new position controller using a steer TalonFX and azimuth CANcoder. */
 public class PositionControllerIOTalonFXSteer implements PositionControllerIO {
 
   private final MechanismConfig config;
 
-  private final TalonFX steer;
+  private final TalonFX steerMotor;
 
-  private final CANcoder azimuth;
+  private final CANcoder azimuthEncoder;
 
   private final StatusSignal<Double> position, velocity, acceleration, volts, amps;
 
@@ -33,18 +34,18 @@ public class PositionControllerIOTalonFXSteer implements PositionControllerIO {
       CAN steerCAN, CAN encoderCAN, MechanismConfig config, boolean enableFOC) {
     this.config = config;
 
-    steer = new TalonFX(steerCAN.id(), steerCAN.bus());
+    steerMotor = new TalonFX(steerCAN.id(), steerCAN.bus());
 
-    azimuth = new CANcoder(encoderCAN.id(), encoderCAN.bus());
+    azimuthEncoder = new CANcoder(encoderCAN.id(), encoderCAN.bus());
 
-    // TODO Use steer position after seeding with azimuth
-    position = azimuth.getAbsolutePosition();
+    // TODO Use steer position after seeding with azimuth to be more resistant to failure
+    position = azimuthEncoder.getAbsolutePosition();
 
-    velocity = steer.getVelocity();
-    acceleration = steer.getAcceleration();
+    velocity = steerMotor.getVelocity();
+    acceleration = steerMotor.getAcceleration();
 
-    volts = steer.getMotorVoltage();
-    amps = steer.getStatorCurrent();
+    volts = steerMotor.getMotorVoltage();
+    amps = steerMotor.getStatorCurrent();
 
     feedforward = config.feedforwardControllerConfig().createSimpleMotorFeedforward();
 
@@ -57,12 +58,12 @@ public class PositionControllerIOTalonFXSteer implements PositionControllerIO {
   public void configure() {
     BaseStatusSignal.setUpdateFrequencyForAll(100.0, position, velocity, acceleration, volts, amps);
 
-    ParentDevice.optimizeBusUtilizationForAll(steer, azimuth);
+    ParentDevice.optimizeBusUtilizationForAll(steerMotor, azimuthEncoder);
 
-    ConfigApplier.applyTalonFXConfig(steer, config.motorConfig().createTalonFXConfig());
+    TalonFXConfigApplier.apply(steerMotor, config.motorConfig());
 
-    ConfigApplier.applyCANcoderConfig(
-        azimuth, config.absoluteEncoderConfig().createCANcoderConfig());
+    CANcoderConfigApplier.applyFactoryDefault(azimuthEncoder);
+    CANcoderConfigApplier.apply(azimuthEncoder, config.absoluteEncoderConfig());
   }
 
   @Override
@@ -88,7 +89,7 @@ public class PositionControllerIOTalonFXSteer implements PositionControllerIO {
 
     double feedbackVolts = feedback.calculate(measuredPositionRotations, positionRotations);
 
-    steer.setControl(voltage.withOutput(feedforwardVolts + feedbackVolts));
+    steerMotor.setControl(voltage.withOutput(feedforwardVolts + feedbackVolts));
   }
 
   private double calculateFeedforward(double measurementRotations, double setpointRotations) {
