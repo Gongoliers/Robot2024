@@ -3,7 +3,6 @@ package frc.lib.controller;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import frc.lib.controller.PositionControllerIO.PositionControllerIOValues;
 import frc.lib.controller.VelocityControllerIO.VelocityControllerIOValues;
 
@@ -85,16 +84,6 @@ public class SwerveModuleIOCustom implements SwerveModuleIO {
     }
 
     // Since we are lazy, perform additional optimizations
-
-    // Deadband the module speed
-    if (Math.abs(setpoint.speedMetersPerSecond) < Units.inchesToMeters(1)) {
-      setpoint.speedMetersPerSecond = 0.0;
-    }
-
-    // Keep previous angle if the module isn't moving
-    if (setpoint.speedMetersPerSecond == 0.0) {
-      setpoint.angle = state.angle;
-    }
 
     // Scale our speed by the module's error
     Rotation2d error = setpoint.angle.minus(state.angle);
