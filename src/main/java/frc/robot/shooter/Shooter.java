@@ -24,9 +24,9 @@ public class Shooter extends Subsystem {
                       .motorToMechanismRatio(28.0 / 16.0)
                       .statorCurrentLimit(40.0)) // TODO Test, 40A -> 80A?
           .motionProfileConfig(
-              motionProfile -> motionProfile.maximumVelocity(60).maximumAcceleration(200))
+              motionProfile -> motionProfile.maximumVelocity(50).maximumAcceleration(200))
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kV(0.2))
-          .feedbackControllerConfig(feedback -> feedback.kP(0.14))
+          .feedbackControllerConfig(feedback -> feedback.kP(0.4))
           .build();
 
   /** Flywheel controller. */

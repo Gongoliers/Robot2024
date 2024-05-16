@@ -20,10 +20,10 @@ public record ShooterState(
   public static final ShooterState EJECT = new ShooterState(0, -44);
 
   /** Subwoofer shooting state. */
-  public static final ShooterState SUBWOOFER = new ShooterState(60, 44);
+  public static final ShooterState SUBWOOFER = new ShooterState(50, 44);
 
   /** Skim shooting state. */
-  public static final ShooterState SKIM = new ShooterState(60, 44);
+  public static final ShooterState SKIM = new ShooterState(50, 44);
 
   /** Amp shooting state. */
   public static final ShooterState AMP = new ShooterState(10, 20);
