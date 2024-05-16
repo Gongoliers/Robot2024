@@ -36,8 +36,7 @@ public class Arm extends Subsystem {
                   motionProfile
                       .maximumVelocity(Units.degreesToRotations(240.0))
                       .maximumAcceleration(Units.degreesToRotations(240.0)))
-          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kG(0.5125).kV(4.0))
-          .feedbackControllerConfig(feedback -> feedback.kP(4.0))
+          .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kG(0.5125).kV(4.2))
           .build();
 
   /** Shoulder controller. */
