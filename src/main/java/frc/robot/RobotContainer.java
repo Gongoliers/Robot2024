@@ -1,10 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.lib.Telemetry;
 import frc.robot.arm.Arm;
@@ -50,12 +47,6 @@ public class RobotContainer {
   /** Operator controller. */
   private final CommandXboxController operatorController;
 
-  /**
-   * Rumble controller. Use the same port as the operator controller to vibrate the operator
-   * controller.
-   */
-  private final XboxController rumbleController;
-
   /** Initializes the robot container. */
   private RobotContainer() {
     arm = Arm.getInstance();
@@ -69,7 +60,6 @@ public class RobotContainer {
     driverController = new CommandXboxController(0);
 
     operatorController = new CommandXboxController(1);
-    rumbleController = new XboxController(1);
 
     initializeTelemetry();
     configureDefaultCommands();
@@ -117,21 +107,6 @@ public class RobotContainer {
     operatorController.a().onTrue(superstructure.amp());
     operatorController.x().onTrue(superstructure.stow());
     operatorController.y().onTrue(superstructure.skim());
-
-    intake.noteStuck().whileTrue(rumble(RumbleType.kLeftRumble));
-
-    shooter.serializedNote().whileTrue(rumble(RumbleType.kRightRumble));
-  }
-
-  /**
-   * Rumbles the controller.
-   *
-   * @param side the side of the controller to rumble.
-   * @return a command that rumbles the controller.
-   */
-  private Command rumble(RumbleType side) {
-    return Commands.startEnd(
-        () -> rumbleController.setRumble(side, 1), () -> rumbleController.setRumble(side, 0));
   }
 
   /**

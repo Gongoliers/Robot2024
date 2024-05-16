@@ -2,7 +2,6 @@ package frc.robot.shooter;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.Subsystem;
 import frc.lib.config.MechanismConfig;
 import frc.lib.config.MechanismConfig.MechanismConfigBuilder;
@@ -123,8 +122,6 @@ public class Shooter extends Subsystem {
   public void addToShuffleboard(ShuffleboardTab tab) {
     VelocityControllerIO.addToShuffleboard(tab, "Flywheel", flywheelValues);
     VelocityControllerIO.addToShuffleboard(tab, "Serializer", serializerValues);
-
-    tab.addBoolean("Serializer Current Spike?", this::serializerCurrentSpike);
   }
 
   /**
@@ -153,23 +150,5 @@ public class Shooter extends Subsystem {
    */
   public boolean atGoal() {
     return getState().at(goal);
-  }
-
-  /**
-   * Returns a trigger for if a note is serialized.
-   *
-   * @return a trigger for if a note is serialized.
-   */
-  public Trigger serializedNote() {
-    return new Trigger(this::serializerCurrentSpike);
-  }
-
-  /**
-   * Returns true if the serializer has a current spike.
-   *
-   * @return true if the serializer has a current spike.
-   */
-  private boolean serializerCurrentSpike() {
-    return serializerValues.motorAmps > 20.0;
   }
 }
