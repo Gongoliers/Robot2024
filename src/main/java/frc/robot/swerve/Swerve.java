@@ -62,7 +62,7 @@ public class Swerve extends Subsystem {
                   motor
                       .ccwPositive(false)
                       .motorToMechanismRatio(6.75)
-                      .statorCurrentLimit(60.0)) // TODO Test, 80A -> 60A -> 50A?
+                      .statorCurrentLimit(50.0))
           .feedforwardControllerConfig(feedforward -> feedforward.kS(0.14).kV(0.725))
           .feedbackControllerConfig(feedback -> feedback.kP(0.75))
           .build();
